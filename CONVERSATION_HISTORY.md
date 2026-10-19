@@ -74,6 +74,9 @@ Website_project/
    * Enriched `it-security.md` with Model Context Protocol (MCP) security, prompt injection, and supply chain analysis.
    * Connected `machine-learning.md` to `Voice_ML_Project` (GPT-SoVITS v2, PyTorch, CUDA, 17.5 GB checkpoint archive on Google Drive).
    * Added direct GitHub project links to `Voice_ML_Project` and `AnkiDeckGenPython`.
+9. **Session 4 (Sync Laptop Work & Language Update)**:
+   * Executed `git pull` cleanly fast-forwarding all laptop edits from `main`.
+   * Updated Japanese language proficiency under Portfolio (`cv.md`) to **B1** (reflecting completed coursework through A2.2, active tandem exchanges, and current B1.2 enrollment).
 
 ---
 

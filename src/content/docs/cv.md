@@ -28,7 +28,7 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 * **Current Seminar & Research Focus (WS 2026/27)**:
   * *Seminar IT Security* at EMCL (Prof. Dr. Vincent Heuveline): Security of AI Tool Ecosystems (Model Context Protocol / MCP trust boundaries), Indirect Prompt Injection in LLM agents, and Open-Source Software Supply Chain Security.
   * *AI Planning & Software Practicals*: Explainable AI Planning (*XAIP*, *PlanPilot* / *FASB*), Neurosymbolic Reasoning (*Answer-Set Programming with Clingo*), and LLM Guardrails (*NeMo Guardrails*).
-* **Interdisciplinary & Languages**: Japanese A1.1 & A1.2 (*heiSKILLS & Central Language Laboratory of Heidelberg University*), Mandarin Chinese.
+* **Interdisciplinary & Languages**: Japanese B1 (*heiSKILLS & Central Language Laboratory of Heidelberg University* — completed coursework through A2.2, regular tandem partner meetups, and current B1.2 course), Mandarin Chinese.
 
 #### 🧭 Academic Roadmap
 * **6th Semester (Summer 2027)**: Bachelor's Thesis in Artificial Intelligence / Machine Learning.
