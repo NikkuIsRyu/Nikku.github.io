@@ -77,6 +77,11 @@ Website_project/
 9. **Session 4 (Sync Laptop Work & Language Update)**:
    * Executed `git pull` cleanly fast-forwarding all laptop edits from `main`.
    * Updated Japanese language proficiency under Portfolio (`cv.md`) to **B1** (reflecting completed coursework through A2.2, active tandem exchanges, and current B1.2 enrollment).
+10. **Session 5 (Reorganize Japanese Track & Subdirectories)**:
+   * Removed legacy A1.2 page (`japanese.md`).
+   * Created intermediate Japanese track hub (`japanese/index.mdx`) with subdirectories `b1-1` and `b1-2`.
+   * Initialized `b1-1/index.md` and `b1-2/index.md` with "Work in Progress / TBA" status callouts and curriculum placeholders.
+   * Updated `astro.config.mjs` sidebar and `lectures/index.mdx` links.
 
 ---
 

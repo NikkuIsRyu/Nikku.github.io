@@ -45,7 +45,17 @@ export default defineConfig({
 				},
 				{
 					label: 'Language Electives',
-					items: [{ autogenerate: { directory: 'lectures/languages' } }],
+					items: [
+						{
+							label: 'Japanisch (Japanese)',
+							items: [
+								{ label: 'Overview', slug: 'lectures/languages/japanese' },
+								{ label: 'Japanisch B1.1', slug: 'lectures/languages/japanese/b1-1' },
+								{ label: 'Japanisch B1.2', slug: 'lectures/languages/japanese/b1-2' },
+							],
+						},
+						{ label: 'Chinesisch & Anki Vault', slug: 'lectures/languages/chinese' },
+					],
 				},
 			],
 		}),
