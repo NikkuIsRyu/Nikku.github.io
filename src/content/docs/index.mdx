@@ -1,0 +1,36 @@
+---
+title: Welcome to My Academic Vault
+description: Personal university archive, lecture notes, and engineering portfolio.
+template: splash
+hero:
+  tagline: A unified digital workspace for lecture notes, research, and technical projects.
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Explore Lecture Notes
+      link: /lectures/sample-lecture/
+      icon: right-arrow
+    - text: Curriculum Vitae
+      link: /cv/
+      icon: document
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## System Overview
+
+<CardGrid stagger>
+	<Card title="Antigravity AI Co-Pilot" icon="pencil">
+		Drop lecture slides or transcripts in your workspace, and Antigravity automatically drafts structured notes with formulas and code.
+	</Card>
+	<Card title="5 TB Google Drive Storage" icon="external">
+		Heavy lecture videos, textbooks, and datasets reside safely on Google Drive with embedded links and viewers.
+	</Card>
+	<Card title="LaTeX Math Support" icon="setting">
+		Full $\KaTeX$ support for clean rendering of physics, mathematics, and machine learning equations.
+	</Card>
+	<Card title="Free GitHub Pages Hosting" icon="rocket">
+		Zero-maintenance automated hosting powered by GitHub Actions and connected to your free student domain.
+	</Card>
+</CardGrid>

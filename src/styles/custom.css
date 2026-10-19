@@ -1,0 +1,8 @@
+@import 'katex/dist/katex.min.css';
+
+/* Custom styling for academic vault */
+:root {
+  --sl-color-accent-low: #1e293b;
+  --sl-color-accent: #3b82f6;
+  --sl-color-accent-high: #93c5fd;
+}
