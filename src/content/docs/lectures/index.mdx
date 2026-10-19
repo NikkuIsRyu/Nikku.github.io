@@ -1,0 +1,44 @@
+---
+title: Academic Knowledge Vault
+description: Directory of university courses, lecture notes, formula derivations, and Google Drive assets.
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Welcome to the digital academic vault. All course summaries, $\KaTeX$ formulas, code implementations, and asset links stored on the 5 TB Google Drive cloud vault are cataloged below.
+
+---
+
+## 🏛️ Course Directory
+
+<CardGrid>
+	<Card title="Core Computer Science" icon="laptop">
+		Foundational curriculum spanning theoretical informatics, algorithms, relational databases, security, and systems engineering.
+		
+		* [Theoretische Informatik](/lectures/core-cs/theoretical-cs/)
+		* [Datenbanken & SQL](/lectures/core-cs/databases/)
+		* [Algorithmen & Datenstrukturen](/lectures/core-cs/algorithms/)
+		* [IT-Security & Exploitation](/lectures/core-cs/it-security/)
+		* [Information Systems Engineering (ISE)](/lectures/core-cs/ise/)
+	</Card>
+
+	<Card title="AI & Medical Informatics" icon="star">
+		Applied machine learning, mathematical optimization, and specialized topics.
+		
+		* [Machine Learning & Gradient Descent](/lectures/ai-and-med/machine-learning/)
+		* [RMI & Systems Anatomy (WS 2026/27)](/lectures/ai-and-med/rmi-anatomy/)
+	</Card>
+
+	<Card title="Language Electives" icon="translate">
+		Interactive language study notes, vocabulary registers, and Anki memory decks.
+		
+		* [Japanisch A1.2](/lectures/languages/japanese/)
+		* [Chinesisch & Anki Vault](/lectures/languages/chinese/)
+	</Card>
+</CardGrid>
+
+---
+
+## ☁️ Cloud Vault Organization (Google Drive)
+
+Heavy binaries such as multi-gigabyte machine learning checkpoints (`ml_models.zip`), lecture slide decks (`.pdf`, `.pptx`), and Anki packages (`.apkg`) are synchronized from Google Drive into our hybrid asset architecture.

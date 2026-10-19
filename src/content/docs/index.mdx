@@ -7,8 +7,8 @@ hero:
   image:
     file: ../../assets/houston.webp
   actions:
-    - text: Explore Lecture Notes
-      link: /lectures/sample-lecture/
+    - text: Explore Knowledge Vault
+      link: /lectures/
       icon: right-arrow
     - text: Curriculum Vitae
       link: /cv/
@@ -18,19 +18,19 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## System Overview
+## Vault Structure & Curriculum
 
 <CardGrid stagger>
-	<Card title="Antigravity AI Co-Pilot" icon="pencil">
-		Drop lecture slides or transcripts in your workspace, and Antigravity automatically drafts structured notes with formulas and code.
+	<Card title="Core Computer Science" icon="laptop">
+		Formal foundations in [Theoretische Informatik](/lectures/core-cs/theoretical-cs/), [Datenbanken](/lectures/core-cs/databases/), [Algorithmen](/lectures/core-cs/algorithms/), and [IT-Security](/lectures/core-cs/it-security/).
 	</Card>
-	<Card title="5 TB Google Drive Storage" icon="external">
-		Heavy lecture videos, textbooks, and datasets reside safely on Google Drive with embedded links and viewers.
+	<Card title="AI & Medical Systems" icon="star">
+		Applied machine learning optimization models and [Wintersemester 2026/27 RMI Anatomy notes](/lectures/ai-and-med/rmi-anatomy/).
 	</Card>
-	<Card title="LaTeX Math Support" icon="setting">
-		Full $\KaTeX$ support for clean rendering of physics, mathematics, and machine learning equations.
+	<Card title="5 TB Google Drive Vault" icon="external">
+		High-capacity cloud storage for slides, datasets (`ml_models.zip`), and media without repo bloat.
 	</Card>
-	<Card title="Free GitHub Pages Hosting" icon="rocket">
-		Zero-maintenance automated hosting powered by GitHub Actions and connected to your free student domain.
+	<Card title="LaTeX Math & Code Synthesis" icon="pencil">
+		Full $\KaTeX$ formula rendering with reproducible Python code and interactive search.
 	</Card>
 </CardGrid>

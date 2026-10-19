@@ -1,28 +1,39 @@
 ---
-title: "Lecture 01: Foundations & Gradient Descent"
-description: Overview of optimization, loss functions, and learning rate dynamics.
+title: Machine Learning & Gradient Descent
+description: Foundations of empirical risk minimization, loss functions, convergence, and checkpoint assets.
 sidebar:
   order: 1
 ---
 
+import DriveAsset from '../../../../components/DriveAsset.astro';
+
 :::tip[AI Assisted Note]
-Synthesized and formatted by **Antigravity** from original lecture slides and notes.
+Synthesized and formatted from lecture slides, course datasets, and model checkpoint archives.
 :::
+
+## 🗂️ Course Assets (Google Drive)
+
+<DriveAsset
+	title="Trained Model Checkpoints Archive"
+	type="dataset"
+	description="17.5 GB compressed deep learning model weights from Google Drive: Meine Ablage/ml_models.zip"
+	href="https://drive.google.com"
+/>
+
+<DriveAsset
+	title="Course Slides & Dataset Benchmarks"
+	type="slides"
+	description="Lecture slide decks and benchmark datasets from Google Drive: University/"
+	href="https://drive.google.com"
+/>
+
+---
 
 ## 🎯 Key Objectives
 
 1. Understand empirical risk minimization.
 2. Formalize Gradient Descent and convergence conditions.
 3. Link lecture materials with practical code examples.
-
----
-
-## 🗂️ Course Assets (Google Drive)
-
-Large slides and datasets are stored on Google Drive to keep the repository fast:
-
-* [📥 Download Original Lecture Slides (Google Drive)](https://drive.google.com)
-* [📊 Download Dataset Benchmark (Google Drive)](https://drive.google.com)
 
 ---
 

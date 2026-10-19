@@ -24,16 +24,28 @@ export default defineConfig({
 			],
 			sidebar: [
 				{
-					label: 'Profile',
+					label: 'Profile & Portfolio',
 					items: [
 						{ label: 'CV & About Me', slug: 'cv' },
 					],
 				},
 				{
-					label: 'Lectures & Courses',
+					label: 'Academic Vault',
 					items: [
-						{ autogenerate: { directory: 'lectures' } },
+						{ label: 'Course Overview', slug: 'lectures' },
 					],
+				},
+				{
+					label: 'Core Computer Science',
+					items: [{ autogenerate: { directory: 'lectures/core-cs' } }],
+				},
+				{
+					label: 'AI & Medical Informatics',
+					items: [{ autogenerate: { directory: 'lectures/ai-and-med' } }],
+				},
+				{
+					label: 'Language Electives',
+					items: [{ autogenerate: { directory: 'lectures/languages' } }],
 				},
 			],
 		}),

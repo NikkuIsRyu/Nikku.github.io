@@ -9,7 +9,8 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 
 * **Name**: Nick Blassmann (Nikku)
 * **University**: Current Student (B.Sc. Computer Science / Informatik)
-* **Focus Areas**: Computer Science / Systems / Machine Learning
+* **Focus Areas**: Systems Architecture, Machine Learning, Applied Informatics
+* **Portfolio**: [nikku.tech](https://nikku.tech) *(alias: [nickblassmann.me](https://nickblassmann.me))*
 * **GitHub**: [github.com/NikkuIsRyu](https://github.com/NikkuIsRyu)
 * **LinkedIn**: [linkedin.com/in/nikkuisryu](https://linkedin.com)
 
@@ -17,22 +18,32 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 
 ## 🎓 Education
 
-### B.Sc. / M.Sc. in Computer Science
-*Your University* • *2023 – Present*
-* Relevant Coursework: Algorithms & Data Structures, Machine Learning, Systems Architecture, Linear Algebra.
+### B.Sc. in Computer Science (Informatik)
+*University* • *2023 – Present*
+* **Core Coursework**: Theoretische Informatik, Algorithmen & Datenstrukturen (AlDa), Datenbanken & Informationssysteme, IT-Security, Information Systems Engineering (ISE).
+* **Applied & Specializations**: Machine Learning, Robotic Medical Interventions (RMI) & Anatomical Systems (WS 2026/27).
+* **Electives**: Japanese A1.2, Mandarin Chinese.
 
 ---
 
 ## 🛠️ Technical Skills
 
-* **Languages**: Python, TypeScript/JavaScript, C++, SQL
-* **Frameworks & Tools**: Astro, Git, Docker, PyTorch, Linux
-* **Knowledge Management**: Automated Markdown documentation with Antigravity AI
+* **Languages**: Python, TypeScript/JavaScript, SQL, C++, Bash/PowerShell
+* **Frameworks & Tools**: Astro, Starlight, Git, Docker & Docker Compose, PyTorch, Linux
+* **Systems & Cloud**: Google Drive CDN Integration, GitHub Actions CI/CD, Static Site Generators
 
 ---
 
 ## 🚀 Projects
 
-### Academic Knowledge Vault (This Site)
-* **Stack**: Astro, Starlight, GitHub Pages, Google Drive CDN.
-* Continuous deployment with GitHub Actions and AI-assisted lecture synthesis.
+### Academic Knowledge Vault & Portfolio
+* **Live Site**: [https://nikku.tech](https://nikku.tech)
+* **Stack**: Astro, Starlight, KaTeX, GitHub Actions, Google Drive 5 TB Vault CDN.
+* Continuous automated deployment via GitHub Pages with hybrid asset streaming for heavy slides and datasets.
+
+### Machine Learning Checkpoint Archive
+* Automated training benchmarks, gradient descent optimization notebooks, and neural network checkpoint repository.
+
+### Project Voice & Multi-Modal Experiments
+* Exploration of speech, dialogue analysis, and audio signal processing workflows.
+
