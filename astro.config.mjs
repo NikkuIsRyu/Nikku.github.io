@@ -40,7 +40,7 @@ export default defineConfig({
 					items: [{ autogenerate: { directory: 'lectures/core-cs' } }],
 				},
 				{
-					label: 'AI & Medical Informatics',
+					label: 'AI, Robotics & Medical Informatics',
 					items: [{ autogenerate: { directory: 'lectures/ai-and-med' } }],
 				},
 				{

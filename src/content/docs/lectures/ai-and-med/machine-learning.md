@@ -8,7 +8,7 @@ sidebar:
 import DriveAsset from '../../../../components/DriveAsset.astro';
 
 :::tip[AI Assisted Note]
-Synthesized and formatted from lecture slides, course datasets, and model checkpoint archives.
+Synthesized and formatted from lecture slides, course datasets, and model checkpoint archives at Heidelberg University.
 :::
 
 ## 🗂️ Course Assets (Google Drive)
@@ -16,7 +16,7 @@ Synthesized and formatted from lecture slides, course datasets, and model checkp
 <DriveAsset
 	title="Trained Model Checkpoints Archive"
 	type="dataset"
-	description="17.5 GB compressed deep learning model weights from Google Drive: Meine Ablage/ml_models.zip"
+	description="17.5 GB compressed deep learning model weights (GPT-SoVITS v2, HuBERT, RoBERTa, Whisper ASR, UVR5) from Google Drive: Meine Ablage/ml_models.zip"
 	href="https://drive.google.com"
 />
 
@@ -33,7 +33,7 @@ Synthesized and formatted from lecture slides, course datasets, and model checkp
 
 1. Understand empirical risk minimization.
 2. Formalize Gradient Descent and convergence conditions.
-3. Link lecture materials with practical code examples.
+3. Connect theoretical optimization to applied deep learning pipelines.
 
 ---
 
@@ -80,3 +80,13 @@ def gradient_descent(X, y, lr=0.01, epochs=1000):
         
     return theta
 ```
+
+---
+
+## 🎙️ Applied Deep Learning: Voice Synthesis & Checkpoints
+
+Mathematical optimization and backpropagation directly power the neural models trained in the [Voice ML Project](https://github.com/NikkuIsRyu/Voice_ML_Project):
+* **Acoustic Modeling**: Adapting pre-trained HuBERT representations to extract speaker latent features from reference clips.
+* **Text-to-Semantic Synthesis**: Autoregressive transformers trained to map phoneme sequences into semantic speech tokens.
+* **Diffusion / VITS Vocoder**: Inverting semantic tokens and mel-spectrogram representations into natural time-domain audio waveforms.
+* **Checkpoint Archival**: The synchronized 17.5 GB `ml_models.zip` archive contains fine-tuned checkpoints alongside UVR5 vocal separation models and Whisper ASR transcription models.

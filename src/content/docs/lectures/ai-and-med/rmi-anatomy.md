@@ -1,6 +1,6 @@
 ---
 title: RMI & Anatomy (WS 2026/27)
-description: Medical informatics, robotics, anatomical coordinate systems, and remote method invocation.
+description: Robotics and Machine Intelligence (Prof. Dr. Artur Andrzejak), spatial kinematics, rigid body transformations, and anatomical coordinate systems.
 sidebar:
   order: 2
 ---
@@ -8,7 +8,7 @@ sidebar:
 import DriveAsset from '../../../../components/DriveAsset.astro';
 
 :::note[Current Semester Note (Wintersemester 2026/27)]
-Lecture notes and slide summaries for the Wintersemester 2026/27 curriculum.
+Lecture notes, spatial kinematics derivations, and slide summaries for the Wintersemester 2026/27 curriculum at Heidelberg University.
 :::
 
 ## 🗂️ Course Assets (Google Drive)
@@ -31,8 +31,8 @@ Lecture notes and slide summaries for the Wintersemester 2026/27 curriculum.
 
 ## 🔬 Core Disciplines & Intersections
 
-* **Robotic Medical Interventions (RMI)**: Kinematics, tracking systems, surgical guidance, and registration of anatomical models with real-time sensor streams.
-* **Coordinate Systems & Anatomical Planes**:
+* **Robotics and Machine Intelligence (RMI)**: Lecture by Prof. Dr. Artur Andrzejak (Wintersemester 2026/27). Foundations of embodied intelligence, sensor integration, forward/inverse kinematics, and spatial tracking.
+* **Medical Imaging & Anatomical Coordinate Systems**: Foundations for registering medical sensor streams and spatial coordinate systems with human anatomy:
   - **Sagittal plane**: Bisects body into left and right.
   - **Coronal (Frontal) plane**: Bisects body into anterior and posterior.
   - **Transverse (Axial) plane**: Bisects body into superior and inferior.

@@ -66,6 +66,14 @@ Website_project/
    * Automated CI/CD pipeline using GitHub Actions (`.github/workflows/deploy.yml`).
    * Registered and connected primary custom domain **`https://nikku.tech`** with HTTPS/SSL verified.
    * Configured **`nickblassmann.me`** via 301 URL redirect to seamlessly forward to `https://nikku.tech`.
+8. **Session 3 (Repo Synchronization, Push Auth & Academic Realignment)**:
+   * Synchronized local workspace with remote GitHub repository (`NikkuIsRyu/Nikku.github.io`).
+   * Configured local repository `core.sshCommand` with account key `~/.ssh/cggames_key` for passwordless push.
+   * Aligned `cv.md` with verified Heidelberg University records (B.Sc. Informatik, 5th Semester, Oct 2024 – Present), listing passed coursework without numerical grades per user preference.
+   * Corrected RMI terminology to *Robotics and Machine Intelligence* (Prof. Dr. Artur Andrzejak, WS 2026/27) and updated sidebar to `'AI, Robotics & Medical Informatics'`.
+   * Enriched `it-security.md` with Model Context Protocol (MCP) security, prompt injection, and supply chain analysis.
+   * Connected `machine-learning.md` to `Voice_ML_Project` (GPT-SoVITS v2, PyTorch, CUDA, 17.5 GB checkpoint archive on Google Drive).
+   * Added direct GitHub project links to `Voice_ML_Project` and `AnkiDeckGenPython`.
 
 ---
 
