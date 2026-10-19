@@ -82,6 +82,10 @@ Website_project/
    * Created intermediate Japanese track hub (`japanese/index.mdx`) with subdirectories `b1-1` and `b1-2`.
    * Initialized `b1-1/index.md` and `b1-2/index.md` with "Work in Progress / TBA" status callouts and curriculum placeholders.
    * Updated `astro.config.mjs` sidebar and `lectures/index.mdx` links.
+11. **Session 6 (Japanese B1.1 Chapters 26–32 Grammar & Anki Deck Integration)**:
+   * Audited all 27 `iMina` grammar screenshots (`G:\Meine Ablage\University\Screenshot_20261019_210*_iMina.jpg`) and decompressed the `collection.anki21b` Zstandard SQLite database from `E:\nickb\Documents\Japanese__Minna no Nihongo 1 & 2 (Chapters 1-50).apkg`.
+   * Identified and corrected 8 grammatical/spelling typos in the iMina app screenshots (e.g., `しめって` $\to$ `しめて`, `つかたら` $\to$ `つかったら`, `て きます` $\to$ `ときます`, `しゅちょう` $\to$ `しゅっちょう`, `とかい` $\to$ `とけい`, `あたらしし` $\to$ `あたらしいし`) and 7 card typos in the Anki `.apkg` deck (e.g., L29 `開[ひら]きます` $\to$ `開[あ]きます`, `ふさます` $\to$ `ふきます`, `お先に どうそ` $\to$ `どうぞ`, L27 `はかの` $\to$ `ほかの`, L32 `いけませんえ` $\to$ `いけませんね`).
+   * Built `src/content/docs/lectures/languages/japanese/b1-1/index.mdx` featuring a quick-jump navigation table, master conjugation & clause-attachment matrices, all 27 grammar patterns with Kanji/Furigana + iMina Kana + English translations, and 7 collapsible vocabulary drawers containing all 335 verified words across Chapters 26–32.
 
 ---
 
