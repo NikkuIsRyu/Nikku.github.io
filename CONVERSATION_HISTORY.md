@@ -58,6 +58,14 @@ Website_project/
    * Located folder `University`.
    * Created folder `gemini_convos`.
    * Packaged and uploaded `Website_project.zip` and the uncompressed project files.
+7. **Session 2 (Windows Setup & Live Deployment)**:
+   * Diagnosed `C:` drive storage limit (222 GB SSD, ~3.64 GB free).
+   * Relocated `npm` global cache to `D:\.npm-cache` and temp to `D:\Temp`, preserving `C:` from being exhausted during dependency installation.
+   * Installed 365 Astro/Starlight dependencies cleanly on `D:` and launched background dev server.
+   * Initialized Git repo, pushed to GitHub at `https://github.com/NikkuIsRyu/Nikku.github.io`.
+   * Automated CI/CD pipeline using GitHub Actions (`.github/workflows/deploy.yml`).
+   * Registered and connected primary custom domain **`https://nikku.tech`** with HTTPS/SSL verified.
+   * Configured **`nickblassmann.me`** via 301 URL redirect to seamlessly forward to `https://nikku.tech`.
 
 ---
 
