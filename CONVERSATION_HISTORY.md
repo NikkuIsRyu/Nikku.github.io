@@ -100,6 +100,13 @@ Website_project/
    * Created the comprehensive German reference page (`src/content/docs/lectures/languages/japanese/b1-1/de/index.mdx`) featuring full German grammar explanations, corrected example sentences, German quick navigation (`#lektion-26` to `#lektion-32`), Master-Konjugationstabellen, and 7 collapsible vocabulary drawers with all 335 words translated into natural German. Set `sidebar: { hidden: true }` to keep sidebar navigation clean.
    * Updated the Japanese track index (`src/content/docs/lectures/languages/japanese/index.mdx`) card with direct access to both English and German versions.
    * Verified clean build (`npm run build`), generated backup archive, and deployed to `main` (`nikku.tech`).
+14. **Session 9 (Japanese B1.1 DE & EN Second Peer-Review & Arrow Rendering Fix)**:
+   * Evaluated the second external linguistic peer review ([ChatGPT `6ad76041-e078-83eb-b757-a9d5659ce1ef`](https://chatgpt.com/share/6ad76041-e078-83eb-b757-a9d5659ce1ef)) and inspected the compiled HTML output in `dist/`.
+   * Fixed 8 occurrences of `$	o$` (corrupted by Python tab-escaping during initial generation) and all `$\to$` / `$\longrightarrow$` KaTeX math arrows across both `de/index.mdx` and `index.mdx`, replacing them with clean Unicode `→` to prevent duplicate MathML/HTML arrow extraction.
+   * Refined example translations for `映画を見たかもしれない` (L32.3), `バスが来なかったんです` (L26.1), and `日本では馬を見ることができません` (L27.5, removing parenthetical "wild/wilden").
+   * Nuanced grammar explanations for `予定です` vs. `つもりです` (L31.4), Volitional form `意向形` resolve/self-encouragement usage (L31.1), Potential form `可能形` focus on capability/possibility (L27.1), `～しか` vs. `～だけ` scope contrast (L27.3), and `～てあります` intentional resultant state (L30.1).
+   * Polished German vocabulary entries (`国会議事堂` removing "Diät", `片づきます`, `マンション`, `嫌［な］`, `国際 〜`) and fixed typo `jobb(e)` → `jobbe` (L28.4).
+   * Verified clean build (`npm run build`), created pre/post backup archives, and pushed to `main` (`nikku.tech`).
 
 ---
 
