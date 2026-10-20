@@ -84,8 +84,14 @@ Website_project/
    * Updated `astro.config.mjs` sidebar and `lectures/index.mdx` links.
 11. **Session 6 (Japanese B1.1 Chapters 26–32 Grammar & Anki Deck Integration)**:
    * Audited all 27 `iMina` grammar screenshots (`G:\Meine Ablage\University\Screenshot_20261019_210*_iMina.jpg`) and decompressed the `collection.anki21b` Zstandard SQLite database from `E:\nickb\Documents\Japanese__Minna no Nihongo 1 & 2 (Chapters 1-50).apkg`.
-   * Identified and corrected 8 grammatical/spelling typos in the iMina app screenshots (e.g., `しめって` $\to$ `しめて`, `つかたら` $\to$ `つかったら`, `て きます` $\to$ `ときます`, `しゅちょう` $\to$ `しゅっちょう`, `とかい` $\to$ `とけい`, `あたらしし` $\to$ `あたらしいし`) and 7 card typos in the Anki `.apkg` deck (e.g., L29 `開[ひら]きます` $\to$ `開[あ]きます`, `ふさます` $\to$ `ふきます`, `お先に どうそ` $\to$ `どうぞ`, L27 `はかの` $\to$ `ほかの`, L32 `いけませんえ` $\to$ `いけませんね`).
+   * Identified and corrected genuine source typos in the iMina app screenshots (e.g., `しめって` $\to$ `しめて`, `つかたら` $\to$ `つかったら`, `て きます` $\to$ `ときます`, `しゅちょう` $\to$ `しゅっちょう`, `とかい` $\to$ `とけい`, `あたらしし` $\to$ `あたらしいし`) and card typos in the Anki `.apkg` deck (e.g., L29 `開[ひら]きます` $\to$ `開[あ]きます`, `ふさます` $\to$ `ふきます`, `お先に どうそ` $\to$ `どうぞ`, L27 `はかの` $\to$ `ほかの`, L32 `いけませんえ` $\to$ `いけませんね`), while applying standard loanword/kanji orthography (`ダンス`, `悪`).
    * Built `src/content/docs/lectures/languages/japanese/b1-1/index.mdx` featuring a quick-jump navigation table, master conjugation & clause-attachment matrices, all 27 grammar patterns with Kanji/Furigana + iMina Kana + English translations, and 7 collapsible vocabulary drawers containing all 335 verified words across Chapters 26–32.
+12. **Session 7 (Japanese B1.1 Linguistic Peer-Review & Precision Refinement)**:
+   * Audited the live B1.1 reference page against external linguistic peer review ([ChatGPT `6ad743cf-0c6c-83eb-a88a-9912abd3ff16`](https://chatgpt.com/share/6ad743cf-0c6c-83eb-a88a-9912abd3ff16)) and authoritative Japanese grammar references (Japan Foundation & TUFS Grammar Modules).
+   * Reclassified the B1.1 Source Audit drawer into 3 explicit categories: genuine Japanese grammar/conjugation/kana fixes (11), English gloss/typo fixes (3), and orthographic standardizations / explicit textbook formatting (3).
+   * Corrected Lesson 26 Vocab #30 `片づきます` gloss to accurately reflect intransitive usage (`to be put in order, get tidied up / put away`) vs. transitive `片づけます` (L29 #18).
+   * Refined explanations for `～んです` / `～のです` contextual nuance and `から` usage (L26.1), `Nは` topicalization of `が`-marked phrases (L26.4), `時計の修理はいつできますか` translation (L27.2), `土（土曜日）` schedule abbreviation (L28 #50), casual particle drop note for `宿題(は)` (L29.2), `嫌［な］` glosses (L30 #46, L31 #34), and `～かもしれません` present/future/past possibility scope (L32.3).
+   * Verified full static site build with `npm run build` and pushed changes to `main` (`nikku.tech`).
 
 ---
 
