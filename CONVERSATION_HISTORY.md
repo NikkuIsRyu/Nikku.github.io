@@ -92,6 +92,14 @@ Website_project/
    * Corrected Lesson 26 Vocab #30 `片づきます` gloss to accurately reflect intransitive usage (`to be put in order, get tidied up / put away`) vs. transitive `片づけます` (L29 #18).
    * Refined explanations for `～んです` / `～のです` contextual nuance and `から` usage (L26.1), `Nは` topicalization of `が`-marked phrases (L26.4), `時計の修理はいつできますか` translation (L27.2), `土（土曜日）` schedule abbreviation (L28 #50), casual particle drop note for `宿題(は)` (L29.2), `嫌［な］` glosses (L30 #46, L31 #34), and `～かもしれません` present/future/past possibility scope (L32.3).
    * Verified full static site build with `npm run build` and pushed changes to `main` (`nikku.tech`).
+13. **Session 8 (Japanese B1.1 German Edition & Flag Switcher Component)**:
+   * Audited all 27 German `iMina` app grammar screenshots (`/home/nick/Dokumente/Imina /`) across Minna no Nihongo Shokyu II (Lessons 26–32).
+   * Detected and corrected 6 app Japanese typos (`しめって` $\to$ `しめて`, `て きます` $\to$ `ときます`, `しゅちょう` $\to$ `しゅっちょう`, `とかい` $\to$ `とけい`, `あたらしし` $\to$ `あたらしいし`, and German-app-specific `ジョッギング` $\to$ `ジョギング`) as well as 7 German translation/formatting defects (such as correcting the inverted main/subordinate clause order in `ながら` explanations and missing particles).
+   * Created a reusable `<LanguageSwitch current="en|de" />` Astro component (`src/components/LanguageSwitch.astro`) with inline SVG flags (`🇬🇧 English` | `🇩🇪 Deutsch`), responsive Starlight integration, and dynamic hash-preservation mapping between English (`#lesson-XX`) and German (`#lektion-XX`) anchor links.
+   * Integrated `<LanguageSwitch current="en" />` directly beneath the header badge on the English page (`src/content/docs/lectures/languages/japanese/b1-1/index.mdx`).
+   * Created the comprehensive German reference page (`src/content/docs/lectures/languages/japanese/b1-1/de/index.mdx`) featuring full German grammar explanations, corrected example sentences, German quick navigation (`#lektion-26` to `#lektion-32`), Master-Konjugationstabellen, and 7 collapsible vocabulary drawers with all 335 words translated into natural German. Set `sidebar: { hidden: true }` to keep sidebar navigation clean.
+   * Updated the Japanese track index (`src/content/docs/lectures/languages/japanese/index.mdx`) card with direct access to both English and German versions.
+   * Verified clean build (`npm run build`), generated backup archive, and deployed to `main` (`nikku.tech`).
 
 ---
 

@@ -1,0 +1,121 @@
+---
+interface Props {
+  current: 'en' | 'de';
+  enHref?: string;
+  deHref?: string;
+}
+
+const {
+  current,
+  enHref = '/lectures/languages/japanese/b1-1/',
+  deHref = '/lectures/languages/japanese/b1-1/de/',
+} = Astro.props;
+---
+
+<div class="lang-switch-bar not-content" role="navigation" aria-label="Language selector / Sprachauswahl">
+  <span class="lang-switch-label">
+    {current === 'en' ? 'Language / Sprache:' : 'Sprache / Language:'}
+  </span>
+  <div class="lang-switch-group">
+    <a
+      href={enHref}
+      class:list={['lang-btn', { active: current === 'en' }]}
+      aria-current={current === 'en' ? 'page' : undefined}
+      data-lang-switch="en"
+    >
+      <svg class="flag-icon" viewBox="0 0 60 30" width="20" height="14" aria-hidden="true">
+        <clipPath id="uk-clip"><rect width="60" height="30" rx="3"/></clipPath>
+        <g clip-path="url(#uk-clip)">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+          <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/>
+          <path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/>
+          <path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/>
+        </g>
+      </svg>
+      <span>English</span>
+    </a>
+    <a
+      href={deHref}
+      class:list={['lang-btn', { active: current === 'de' }]}
+      aria-current={current === 'de' ? 'page' : undefined}
+      data-lang-switch="de"
+    >
+      <svg class="flag-icon" viewBox="0 0 5 3" width="20" height="14" aria-hidden="true">
+        <rect width="5" height="3" y="0" fill="#000" rx="0.2"/>
+        <rect width="5" height="2" y="1" fill="#D00"/>
+        <rect width="5" height="1" y="2" fill="#FFCE00"/>
+      </svg>
+      <span>Deutsch</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lang-switch]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const numMatch = hash.match(/(?:lesson|lektion)-(\d+)/i);
+      if (numMatch) {
+        const num = numMatch[1];
+        const targetLang = link.dataset.langSwitch;
+        link.href = `${link.pathname}#${targetLang === 'de' ? 'lektion' : 'lesson'}-${num}`;
+      }
+    });
+  });
+</script>
+
+<style>
+  .lang-switch-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.65rem 1rem;
+    margin: 0.75rem 0 1.25rem;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.6rem;
+  }
+  .lang-switch-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+  }
+  .lang-switch-group {
+    display: inline-flex;
+    gap: 0.4rem;
+    background: var(--sl-color-black);
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+  }
+  .lang-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    transition: all 0.15s ease;
+  }
+  .lang-btn:hover {
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+  }
+  .lang-btn.active {
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+  .flag-icon {
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+  }
+</style>
