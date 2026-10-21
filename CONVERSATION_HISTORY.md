@@ -108,11 +108,22 @@ Website_project/
    * Polished German vocabulary entries (`国会議事堂` removing "Diät", `片づきます`, `マンション`, `嫌［な］`, `国際 〜`) and fixed typo `jobb(e)` → `jobbe` (L28.4).
    * Verified clean build (`npm run build`), created pre/post backup archives, and pushed to `main` (`nikku.tech`).
 
+15. **Session 10 (Omarchy Handover, Cross-System Sync & Google Drive Archive)**:
+   * **Host & System**: Ubuntu 24.04 LTS (Acer Swift SFG14-63) preparing seamless handover to Arch Linux / Omarchy.
+   * **Project Health**: Verified `npm run build` generates all 16 static routes without warnings or errors in 2.7 seconds.
+   * **Omarchy Migration Bundle**: Bundled active Antigravity profile (`antigravity_user_data.tar.gz`, 469 MB) with OAuth tokens, brain contexts, and MCP configs to USB drive (`/media/nick/Ventoy/antigravity_migration/`).
+   * **Google Drive Cloud Sync**: Synthesized complete project architecture and conversation transcript into `SUMMARY.md` and `CONVERSATION_HISTORY.md`, syncing to Google Drive (`University/gemini_convos/Website-project-laptop/` and `Website-project-omarchy/`).
+   * **Cross-Environment Ready**: Full instructions documented for instant onboarding on Arch Linux / Omarchy.
+
 ---
 
-## 🚀 How to Resume in Antigravity on Your Home PC
-1. Extract `Website_project.zip` into your desired projects directory.
-2. Open the folder in **Antigravity IDE** (`File > Open Folder...`).
-3. Ensure Node.js v22+ is installed on your PC (`node -v`).
+## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
+1. Clone or extract the repository:
+   ```bash
+   git clone git@github.com:NikkuIsRyu/Nikku.github.io.git Website_project
+   cd Website_project
+   ```
+2. Open the directory in **Antigravity IDE** (`File > Open Folder...`).
+3. Ensure Node.js v22+ is installed (`node -v` / `sudo pacman -S nodejs npm` on Omarchy).
 4. In the Antigravity chat, send:
-   > *"Read CONVERSATION_HISTORY.md and AGENTS.md, run npm install, and start the dev server."*
+   > *"Read SUMMARY.md, CONVERSATION_HISTORY.md, and AGENTS.md, run npm install, verify with npm run build, and start the dev server with astro dev --background."*
