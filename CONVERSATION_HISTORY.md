@@ -107,7 +107,6 @@ Website_project/
    * Nuanced grammar explanations for `予定です` vs. `つもりです` (L31.4), Volitional form `意向形` resolve/self-encouragement usage (L31.1), Potential form `可能形` focus on capability/possibility (L27.1), `～しか` vs. `～だけ` scope contrast (L27.3), and `～てあります` intentional resultant state (L30.1).
    * Polished German vocabulary entries (`国会議事堂` removing "Diät", `片づきます`, `マンション`, `嫌［な］`, `国際 〜`) and fixed typo `jobb(e)` → `jobbe` (L28.4).
    * Verified clean build (`npm run build`), created pre/post backup archives, and pushed to `main` (`nikku.tech`).
-
 15. **Session 10 (Omarchy Handover, Cross-System Sync & Google Drive Archive)**:
    * **Host & System**: Ubuntu 24.04 LTS (Acer Swift SFG14-63) preparing seamless handover to Arch Linux / Omarchy.
    * **Project Health**: Verified `npm run build` generates all 16 static routes without warnings or errors in 2.7 seconds.
@@ -115,6 +114,14 @@ Website_project/
    * **Google Drive Cloud Sync**: Synthesized complete project architecture and conversation transcript into `SUMMARY.md` and `CONVERSATION_HISTORY.md`, syncing to Google Drive (`University/gemini_convos/Website-project-laptop/` and `Website-project-omarchy/`).
    * **Cross-Environment Ready**: Full instructions documented for instant onboarding on Arch Linux / Omarchy.
 
+16. **Session 11 (Chinese Course & Interactive Multi-Speaker Audio Dialogues)**:
+   * Integrated the complete multi-speaker dialogue audio generation from Voice-ML v3 (conversation `Create Anki Audio Deck`).
+   * Converted all 6 dialogue WAV files (`Dialogue2_1.wav` to `Dialogue4_2.wav`) from `G:\Meine Ablage\University\dialogues` into high-quality, lightweight MP3 files (total size ~1.95 MB) and deployed them to `public/audio/dialogues/` alongside the JSON alignment timestamp files.
+   * Built a typed, modular dataset (`src/data/chineseDialogues.ts`) with speaker metadata (`female_v3`, `male_v1`, `male_zs`), roles, Hanzi, Pinyin with tone marks, German translations, and millisecond-accurate timestamps.
+   * Engineered the rich, interactive `<DialoguePlayer.astro>` component featuring master playback controls, scrubber progress bar, speed control (1.0x, 0.85x, 0.7x), live karaoke active-turn highlighting, single-turn replay buttons, Pinyin/Translation toggles, sentence loop mode, and Google Drive lossless WAV / JSON links.
+   * Replaced legacy placeholder `chinese.md` with the comprehensive reference page `src/content/docs/lectures/languages/chinese.mdx` covering Lektionen 2–4 dialogues, Tone Sandhi rules ($3+3 \to 2+3$, half 3rd tone, `不`, `一`/`yāo`), sentence structure (S-Z-O-V), 4 question types, and Google Drive asset links (107 MB Dual-Audio Anki deck).
+   * Updated `astro.config.mjs` sidebar to `'Chinesisch & Audio-Dialoge'` and updated `src/content/docs/lectures/index.mdx`.
+   * Verified 100% clean static production build (`npm run build`, 16 pages).
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC

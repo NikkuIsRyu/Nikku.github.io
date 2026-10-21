@@ -1,0 +1,62 @@
+{
+  "dialogue_id": "Dialogue3_1",
+  "total_duration_s": 14.85,
+  "sample_rate": 32000,
+  "turns_count": 6,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "Helen，购物中心的广告在哪儿？",
+      "start_ms": 0.0,
+      "end_ms": 2411.0,
+      "duration_ms": 2411.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "在这儿。",
+      "start_ms": 3031.0,
+      "end_ms": 3622.0,
+      "duration_ms": 591.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "里边有亚洲超市的电话号码吗？",
+      "start_ms": 4142.0,
+      "end_ms": 6743.0,
+      "duration_ms": 2601.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "有，他们的电话是四五〇一一二。",
+      "start_ms": 7363.0,
+      "end_ms": 10349.0,
+      "duration_ms": 2986.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "他们的传真是多少？",
+      "start_ms": 10869.0,
+      "end_ms": 12495.0,
+      "duration_ms": 1626.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "是四五〇二一一。",
+      "start_ms": 13115.0,
+      "end_ms": 14846.0,
+      "duration_ms": 1731.0
+    }
+  ]
+}

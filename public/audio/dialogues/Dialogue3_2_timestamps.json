@@ -1,0 +1,71 @@
+{
+  "dialogue_id": "Dialogue3_2",
+  "total_duration_s": 22.83,
+  "sample_rate": 32000,
+  "turns_count": 7,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "听说张小姐现在在天津工作。",
+      "start_ms": 0.0,
+      "end_ms": 2531.0,
+      "duration_ms": 2531.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "张小姐？张小姐是谁？",
+      "start_ms": 3051.0,
+      "end_ms": 4242.0,
+      "duration_ms": 1191.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "张丽佳，你认识她。她以前是汉堡大学的学生。",
+      "start_ms": 4862.0,
+      "end_ms": 9078.0,
+      "duration_ms": 4216.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "哦，丽佳！你有她的地址吗？",
+      "start_ms": 9598.0,
+      "end_ms": 12589.0,
+      "duration_ms": 2991.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "有。她家在天津五一路十号。",
+      "start_ms": 13209.0,
+      "end_ms": 15965.0,
+      "duration_ms": 2756.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "你有没有她的电话？",
+      "start_ms": 16485.0,
+      "end_ms": 18271.0,
+      "duration_ms": 1786.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v3",
+      "text": "我只有她办公室的电话，还没有她的手机号码。",
+      "start_ms": 18891.0,
+      "end_ms": 22832.0,
+      "duration_ms": 3941.0
+    }
+  ]
+}

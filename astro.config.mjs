@@ -54,7 +54,7 @@ export default defineConfig({
 								{ label: 'Japanisch B1.2', slug: 'lectures/languages/japanese/b1-2' },
 							],
 						},
-						{ label: 'Chinesisch & Anki Vault', slug: 'lectures/languages/chinese' },
+						{ label: 'Chinesisch & Audio-Dialoge', slug: 'lectures/languages/chinese' },
 					],
 				},
 			],
