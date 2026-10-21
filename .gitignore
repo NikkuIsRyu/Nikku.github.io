@@ -25,5 +25,6 @@ pnpm-debug.log*
 .npm-cache/
 temp/
 .antigravity_logs/
+export_omarchy/
 
 
