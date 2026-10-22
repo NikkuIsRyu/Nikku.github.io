@@ -135,6 +135,8 @@ Website_project/
     * Removed Google Drive download links and fallback folder references (`1w3qC6G6t4q0f5o2G1L7n5d3jX`) from `<DialoguePlayer.astro>` and all dialogue instances in `src/content/docs/lectures/languages/chinese.mdx`.
     * Removed the "Studio WAV & Timestamps Master (Dialogues Master Archive)" Google Drive card from `chinese.mdx` to prevent public download of raw dialogue audio assets.
     * Preserved on-site web audio playback (`/audio/dialogues/*.mp3`) and interactive JSON timestamps for practice on `nikku.tech`.
+    * Upgraded `<DriveAsset />` component with support for `wip={true}` (rendering a styled amber `🚧 Work In Progress` badge instead of an active Google Drive download link).
+    * Set the Chinese 107 MB Anki deck asset card to `Work In Progress` pending rights clearance and audio verification.
     * Verified clean build (`npm run build`, 16 pages).
 ---
 
