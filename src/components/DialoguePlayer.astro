@@ -8,7 +8,7 @@ interface Props {
 
 const {
 	dialogue,
-	driveFolderHref = 'https://drive.google.com/drive/folders/1w3qC6G6t4q0f5o2G1L7n5d3jX' // fallback to drive
+	driveFolderHref
 } = Astro.props;
 
 const containerId = `dialogue-player-${dialogue.id}`;
@@ -89,9 +89,11 @@ const containerId = `dialogue-player-${dialogue.id}`;
 				<a href={`/audio/dialogues/${dialogue.id}_timestamps.json`} target="_blank" rel="noopener noreferrer" class="tool-link-btn" title="Exakte Frame- und Zeitstempel als JSON öffnen">
 					<span>📄 JSON Timestamps</span>
 				</a>
-				<a href={driveFolderHref} target="_blank" rel="noopener noreferrer" class="tool-link-btn primary" title="Lossless 32 kHz WAV Studio-Master auf Google Drive öffnen">
-					<span>Lossless WAV (Drive) ↗</span>
-				</a>
+				{driveFolderHref && (
+					<a href={driveFolderHref} target="_blank" rel="noopener noreferrer" class="tool-link-btn primary" title="Lossless 32 kHz WAV Studio-Master auf Google Drive öffnen">
+						<span>Lossless WAV (Drive) ↗</span>
+					</a>
+				)}
 			</div>
 		</div>
 	</div>

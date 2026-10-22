@@ -122,6 +122,20 @@ Website_project/
    * Replaced legacy placeholder `chinese.md` with the comprehensive reference page `src/content/docs/lectures/languages/chinese.mdx` covering Lektionen 2–4 dialogues, Tone Sandhi rules ($3+3 \to 2+3$, half 3rd tone, `不`, `一`/`yāo`), sentence structure (S-Z-O-V), 4 question types, and Google Drive asset links (107 MB Dual-Audio Anki deck).
    * Updated `astro.config.mjs` sidebar to `'Chinesisch & Audio-Dialoge'` and updated `src/content/docs/lectures/index.mdx`.
    * Verified 100% clean static production build (`npm run build`, 16 pages).
+
+17. **Session 12 (Japanese B1.1 Vocabulary Table of Contents Visibility & Direct Anchor Navigation)**:
+    * Addressed user difficulty locating the Japanese B1.1 vocabulary registers (Chapters 26–32, 335 words total).
+    * Promoted all 7 vocabulary registers in both English (`b1-1/index.mdx`) and German (`b1-1/de/index.mdx`) into prominent Markdown `###` headings (`### 26.5 📖 Vocabulary Register (45 Words)` / `### 26.5 📖 Vokabelregister (45 Wörter)`), making them instantly visible in the right-hand Starlight Table of Contents sidebar.
+    * Enhanced the top Quick Chapter Navigation tables on both pages with direct clickable links (`[📖 XX words](#lesson-XX-vocab)` / `[📖 XX Wörter](#lektion-XX-vokabeln)`).
+    * Upgraded `src/components/LanguageSwitch.astro` with automatic bidirectional hash mapping (`lesson-XX-vocab` ↔ `lektion-XX-vokabeln`) and automatic drawer expansion on hash navigation.
+    * Confirmed user will wait for `.apkg` download files until speech audio generation with `Voice_ML_Project`.
+    * Verified clean build (`npm run build`, 16 pages).
+
+18. **Session 13 (Chinese Dialogues Audio Privacy & Removal of Google Drive Downloads)**:
+    * Removed Google Drive download links and fallback folder references (`1w3qC6G6t4q0f5o2G1L7n5d3jX`) from `<DialoguePlayer.astro>` and all dialogue instances in `src/content/docs/lectures/languages/chinese.mdx`.
+    * Removed the "Studio WAV & Timestamps Master (Dialogues Master Archive)" Google Drive card from `chinese.mdx` to prevent public download of raw dialogue audio assets.
+    * Preserved on-site web audio playback (`/audio/dialogues/*.mp3`) and interactive JSON timestamps for practice on `nikku.tech`.
+    * Verified clean build (`npm run build`, 16 pages).
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
