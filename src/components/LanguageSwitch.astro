@@ -52,18 +52,56 @@ const {
 </div>
 
 <script>
-  document.querySelectorAll<HTMLAnchorElement>('a[data-lang-switch]').forEach((link) => {
-    link.addEventListener('click', () => {
+  function setupLanguageSwitch() {
+    document.querySelectorAll<HTMLAnchorElement>('a[data-lang-switch]').forEach((link) => {
+      link.addEventListener('click', () => {
+        const hash = window.location.hash;
+        if (!hash) return;
+        const targetLang = link.dataset.langSwitch;
+        const vocabMatch = hash.match(/(?:lesson|lektion)-(\d+)-(?:vocab|vokabeln)/i);
+        if (vocabMatch) {
+          const num = vocabMatch[1];
+          link.href = `${link.pathname}#${targetLang === 'de' ? `lektion-${num}-vokabeln` : `lesson-${num}-vocab`}`;
+          return;
+        }
+        const numMatch = hash.match(/(?:lesson|lektion)-(\d+)/i);
+        if (numMatch) {
+          const num = numMatch[1];
+          link.href = `${link.pathname}#${targetLang === 'de' ? 'lektion' : 'lesson'}-${num}`;
+        }
+      });
+    });
+
+    const openHashDetails = () => {
       const hash = window.location.hash;
       if (!hash) return;
-      const numMatch = hash.match(/(?:lesson|lektion)-(\d+)/i);
-      if (numMatch) {
-        const num = numMatch[1];
-        const targetLang = link.dataset.langSwitch;
-        link.href = `${link.pathname}#${targetLang === 'de' ? 'lektion' : 'lesson'}-${num}`;
+      try {
+        const target = document.querySelector(decodeURIComponent(hash));
+        if (!target) return;
+        let details = target.closest('details');
+        if (!details) {
+          if (target.nextElementSibling && target.nextElementSibling.tagName === 'DETAILS') {
+            details = target.nextElementSibling as HTMLDetailsElement;
+          } else if (target.parentElement) {
+            details = target.parentElement.querySelector('details') || 
+                      (target.parentElement.nextElementSibling?.tagName === 'DETAILS' ? target.parentElement.nextElementSibling as HTMLDetailsElement : null);
+          }
+        }
+        if (details && details.tagName === 'DETAILS') {
+          details.open = true;
+        }
+      } catch (e) {
+        // Ignore invalid selector
       }
-    });
-  });
+    };
+
+    window.addEventListener('hashchange', openHashDetails);
+    if (window.location.hash) {
+      setTimeout(openHashDetails, 150);
+    }
+  }
+
+  setupLanguageSwitch();
 </script>
 
 <style>
