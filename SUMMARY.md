@@ -69,7 +69,7 @@ Website_project/
 
 ---
 
-## 📑 Static Routes & Pages (18 Verified Routes)
+## 📑 Static Routes & Pages (17 Verified Routes)
 
 1. `/index.html`: Digital Garden Landing Page with quick-access cards to all semesters
 2. `/cv/index.html`: Curriculum Vitae, academic background, research interests, and project links
@@ -81,14 +81,13 @@ Website_project/
 8. `/lectures/core-cs/it-security/index.html`: IT-Sicherheit & MCP Trust Boundaries
 9. `/lectures/ai-and-med/machine-learning/index.html`: Machine Learning & Voice ML Project
 10. `/lectures/ai-and-med/rmi-anatomy/index.html`: Robotics & Machine Intelligence + Anatomy
-11. `/lectures/ai-and-med/seminar-agentic-ai/index.html`: Agentic AI Seminar Hub (English Edition)
-12. `/lectures/ai-and-med/seminar-agentic-ai/de/index.html`: Agentic AI Seminar Hub (German Edition)
-13. `/lectures/languages/chinese/index.html`: Mandarin Chinese & Interactive Multi-Speaker Dialogues
-14. `/lectures/languages/japanese/index.html`: Japanese Track Hub (Intermediate B1)
-15. `/lectures/languages/japanese/b1-1/index.html`: Japanese B1.1 Reference (English edition)
-16. `/lectures/languages/japanese/b1-1/de/index.html`: Japanese B1.1 Reference (German edition)
-17. `/lectures/languages/japanese/b1-2/index.html`: Japanese B1.2 Coursework (WS 2026/27 placeholder)
-18. `/404.html`: Custom 404 error page
+11. `/lectures/ai-and-med/seminar-agentic-ai/index.html`: Agentic AI Seminar Hub (Interactive Progress Tracker & Per-Card EN/DE Lexicon)
+12. `/lectures/languages/chinese/index.html`: Mandarin Chinese & Interactive Multi-Speaker Dialogues
+13. `/lectures/languages/japanese/index.html`: Japanese Track Hub (Intermediate B1)
+14. `/lectures/languages/japanese/b1-1/index.html`: Japanese B1.1 Reference (English edition)
+15. `/lectures/languages/japanese/b1-1/de/index.html`: Japanese B1.1 Reference (German edition)
+16. `/lectures/languages/japanese/b1-2/index.html`: Japanese B1.2 Coursework (WS 2026/27 placeholder)
+17. `/404.html`: Custom 404 error page
 
 ---
 

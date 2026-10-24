@@ -146,8 +146,14 @@ Website_project/
     * Engineered `<SeminarTracker.astro>` featuring live milestone and paper progress meters, momentary focus bookmark with scratchpad (`localStorage` persistence across languages), and self-check Socratic questions preventing passive AI over-summarization.
     * Built `<SeminarLexicon.astro>` featuring instant search and multi-filtering across Core Paradigms, RL/Reflexion, Benchmarks, and Medical AI.
     * Upgraded `<LanguageSwitch.astro>` with seamless hash-preservation for `#progress`, `#papers`, `#lexicon`, and `#guidelines`.
-    * Deployed both English primary route (`/lectures/ai-and-med/seminar-agentic-ai/`) and native German edition (`/lectures/ai-and-med/seminar-agentic-ai/de/`), linking from `lectures/index.mdx` and landing page `index.mdx`.
-    * Verified clean static production build (`npm run build`, 18 pages in 1.92s) and running background dev server.
+    * Deployed English primary route (`/lectures/ai-and-med/seminar-agentic-ai/`) and native German edition (`/lectures/ai-and-med/seminar-agentic-ai/de/`), linking from `lectures/index.mdx` and landing page `index.mdx`.
+    * **Iteration 2 Refinements**:
+      - Removed translated German technical terms from Lexicon card headers so only canonical English Fachbegriffe are displayed.
+      - Implemented instant per-card `🇬🇧 EN | 🇩🇪 DE` toggle buttons directly inside each Lexicon word card (plus bulk `All EN | All DE` toggle in filter bar) for client-side language switching without page reload.
+      - Pinned the `🇬🇧 EN | 🇩🇪 DE` toggle button to the top-right corner of each card horizontally side-by-side opposite the term title, per user screenshot specification.
+      - Removed the duplicate full-page German route (`/de/`) and consolidated the Seminar Hub to a single clean English route (17 static routes total).
+      - Archived the complete German page to `/home/nikku/GoogleDrive/University/Seminar-Gertz/backups/seminar_de_index.mdx.bak` for 1-command restoration while preserving all German data fields in `src/data/seminarAgenticAi.ts`.
+    * Verified clean static production build (`npm run build`, 17 pages in 1.87s) and running background dev server.
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
