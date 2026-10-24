@@ -1,6 +1,9 @@
 ---
 title: Academic Knowledge Vault
 description: Directory of university courses, lecture notes, formula derivations, and Google Drive assets.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'audimax';
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
@@ -8,6 +11,8 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 Welcome to the digital academic vault. All course summaries, $\KaTeX$ formulas, code implementations, and asset links stored on the 5 TB Google Drive cloud vault are cataloged below.
 
 ---
+
+<div class="page-bg-audimax" aria-hidden="true"></div>
 
 ## 🏛️ Course Directory
 

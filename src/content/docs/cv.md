@@ -1,7 +1,12 @@
 ---
 title: Curriculum Vitae & About Me
 description: Academic background, projects, and contact info.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'desk';
 ---
+
+<div class="page-bg-desk" aria-hidden="true"></div>
 
 ## 👨‍💻 About Me
 

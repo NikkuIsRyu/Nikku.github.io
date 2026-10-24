@@ -7,88 +7,86 @@
   --sl-color-accent-high: #93c5fd;
 }
 
-/* Page-specific pixel art background definitions */
-html[data-has-hero] {
-  --page-bg-image: url('/sakura-bg.jpg');
-  --page-bg-pos: right bottom;
-  --page-bg-opacity: 0.28;
-}
-
-html:has(link[rel="canonical"][href$="nikku.tech/cv/"]) {
-  --page-bg-image: url('/desk-bg.jpg');
-  --page-bg-pos: center center;
-  --page-bg-opacity: 0.26;
-}
-
-html:has(link[rel="canonical"][href$="nikku.tech/lectures/"]) {
-  --page-bg-image: url('/audimax-bg.jpg');
-  --page-bg-pos: center bottom;
-  --page-bg-opacity: 0.25;
-}
-
-/* Shared semi-transparent pixel art overlay for Front Page, CV, and Lectures Overview */
-:is(
-  html[data-has-hero],
-  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-) body {
+/* Shared base layout for pages with pixel art background overlay */
+html[data-has-hero] body,
+html[data-page-bg] body,
+body:has(.page-bg-desk),
+body:has(.page-bg-audimax) {
   position: relative;
   background-color: var(--sl-color-bg);
 }
 
-:is(
-  html[data-has-hero],
-  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-) body::before {
+html[data-has-hero] body::before,
+html[data-page-bg="desk"] body::before,
+html[data-page-bg="audimax"] body::before,
+body:has(.page-bg-desk)::before,
+body:has(.page-bg-audimax)::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: var(--page-bg-image);
   background-size: cover;
-  background-position: var(--page-bg-pos, center center);
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  opacity: var(--page-bg-opacity, 0.26);
   pointer-events: none;
   z-index: 0;
 }
 
-:is(
-  html[data-has-hero],
-  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-) .page {
+html[data-has-hero] body::before {
+  background-image: url('/sakura-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
+html[data-page-bg="desk"] body::before,
+body:has(.page-bg-desk)::before {
+  background-image: url('/desk-bg.jpg');
+  background-position: center center;
+  opacity: 0.28;
+}
+
+html[data-page-bg="audimax"] body::before,
+body:has(.page-bg-audimax)::before {
+  background-image: url('/audimax-bg.jpg');
+  background-position: center bottom;
+  opacity: 0.28;
+}
+
+html[data-has-hero] .page,
+html[data-page-bg] .page,
+body:has(.page-bg-desk) .page,
+body:has(.page-bg-audimax) .page {
   position: relative;
   z-index: 1;
 }
 
-:is(
-  html[data-has-hero],
-  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-) .header {
+html[data-has-hero] .header,
+html[data-page-bg] .header,
+body:has(.page-bg-desk) .header,
+body:has(.page-bg-audimax) .header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
 
 @media (min-width: 50rem) {
-  :is(
-    html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-    html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-  ) .sidebar-pane {
-    background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 78%, transparent);
+  html[data-page-bg] .sidebar-pane,
+  body:has(.page-bg-desk) .sidebar-pane,
+  body:has(.page-bg-audimax) .sidebar-pane {
+    background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 75%, transparent);
     backdrop-filter: blur(8px);
   }
 }
 
-:is(
-  html[data-has-hero],
-  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
-  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
-) .card {
+html[data-has-hero] .card,
+html[data-page-bg] .card,
+body:has(.page-bg-desk) .card,
+body:has(.page-bg-audimax) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
+}
+
+.page-bg-desk,
+.page-bg-audimax {
+  display: none;
 }
 
 /* Prevent horizontal viewport expansion on mobile devices */
