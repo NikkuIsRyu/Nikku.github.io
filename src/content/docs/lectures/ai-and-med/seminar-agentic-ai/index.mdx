@@ -1,0 +1,121 @@
+---
+title: "Seminar: Agentic AI for Problem Solving (WS 2026/27)"
+description: "Interactive reading hub, paper access vault, progress tracker, and bilingual technical lexicon for Prof. Gertz's Agentic AI seminar at Heidelberg University."
+sidebar:
+  order: 3
+  label: "Seminar: Agentic AI (WS 26/27)"
+---
+
+import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
+import LanguageSwitch from '../../../../../components/LanguageSwitch.astro';
+import SeminarTracker from '../../../../../components/SeminarTracker.astro';
+import SeminarLexicon from '../../../../../components/SeminarLexicon.astro';
+
+# Seminar: Agentic AI for Problem Solving <Badge text="WS 2026/27" variant="success" size="medium" />
+
+<LanguageSwitch current="en" enHref="/lectures/ai-and-med/seminar-agentic-ai/" deHref="/lectures/ai-and-med/seminar-agentic-ai/de/" />
+
+Personal academic workstation and reading companion for the master/bachelor advanced seminar **Agentic AI for Problem Solving** (Winter Semester 2026/27, **Prof. Dr. Michael Gertz**, Data Science Group, Heidelberg University).
+
+:::note[Assigned Roles & Key Dates — Nick Blassmann]
+* **Presentation Paper (S5)**: *Reflexion: Language Agents with Verbal Reinforcement Learning* (NeurIPS 2023)  
+  📅 **Presentation Date**: **Thursday, December 3, 2026** (9:00–11:00 c.t., INF 205, Seminar Room 1)
+* **Discussant / Questioner Paper (S14)**: *Towards Conversational Artificial Intelligence for Disease Management* (Nature 2026)  
+  📅 **Discussant Date**: **Thursday, January 14, 2027**
+* **Written Report (12–14 Pages LaTeX)**: Due **Friday, February 12, 2027 (20:00)**  
+* **Grading Formula**: `50% Presentation` + `42% Written Report` + `8% Discussant / Participation` *(Both presentation and report must be graded ≤ 4.0 to pass).*
+:::
+
+---
+
+## 🗺️ Quick Hub Navigation
+
+| Section | Content Overview | Direct Anchor |
+| :--- | :--- | :--- |
+| **[📊 Momentary Progress & Dashboard](#progress)** | Live progress bars, current reading focus bookmark & persistent scratchpad | [Jump to Progress ↗](#progress) |
+| **[🗓️ Master Timeline & Milestones](#milestones-section)** | Checklist of all 10 seminar deliverables and advisor deadlines | [Jump to Milestones ↗](#milestones-section) |
+| **[📚 Paper Access & Reading Compasses](#papers-section)** | 1-click open-access PDFs, Drive vault sync, inline viewer & section guides | [Jump to Papers ↗](#papers-section) |
+| **[📖 Bilingual Fachbegriffe Lexikon](#lexicon)** | 28 filterable technical terms with EN/DE side-by-side definitions | [Jump to Lexicon ↗](#lexicon) |
+| **[🎙️ Presentation Guidelines & Blueprint](#presentation-guidelines)** | Gertz presentation rules, "Tell 'em Three Times", and recommended 22-slide outline | [Jump to Guidelines ↗](#presentation-guidelines) |
+| **[💬 S14 Discussant Questions](#discussant-questions)** | 4 prepared deep questions for the AMIE presentation on Jan 14 | [Jump to Questions ↗](#discussant-questions) |
+
+---
+
+<div id="progress"></div>
+
+## 📊 Reading Progress & Paper Access Vault
+
+<SeminarTracker lang="en" />
+
+---
+
+## 📖 Bilingual Technical Lexicon (EN / DE)
+
+<SeminarLexicon lang="en" />
+
+---
+
+<div id="presentation-guidelines"></div>
+
+## 🎙️ Presentation Guidelines & S5 Blueprint (Prof. Gertz)
+
+Based on the seminar presentation guidelines (*"How to Give a Presentation"*, Prof. Dr. Michael Gertz / Prof. Dr. Jannik Strötgen):
+
+### 1. Fundamental Rules
+* **Pacing Rule of Thumb**: Plan for **1 to 2 minutes per slide**. For a strict 30-minute talk, your core presentation should have **18 to 22 content slides**.
+* **"Tell 'em Three Times" Structure**:
+  1. *Introduction*: Tell them what you are going to tell them (Motivation, Core Dilemma, High-level Roadmap).
+  2. *Body*: Tell them (Methodology, Mathematical Formalization, Architecture, Empirical Results).
+  3. *Conclusion*: Tell them what you just told them (Summary, Limitations, Critical Distance, Open Questions).
+* **Maintain Scientific Distance**:
+  * Never say *"in my paper"* or *"our approach"*. You did not author the paper. Use objective scientific attribution: *"Shinn et al. propose..."*, *"The authors evaluate..."*.
+  * Dedicate explicit slides to **criticism, edge cases, and limitations**.
+* **Formula Discipline**:
+  * If you display an equation (e.g. $\theta = \{M_a, mem\}$ or policy $\pi_\theta$), explain **every single symbol and axis**. Never show uninterpreted mathematical boilerplate.
+* **Strict GenAI Policy (Slide 9)**:
+  * Prohibited: Generating slide text, slide layouts, or synthetic report text with GenAI.
+  * Permitted: Literature discovery, terminology clarification, code syntax assistance, and grammar polish.
+
+### 2. Recommended 22-Slide Blueprint for Paper S5 (*Reflexion*)
+
+```
+Slide 1:  Title Slide (Paper Title, Seminar: Agentic AI, Nick Blassmann, Dec 3, 2026)
+Slide 2:  Motivation: The Promise and Pain of Autonomous LLM Agents
+Slide 3:  The Bottleneck of Traditional RL (Why PPO & Weight Updates Fail for LLMs)
+Slide 4:  Outline of the Talk
+Slide 5:  Background: The ReAct Foundation (Thought → Action → Observation Loop)
+Slide 6:  Where ReAct Breaks Down: Single-Trial Horizon & Error Cascades
+Slide 7:  The Reflexion Paradigm: Reinforcement via Linguistic Feedback
+Slide 8:  The Core Architecture: Actor Ma, Evaluator Me, and Self-Reflector Msr
+Slide 9:  Algorithm 1 Formalization: Updating Policy π_θ without Backpropagation
+Slide 10: Episodic Memory Buffer: How Reflections are Stored & Injected
+Slide 11: Walkthrough 1: Decision Making in ALFWorld (Room Navigation & Hallucination Recovery)
+Slide 12: Walkthrough 2: Python Code Synthesis & Test Execution
+Slide 13: Experimental Setup: Benchmarks (ALFWorld, HotpotQA, HumanEval, MBPP)
+Slide 14: Main Results: Coding Breakthrough (91% pass@1 on HumanEval Python)
+Slide 15: Main Results: ALFWorld (97% Success Rate across 12 Consecutive Trials)
+Slide 16: Ablation Studies: What Happens Without Self-Reflection or Without Evaluator?
+Slide 17: The Critical Dilemma: False Positives vs. False Negatives in Self-Generated Tests
+Slide 18: Computational Cost & Latency: Token Consumption across k Trials
+Slide 19: Critical Discussion & Limitations (Local Minima, Flawed Reflection Loops)
+Slide 20: Comparison with Alternative Paradigms (Tree-of-Thoughts & MCTS)
+Slide 21: Summary of Contributions & Future Outlook
+Slide 22: Q&A Slide (Thank You! Questions?)
+```
+
+---
+
+<div id="discussant-questions"></div>
+
+## 💬 Discussant Preparation: 4 Critical Questions for Paper S14 (AMIE)
+
+When acting as designated discussant for **Paper S14** (*Towards Conversational Artificial Intelligence for Disease Management*, Nature 2026) on **Thursday, January 14, 2027**, use these prepared questions:
+
+1. **Simulated OSCE vs. Real Clinical Reality**:
+   > *"The evaluation is conducted on text-based Objective Structured Clinical Examinations (OSCEs) with simulated patient actors who communicate via clean text prompts. In real primary care, patients exhibit messy speech, omit vital symptoms, and present non-verbal signs (e.g., pallor, distress, tremor). How much of AMIE's apparent superiority over PCPs is an artifact of guideline-conforming text vignettes?"*
+2. **Formulary Bias & Global Generalizability**:
+   > *"AMIE's in-context retrieval relies heavily on the UK NICE guidelines and the British National Formulary (BNF). How well does this approach generalize to emerging economies or regional hospitals facing severe shortages of first-line medications, where clinicians must improvise off-label regimens?"*
+3. **The Risk of Over-Adherence ("Guideline Anchoring")**:
+   > *"AMIE scored significantly higher than human physicians on strict adherence to clinical guidelines. However, experienced physicians frequently and deliberately deviate from standard guidelines to accommodate idiosyncratic patient comorbidities or social constraints. Could AMIE's rigid adherence be a clinical liability in atypical presentations?"*
+4. **Longitudinal Responsibility in Watchful Waiting**:
+   > *"In multi-visit management, one of the most critical decisions is 'watchful waiting' versus active intervention. If AMIE recommends watchful waiting and a subtle disease exacerbation is missed between visits, how can clinical liability and verifiable audit trails be assigned in autonomous agentic care?"*

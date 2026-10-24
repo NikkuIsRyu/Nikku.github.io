@@ -1,0 +1,120 @@
+---
+title: "Seminar: Agentic AI for Problem Solving (Deutsch)"
+description: "Interaktiver Lese-Hub, Paper-Zugang, Fortschritts-Tracker und zweisprachiges Fachbegriffe-Lexikon für das Seminar bei Prof. Gertz an der Universität Heidelberg."
+sidebar:
+  hidden: true
+---
+
+import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
+import LanguageSwitch from '../../../../../../components/LanguageSwitch.astro';
+import SeminarTracker from '../../../../../../components/SeminarTracker.astro';
+import SeminarLexicon from '../../../../../../components/SeminarLexicon.astro';
+
+# Seminar: Agentic AI for Problem Solving (Deutsch) <Badge text="WS 2026/27" variant="success" size="medium" />
+
+<LanguageSwitch current="de" enHref="/lectures/ai-and-med/seminar-agentic-ai/" deHref="/lectures/ai-and-med/seminar-agentic-ai/de/" />
+
+Persönliche wissenschaftliche Arbeitsplattform und Lese-Begleiter für das Hauptseminar **Agentic AI for Problem Solving** (Wintersemester 2026/27, **Prof. Dr. Michael Gertz**, Data Science Group, Universität Heidelberg).
+
+:::note[Zugewiesene Rollen & Fristen — Nick Blassmann]
+* **Vortragspaper (S5)**: *Reflexion: Language Agents with Verbal Reinforcement Learning* (NeurIPS 2023)  
+  📅 **Vortragstermin**: **Donnerstag, 03. Dezember 2026** (9:00–11:00 c.t., INF 205, Seminarraum 1)
+* **Diskutanten-Paper (S14)**: *Towards Conversational Artificial Intelligence for Disease Management* (Nature 2026)  
+  📅 **Diskussionstermin**: **Donnerstag, 14. Januar 2027**
+* **Seminarbericht (12–14 Seiten LaTeX)**: Frist bis **Freitag, 12. Februar 2027 (20:00 Uhr)**  
+* **Notengewichtung**: `50 % Vortrag` + `42 % Ausarbeitung` + `8 % Diskutant / Mitarbeit` *(Vortrag und Bericht müssen jeweils mindestens mit 4,0 bewertet werden).*
+:::
+
+---
+
+## 🗺️ Schnellnavigation
+
+| Bereich | Inhalt | Direktsprung |
+| :--- | :--- | :--- |
+| **[📊 Momentaner Stand & Dashboard](#progress)** | Live-Fortschrittsbalken, Lese-Lesezeichen & Notizfeld | [Zum Fortschritt ↗](#progress) |
+| **[🗓️ Master-Zeitplan & Fristen](#milestones-section)** | Checkliste aller 10 Meilensteine und Abgabetermine | [Zu den Terminen ↗](#milestones-section) |
+| **[📚 Paper-Zugang & Lese-Kompass](#papers-section)** | 1-Klick-Open-Access, Drive-Vault-Backup, Inline-Viewer & Abschnitte | [Zu den Papern ↗](#papers-section) |
+| **[📖 Zweisprachiges Fachbegriffe-Lexikon](#lexicon)** | 28 filterbare Begriffe mit Gegenüberstellung EN / DE | [Zum Lexikon ↗](#lexicon) |
+| **[🎙️ Vortragsleitfaden & Gliederung](#presentation-guidelines)** | Gertz-Präsentationsregeln, "Tell 'em Three Times" & 22-Folien-Blueprint | [Zum Leitfaden ↗](#presentation-guidelines) |
+| **[💬 Diskutantenfragen zu S14](#discussant-questions)** | 4 vorbereitete kritische Fragen für den 14.01.2027 (AMIE) | [Zu den Fragen ↗](#discussant-questions) |
+
+---
+
+<div id="progress"></div>
+
+## 📊 Lese-Fortschritt & Paper-Zugang
+
+<SeminarTracker lang="de" />
+
+---
+
+## 📖 Zweisprachiges Fachbegriffe-Lexikon (DE / EN)
+
+<SeminarLexicon lang="de" />
+
+---
+
+<div id="presentation-guidelines"></div>
+
+## 🎙️ Vortragsleitfaden & 22-Folien-Blueprint (Prof. Gertz)
+
+Zusammenfassung der zentralen Vorgaben aus den Seminarfolien (*"How to Give a Presentation"*, Prof. Dr. Michael Gertz / Prof. Dr. Jannik Strötgen):
+
+### 1. Grundregeln für den 30-Minuten-Vortrag
+* **Faustregel zur Folienanzahl**: **1 bis 2 Minuten pro Folie**. Für einen 30-minütigen Vortrag sollte die Präsentation ca. **18 bis maximal 22 Inhaltsfolien** umfassen.
+* **Das „Tell 'em Three Times“-Prinzip**:
+  1. *Einleitung (Tell 'em what you are going to tell them)*: Problemstellung, Relevanz, zentrale Forschungsfrage und Gliederung.
+  2. *Hauptteil (Tell 'em)*: Methodik, mathematische Formulierung, Systemarchitektur und empirische Evaluation.
+  3. *Schluss (Tell 'em what you just told them)*: Zusammenfassung, methodische Kritik, Limitationen und Ausblick.
+* **Wissenschaftliche Distanz wahren**:
+  * Niemals von *„unserem Ansatz“* oder *„in meinem Paper“* sprechen. Du bist nicht der Autor der Arbeit. Formuliere stets objektiv: *„Die Autoren schlagen vor...“*, *„Shinn et al. untersuchen...“*.
+  * Eigene Folien für **Kritik, Schwachstellen und Annahmen** einplanen.
+* **Disziplin bei Formeln und Diagrammen**:
+  * Jedes gezeigte mathematische Symbol (z. B. $\theta = \{M_a, mem\}$ oder $\pi_\theta$) und jede Achse in Diagrammen muss im Vortrag aktiv erläutert werden. Keine unkommentierten Formelblöcke abbilden.
+* **Strikte Richtlinie zum Einsatz generativer KI (Folie 9)**:
+  * Untersagt: Generierung von Folientexten, Folienlayouts oder Berichtsabschnitten mittels GenAI.
+  * Erlaubt: Literaturrecherche, Begriffsklärungen, Unterstützung bei Programmiersyntax und sprachliches Lektorat.
+
+### 2. Empfohlener 22-Folien-Blueprint für Paper S5 (*Reflexion*)
+
+```
+Folie 1:  Titelfolie (Papiertitel, Seminar: Agentic AI, Nick Blassmann, 03.12.2026)
+Folie 2:  Motivation: Autonome Sprachagenten in dynamischen Umgebungen
+Folie 3:  Das Dilemma des traditionellen RL (Warum PPO & Gewichts-Updates bei LLMs versagen)
+Folie 4:  Gliederung des Vortrags
+Folie 5:  Grundlagen: Das ReAct-Paradigma (Thought → Action → Observation)
+Folie 6:  Wo ReAct an Grenzen stößt: Einzeldurchläufe & Fehlerakkumulation
+Folie 7:  Der Reflexion-Ansatz: Verbales Reinforcement Learning statt Gradientenabstieg
+Folie 8:  Die Systemarchitektur: Akteur Ma, Evaluator Me und Selbstreflektor Msr
+Folie 9:  Algorithmus 1 formal: Aktualisierung der Policy π_θ im Textpuffer
+Folie 10: Der episodische Gedächtnispuffer: Wie Feedback gespeichert und injiziert wird
+Folie 11: Fallbeispiel 1: Entscheidungsfindung in ALFWorld (Navigation & Entkommen aus Loops)
+Folie 12: Fallbeispiel 2: Python-Codesynthese und Testausführung
+Folie 13: Experimenteller Aufbau: Die Benchmarks (ALFWorld, HotpotQA, HumanEval, MBPP)
+Folie 14: Hauptergebnisse: Programmiersynthese (91 % pass@1 auf HumanEval Python)
+Folie 15: Hauptergebnisse: ALFWorld (97 % Erfolgsquote über 12 aufeinanderfolgende Versuche)
+Folie 16: Ablationsstudien: Was passiert ohne Selbstreflexion oder ohne Evaluator?
+Folie 17: Die Test-Falle: Falsch-Positive vs. Falsch-Negative in selbstgenerierten Tests
+Folie 18: Rechenaufwand & Latenz: Token-Verbrauch bei k aufeinanderfolgenden Versuchen
+Folie 19: Kritische Diskussion & Limitationen (Lokale Minima & fehlerhafte Reflexionen)
+Folie 20: Vergleich mit Alternativen (Tree-of-Thoughts & Monte-Carlo-Baumsuche MCTS)
+Folie 21: Zusammenfassung & Zukunftsaspekte
+Folie 22: Q&A-Folie (Vielen Dank! Fragen & Diskussion)
+```
+
+---
+
+<div id="discussant-questions"></div>
+
+## 💬 Diskutanten-Vorbereitung: 4 Kritische Fragen zu Paper S14 (AMIE)
+
+Für die Rolle als designierter Diskutant zu **Paper S14** (*Towards Conversational Artificial Intelligence for Disease Management*, Nature 2026) am **Donnerstag, 14. Januar 2027**:
+
+1. **Synthetische OSCE-Szenarien vs. Echte Klinische Realität**:
+   > *„Die Evaluation basiert auf textbasierten Objective Structured Clinical Examinations (OSCEs) mit Schauspielpatienten, die nach klaren Drehbuchvorgaben chatten. In der realen hausärztlichen Praxis sprechen Patienten oft ungeordnet, vergessen entscheidende Symptome oder senden nonverbale Signale (z. B. Blässe, Schmerzvermeidung, Tremor). Wie viel von AMIEs gemessener Überlegenheit gegenüber Hausärzten ist ein Artefakt der wohldefinierten, leitlinienkonformen Textvignetten?“*
+2. **Leitlinien-Verzerrung & Globale Übertragbarkeit**:
+   > *„AMIE stützt sich beim In-Context Retrieval primär auf britische NICE-Leitlinien und das British National Formulary (BNF). Wie gut lässt sich ein solches System auf Schwellenländer oder regionale Kliniken übertragen, in denen chronische Medikamentenengpässe herrschen und Ärzte pragmatisch von Standardleitlinien abweichen müssen?“*
+3. **Das Risiko der Leitlinien-Fixierung („Guideline Anchoring“)**:
+   > *„AMIE schnitt bei der strikten Einhaltung evidenzbasierter Leitlinien besser ab als niedergelassene Hausärzte. Allerdings weichen erfahrene Kliniker häufig ganz bewusst von starren Leitlinien ab, um individuellen Begleiterkrankungen oder Lebensumständen der Patienten gerecht zu werden. Könnte AMIEs starre Leitlinientreue bei atypischen Krankheitsverläufen zu einer klinischen Fehlversorgung führen?“*
+4. **Verantwortung beim abwartenden Beobachten („Watchful Waiting“)**:
+   > *„Im mehrvisitativen Krankheitsmanagement ist das ‚abwartende Beobachten‘ eine zentrale ärztliche Strategie. Wenn ein KI-System wie AMIE ein Zuwarten empfiehlt und eine schleichende Zustandsverschlechterung zwischen den Terminen unbemerkt bleibt: Wie lassen sich in einem autonomen agentischen System rechtlich verbindliche Prüfpfade und Haftungsketten etablieren?“*

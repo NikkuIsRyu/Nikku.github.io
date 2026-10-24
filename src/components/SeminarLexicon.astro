@@ -1,0 +1,554 @@
+---
+import { lexiconEntries } from '../data/seminarAgenticAi';
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+const isDe = lang === 'de';
+
+const categories = [
+  { id: 'all', labelEn: 'All Categories', labelDe: 'Alle Kategorien', count: lexiconEntries.length },
+  { id: 'paradigms', labelEn: 'Core Paradigms', labelDe: 'Kern-Paradigmen', count: lexiconEntries.filter(e => e.category === 'paradigms').length },
+  { id: 'rl-reflexion', labelEn: 'RL & S5 Reflexion', labelDe: 'RL & S5 Reflexion', count: lexiconEntries.filter(e => e.category === 'rl-reflexion').length },
+  { id: 'benchmarks-eval', labelEn: 'Benchmarks & Eval', labelDe: 'Benchmarks & Evaluation', count: lexiconEntries.filter(e => e.category === 'benchmarks-eval').length },
+  { id: 'medical-ai', labelEn: 'Medical AI (S14 AMIE)', labelDe: 'Klinische KI (S14 AMIE)', count: lexiconEntries.filter(e => e.category === 'medical-ai').length },
+];
+
+const papersFilter = [
+  { id: 'all', label: 'All Papers' },
+  { id: 'react', label: 'ReAct' },
+  { id: 'reflexion-s5', label: 'S5: Reflexion' },
+  { id: 'survey-wei', label: 'Survey' },
+  { id: 'amie-s14', label: 'S14: AMIE' },
+  { id: 'healthcare-karunanayake', label: 'Healthcare' }
+];
+---
+
+<div class="seminar-lexicon not-content" id="lexicon" data-lang={lang}>
+  <!-- Lexicon Header & Search Bar -->
+  <div class="lexicon-header">
+    <div>
+      <h3 class="lexicon-title">
+        {isDe ? '📖 Fachbegriffe-Lexikon & Glossar (Zweisprachig EN / DE)' : '📖 Technical Lexicon & Glossary (Bilingual EN / DE)'}
+      </h3>
+      <p class="lexicon-subtitle">
+        {isDe
+          ? 'Zweisprachige Definitionen und konkrete Papier-Bezüge für alle Schlüsselbegriffe aus ReAct, Reflexion, dem Survey und AMIE.'
+          : 'Bilingual definitions and concrete paper contexts for all essential terms from ReAct, Reflexion, the Survey, and AMIE.'}
+      </p>
+    </div>
+
+    <!-- Search Input -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="lexicon-search-input"
+        class="search-input"
+        placeholder={isDe ? 'Begriff suchen (z. B. Ablation, Memory, Trajectory, OSCE, PPO)...' : 'Search term (e.g. Ablation, Memory, Trajectory, OSCE, PPO)...'}
+      />
+      <button type="button" id="lexicon-search-clear" class="search-clear-btn" title="Clear search">✕</button>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-controls">
+    <!-- Category Pills -->
+    <div class="filter-group">
+      <span class="filter-group-label">{isDe ? 'Kategorie:' : 'Category:'}</span>
+      <div class="filter-pills" id="category-pills">
+        {categories.map((c) => (
+          <button
+            type="button"
+            class={`filter-pill ${c.id === 'all' ? 'active' : ''}`}
+            data-filter-cat={c.id}
+          >
+            {isDe ? c.labelDe : c.labelEn} <span class="pill-badge">{c.count}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Paper Pills -->
+    <div class="filter-group">
+      <span class="filter-group-label">{isDe ? 'Paper:' : 'Paper:'}</span>
+      <div class="filter-pills" id="paper-pills">
+        {papersFilter.map((p) => (
+          <button
+            type="button"
+            class={`filter-pill paper-pill ${p.id === 'all' ? 'active' : ''}`}
+            data-filter-paper={p.id}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="results-bar">
+    <span id="results-count-text">
+      {isDe ? `Zeige ${lexiconEntries.length} von ${lexiconEntries.length} Begriffen` : `Showing ${lexiconEntries.length} of ${lexiconEntries.length} terms`}
+    </span>
+  </div>
+
+  <!-- Lexicon Cards Grid -->
+  <div class="lexicon-grid" id="lexicon-cards-grid">
+    {lexiconEntries.map((item) => (
+      <div
+        class="lexicon-card"
+        id={`lexicon-${item.id}`}
+        data-cat={item.category}
+        data-papers={item.papers.join(',')}
+        data-search={`${item.termEn} ${item.termDe} ${item.defEn} ${item.defDe} ${item.paperContextEn} ${item.paperContextDe}`.toLowerCase()}
+      >
+        <!-- Card Header with Dual-Language Terms -->
+        <div class="card-header">
+          <div class="card-titles">
+            <h4 class="primary-term">
+              {isDe ? item.termDe : item.termEn}
+            </h4>
+            <div class="secondary-term">
+              <span class="flag-indicator">{isDe ? '🇬🇧' : '🇩🇪'}</span>
+              <span>{isDe ? item.termEn : item.termDe}</span>
+            </div>
+          </div>
+          <div class="card-badges">
+            <span class={`cat-badge cat-${item.category}`}>
+              {item.category}
+            </span>
+          </div>
+        </div>
+
+        <!-- Definition -->
+        <p class="definition-text">
+          {isDe ? item.defDe : item.defEn}
+        </p>
+
+        <!-- Paper Context Anchor -->
+        <div class="context-box">
+          <strong class="context-label">📌 {isDe ? 'Im Kontext deiner Paper:' : 'In Your Paper Context:'}</strong>
+          <span class="context-desc">{isDe ? item.paperContextDe : item.paperContextEn}</span>
+        </div>
+
+        <!-- Associated Papers Footer -->
+        <div class="card-footer">
+          <span class="footer-label">📚 {isDe ? 'Vorkommen:' : 'Appears in:'}</span>
+          <div class="paper-tags">
+            {item.papers.map((p) => (
+              <span class="paper-tag">{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  function initLexicon() {
+    const searchInput = document.getElementById('lexicon-search-input') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('lexicon-search-clear');
+    const catPills = document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]');
+    const paperPills = document.querySelectorAll<HTMLButtonElement>('[data-filter-paper]');
+    const cards = document.querySelectorAll<HTMLDivElement>('.lexicon-card');
+    const countDisplay = document.getElementById('results-count-text');
+    const isGerman = document.querySelector('.seminar-lexicon')?.getAttribute('data-lang') === 'de';
+
+    let activeCategory = 'all';
+    let activePaper = 'all';
+    let searchQuery = '';
+
+    function filterCards() {
+      let visibleCount = 0;
+      const q = searchQuery.trim().toLowerCase();
+
+      cards.forEach((card) => {
+        const cardCat = card.dataset.cat || '';
+        const cardPapers = (card.dataset.papers || '').split(',');
+        const cardSearchText = card.dataset.search || '';
+
+        const matchesCat = activeCategory === 'all' || cardCat === activeCategory;
+        const matchesPaper = activePaper === 'all' || cardPapers.includes(activePaper);
+        const matchesSearch = !q || cardSearchText.includes(q);
+
+        if (matchesCat && matchesPaper && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (countDisplay) {
+        countDisplay.textContent = isGerman
+          ? `Zeige ${visibleCount} von ${cards.length} Begriffen`
+          : `Showing ${visibleCount} of ${cards.length} terms`;
+      }
+    }
+
+    // Category Buttons
+    catPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        catPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        activeCategory = pill.dataset.filterCat || 'all';
+        filterCards();
+      });
+    });
+
+    // Paper Buttons
+    paperPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        paperPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        activePaper = pill.dataset.filterPaper || 'all';
+        filterCards();
+      });
+    });
+
+    // Search Input
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value;
+        filterCards();
+      });
+    }
+
+    if (clearBtn && searchInput) {
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        filterCards();
+      });
+    }
+
+    // Hash Highlighting Support (when clicking chips from tracker)
+    function checkHashTarget() {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#lexicon-')) {
+        const target = document.querySelector<HTMLDivElement>(hash);
+        if (target) {
+          // Reset filters to show the card
+          activeCategory = 'all';
+          activePaper = 'all';
+          searchQuery = '';
+          if (searchInput) searchInput.value = '';
+          catPills.forEach((p) => p.classList.toggle('active', p.dataset.filterCat === 'all'));
+          paperPills.forEach((p) => p.classList.toggle('active', p.dataset.filterPaper === 'all'));
+          filterCards();
+
+          // Scroll & Highlight animation
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('highlighted-card');
+            setTimeout(() => target.classList.remove('highlighted-card'), 2500);
+          }, 100);
+        }
+      }
+    }
+
+    window.addEventListener('hashchange', checkHashTarget);
+    checkHashTarget();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLexicon);
+  } else {
+    initLexicon();
+  }
+</script>
+
+<style>
+  .seminar-lexicon {
+    margin: 2rem 0;
+  }
+
+  .lexicon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .lexicon-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .lexicon-subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  /* Search Input */
+  .search-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.6rem;
+  }
+
+  .search-icon {
+    font-size: 0.9rem;
+    margin-right: 0.4rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    color: var(--sl-color-white);
+  }
+
+  .search-clear-btn {
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.2rem;
+  }
+
+  .search-clear-btn:hover {
+    color: var(--sl-color-white);
+  }
+
+  /* Filter Controls */
+  .filter-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.6rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .filter-group-label {
+    font-size: 0.775rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    min-width: 75px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-pill:hover {
+    color: var(--sl-color-white);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  .filter-pill.active {
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    border-color: var(--sl-color-accent);
+  }
+
+  .paper-pill.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+
+  .pill-badge {
+    font-size: 0.7rem;
+    opacity: 0.8;
+  }
+
+  .results-bar {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Cards Grid */
+  .lexicon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .lexicon-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.65rem;
+    padding: 1.15rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .lexicon-card:hover {
+    border-color: var(--sl-color-gray-4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .lexicon-card.highlighted-card {
+    border-color: var(--sl-color-accent) !important;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4) !important;
+    transform: scale(1.02);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .primary-term {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    line-height: 1.3;
+  }
+
+  .secondary-term {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    margin-top: 0.25rem;
+  }
+
+  .flag-indicator {
+    font-size: 0.8rem;
+  }
+
+  .cat-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.25rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-2);
+    border: 1px solid var(--sl-color-gray-5);
+    white-space: nowrap;
+  }
+
+  .cat-badge.cat-rl-reflexion {
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #f59e0b;
+  }
+
+  .cat-badge.cat-medical-ai {
+    border-color: rgba(139, 92, 246, 0.4);
+    color: #a78bfa;
+  }
+
+  .cat-badge.cat-paradigms {
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #60a5fa;
+  }
+
+  .cat-badge.cat-benchmarks-eval {
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #34d399;
+  }
+
+  .definition-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+    margin: 0 0 0.85rem;
+    flex: 1;
+  }
+
+  .context-box {
+    background: var(--sl-color-black);
+    border-left: 3px solid var(--sl-color-accent);
+    border-radius: 0 0.35rem 0.35rem 0;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.775rem;
+    line-height: 1.45;
+    margin-bottom: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .context-label {
+    display: block;
+    color: var(--sl-color-white);
+    margin-bottom: 0.15rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-top: 0.65rem;
+    border-top: 1px dashed var(--sl-color-hairline);
+    font-size: 0.75rem;
+  }
+
+  .footer-label {
+    color: var(--sl-color-gray-4);
+  }
+
+  .paper-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .paper-tag {
+    font-family: monospace;
+    font-size: 0.7rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.2rem;
+  }
+</style>

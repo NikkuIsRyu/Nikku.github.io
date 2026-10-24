@@ -1,0 +1,1192 @@
+---
+import { seminarMilestones, seminarPapers, seminarSlideDecks } from '../data/seminarAgenticAi';
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+const isDe = lang === 'de';
+
+const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 0);
+---
+
+<div class="seminar-tracker not-content" data-lang={lang}>
+  <!-- Top Progress Dashboard -->
+  <div class="dashboard-card">
+    <div class="dashboard-header">
+      <div>
+        <h3 class="dashboard-title">
+          {isDe ? '📊 Momentaner Fortschritt & Lese-Navigator' : '📊 Momentary Progress & Reading Navigator'}
+        </h3>
+        <p class="dashboard-subtitle">
+          {isDe
+            ? 'Interaktiver Fortschrittstracker mit automatischer Synchronisation zwischen Deutsch und Englisch.'
+            : 'Interactive milestone and reading tracker synchronized across both English and German editions.'}
+        </p>
+      </div>
+      <div class="dashboard-actions">
+        <button type="button" class="btn-tracker-tool" id="btn-export-progress" title={isDe ? 'Fortschritt als JSON sichern' : 'Export progress as JSON'}>
+          💾 {isDe ? 'Fortschritt exportieren' : 'Export JSON'}
+        </button>
+        <button type="button" class="btn-tracker-tool secondary" id="btn-reset-progress" title={isDe ? 'Auf Standard zurücksetzen' : 'Reset to code baseline'}>
+          🔄 {isDe ? 'Zurücksetzen' : 'Reset'}
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bars Grid -->
+    <div class="progress-bars-grid">
+      <div class="progress-box">
+        <div class="progress-labels">
+          <span class="progress-name">📋 {isDe ? 'Seminar-Meilensteine' : 'Seminar Milestones'}</span>
+          <span class="progress-count" id="milestones-count">-- / {seminarMilestones.length}</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill milestones-fill" id="milestones-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-labels">
+          <span class="progress-name">📖 {isDe ? 'Paper-Abschnitte gelesen' : 'Paper Sections Read'}</span>
+          <span class="progress-count" id="sections-count">-- / {totalSections}</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill sections-fill" id="sections-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Momentary Reading Bookmark & Scratchpad -->
+    <div class="bookmark-card">
+      <div class="bookmark-header">
+        <span class="bookmark-pin">📍</span>
+        <div>
+          <span class="bookmark-label">{isDe ? 'Aktueller Fokus / Lesestand:' : 'Current Focus / Reading Bookmark:'}</span>
+          <div class="bookmark-title" id="active-bookmark-text">
+            {isDe
+              ? 'Paper S5: Reflexion (Shinn et al.) — §1 Einleitung'
+              : 'Paper S5: Reflexion (Shinn et al.) — §1 Introduction'}
+          </div>
+        </div>
+      </div>
+      <div class="scratchpad-area">
+        <label for="scratchpad-input" class="scratchpad-label">
+          📝 {isDe ? 'Persönliche Notiz / Nächster Schritt (im Browser gespeichert):' : 'Personal Scratchpad / Next Step (Saved in Browser):'}
+        </label>
+        <input
+          type="text"
+          id="scratchpad-input"
+          class="scratchpad-input"
+          placeholder={isDe ? 'z. B. Algorithmus 1 auf Seite 4 analysieren...' : 'e.g., Analyze Algorithm 1 on page 4...'}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone Checklist -->
+  <section class="section-container" id="milestones-section">
+    <div class="section-header">
+      <h3 class="section-title">
+        {isDe ? '🗓️ Master-Zeitplan & Seminar-Leistungsanforderungen' : '🗓️ Master Timeline & Deliverables Checklist'}
+      </h3>
+      <span class="grading-pill">
+        {isDe ? '50 % Vortrag (S5) · 42 % Ausarbeitung · 8 % Diskutant (S14)' : '50% Talk (S5) · 42% Report · 8% Discussant (S14)'}
+      </span>
+    </div>
+
+    <div class="milestones-list">
+      {seminarMilestones.map((m) => (
+        <div class={`milestone-item status-${m.status}`} data-milestone-id={m.id}>
+          <div class="milestone-left">
+            <input
+              type="checkbox"
+              class="milestone-checkbox"
+              id={`ms-${m.id}`}
+              data-ms-id={m.id}
+            />
+          </div>
+          <div class="milestone-body">
+            <div class="milestone-top">
+              <label for={`ms-${m.id}`} class="milestone-title">
+                {isDe ? m.titleDe : m.titleEn}
+              </label>
+              <div class="milestone-meta">
+                <span class="milestone-tag">{isDe ? m.tagDe : m.tagEn}</span>
+                <span class="milestone-date">{m.date}</span>
+              </div>
+            </div>
+            <p class="milestone-desc">
+              {isDe ? m.descDe : m.descEn}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Paper Access & Active-Reading Section Compasses -->
+  <section class="section-container" id="papers-section">
+    <div class="section-header">
+      <h3 class="section-title">
+        {isDe ? '📚 Paper-Zugang & Aktive Lese-Leitfäden (5 Paper)' : '📚 Paper Access & Active Reading Guides (5 Papers)'}
+      </h3>
+      <span class="rule-hint">
+        💡 {isDe ? '„Compass, Not Spoiler“: Kurze Orientierung ohne das Selbstlesen vorwegzunehmen.' : '“Compass, Not Spoiler”: Structural orientation without spoiling active reading.'}
+      </span>
+    </div>
+
+    <div class="papers-grid">
+      {seminarPapers.map((paper) => (
+        <div class={`paper-card role-${paper.roleType}`} id={`paper-${paper.id}`}>
+          <!-- Paper Card Header -->
+          <div class="paper-card-header">
+            <div class="paper-role-badge">
+              {isDe ? paper.roleBadgeDe : paper.roleBadgeEn}
+            </div>
+            <h4 class="paper-title">{paper.title}</h4>
+            <div class="paper-meta">
+              <span class="paper-authors">👤 {paper.authors}</span>
+              <span class="paper-venue">🏛️ {paper.venue}</span>
+            </div>
+            <p class="paper-overview">{isDe ? paper.overviewDe : paper.overviewEn}</p>
+
+            <!-- Links & Action Bar -->
+            <div class="paper-action-bar">
+              <a href={paper.pdfUrl} target="_blank" rel="noopener noreferrer" class="paper-link-btn primary">
+                📄 {isDe ? 'PDF öffnen (Open-Access) ↗' : 'Open Official PDF ↗'}
+              </a>
+              <a href={paper.landingUrl} target="_blank" rel="noopener noreferrer" class="paper-link-btn secondary">
+                🌐 {isDe ? 'Landing Page' : 'Landing Page'}
+              </a>
+              <span class="vault-badge" title={`Lokal: ${paper.localPath}`}>
+                ☁️ Drive Vault: /University/Seminar-Gertz/
+              </span>
+            </div>
+
+            <!-- In-Page Embedded PDF Viewer -->
+            <details class="inline-pdf-details">
+              <summary class="inline-pdf-summary">
+                👁️ {isDe ? 'PDF direkt im Browser lesen (Vorschau)' : 'Read PDF Inline (Embedded Viewer)'}
+              </summary>
+              <div class="pdf-iframe-container">
+                <iframe
+                  src={paper.pdfUrl}
+                  title={paper.title}
+                  loading="lazy"
+                  class="pdf-iframe"
+                ></iframe>
+              </div>
+            </details>
+          </div>
+
+          <!-- Section Compasses Accordion -->
+          <div class="paper-sections-wrapper">
+            <h5 class="sections-heading">
+              {isDe ? 'Abschnitts-Leitfäden & Verständnis-Check:' : 'Section Guides & Comprehension Check:'}
+            </h5>
+            <div class="sections-list">
+              {paper.sections.map((sec) => (
+                <div class="section-card" data-section-id={sec.id}>
+                  <div class="section-card-top">
+                    <label class="section-check-label">
+                      <input
+                        type="checkbox"
+                        class="section-checkbox"
+                        id={`sec-${sec.id}`}
+                        data-sec-id={sec.id}
+                        data-paper-id={paper.id}
+                      />
+                      <span class="section-check-title">
+                        {isDe ? sec.titleDe : sec.titleEn}
+                      </span>
+                    </label>
+                    <button
+                      type="button"
+                      class="btn-set-bookmark"
+                      data-bookmark-target={`${paper.title} — ${isDe ? sec.titleDe : sec.titleEn}`}
+                      title={isDe ? 'Als aktuellen Lesestand festlegen' : 'Set as current reading bookmark'}
+                    >
+                      📍 {isDe ? 'Hier bin ich' : 'Set as Focus'}
+                    </button>
+                  </div>
+
+                  <!-- Compass Summary -->
+                  <div class="section-compass-box">
+                    <strong class="compass-label">🎯 {isDe ? 'Struktur-Kompass:' : 'Section Compass:'}</strong>
+                    <span>{isDe ? sec.compassDe : sec.compassEn}</span>
+                  </div>
+
+                  <!-- Key Terms Tags -->
+                  <div class="section-terms-bar">
+                    <span class="terms-prefix">🔑 {isDe ? 'Schlüsselbegriffe:' : 'Key Terms:'}</span>
+                    <div class="terms-chips">
+                      {sec.keyTerms.map((termId) => (
+                        <a href={`#lexicon-${termId}`} class="term-chip" data-lexicon-ref={termId}>
+                          {termId}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  <!-- Self Check Question -->
+                  <div class="section-selfcheck-box">
+                    <strong class="selfcheck-label">🧠 {isDe ? 'Verständnis-Frage fürs Selbstlesen:' : 'Active-Reading Self-Check:'}</strong>
+                    <p class="selfcheck-q">{isDe ? sec.selfCheckDe : sec.selfCheckEn}</p>
+                  </div>
+
+                  <!-- Personal Scratch Notes -->
+                  <details class="section-notes-details">
+                    <summary class="notes-summary">
+                      ✏️ {isDe ? 'Eigene Notizen zu diesem Abschnitt' : 'My Notes for this Section'}
+                    </summary>
+                    <textarea
+                      class="section-note-textarea"
+                      data-note-id={`note-${sec.id}`}
+                      placeholder={isDe ? 'Hier eigene Erkenntnisse in Stichpunkten notieren...' : 'Jot down personal bullet takeaways while reading the paper...'}
+                    ></textarea>
+                  </details>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Seminar Slide Decks Card -->
+  <section class="section-container" id="slides-section">
+    <div class="section-header">
+      <h3 class="section-title">
+        {isDe ? '📊 Seminar-Verwaltung & Präsentations-Leitfaden (Folien)' : '📊 Seminar Administration & Presentation Guide (Slides)'}
+      </h3>
+    </div>
+    <div class="slides-grid">
+      {seminarSlideDecks.map((deck) => (
+        <div class="slide-card">
+          <div class="slide-card-top">
+            <span class="slide-badge">📑 {deck.pages} {isDe ? 'Folien' : 'Slides'}</span>
+            <h4 class="slide-title">{deck.title}</h4>
+            <div class="slide-meta">
+              <span>👤 {deck.lecturer}</span> · <span>📅 {deck.date}</span>
+            </div>
+          </div>
+          <p class="slide-desc">{isDe ? deck.summaryDe : deck.summaryEn}</p>
+          <div class="slide-footer">
+            <span class="vault-badge">☁️ Google Drive: {deck.drivePath}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</div>
+
+<script>
+  const STORAGE_KEY_SECTIONS = 'nikku-seminar-sections-v1';
+  const STORAGE_KEY_MILESTONES = 'nikku-seminar-milestones-v1';
+  const STORAGE_KEY_BOOKMARK = 'nikku-seminar-active-bookmark-v1';
+  const STORAGE_KEY_SCRATCHPAD = 'nikku-seminar-scratchpad-v1';
+  const STORAGE_KEY_NOTES = 'nikku-seminar-section-notes-v1';
+
+  // Default baseline configuration
+  const defaultSections: Record<string, boolean> = {
+    'react-s1': true,
+    'react-s2': true,
+    'react-s3': true,
+    'react-s4': true,
+    'react-s5': false,
+    'reflexion-s1': false,
+    'reflexion-s2': false,
+    'reflexion-s3': false,
+    'reflexion-s41': false,
+    'reflexion-s42': false,
+    'reflexion-s5limit': false,
+    'survey-s12': false,
+    'survey-s3': false,
+    'survey-s4': false,
+    'survey-s6': false,
+    'health-s1': false,
+    'health-s2': false,
+    'health-s3': false,
+    'health-s4': false,
+    'amie-s1': false,
+    'amie-s2': false,
+    'amie-s3': false,
+    'amie-s4': false,
+    'amie-s5discuss': false,
+  };
+
+  const defaultMilestones: Record<string, boolean> = {
+    'm1': true,
+    'm2': true,
+    'm3': false,
+    'm4': false,
+    'm5': false,
+    'm6': false,
+    'm7': false,
+    'm8': false,
+    'm9': false,
+    'm10': false,
+  };
+
+  function initTracker() {
+    // 1. Load saved state or fall back to defaults
+    let sectionsState: Record<string, boolean> = defaultSections;
+    try {
+      const rawSec = localStorage.getItem(STORAGE_KEY_SECTIONS);
+      if (rawSec) sectionsState = { ...defaultSections, ...JSON.parse(rawSec) };
+    } catch (e) {
+      console.warn('Failed to parse saved sections state', e);
+    }
+
+    let milestonesState: Record<string, boolean> = defaultMilestones;
+    try {
+      const rawMs = localStorage.getItem(STORAGE_KEY_MILESTONES);
+      if (rawMs) milestonesState = { ...defaultMilestones, ...JSON.parse(rawMs) };
+    } catch (e) {
+      console.warn('Failed to parse saved milestones state', e);
+    }
+
+    // 2. Hydrate Milestones
+    const msCheckboxes = document.querySelectorAll<HTMLInputElement>('.milestone-checkbox');
+    msCheckboxes.forEach((cb) => {
+      const id = cb.dataset.msId;
+      if (id && sectionsState !== undefined) {
+        cb.checked = milestonesState[id] ?? false;
+      }
+      cb.addEventListener('change', () => {
+        if (id) {
+          milestonesState[id] = cb.checked;
+          localStorage.setItem(STORAGE_KEY_MILESTONES, JSON.stringify(milestonesState));
+          updateCounters();
+        }
+      });
+    });
+
+    // 3. Hydrate Sections
+    const secCheckboxes = document.querySelectorAll<HTMLInputElement>('.section-checkbox');
+    secCheckboxes.forEach((cb) => {
+      const id = cb.dataset.secId;
+      if (id) {
+        cb.checked = sectionsState[id] ?? false;
+      }
+      cb.addEventListener('change', () => {
+        if (id) {
+          sectionsState[id] = cb.checked;
+          localStorage.setItem(STORAGE_KEY_SECTIONS, JSON.stringify(sectionsState));
+          updateCounters();
+        }
+      });
+    });
+
+    // 4. Hydrate Bookmark & Scratchpad
+    const bookmarkDisplay = document.getElementById('active-bookmark-text');
+    const savedBookmark = localStorage.getItem(STORAGE_KEY_BOOKMARK);
+    if (savedBookmark && bookmarkDisplay) {
+      bookmarkDisplay.textContent = savedBookmark;
+    }
+
+    const scratchpad = document.getElementById('scratchpad-input') as HTMLInputElement | null;
+    if (scratchpad) {
+      const savedScratch = localStorage.getItem(STORAGE_KEY_SCRATCHPAD);
+      if (savedScratch) scratchpad.value = savedScratch;
+      scratchpad.addEventListener('input', () => {
+        localStorage.setItem(STORAGE_KEY_SCRATCHPAD, scratchpad.value);
+      });
+    }
+
+    // Bookmark Buttons
+    document.querySelectorAll<HTMLButtonElement>('.btn-set-bookmark').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.bookmarkTarget;
+        if (target && bookmarkDisplay) {
+          bookmarkDisplay.textContent = target;
+          localStorage.setItem(STORAGE_KEY_BOOKMARK, target);
+        }
+      });
+    });
+
+    // 5. Hydrate Notes Textareas
+    let notesState: Record<string, string> = {};
+    try {
+      const rawNotes = localStorage.getItem(STORAGE_KEY_NOTES);
+      if (rawNotes) notesState = JSON.parse(rawNotes);
+    } catch (e) {
+      console.warn('Failed to parse notes state', e);
+    }
+
+    document.querySelectorAll<HTMLTextAreaElement>('.section-note-textarea').forEach((ta) => {
+      const noteId = ta.dataset.noteId;
+      if (noteId && notesState[noteId]) {
+        ta.value = notesState[noteId];
+      }
+      ta.addEventListener('input', () => {
+        if (noteId) {
+          notesState[noteId] = ta.value;
+          localStorage.setItem(STORAGE_KEY_NOTES, JSON.stringify(notesState));
+        }
+      });
+    });
+
+    // 6. Update Counters Function
+    function updateCounters() {
+      // Milestones
+      const totalMs = msCheckboxes.length;
+      let completedMs = 0;
+      msCheckboxes.forEach((cb) => {
+        if (cb.checked) completedMs++;
+      });
+      const msCountEl = document.getElementById('milestones-count');
+      const msFillEl = document.getElementById('milestones-bar-fill');
+      if (msCountEl) msCountEl.textContent = `${completedMs} / ${totalMs}`;
+      if (msFillEl && totalMs > 0) {
+        msFillEl.style.width = `${Math.round((completedMs / totalMs) * 100)}%`;
+      }
+
+      // Sections
+      const totalSec = secCheckboxes.length;
+      let completedSec = 0;
+      secCheckboxes.forEach((cb) => {
+        if (cb.checked) completedSec++;
+      });
+      const secCountEl = document.getElementById('sections-count');
+      const secFillEl = document.getElementById('sections-bar-fill');
+      if (secCountEl) secCountEl.textContent = `${completedSec} / ${totalSec}`;
+      if (secFillEl && totalSec > 0) {
+        secFillEl.style.width = `${Math.round((completedSec / totalSec) * 100)}%`;
+      }
+    }
+
+    updateCounters();
+
+    // 7. Reset Button
+    const resetBtn = document.getElementById('btn-reset-progress');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        const confirmMsg = document.querySelector('.seminar-tracker')?.getAttribute('data-lang') === 'de'
+          ? 'Möchtest du den Fortschritt wirklich auf den Ausgangszustand zurücksetzen?'
+          : 'Do you really want to reset reading progress to the baseline?';
+        if (confirm(confirmMsg)) {
+          localStorage.setItem(STORAGE_KEY_SECTIONS, JSON.stringify(defaultSections));
+          localStorage.setItem(STORAGE_KEY_MILESTONES, JSON.stringify(defaultMilestones));
+          secCheckboxes.forEach((cb) => {
+            const id = cb.dataset.secId;
+            if (id) cb.checked = defaultSections[id] ?? false;
+          });
+          msCheckboxes.forEach((cb) => {
+            const id = cb.dataset.msId;
+            if (id) cb.checked = defaultMilestones[id] ?? false;
+          });
+          updateCounters();
+        }
+      });
+    }
+
+    // 8. Export Button
+    const exportBtn = document.getElementById('btn-export-progress');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const exportData = {
+          timestamp: new Date().toISOString(),
+          milestones: milestonesState,
+          sections: sectionsState,
+          bookmark: localStorage.getItem(STORAGE_KEY_BOOKMARK) || '',
+          scratchpad: localStorage.getItem(STORAGE_KEY_SCRATCHPAD) || '',
+          notes: notesState,
+        };
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nikku_seminar_progress_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+  }
+
+  // Support Astro client-side navigation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTracker);
+  } else {
+    initTracker();
+  }
+</script>
+
+<style>
+  .seminar-tracker {
+    margin: 1.5rem 0 2.5rem;
+    font-family: inherit;
+  }
+
+  /* Dashboard */
+  .dashboard-card {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .dashboard-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .dashboard-subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .dashboard-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-tracker-tool {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 0.4rem;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-tracker-tool:hover {
+    background: var(--sl-color-gray-5);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  .btn-tracker-tool.secondary {
+    background: transparent;
+    color: var(--sl-color-gray-3);
+  }
+
+  .btn-tracker-tool.secondary:hover {
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+  }
+
+  /* Progress Bars */
+  .progress-bars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .progress-box {
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.825rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-name {
+    color: var(--sl-color-gray-2);
+  }
+
+  .progress-count {
+    color: var(--sl-color-accent);
+  }
+
+  .progress-bar-track {
+    height: 8px;
+    background: var(--sl-color-gray-6);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .milestones-fill {
+    background: linear-gradient(90deg, #10b981, #34d399);
+  }
+
+  .sections-fill {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  }
+
+  /* Bookmark Card */
+  .bookmark-card {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .bookmark-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .bookmark-pin {
+    font-size: 1.25rem;
+  }
+
+  .bookmark-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #60a5fa;
+  }
+
+  .bookmark-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .scratchpad-area {
+    margin-top: 0.5rem;
+  }
+
+  .scratchpad-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.25rem;
+  }
+
+  .scratchpad-input {
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-white);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .scratchpad-input:focus {
+    border-color: #60a5fa;
+  }
+
+  /* Section Containers */
+  .section-container {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .grading-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+  }
+
+  .rule-hint {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  /* Milestones List */
+  .milestones-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .milestone-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .milestone-item:hover {
+    border-color: var(--sl-color-gray-4);
+  }
+
+  .milestone-item.status-current {
+    border-left: 4px solid #60a5fa;
+    background: rgba(59, 130, 246, 0.04);
+  }
+
+  .milestone-item.status-completed {
+    border-left: 4px solid #10b981;
+  }
+
+  .milestone-left {
+    padding-top: 0.15rem;
+  }
+
+  .milestone-checkbox {
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--sl-color-accent);
+    cursor: pointer;
+  }
+
+  .milestone-body {
+    flex: 1;
+  }
+
+  .milestone-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .milestone-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    cursor: pointer;
+  }
+
+  .milestone-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .milestone-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-2);
+    border-radius: 0.25rem;
+  }
+
+  .milestone-date {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f59e0b;
+  }
+
+  .milestone-desc {
+    margin: 0.35rem 0 0;
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+  }
+
+  /* Paper Cards */
+  .papers-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .paper-card {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .paper-card.role-presentation {
+    border-top: 4px solid #f59e0b;
+  }
+
+  .paper-card.role-discussant {
+    border-top: 4px solid #8b5cf6;
+  }
+
+  .paper-card.role-required {
+    border-top: 4px solid #10b981;
+  }
+
+  .paper-card.role-survey {
+    border-top: 4px solid #3b82f6;
+  }
+
+  .paper-role-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.3rem;
+    margin-bottom: 0.5rem;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-accent);
+  }
+
+  .paper-title {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .paper-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.65rem;
+  }
+
+  .paper-overview {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+    margin: 0 0 1rem;
+  }
+
+  .paper-action-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .paper-link-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    border-radius: 0.35rem;
+    text-decoration: none !important;
+    transition: opacity 0.15s ease;
+  }
+
+  .paper-link-btn.primary {
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black) !important;
+  }
+
+  .paper-link-btn.secondary {
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white) !important;
+    border: 1px solid var(--sl-color-gray-5);
+  }
+
+  .paper-link-btn:hover {
+    opacity: 0.85;
+  }
+
+  .vault-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    padding: 0.3rem 0.6rem;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.3rem;
+  }
+
+  /* Inline PDF Details */
+  .inline-pdf-details {
+    margin: 0.75rem 0 1.25rem;
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.4rem;
+  }
+
+  .inline-pdf-summary {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+  }
+
+  .inline-pdf-summary:hover {
+    color: var(--sl-color-accent);
+  }
+
+  .pdf-iframe-container {
+    padding: 0.5rem;
+  }
+
+  .pdf-iframe {
+    width: 100%;
+    height: 520px;
+    border: none;
+    border-radius: 0.35rem;
+  }
+
+  /* Section Compasses */
+  .paper-sections-wrapper {
+    margin-top: 1rem;
+    border-top: 1px dashed var(--sl-color-hairline);
+    padding-top: 1rem;
+  }
+
+  .sections-heading {
+    margin: 0 0 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-2);
+  }
+
+  .sections-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .section-card {
+    background: var(--sl-color-black);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .section-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .section-checkbox {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: #3b82f6;
+    cursor: pointer;
+  }
+
+  .section-check-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  .btn-set-bookmark {
+    background: transparent;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-set-bookmark:hover {
+    color: #60a5fa;
+    border-color: #60a5fa;
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .section-compass-box {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin-bottom: 0.5rem;
+  }
+
+  .compass-label {
+    color: #f59e0b;
+    margin-right: 0.35rem;
+  }
+
+  .section-terms-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .terms-prefix {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+  }
+
+  .terms-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .term-chip {
+    font-size: 0.725rem;
+    font-family: monospace;
+    padding: 0.15rem 0.45rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-accent);
+    border-radius: 0.25rem;
+    text-decoration: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .term-chip:hover {
+    background: var(--sl-color-gray-5);
+  }
+
+  .section-selfcheck-box {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px dashed rgba(52, 211, 153, 0.25);
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .selfcheck-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #34d399;
+    margin-bottom: 0.2rem;
+  }
+
+  .selfcheck-q {
+    margin: 0;
+    font-size: 0.825rem;
+    font-style: italic;
+    color: var(--sl-color-white);
+  }
+
+  .section-notes-details {
+    margin-top: 0.4rem;
+  }
+
+  .notes-summary {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+  }
+
+  .notes-summary:hover {
+    color: var(--sl-color-gray-2);
+  }
+
+  .section-note-textarea {
+    width: 100%;
+    margin-top: 0.4rem;
+    min-height: 60px;
+    padding: 0.45rem 0.65rem;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-white);
+    resize: vertical;
+    outline: none;
+  }
+
+  .section-note-textarea:focus {
+    border-color: #60a5fa;
+  }
+
+  /* Slides Grid */
+  .slides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .slide-card {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .slide-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--sl-color-black);
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.25rem;
+    color: var(--sl-color-accent);
+  }
+
+  .slide-title {
+    margin: 0.4rem 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  .slide-meta {
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.6rem;
+  }
+
+  .slide-desc {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin: 0 0 0.85rem;
+  }
+
+  .slide-footer {
+    border-top: 1px solid var(--sl-color-hairline);
+    padding-top: 0.6rem;
+  }
+</style>

@@ -68,7 +68,10 @@ const {
         if (numMatch) {
           const num = numMatch[1];
           link.href = `${link.pathname}#${targetLang === 'de' ? 'lektion' : 'lesson'}-${num}`;
+          return;
         }
+        // Generic anchor fallback (preserves hash as-is on the target page)
+        link.href = `${link.pathname}${hash}`;
       });
     });
 

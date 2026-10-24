@@ -138,6 +138,16 @@ Website_project/
     * Upgraded `<DriveAsset />` component with support for `wip={true}` (rendering a styled amber `🚧 Work In Progress` badge instead of an active Google Drive download link).
     * Set the Chinese 107 MB Anki deck asset card to `Work In Progress` pending rights clearance and audio verification.
     * Verified clean build (`npm run build`, 16 pages).
+
+19. **Session 14 (Agentic AI Seminar Hub, Bilingual Lexicon & Interactive Progress Tracker)**:
+    * Built the dedicated academic seminar workstation for *Agentic AI for Problem Solving* (WS 2026/27, Prof. Dr. Michael Gertz, Data Science Group, Heidelberg University).
+    * Safeguarded repository weight (<5 MB Git rule) and organizational privacy by syncing all 5 seminar research PDFs + 2 internal slide decks (`~37.6 MB`) into the private Google Drive Vault (`/home/nikku/GoogleDrive/University/Seminar-Gertz/`) while providing official open-access direct links (arXiv, Nature, ScienceDirect) and in-browser inline viewers.
+    * Designed a strongly typed bilingual single source of truth (`src/data/seminarAgenticAi.ts`) housing 10 seminar milestones, 5 paper curriculum tracks with 24 active-reading section compasses, and 28 curated technical terms with English and German side-by-side titles.
+    * Engineered `<SeminarTracker.astro>` featuring live milestone and paper progress meters, momentary focus bookmark with scratchpad (`localStorage` persistence across languages), and self-check Socratic questions preventing passive AI over-summarization.
+    * Built `<SeminarLexicon.astro>` featuring instant search and multi-filtering across Core Paradigms, RL/Reflexion, Benchmarks, and Medical AI.
+    * Upgraded `<LanguageSwitch.astro>` with seamless hash-preservation for `#progress`, `#papers`, `#lexicon`, and `#guidelines`.
+    * Deployed both English primary route (`/lectures/ai-and-med/seminar-agentic-ai/`) and native German edition (`/lectures/ai-and-med/seminar-agentic-ai/de/`), linking from `lectures/index.mdx` and landing page `index.mdx`.
+    * Verified clean static production build (`npm run build`, 18 pages in 1.92s) and running background dev server.
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
