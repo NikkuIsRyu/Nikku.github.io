@@ -6,3 +6,38 @@
   --sl-color-accent: #3b82f6;
   --sl-color-accent-high: #93c5fd;
 }
+
+/* Front-page (splash) pixel art Sakura background overlay */
+html[data-has-hero] body {
+  position: relative;
+  background-color: var(--sl-color-bg);
+}
+
+html[data-has-hero] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/sakura-bg.jpg');
+  background-size: cover;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-has-hero] .page {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-has-hero] .header {
+  background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+html[data-has-hero] .card {
+  background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
+  backdrop-filter: blur(4px);
+}
