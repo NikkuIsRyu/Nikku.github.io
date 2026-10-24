@@ -5,22 +5,9 @@ sidebar:
   order: 3
 ---
 
-import DriveAsset from '../../../../components/DriveAsset.astro';
-
 :::tip[Exam Focus]
 Covers asymptotic notation, recurrent relations, greedy paradigms, dynamic programming, and amortized analysis.
 :::
-
-## 🗂️ Course Assets (Google Drive)
-
-<DriveAsset
-	title="AlDa Klausurvorbereitung & Protokolle"
-	type="pdf"
-	description="Exam problem sheets & solution transcripts from Google Drive: University/Alda Klauspc1.pdf"
-	href="https://drive.google.com"
-/>
-
----
 
 ## 📐 Asymptotic Notations
 

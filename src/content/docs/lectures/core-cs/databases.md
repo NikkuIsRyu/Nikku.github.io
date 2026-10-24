@@ -5,29 +5,9 @@ sidebar:
   order: 2
 ---
 
-import DriveAsset from '../../../../components/DriveAsset.astro';
-
 :::tip[Exam & Exercise Archives]
 Includes solutions and notes based on university exam archives and Docker-based database labs.
 :::
-
-## 🗂️ Course Assets (Google Drive)
-
-<DriveAsset
-	title="Klausursammlung Datenbanken (SoSe)"
-	type="pdf"
-	description="Probeklausuren & Lösungen (SoSe 2023 / 2024 / SoSe 12) from Google Drive: University/"
-	href="https://drive.google.com"
-/>
-
-<DriveAsset
-	title="Datenbanken Docker Umgebung"
-	type="code"
-	description="Containerized PostgreSQL/MySQL environment configs from Google Drive: University/Datenbanken_Docker_etwas"
-	href="https://drive.google.com"
-/>
-
----
 
 ## 📐 Relational Algebra Fundamentals
 

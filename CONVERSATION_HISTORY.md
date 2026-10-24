@@ -154,6 +154,11 @@ Website_project/
       - Removed the duplicate full-page German route (`/de/`) and consolidated the Seminar Hub to a single clean English route (17 static routes total).
       - Archived the complete German page to `/home/nikku/GoogleDrive/University/Seminar-Gertz/backups/seminar_de_index.mdx.bak` for 1-command restoration while preserving all German data fields in `src/data/seminarAgenticAi.ts`.
     * Verified clean static production build (`npm run build`, 17 pages in 1.87s) and running background dev server.
+
+20. **Session 15 (Core Computer Science Privacy & Asset Clean-up)**:
+    * Waited for prior seminar tasks to conclude and verified dev server status.
+    * Removed Google Drive Assets sections (`<DriveAsset />` components and headings) across all five Core Computer Science course pages ([`theoretical-cs.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/theoretical-cs.md), [`databases.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/databases.md), [`algorithms.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/algorithms.md), [`it-security.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/it-security.md), and [`ise.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/ise.md)) to uphold academic privacy and intellectual property policies (not publishing professor slides without consent).
+    * Removed unused component imports; verified clean static production build (`npm run build`, 17 pages in 2.73s).
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC

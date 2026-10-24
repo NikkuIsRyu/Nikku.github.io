@@ -5,22 +5,9 @@ sidebar:
   order: 5
 ---
 
-import DriveAsset from '../../../../components/DriveAsset.astro';
-
 :::tip[Assignment & Quiz Vault]
 Coursework materials, weekly assignments, and design patterns from Information Systems Engineering.
 :::
-
-## 🗂️ Course Assets (Google Drive)
-
-<DriveAsset
-	title="ISE Assignment Submissions & Quizzes"
-	type="pdf"
-	description="Assignment deliverables (Ass05, Ass08, Ass10) and Quizzes from Google Drive: University/"
-	href="https://drive.google.com"
-/>
-
----
 
 ## 🏛️ Architecture Patterns
 

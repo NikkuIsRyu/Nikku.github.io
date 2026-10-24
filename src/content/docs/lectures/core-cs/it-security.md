@@ -5,22 +5,9 @@ sidebar:
   order: 4
 ---
 
-import DriveAsset from '../../../../components/DriveAsset.astro';
-
 :::tip[Lab & CTF Archive]
 Compiled writeups, security flags, practice exercise notes, and research topics from IT security coursework and the WS 2026/27 Seminar at Heidelberg University.
 :::
-
-## 🗂️ Course Assets (Google Drive)
-
-<DriveAsset
-	title="IT-Security Flags & Assignment Notes"
-	type="doc"
-	description="CTF challenge flags and writeups from Google Drive: University/Flags_03-2.md & itsecub03flags.txt"
-	href="https://drive.google.com"
-/>
-
----
 
 ## 🛡️ Core Security Concepts
 

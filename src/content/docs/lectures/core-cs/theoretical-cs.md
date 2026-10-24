@@ -5,22 +5,9 @@ sidebar:
   order: 1
 ---
 
-import DriveAsset from '../../../../components/DriveAsset.astro';
-
 :::tip[Academic Vault Entry]
 Summary and exam memory protocols synthesized for the **Theoretische Informatik** curriculum.
 :::
-
-## 🗂️ Course Assets (Google Drive)
-
-<DriveAsset
-	title="Gedächtnisprotokoll Theoretische Informatik"
-	type="doc"
-	description="Exam recall transcript & problem set analysis from Google Drive: University/"
-	href="https://drive.google.com"
-/>
-
----
 
 ## 🎯 Key Topics & Pillars
 
