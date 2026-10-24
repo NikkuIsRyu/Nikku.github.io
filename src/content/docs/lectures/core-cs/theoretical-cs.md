@@ -36,7 +36,7 @@ If $L$ is a regular language, then there exists a constant $p \ge 1$ (the pumpin
 3. $\forall i \ge 0, \; x y^i z \in L$
 
 $$
-\forall w \in L, \; (|w| \ge p \implies \exists x,y,z: w = xyz \land |y| > 0 \land |xy| \le p \land \forall i \ge 0, xy^iz \in L)
+\forall w \in L, \;\allowbreak (|w| \ge p \implies \exists x,y,z:\allowbreak w = xyz \land |y| > 0 \land |xy| \le p \land \forall i \ge 0, \;\allowbreak xy^iz \in L)
 $$
 
 ### The Halting Problem Undecidability Proof Sketch

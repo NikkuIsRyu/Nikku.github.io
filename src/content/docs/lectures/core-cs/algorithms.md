@@ -15,11 +15,11 @@ For functions $f, g: \mathbb{N} \to \mathbb{R}^+$:
 
 * **Big-$O$ (Upper bound)**:
   $$
-  f(n) \in \mathcal{O}(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} : \forall n \ge n_0, \; f(n) \le c \cdot g(n)
+  f(n) \in \mathcal{O}(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} :\allowbreak \forall n \ge n_0, \;\allowbreak f(n) \le c \cdot g(n)
   $$
 * **Big-$\Omega$ (Lower bound)**:
   $$
-  f(n) \in \Omega(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} : \forall n \ge n_0, \; f(n) \ge c \cdot g(n)
+  f(n) \in \Omega(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} :\allowbreak \forall n \ge n_0, \;\allowbreak f(n) \ge c \cdot g(n)
   $$
 * **Big-$\Theta$ (Tight bound)**:
   $$

@@ -86,20 +86,31 @@ const icon = icons[type] || '📁';
 		display: flex;
 		align-items: center;
 		gap: 0.875rem;
+		min-width: 0;
+		flex: 1 1 200px;
+	}
+	.asset-info > div {
+		min-width: 0;
+		flex: 1;
 	}
 	.asset-icon {
 		font-size: 1.5rem;
 		line-height: 1;
+		flex-shrink: 0;
 	}
 	.asset-title {
 		font-weight: 600;
 		font-size: 0.95rem;
 		color: var(--sl-color-white);
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 	.asset-desc {
 		font-size: 0.8rem;
 		color: var(--sl-color-gray-3);
 		margin-top: 0.15rem;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 	.asset-btn {
 		display: inline-flex;

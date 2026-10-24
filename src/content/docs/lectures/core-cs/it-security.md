@@ -16,12 +16,12 @@ Compiled writeups, security flags, practice exercise notes, and research topics 
 * **Symmetric Encryption (AES-GCM, ChaCha20)**: Fast bulk encryption using a single shared key $K$.
 * **Asymmetric Encryption (RSA, ECC)**: Key pair $(e, d)$ where $e$ is public and $d$ is private:
   $$
-  c \equiv m^e \pmod N, \quad m \equiv c^d \pmod N
+  c \equiv m^e \pmod N, \quad\allowbreak m \equiv c^d \pmod N
   $$
 * **Diffie-Hellman Key Exchange**:
   Given generator $g$ and prime $p$:
   $$
-  A = g^a \pmod p, \quad B = g^b \pmod p \implies K = B^a \equiv A^b \equiv g^{ab} \pmod p
+  A = g^a \pmod p, \quad\allowbreak B = g^b \pmod p \implies K = B^a \equiv A^b \equiv g^{ab} \pmod p
   $$
 
 ---

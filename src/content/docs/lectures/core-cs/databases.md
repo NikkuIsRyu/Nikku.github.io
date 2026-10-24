@@ -26,7 +26,7 @@ The foundational operators in relational algebra:
 Retrieve all students enrolled in "Datenbanken" with a grade $\le 2.0$:
 
 $$
-\pi_{\text{name, matnr}}\left( \sigma_{\text{title} = \text{'Datenbanken'} \land \text{grade} \le 2.0} (\text{Student} \bowtie \text{Exam} \bowtie \text{Course}) \right)
+\pi_{\text{name, matnr}}\bigl(\allowbreak \sigma_{\text{title} = \text{'Datenbanken'} \land \text{grade} \le 2.0}\allowbreak (\text{Student} \bowtie \text{Exam} \bowtie \text{Course}) \bigr)
 $$
 
 ---

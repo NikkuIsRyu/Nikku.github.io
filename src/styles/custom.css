@@ -41,3 +41,77 @@ html[data-has-hero] .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
+
+/* Prevent horizontal viewport expansion on mobile devices */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.main-frame,
+.main-pane,
+.content-panel,
+.sl-container,
+.sl-markdown-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.sl-markdown-content {
+  overflow-wrap: break-word;
+}
+
+.not-content {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.sl-markdown-content :not(pre) > code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.sl-markdown-content a {
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Responsive KaTeX Math Rendering (prevent unbroken long lines on mobile) */
+.katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.katex-display > .katex {
+  white-space: normal;
+  max-width: 100%;
+}
+
+.katex-display > .katex > .katex-html {
+  white-space: normal;
+  display: block;
+}
+
+.katex {
+  white-space: normal;
+}
+
+.katex .katex-html {
+  white-space: normal;
+}
+
+@media (max-width: 640px) {
+  .katex-display > .katex > .katex-html > .base {
+    margin-top: 0.15em;
+    margin-bottom: 0.15em;
+  }
+}

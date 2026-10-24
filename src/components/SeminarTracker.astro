@@ -588,7 +588,7 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
   /* Progress Bars */
   .progress-bars-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
     gap: 1rem;
     margin-bottom: 1.25rem;
   }
@@ -780,6 +780,8 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
 
   .milestone-body {
     flex: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
   }
 
   .milestone-top {
@@ -863,6 +865,9 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
     font-weight: 700;
     padding: 0.2rem 0.6rem;
     border-radius: 0.3rem;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     margin-bottom: 0.5rem;
     background: var(--sl-color-black);
     border: 1px solid var(--sl-color-gray-5);
@@ -934,6 +939,9 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
     background: var(--sl-color-black);
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.3rem;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   /* Inline PDF Details */
@@ -1027,6 +1035,9 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
     background: transparent;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.3rem;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     padding: 0.2rem 0.5rem;
     font-size: 0.75rem;
     color: var(--sl-color-gray-3);
@@ -1144,7 +1155,7 @@ const totalSections = seminarPapers.reduce((acc, p) => acc + p.sections.length, 
   /* Slides Grid */
   .slides-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 1rem;
   }
 
