@@ -7,37 +7,86 @@
   --sl-color-accent-high: #93c5fd;
 }
 
-/* Front-page (splash) pixel art Sakura background overlay */
-html[data-has-hero] body {
+/* Page-specific pixel art background definitions */
+html[data-has-hero] {
+  --page-bg-image: url('/sakura-bg.jpg');
+  --page-bg-pos: right bottom;
+  --page-bg-opacity: 0.28;
+}
+
+html:has(link[rel="canonical"][href$="nikku.tech/cv/"]) {
+  --page-bg-image: url('/desk-bg.jpg');
+  --page-bg-pos: center center;
+  --page-bg-opacity: 0.26;
+}
+
+html:has(link[rel="canonical"][href$="nikku.tech/lectures/"]) {
+  --page-bg-image: url('/audimax-bg.jpg');
+  --page-bg-pos: center bottom;
+  --page-bg-opacity: 0.25;
+}
+
+/* Shared semi-transparent pixel art overlay for Front Page, CV, and Lectures Overview */
+:is(
+  html[data-has-hero],
+  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+) body {
   position: relative;
   background-color: var(--sl-color-bg);
 }
 
-html[data-has-hero] body::before {
+:is(
+  html[data-has-hero],
+  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+) body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url('/sakura-bg.jpg');
+  background-image: var(--page-bg-image);
   background-size: cover;
-  background-position: right bottom;
+  background-position: var(--page-bg-pos, center center);
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  opacity: 0.28;
+  opacity: var(--page-bg-opacity, 0.26);
   pointer-events: none;
   z-index: 0;
 }
 
-html[data-has-hero] .page {
+:is(
+  html[data-has-hero],
+  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+) .page {
   position: relative;
   z-index: 1;
 }
 
-html[data-has-hero] .header {
+:is(
+  html[data-has-hero],
+  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+) .header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
 
-html[data-has-hero] .card {
+@media (min-width: 50rem) {
+  :is(
+    html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+    html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+  ) .sidebar-pane {
+    background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 78%, transparent);
+    backdrop-filter: blur(8px);
+  }
+}
+
+:is(
+  html[data-has-hero],
+  html:has(link[rel="canonical"][href$="nikku.tech/cv/"]),
+  html:has(link[rel="canonical"][href$="nikku.tech/lectures/"])
+) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
