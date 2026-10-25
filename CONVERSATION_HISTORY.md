@@ -174,6 +174,16 @@ Website_project/
     * Configured sidebar navigation in `astro.config.mjs` under *Profile & Portfolio* (`Heidelberg & Student Life`).
     * Cross-linked the page from `index.mdx` (hero action button) and `cv.md` (University and Education sections).
     * Verified 100% clean production build (`npm run build`, 18 pages generated in 1.86s).
+
+22. **Session 17 (Full-Body Standing Character Pixel Art Sprites & Sheets)**:
+    * Created 19 individual, full-body, front-facing 16-bit retro pixel art character sprites with 100% transparent alpha backgrounds across all website pixel art groups ([`public/characters/standing-sprites/`](file:///home/nikku/Documents/Website-Project/public/characters/standing-sprites/)).
+    * Extracted 4 master 16:9 sprite sheet lineups ([`public/characters/standing-sprites/sheets/`](file:///home/nikku/Documents/Website-Project/public/characters/standing-sprites/sheets/)):
+      - **Lineup 1 (Japanese Tandem Part 1)**: Friend 1 (Olive Shirt), Friend 2 (Curtain Bangs), Friend 3 (Cardigan Girl), Friend 4 (Long-Sleeve Graphic Girl).
+      - **Lineup 2 (Japanese Tandem Part 2 & Barista)**: Friend 5 (Short Beard), Friend 6 (Hair Bun Girl), Friend 7 (Bowl Cut), and Café Park Owner / Barista.
+      - **Lineup 3 (Heidelberg Uni OG Friends)**: Friend 2 (Dark Hair Girl), Friend 1 (Golden Blonde Guy), Friend 3 (Curly Glasses Girl), Friend 4 (Spezi Blue Shirt Guy), Friend 5 (Cap & Beard Guy).
+      - **Lineup 4 (OG Friends Group)**: OG Nick (Bearded Winter Coat), Friend 2 (Ginger Fleece Jacket), Friend 3 (Long Blonde Hair Mustard Hoodie), Friend 4 (Retro Colorblock Windbreaker), Friend 5 (Rahul).
+      - Plus standalone Nick (clean-shaven look) and original background scene crops.
+    * Committed and pushed all character sprite assets cleanly to `origin/main`. Dev server verified running in background.
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
