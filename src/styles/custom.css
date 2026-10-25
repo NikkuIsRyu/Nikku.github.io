@@ -61,6 +61,16 @@ body:has(.page-bg-japanese)::before {
   opacity: 0.28;
 }
 
+@media (max-width: 50rem), (orientation: portrait) {
+  html[data-page-bg="japanese"] body::before,
+  body:has(.page-bg-japanese)::before {
+    background-color: #242b3e;
+    background-image: url('/japanese-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+}
+
 html[data-has-hero] .page,
 html[data-page-bg] .page,
 body:has(.page-bg-desk) .page,

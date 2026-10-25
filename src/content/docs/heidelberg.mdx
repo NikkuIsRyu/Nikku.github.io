@@ -1,0 +1,193 @@
+---
+title: Heidelberg University & Student Life
+description: An inside look at studying Computer Science at Ruprecht-Karls-Universität Heidelberg — favorite study hubs, cafes, campus culture, and historical landmarks.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'audimax';
+---
+
+import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<div class="page-bg-audimax" aria-hidden="true"></div>
+
+Welcome to my guide to **Ruprecht-Karls-Universität Heidelberg** and what it is like living and studying Computer Science here in Germany's oldest university town.
+
+Heidelberg is a unique blend of centuries-old academic traditions, romantic river landscapes, and cutting-edge STEM research. As a CS student, life unfolds across two contrasting worlds: the hyper-modern laboratories of **Im Neuenheimer Feld (INF)** and the cobblestone alleys and baroque squares of the **historic Altstadt**.
+
+---
+
+## 🏛️ Ruprecht-Karls-Universität Heidelberg
+
+Founded in **1386** by Elector Rupert I (*Ruprecht I.*), Heidelberg University is **Germany’s oldest university** and one of the most prestigious research institutions in the world. For over six centuries, it has served as a beacon of independent thought, scientific breakthrough, and humanistic philosophy.
+
+<CardGrid>
+  <Card title="640 Years of Heritage" icon="open-book">
+    Established in 1386 under papal charter from Pope Urban VI. It is the third university established in the Holy Roman Empire (after Prague and Vienna).
+  </Card>
+  <Card title="Semper Apertus" icon="star">
+    The university’s Latin motto — *"Semper Apertus"* (Always Open) — embodies an uncompromised commitment to open-minded inquiry, academic freedom, and international dialogue.
+  </Card>
+  <Card title="44+ Nobel Laureates" icon="rocket">
+    Associated with 44 Nobel Prize winners across Physics, Chemistry, and Medicine — including **Robert Bunsen**, **Fritz Haber**, **Carl Bosch**, **Philipp Lenard**, **Otto Meyerhof**, **Bert Sakmann**, and **Stefan Hell**.
+  </Card>
+  <Card title="Excellence University" icon="approve-check">
+    Continuously awarded the prestigious status of *Exzellenzuniversität* in the German Universities Excellence Initiative and a founding member of the **League of European Research Universities (LERU)** and the **German U15**.
+  </Card>
+</CardGrid>
+
+### Campus Geography: A Tale of Two Riverbanks
+
+Unlike campus universities consolidated in a single enclosed zone, Heidelberg University is woven into the fabric of the entire city, divided by the Neckar river:
+
+```
+               [ Heiligenberg & Philosophenweg ]
+  ~~~~~~~~~~~~~~~~~~~~~~ Neckar River ~~~~~~~~~~~~~~~~~~~~~~
+  [ Im Neuenheimer Feld (INF) ]        [ Altstadt (Old Town) ]
+  • Mathematikon (CS / Math)          • Universitätsplatz & Alte Aula
+  • Audimax & Hörsaalzentrum          • Universitätsbibliothek (UB)
+  • Physics, Chemistry, Medicine      • Historic Student Prison (Karzer)
+  • DKFZ & Max Planck Institutes      • Marstall Mensa & Zeughaus
+```
+
+* **Im Neuenheimer Feld (INF)**: The modern STEM (*MINT*) powerhouse situated on the north bank. This expansive campus houses the Faculty of Mathematics and Computer Science, Natural Sciences, the University Hospital (*Universitätsklinikum*), the German Cancer Research Center (DKFZ), and Max Planck Institutes.
+* **Altstadt (Old Town)**: The historic humanities, theology, and law campus nestled beneath the world-famous Heidelberg Castle (*Schloss*). Here you find the *Alte Aula*, the historic Student Prison (*Studentenkarzer*), and the monumental *Universitätsbibliothek (UB)*.
+* **Bergheim Campus**: Situated between the central station and the old town in the historic Ludolf Krehl clinic, housing Economics, Political Science, and the Max Weber Institute of Sociology.
+
+---
+
+## 💻 Life as a Computer Science Student (*B.Sc. Informatik*)
+
+Studying Computer Science at Heidelberg combines rigorous theoretical foundations with practical system design. Whether implementing algorithms in C++, writing $\LaTeX$ proofs for Theoretical Computer Science, or training voice synthesis models with PyTorch, the student lifestyle follows a vibrant cadence:
+
+### The Daily Rhythm
+1. **Morning Lectures in INF**: Starting the day at the **Audimax** or the **Mathematikon** for lectures in Algorithms, Artificial Intelligence, or Operating Systems.
+2. **The "Zettel" Grind**: Weekly problem sets (*Übungszettel*) form the backbone of German STEM education. Solving complex mathematical proofs and debugging code with study teams is an essential ritual.
+3. **The Commute Across the Neckar**: Cruising along the Neckar bike paths or catching Tram 21/24 across Ernst-Walz-Brücke and Theodor-Heuss-Brücke, connecting high-tech labs with relaxed historic squares.
+4. **Afternoon Wind-Down**: Heading into the Altstadt for an espresso at **Café Park**, a sunset walk along the **Neckarwiese**, or an evening dinner at the **Marstall**.
+
+---
+
+## 📍 Favorite Spots: Where to Study, Hang Out & Recharge
+
+Here is a curated guide to my favorite spots in Heidelberg for deep focus, team collaboration, great coffee, and outdoor downtime.
+
+### 🧠 Deep Focus & Individual Learning
+
+<CardGrid>
+  <Card title="The Audimax (INF 308)" icon="laptop">
+    <Badge text="Massive Lecture Hall" variant="tip" /> <Badge text="Deep Learning" variant="note" />
+
+    The **Auditorium Maximum** located within the *Hörsaalzentrum Chemie / INF 308* is the architectural centerpiece of STEM lectures in the Neuenheimer Feld.
+    
+    * **Why it's a favorite**: With its soaring, wood-paneled tiered amphitheater, the Audimax radiates an inspiring academic atmosphere. When you need to immerse yourself in lecture reviews, slide analysis, or intense exam prep, sitting in this grand auditorium provides incredible focus and acoustic tranquility.
+    * **Best for**: Absorbing large foundational lectures, reviewing complex slides, and immersive solo study sessions.
+  </Card>
+
+  <Card title="Universitätsbibliothek (UB) Heidelberg" icon="document">
+    <Badge text="Altstadt (Plöck)" variant="tip" /> <Badge text="Silent Reading Hall" variant="note" />
+
+    The main university library is one of Germany's most famous and stunning library structures, designed in the historicist Neo-Renaissance style by Josef Durm.
+
+    * **Why it's a favorite**: The silent reading rooms (*Lesesaal*) offer absolute, distraction-free quiet under high arched ceilings and book-lined galleries. It is the ultimate productivity temple when exam deadlines loom and zero-procrastination mode is required.
+    * **Pro-Tip**: Arrive early during the February/July exam phases to secure a desk with natural window light overlooking the inner courtyards.
+  </Card>
+</CardGrid>
+
+---
+
+### 👥 Group Learning & Coding Collaboration
+
+<CardGrid>
+  <Card title="Das Mathematikon (INF 205)" icon="setting">
+    <Badge text="CS Headquarters" variant="success" /> <Badge text="Group Work" variant="tip" />
+
+    Opened in 2015, the **Mathematikon** is the state-of-the-art home of the Faculty of Mathematics and Computer Science.
+
+    * **Why it's a favorite**: This is the social and intellectual engine room for CS students. Bright group study zones, collaborative workbenches, and seminar rooms make it the undisputed headquarters for tackling weekly *Übungszettel*, pair programming, and brainstorming system architectures.
+    * **The Survival Factor**: When debugging code at 4 PM, you don't even have to leave the building. The ground floor houses the **Mathematikon Passage** with a large **REWE Center**, bakeries (**Bäcker Görtz**), and quick food options for instant caffeine and snack refills.
+  </Card>
+
+  <Card title="BioQuant Atrium & INF CIP-Pools" icon="puzzle">
+    <Badge text="INF Campus" variant="note" /> <Badge text="Interdisciplinary" variant="success" />
+
+    The BioQuant center and adjacent computer science lab rooms provide high-spec Linux workstations and collaborative spaces surrounded by computational biology and bioinformatics research groups.
+
+    * **Why it's a favorite**: A peaceful, modern glass architecture that bridges the gap between raw computing and biological life sciences.
+  </Card>
+</CardGrid>
+
+---
+
+### ☕ Favorite Cafés & Student Hangouts
+
+<CardGrid>
+  <Card title="Café Park (Altstadt)" icon="sun">
+    <Badge text="Altstadt (Plöck / Friedrich-Ebert-Platz)" variant="caution" /> <Badge text="Favorite Chill Spot" variant="success" />
+
+    Tucked along the Plöck near Friedrich-Ebert-Platz, **Café Park** is one of the coziest, most atmospheric cafes in the entire Old Town.
+
+    * **The Vibe**: Charming vintage furniture, lush green plants, warm lighting, and a serene outdoor terrace. It feels like stepping into a peaceful oasis away from tourist crowds.
+    * **Why it's a favorite**: Outstanding espresso, delicious homemade cakes, quiches, and a wonderfully relaxed energy. It is my top recommendation for unwinding with a book after a long day of lectures, catching up with friends, or having engaging conversations about AI, philosophy, and life over flat whites.
+  </Card>
+
+  <Card title="Zeughaus & Marstallcafé" icon="star">
+    <Badge text="Neckar Riverfront" variant="caution" /> <Badge text="Student Hub" variant="note" />
+
+    The historic **Zeughaus** (former 16th-century armory) hosts the flagship Mensa of the *Studierendenwerk Heidelberg*, regularly voted among the best student dining halls in Germany.
+
+    * **The Vibe**: By day, a vast fresh buffet with open seating under historic sandstone vaults. By late afternoon and evening, the **Marstallcafé** turns into a lively social beer garden and bar with student-friendly prices.
+    * **Why it's a favorite**: Eating lunch in the sunny open-air courtyard under huge chestnut trees right next to the Neckar river is an essential part of the Heidelberg student experience.
+  </Card>
+</CardGrid>
+
+---
+
+### 🌿 Outdoor Downtime & Scenic Spots
+
+<Tabs>
+  <TabItem label="Neckarwiese (Neuenheim)">
+    #### Heidelberg’s Open-Air Living Room
+    Stretching for several kilometers along the northern riverbank directly opposite the Old Town and Castle, the **Neckarwiese** is the heart of student leisure.
+
+    * **The Experience**: On any sunny afternoon from April through October, the green lawns fill with students picnicking, slacklining, playing volleyball, or reading under willow trees.
+    * **The View**: Sweeping panoramas across the Neckar toward the Old Bridge (*Alte Brücke*) and the castle ruins glowing golden at sunset. It is the best place to decompress after finishing a tough programming milestone.
+  </TabItem>
+
+  <TabItem label="Philosophenweg (Philosophers' Way)">
+    #### The Historic Contemplative Walk
+    Winding along the sunny southern slopes of the Heiligenberg, the **Philosophenweg** is steeped in intellectual history.
+
+    * **The Experience**: For centuries, university scholars, romantic poets (Hölderlin, Eichendorff), and philosophers walked this path to find inspiration and clarity of thought.
+    * **The Panorama**: Unrivaled postcard vistas looking directly down upon the red-tiled roofs of the Altstadt, the Church of the Holy Spirit (*Heiliggeistkirche*), and the Castle. It’s an unbeatable spot for a refreshing hike to reset your mental cache.
+  </TabItem>
+
+  <TabItem label="Botanischer Garten (INF 340)">
+    #### The STEM Campus Green Oasis
+    Founded in **1593**, the Botanical Garden of Heidelberg University is one of the oldest botanical gardens in Germany and is located directly behind the INF natural science complexes.
+
+    * **The Experience**: Featuring extensive greenhouses with tropical orchids, ferns, cacti, and tranquil outdoor ponds.
+    * **The Pro-Tip**: When stuck on a challenging algorithm proof or complex code bug, a 15-minute walk through the serene bamboo groves and greenhouses provides the perfect cognitive reboot.
+  </TabItem>
+</Tabs>
+
+---
+
+## 🗺️ Student Life Quick Guide & Pro-Tips
+
+| Category | Recommended Spot | Purpose / Pro-Tip |
+| :--- | :--- | :--- |
+| **Deep Concentration** | **Audimax (INF 308)** & **UB Lesesaal** | High ceilings, calm acoustics, and maximum focus for exam prep. |
+| **Group Coding & Homework** | **Mathematikon (INF 205)** | Whiteboards, collaborative tables, and direct access to REWE and Bäcker Görtz. |
+| **Artisanal Coffee & Chat** | **Café Park (Altstadt)** | Cozy vintage garden atmosphere, top-tier coffee, and relaxing chill vibe. |
+| **Daily Student Lunch** | **Zeughaus / Marstall** & **Zentralmensa INF 304** | Fresh buffet, affordable student rates, and lively outdoor courtyard seating. |
+| **Sunsets & Relaxation** | **Neckarwiese** | Post-exam picnics, frisbee, river breezes, and castle views. |
+| **Clear Your Mind** | **Philosophenweg** | Scenic trail overlooking the entire valley — perfect for long philosophical walks. |
+| **Nature Break on Campus** | **Botanischer Garten (INF)** | 400-year-old botanical garden tucked directly behind STEM lecture halls. |
+
+---
+
+## 🔗 Related Pages
+
+* [Curriculum Vitae & Education](/cv/) — Detailed overview of coursework, seminars, and technical proficiencies.
+* [Academic Knowledge Vault](/lectures/) — Course summaries, $\KaTeX$ formulas, and lecture slides repository.
+* [Agentic AI Seminar Hub](/lectures/ai-and-med/seminar-agentic-ai/) — Research on AI agents, MCP protocol, and safety guardrails.

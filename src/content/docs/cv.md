@@ -13,7 +13,7 @@ head:
 Welcome to my personal academic portal and knowledge base. I document my university coursework, research summaries, and engineering projects here.
 
 * **Name**: Nick Blassmann (Nikku)
-* **University**: Heidelberg University (*Ruprecht-Karls-Universität Heidelberg*)
+* **University**: Heidelberg University (*Ruprecht-Karls-Universität Heidelberg*) — [Explore My Heidelberg & Student Life Guide](/heidelberg/)
 * **Degree**: B.Sc. in Computer Science (*Informatik*), 5th Semester
 * **Focus Areas**: Artificial Intelligence & Machine Learning, Robotics & Embodied AI, AI Agent Security (MCP), Systems Architecture
 * **Portfolio**: [nikku.tech](https://nikku.tech) *(alias: [nickblassmann.me](https://nickblassmann.me))*
@@ -25,7 +25,7 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 ## 🎓 Education
 
 ### B.Sc. in Computer Science (Informatik)
-*Heidelberg University (Ruprecht-Karls-Universität Heidelberg)* • *Oct 2024 – Present (5th Semester)*
+*Heidelberg University (Ruprecht-Karls-Universität Heidelberg)* • *Oct 2024 – Present (5th Semester)* • [Campus & Student Life Guide](/heidelberg/)
 
 * **Core Computer Science & Systems**: Operating Systems and Networks (*Betriebssysteme und Netzwerke*), Algorithms and Data Structures (*AlDa*), Introduction to Software Engineering (*ISW/ISE*), Programming Course (C++), Introduction to Computer Science (*IPI*), Introduction to Computer Engineering (*ITE*), Theoretical Computer Science (*ITH*), Databases & Information Systems (*IDB*).
 * **Mathematics**: Mathematics for Computer Scientists 1 & 2 (*Lineare Algebra, Analysis, Diskrete Mathematik*).

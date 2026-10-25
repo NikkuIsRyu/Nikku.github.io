@@ -27,6 +27,7 @@ export default defineConfig({
 					label: 'Profile & Portfolio',
 					items: [
 						{ label: 'CV & About Me', slug: 'cv' },
+						{ label: 'Heidelberg & Student Life', slug: 'heidelberg' },
 					],
 				},
 				{

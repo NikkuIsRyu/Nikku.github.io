@@ -159,6 +159,21 @@ Website_project/
     * Waited for prior seminar tasks to conclude and verified dev server status.
     * Removed Google Drive Assets sections (`<DriveAsset />` components and headings) across all five Core Computer Science course pages ([`theoretical-cs.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/theoretical-cs.md), [`databases.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/databases.md), [`algorithms.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/algorithms.md), [`it-security.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/it-security.md), and [`ise.md`](file:///home/nikku/Documents/Website-Project/src/content/docs/lectures/core-cs/ise.md)) to uphold academic privacy and intellectual property policies (not publishing professor slides without consent).
     * Removed unused component imports; verified clean static production build (`npm run build`, 17 pages in 2.73s).
+
+21. **Session 16 (Heidelberg University & Student Life Guide)**:
+    * Created dedicated page `src/content/docs/heidelberg.mdx` (`/heidelberg/`) exploring Ruprecht-Karls-Universität Heidelberg (founded 1386, *Semper Apertus*, 44 Nobel Laureates, Excellence University status).
+    * Detailed the dual-campus geography (historic Altstadt vs. modern STEM campus Im Neuenheimer Feld) and the daily life of a B.Sc. Computer Science student (the "Zettel" cycle, bike commuting across the Neckar, study-life balance).
+    * Featured curated favorite spots with custom badges and icons:
+      - **The Audimax (INF 308)**: Tiered auditorium for deep focus and lecture reviews (styled with the pixel-art `audimax-bg.jpg` overlay).
+      - **Das Mathematikon (INF 205)**: Faculty headquarters for CS/Math group learning, problem sets, REWE Center and Bäcker Görtz coffee runs.
+      - **Café Park (Altstadt)**: Cozy vintage café on Plöck for coffee breaks, casual reading, and hanging out.
+      - **Universitätsbibliothek (UB) Heidelberg**: Historic silent reading rooms for intense exam preparation.
+      - **Zeughaus / Marstall & Marstallcafé**: Award-winning riverside Mensa by day, student courtyard and social bar by night.
+      - **Neckarwiese**: Heidelberg's open-air living room for post-exam downtime, picnics, and castle sunset views.
+      - **Philosophenweg & Botanischer Garten**: Scenic contemplative trails and campus green sanctuaries.
+    * Configured sidebar navigation in `astro.config.mjs` under *Profile & Portfolio* (`Heidelberg & Student Life`).
+    * Cross-linked the page from `index.mdx` (hero action button) and `cv.md` (University and Education sections).
+    * Verified 100% clean production build (`npm run build`, 18 pages generated in 1.86s).
 ---
 
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC

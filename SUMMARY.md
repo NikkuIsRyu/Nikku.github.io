@@ -45,6 +45,7 @@ Website_project/
     └── content/docs/
         ├── index.mdx              # Splash landing page with course curriculum cards
         ├── cv.md                  # CV & About Me (education, skills, research, projects)
+        ├── heidelberg.mdx         # Heidelberg University & Student Life Guide
         └── lectures/
             ├── index.mdx          # Academic Vault directory & Drive storage overview
             ├── core-cs/           # CS Foundations
