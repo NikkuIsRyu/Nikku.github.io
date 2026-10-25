@@ -28,4 +28,14 @@ temp/
 export_omarchy/
 backups/
 
+# User manual backup and copy files (do not track or delete)
+*(Copy)*
+* (Copy)*
+* - Copy*
+* - Kopie*
+*_copy*
+*_backup*
+*.bak
+
+
 

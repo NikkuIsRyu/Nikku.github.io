@@ -1,9 +1,20 @@
-## Asset Safety & Mandatory Image Backups
+## Asset Safety & Image Preservation Rules
 
-**CRITICAL RULE - NEVER VIOLATE**:
-- **NEVER** delete, overwrite, or replace any image or pixel art asset (under `public/`, `src/assets/`, or anywhere in the project) without FIRST creating a timestamped backup copy.
-- Always back up the existing image to `backups/assets/` and copy it to `${HOME}/GoogleDrive/University/Website_Project_Backups/asset_vault/` before touching it.
-- **NEVER** replace user artwork or personalized pixel art (such as the OG friends group portraits or uni friends under the sakura tree) with generic placeholders or other scenes unless explicitly confirmed by the user.
+**CRITICAL RULES - STRICTLY ENFORCED**:
+1. **USER BACKUPS & COPIES ARE PERMANENT & SACROSANCT**:
+   - The user frequently creates local copy/backup images directly in `public/` or asset directories (e.g. `desk-bg (Copy).jpg`, `desk-bg (Copy)1.jpg`, `*-Copy*`, `* (Copy)*`, `* - Kopie*`, `*_backup*`, `*.bak`).
+   - **NEVER delete, move, rename, or clean up any user-created copy or backup file.**
+   - Do NOT run `rm`, `mv`, `git clean`, or cleanup scripts targeting these files.
+   - These files are intentionally ignored in `.gitignore` so they remain safely in place without affecting git status or staging.
+
+2. **RESTORING / REVERTING IMAGES (UNINTERRUPTED & PRECISE)**:
+   - When the user asks to undo, revert, or restore an image (e.g., restoring `public/uni-og-bg.jpg` or `public/desk-bg.jpg` from git history or backups), you **MUST proceed immediately** to restore and overwrite the specific active image target file (e.g., via `git checkout <commit> -- <filepath>`).
+   - Restoring the image should **NEVER be interrupted or blocked**.
+   - However, restoring must **ONLY** update the specific active image file being restored. Do **NOT** perform broad directory cleans or delete any adjacent user copies (`*(Copy)*`).
+
+3. **MODIFICATIONS & AGENT BACKUPS**:
+   - Before modifying, replacing, or generating a new version of an existing image asset, always ensure a timestamped backup exists in `backups/assets/` and `${HOME}/GoogleDrive/University/Website_Project_Backups/asset_vault/`.
+   - **NEVER** replace user artwork or personalized pixel art (such as the OG friends group portraits or uni friends under the sakura tree) with generic placeholders or other scenes unless explicitly requested by the user.
 
 ## Development
 
