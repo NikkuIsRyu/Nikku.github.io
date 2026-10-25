@@ -3,14 +3,13 @@ title: Heidelberg University & Student Life
 description: An inside look at studying Computer Science at Ruprecht-Karls-Universität Heidelberg — favorite study hubs, cafes, campus culture, and historical landmarks.
 head:
   - tag: script
-    content: document.documentElement.dataset.pageBg = 'uni-og';
+    content: document.documentElement.dataset.pageBg = 'heidelberg';
 ---
 
 import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
-import HangoutsBgObserver from '../../components/HangoutsBgObserver.astro';
+import HeidelbergBgTransition from '../../components/HeidelbergBgTransition.astro';
 
-<div class="page-bg-uni-og" aria-hidden="true"></div>
-<HangoutsBgObserver />
+<HeidelbergBgTransition />
 
 Welcome to my guide to **Ruprecht-Karls-Universität Heidelberg** and what it is like living and studying Computer Science here in Germany's oldest university town.
 

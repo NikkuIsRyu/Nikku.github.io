@@ -69,44 +69,6 @@ body:has(.page-bg-uni-og)::before {
   background-image: url('/uni-og-bg.jpg');
   background-position: right bottom;
   opacity: 0.28;
-  transition: opacity 0.8s ease-in-out;
-}
-
-/* Secondary cross-fade pixel art layer: Café Park (Student Hangouts) */
-html[data-page-bg="uni-og"] body::after,
-body:has(.page-bg-uni-og)::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-size: cover;
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
-  pointer-events: none;
-  z-index: 0;
-  background-image: url('/cafe-park-bg.jpg');
-  background-position: right bottom;
-  opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-}
-
-/* Active Student Hangouts State (Cross-fade) */
-html[data-hangouts-active="true"] body::before,
-body.bg-hangouts-active::before {
-  opacity: 0;
-}
-
-html[data-hangouts-active="true"] body::after,
-body.bg-hangouts-active::after {
-  opacity: 0.28;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-page-bg="uni-og"] body::before,
-  body:has(.page-bg-uni-og)::before,
-  html[data-page-bg="uni-og"] body::after,
-  body:has(.page-bg-uni-og)::after {
-    transition: none !important;
-  }
 }
 
 @media (max-width: 50rem), (orientation: portrait) {
@@ -125,13 +87,117 @@ body.bg-hangouts-active::after {
     background-size: 100% auto;
     background-position: center bottom;
   }
+}
 
-  html[data-page-bg="uni-og"] body::after,
-  body:has(.page-bg-uni-og)::after {
+/* ========================================================
+   Heidelberg Multi-Zone Pixel Art Transition System
+   Zones:
+     1. Top -> Life as a CS Student: Audimax
+     2. Life as a CS Student -> a bit above Cafés: Uni-OG
+     3. A bit above Cafés -> Student Life Quick Guide: Café Park
+     4. Student Life Quick Guide -> End: Audimax
+   ======================================================== */
+
+body:has(.heidelberg-bg-layers)::before,
+body:has(.heidelberg-bg-layers)::after,
+html[data-page-bg="heidelberg"] body::before,
+html[data-page-bg="heidelberg"] body::after {
+  display: none !important;
+}
+
+.heidelberg-bg-layers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heidelberg-bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Zone 1 & Zone 4: Audimax (Default initial state) */
+.heidelberg-bg-layer.bg-audimax {
+  background-image: url('/audimax-bg.jpg');
+  background-position: center bottom;
+  opacity: 0.28;
+}
+
+/* Zone 2: Uni-OG */
+.heidelberg-bg-layer.bg-uni-og {
+  background-image: url('/uni-og-bg.jpg');
+  background-position: right bottom;
+}
+
+/* Zone 3: Café Park */
+.heidelberg-bg-layer.bg-cafe-park {
+  background-image: url('/cafe-park-bg.jpg');
+  background-position: right bottom;
+}
+
+/* State overrides based on data-heidelberg-bg */
+html[data-heidelberg-bg="audimax"] .heidelberg-bg-layer.bg-audimax {
+  opacity: 0.28;
+}
+html[data-heidelberg-bg="audimax"] .heidelberg-bg-layer.bg-uni-og {
+  opacity: 0;
+}
+html[data-heidelberg-bg="audimax"] .heidelberg-bg-layer.bg-cafe-park {
+  opacity: 0;
+}
+
+html[data-heidelberg-bg="uni-og"] .heidelberg-bg-layer.bg-audimax {
+  opacity: 0;
+}
+html[data-heidelberg-bg="uni-og"] .heidelberg-bg-layer.bg-uni-og {
+  opacity: 0.28;
+}
+html[data-heidelberg-bg="uni-og"] .heidelberg-bg-layer.bg-cafe-park {
+  opacity: 0;
+}
+
+html[data-heidelberg-bg="cafe-park"] .heidelberg-bg-layer.bg-audimax {
+  opacity: 0;
+}
+html[data-heidelberg-bg="cafe-park"] .heidelberg-bg-layer.bg-uni-og {
+  opacity: 0;
+}
+html[data-heidelberg-bg="cafe-park"] .heidelberg-bg-layer.bg-cafe-park {
+  opacity: 0.28;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 50rem), (orientation: portrait) {
+  .heidelberg-bg-layer.bg-audimax {
+    background-position: center bottom;
+    background-size: cover;
+  }
+
+  .heidelberg-bg-layer.bg-uni-og {
+    background-color: #242b3e;
+    background-image: url('/uni-og-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  .heidelberg-bg-layer.bg-cafe-park {
     background-color: #242b3e;
     background-image: url('/cafe-park-bg.jpg');
     background-size: cover;
     background-position: center center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heidelberg-bg-layer {
+    transition: none !important;
   }
 }
 

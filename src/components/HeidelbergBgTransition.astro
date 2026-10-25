@@ -1,0 +1,83 @@
+---
+// HeidelbergBgTransition.astro
+// Smooth multi-zone background transitions between Audimax, Uni-OG, and Cafe Park
+---
+
+<div class="heidelberg-bg-layers" aria-hidden="true">
+	<div class="heidelberg-bg-layer bg-audimax"></div>
+	<div class="heidelberg-bg-layer bg-uni-og"></div>
+	<div class="heidelberg-bg-layer bg-cafe-park"></div>
+</div>
+
+<script>
+	function setupHeidelbergBgTransition() {
+		const container = document.querySelector('.heidelberg-bg-layers');
+		if (!container) return;
+
+		const targetCS =
+			document.getElementById('-life-as-a-computer-science-student-bsc-informatik') ||
+			document.querySelector<HTMLElement>('[id*="life-as-a-computer-science"]');
+
+		const targetHangouts =
+			document.getElementById('-favorite-cafés--student-hangouts') ||
+			document.querySelector<HTMLElement>('[id*="favorite-caf"]');
+
+		const targetGuide =
+			document.getElementById('️-student-life-quick-guide--pro-tips') ||
+			document.querySelector<HTMLElement>('[id*="student-life-quick-guide"]') ||
+			document.querySelector<HTMLElement>('[id*="quick-guide"]');
+
+		let ticking = false;
+		let currentBg = '';
+
+		function update() {
+			const vh = window.innerHeight;
+			let nextBg = 'audimax'; // Zone 1: Starting page default
+
+			// Zone 4: From Student Life Quick Guide & Pro-Tips to end of page -> Audimax
+			if (targetGuide && targetGuide.getBoundingClientRect().top <= vh * 0.55) {
+				nextBg = 'audimax';
+			}
+			// Zone 3: A bit above Favorite Cafés & Student Hangouts -> Cafe Park
+			else if (targetHangouts && targetHangouts.getBoundingClientRect().top <= vh * 0.8) {
+				nextBg = 'cafe-park';
+			}
+			// Zone 2: From Life as a CS Student -> Uni-OG
+			else if (targetCS && targetCS.getBoundingClientRect().top <= vh * 0.55) {
+				nextBg = 'uni-og';
+			}
+
+			if (currentBg !== nextBg) {
+				currentBg = nextBg;
+				document.documentElement.setAttribute('data-heidelberg-bg', nextBg);
+			}
+		}
+
+		function onScroll() {
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					update();
+					ticking = false;
+				});
+				ticking = true;
+			}
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll, { passive: true });
+		update();
+
+		document.addEventListener(
+			'astro:before-swap',
+			() => {
+				window.removeEventListener('scroll', onScroll);
+				window.removeEventListener('resize', onScroll);
+				document.documentElement.removeAttribute('data-heidelberg-bg');
+			},
+			{ once: true }
+		);
+	}
+
+	document.addEventListener('DOMContentLoaded', setupHeidelbergBgTransition);
+	document.addEventListener('astro:page-load', setupHeidelbergBgTransition);
+</script>
