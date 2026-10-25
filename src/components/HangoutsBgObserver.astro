@@ -1,6 +1,7 @@
 ---
 // HangoutsBgObserver.astro
-// Smoothly triggers cross-fade to cafe-park-bg.jpg while in "Favorite Cafés & Student Hangouts"
+// Smoothly triggers cross-fade to cafe-park-bg.jpg starting at "Favorite Cafés & Student Hangouts"
+// and staying active through "Outdoor Downtime & Scenic Spots" until "Student Life Quick Guide & Pro-Tips"
 ---
 
 <script>
@@ -20,8 +21,8 @@
 			document.querySelector<HTMLElement>('[id*="favorite-caf"]');
 
 		const nextSection =
-			document.getElementById('-outdoor-downtime--scenic-spots') ||
-			document.querySelector<HTMLElement>('[id*="outdoor-downtime"]');
+			document.querySelector<HTMLElement>('[id*="student-life-quick-guide"]') ||
+			document.querySelector<HTMLElement>('[id*="quick-guide"]');
 
 		if (!target) return;
 
@@ -34,7 +35,7 @@
 			// Trigger entry when heading reaches the upper 55% of the viewport
 			const entered = targetRect.top <= vh * 0.55;
 
-			// Trigger exit when the next section (Outdoor Downtime) reaches upper 45% of viewport
+			// Trigger exit when Student Life Quick Guide reaches upper 45% of viewport
 			let left = false;
 			if (nextSection) {
 				const nextRect = nextSection.getBoundingClientRect();
