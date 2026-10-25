@@ -11,7 +11,8 @@
 html[data-has-hero] body,
 html[data-page-bg] body,
 body:has(.page-bg-desk),
-body:has(.page-bg-audimax) {
+body:has(.page-bg-audimax),
+body:has(.page-bg-japanese) {
   position: relative;
   background-color: var(--sl-color-bg);
 }
@@ -19,8 +20,10 @@ body:has(.page-bg-audimax) {
 html[data-has-hero] body::before,
 html[data-page-bg="desk"] body::before,
 html[data-page-bg="audimax"] body::before,
+html[data-page-bg="japanese"] body::before,
 body:has(.page-bg-desk)::before,
-body:has(.page-bg-audimax)::before {
+body:has(.page-bg-audimax)::before,
+body:has(.page-bg-japanese)::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -51,10 +54,18 @@ body:has(.page-bg-audimax)::before {
   opacity: 0.28;
 }
 
+html[data-page-bg="japanese"] body::before,
+body:has(.page-bg-japanese)::before {
+  background-image: url('/japanese-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
 html[data-has-hero] .page,
 html[data-page-bg] .page,
 body:has(.page-bg-desk) .page,
-body:has(.page-bg-audimax) .page {
+body:has(.page-bg-audimax) .page,
+body:has(.page-bg-japanese) .page {
   position: relative;
   z-index: 1;
 }
@@ -62,7 +73,8 @@ body:has(.page-bg-audimax) .page {
 html[data-has-hero] .header,
 html[data-page-bg] .header,
 body:has(.page-bg-desk) .header,
-body:has(.page-bg-audimax) .header {
+body:has(.page-bg-audimax) .header,
+body:has(.page-bg-japanese) .header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
@@ -70,7 +82,8 @@ body:has(.page-bg-audimax) .header {
 @media (min-width: 50rem) {
   html[data-page-bg] .sidebar-pane,
   body:has(.page-bg-desk) .sidebar-pane,
-  body:has(.page-bg-audimax) .sidebar-pane {
+  body:has(.page-bg-audimax) .sidebar-pane,
+  body:has(.page-bg-japanese) .sidebar-pane {
     background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 75%, transparent);
     backdrop-filter: blur(8px);
   }
@@ -79,13 +92,15 @@ body:has(.page-bg-audimax) .header {
 html[data-has-hero] .card,
 html[data-page-bg] .card,
 body:has(.page-bg-desk) .card,
-body:has(.page-bg-audimax) .card {
+body:has(.page-bg-audimax) .card,
+body:has(.page-bg-japanese) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
 
 .page-bg-desk,
-.page-bg-audimax {
+.page-bg-audimax,
+.page-bg-japanese {
   display: none;
 }
 
