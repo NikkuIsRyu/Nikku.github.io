@@ -1,0 +1,79 @@
+---
+// HangoutsBgObserver.astro
+// Smoothly triggers cross-fade to cafe-park-bg.jpg while in "Favorite Cafés & Student Hangouts"
+---
+
+<script>
+	function setupHangoutsBgObserver() {
+		const isHeidelbergPage =
+			document.documentElement.dataset.pageBg === 'uni-og' ||
+			Boolean(document.querySelector('.page-bg-uni-og'));
+
+		if (!isHeidelbergPage) {
+			document.documentElement.removeAttribute('data-hangouts-active');
+			document.body.classList.remove('bg-hangouts-active');
+			return;
+		}
+
+		const target =
+			document.getElementById('-favorite-cafés--student-hangouts') ||
+			document.querySelector<HTMLElement>('[id*="favorite-caf"]');
+
+		const nextSection =
+			document.getElementById('-outdoor-downtime--scenic-spots') ||
+			document.querySelector<HTMLElement>('[id*="outdoor-downtime"]');
+
+		if (!target) return;
+
+		let ticking = false;
+
+		function updateState() {
+			const vh = window.innerHeight;
+			const targetRect = target.getBoundingClientRect();
+			
+			// Trigger entry when heading reaches the upper 55% of the viewport
+			const entered = targetRect.top <= vh * 0.55;
+
+			// Trigger exit when the next section (Outdoor Downtime) reaches upper 45% of viewport
+			let left = false;
+			if (nextSection) {
+				const nextRect = nextSection.getBoundingClientRect();
+				left = nextRect.top <= vh * 0.45;
+			}
+
+			const isActive = entered && !left;
+
+			document.documentElement.setAttribute('data-hangouts-active', isActive ? 'true' : 'false');
+			document.body.classList.toggle('bg-hangouts-active', isActive);
+		}
+
+		function onScroll() {
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					updateState();
+					ticking = false;
+				});
+				ticking = true;
+			}
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll, { passive: true });
+		updateState();
+
+		// Cleanup if page transitions via Starlight / Astro View Transitions
+		document.addEventListener(
+			'astro:before-swap',
+			() => {
+				window.removeEventListener('scroll', onScroll);
+				window.removeEventListener('resize', onScroll);
+				document.documentElement.removeAttribute('data-hangouts-active');
+				document.body.classList.remove('bg-hangouts-active');
+			},
+			{ once: true }
+		);
+	}
+
+	document.addEventListener('DOMContentLoaded', setupHangoutsBgObserver);
+	document.addEventListener('astro:page-load', setupHangoutsBgObserver);
+</script>

@@ -12,7 +12,8 @@ html[data-has-hero] body,
 html[data-page-bg] body,
 body:has(.page-bg-desk),
 body:has(.page-bg-audimax),
-body:has(.page-bg-japanese) {
+body:has(.page-bg-japanese),
+body:has(.page-bg-uni-og) {
   position: relative;
   background-color: var(--sl-color-bg);
 }
@@ -21,9 +22,11 @@ html[data-has-hero] body::before,
 html[data-page-bg="desk"] body::before,
 html[data-page-bg="audimax"] body::before,
 html[data-page-bg="japanese"] body::before,
+html[data-page-bg="uni-og"] body::before,
 body:has(.page-bg-desk)::before,
 body:has(.page-bg-audimax)::before,
-body:has(.page-bg-japanese)::before {
+body:has(.page-bg-japanese)::before,
+body:has(.page-bg-uni-og)::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -61,6 +64,51 @@ body:has(.page-bg-japanese)::before {
   opacity: 0.28;
 }
 
+html[data-page-bg="uni-og"] body::before,
+body:has(.page-bg-uni-og)::before {
+  background-image: url('/uni-og-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Secondary cross-fade pixel art layer: Café Park (Student Hangouts) */
+html[data-page-bg="uni-og"] body::after,
+body:has(.page-bg-uni-og)::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url('/cafe-park-bg.jpg');
+  background-position: right bottom;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Active Student Hangouts State (Cross-fade) */
+html[data-hangouts-active="true"] body::before,
+body.bg-hangouts-active::before {
+  opacity: 0;
+}
+
+html[data-hangouts-active="true"] body::after,
+body.bg-hangouts-active::after {
+  opacity: 0.28;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-page-bg="uni-og"] body::before,
+  body:has(.page-bg-uni-og)::before,
+  html[data-page-bg="uni-og"] body::after,
+  body:has(.page-bg-uni-og)::after {
+    transition: none !important;
+  }
+}
+
 @media (max-width: 50rem), (orientation: portrait) {
   html[data-page-bg="japanese"] body::before,
   body:has(.page-bg-japanese)::before {
@@ -69,13 +117,30 @@ body:has(.page-bg-japanese)::before {
     background-size: 100% auto;
     background-position: center bottom;
   }
+
+  html[data-page-bg="uni-og"] body::before,
+  body:has(.page-bg-uni-og)::before {
+    background-color: #242b3e;
+    background-image: url('/uni-og-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="uni-og"] body::after,
+  body:has(.page-bg-uni-og)::after {
+    background-color: #242b3e;
+    background-image: url('/cafe-park-bg.jpg');
+    background-size: cover;
+    background-position: center center;
+  }
 }
 
 html[data-has-hero] .page,
 html[data-page-bg] .page,
 body:has(.page-bg-desk) .page,
 body:has(.page-bg-audimax) .page,
-body:has(.page-bg-japanese) .page {
+body:has(.page-bg-japanese) .page,
+body:has(.page-bg-uni-og) .page {
   position: relative;
   z-index: 1;
 }
@@ -84,7 +149,8 @@ html[data-has-hero] .header,
 html[data-page-bg] .header,
 body:has(.page-bg-desk) .header,
 body:has(.page-bg-audimax) .header,
-body:has(.page-bg-japanese) .header {
+body:has(.page-bg-japanese) .header,
+body:has(.page-bg-uni-og) .header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
@@ -93,7 +159,8 @@ body:has(.page-bg-japanese) .header {
   html[data-page-bg] .sidebar-pane,
   body:has(.page-bg-desk) .sidebar-pane,
   body:has(.page-bg-audimax) .sidebar-pane,
-  body:has(.page-bg-japanese) .sidebar-pane {
+  body:has(.page-bg-japanese) .sidebar-pane,
+  body:has(.page-bg-uni-og) .sidebar-pane {
     background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 75%, transparent);
     backdrop-filter: blur(8px);
   }
@@ -103,14 +170,16 @@ html[data-has-hero] .card,
 html[data-page-bg] .card,
 body:has(.page-bg-desk) .card,
 body:has(.page-bg-audimax) .card,
-body:has(.page-bg-japanese) .card {
+body:has(.page-bg-japanese) .card,
+body:has(.page-bg-uni-og) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
 
 .page-bg-desk,
 .page-bg-audimax,
-.page-bg-japanese {
+.page-bg-japanese,
+.page-bg-uni-og {
   display: none;
 }
 
