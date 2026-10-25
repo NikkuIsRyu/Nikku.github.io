@@ -1,0 +1,32 @@
+name: Daily Legal & License Compliance Audit
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC (07:00 / 08:00 German local time)
+    - cron: '0 6 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compliance-audit:
+    name: License & Sharing Compliance Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Compliance Benchmark & Generate Step Summary
+        run: node scripts/license-benchmark.mjs

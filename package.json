@@ -8,6 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "benchmark:licenses": "node scripts/license-benchmark.mjs",
+    "check:compliance": "node scripts/license-benchmark.mjs --strict",
     "backup": "powershell -ExecutionPolicy Bypass -File ./backup.ps1"
   },
   "dependencies": {

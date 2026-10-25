@@ -67,7 +67,7 @@ body:has(.page-bg-japanese)::before {
 html[data-page-bg="uni-og"] body::before,
 body:has(.page-bg-uni-og)::before {
   background-image: url('/uni-og-bg.jpg');
-  background-position: center bottom;
+  background-position: right bottom;
   opacity: 0.28;
   transition: opacity 0.8s ease-in-out;
 }

@@ -1,0 +1,287 @@
+{
+  "$schema": "./compliance-schema.json",
+  "project": "Website-Project (nikku.tech)",
+  "auditor": "Antigravity Compliance Engine",
+  "lastAudited": "2026-10-25",
+  "legalFramework": [
+    "German Urheberrechtsgesetz (UrhG) § 51 (Zitatrecht)",
+    "German Urheberrechtsgesetz (UrhG) § 60a (Unterricht und Lehre)",
+    "EU Directive 2019/790 (Copyright in the Digital Single Market)",
+    "Open Source Initiative (OSI) Approved License Standards"
+  ],
+  "settings": {
+    "strictMode": false,
+    "followUpThresholdDays": 14,
+    "allowedLicenses": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "CC0-1.0",
+      "CC-BY-4.0",
+      "CC-BY-SA-4.0",
+      "Python-2.0",
+      "BlueOak-1.0.0",
+      "MPL-2.0",
+      "LGPL-3.0-or-later"
+    ],
+    "disallowedLicenses": [
+      "GPL-3.0-only",
+      "AGPL-3.0-only",
+      "PROPRIETARY",
+      "UNKNOWN"
+    ]
+  },
+  "publishersAndExternalRights": {
+    "schmetterling_verlag": {
+      "name": "Schmetterling Verlag Stuttgart",
+      "contact": "info@schmetterling-verlag.de",
+      "inquiryDate": "2026-10-18",
+      "status": "PENDING_PERMISSION",
+      "scope": "Permission to present synthesized dialogues and vocabulary learning aids on personal educational digital garden (nikku.tech) for students of Heidelberg University and public learners.",
+      "itemsUnderReview": [
+        "Chinese dialogue texts (Lektionen 2–4) from course textbook",
+        "Dual-Audio 107 MB Anki Spaced-Repetition Deck",
+        "Web audio playback streams synthesized via Voice-ML v3"
+      ],
+      "safeguardsInPlace": [
+        "Direct raw audio downloads are withheld and blocked",
+        "Anki deck download is gated behind WIP (wip={true}) in DriveAsset",
+        "Strictly non-commercial academic study aid (zero monetization)",
+        "Textbook and publisher credited with full academic citation"
+      ],
+      "fallbackPlan": "If publisher declines or does not permit public distribution: (1) Replace textbook dialogue sentences with original conversational scripts crafted for practice, or (2) Gate audio/dialogue text behind local-only mode while keeping original phonetic and grammatical analyses."
+    },
+    "three_a_corporation": {
+      "name": "3A Corporation (Minna no Nihongo) / iMina App",
+      "status": "CLEARED_FAIR_USE_SYNTHESIS",
+      "scope": "Japanese grammar structures and vocabulary registers for B1.1 (Lessons 26–32)",
+      "legalBasis": "UrhG § 51 (Zitatrecht) & UrhG § 60a. Only grammatical explanations, morphological conjugation matrices, and original German/English vocabulary translations are published. No proprietary textbook audio, illustrations, or complete reading passages are hosted.",
+      "safeguardsInPlace": [
+        "Independent grammar explanations and conjugation matrices",
+        "Original German & English translations and Romanization",
+        "No scanned pages or publisher audio files"
+      ]
+    },
+    "heidelberg_university": {
+      "name": "Ruprecht-Karls-Universität Heidelberg (Professors & Lecturers)",
+      "status": "CLEARED_SELF_AUTHORED",
+      "scope": "Student lecture summaries, LaTeX formula derivations, and memory protocols",
+      "legalBasis": "Freely authored student notes and academic synthesis. In accordance with Heidelberg University IP standards, unconsented internal professor lecture slides and exams have been removed from public distribution.",
+      "safeguardsInPlace": [
+        "Removed public Google Drive asset downloads for professor lecture slides across Core CS",
+        "AI derivations and notes are completely self-written summaries in LaTeX"
+      ]
+    },
+    "voice_ml_datasets": {
+      "name": "CSMSC (Data-Baker) & AISHELL-3 (OpenSLR 93)",
+      "status": "CLEARED_NON_COMMERCIAL_RESEARCH",
+      "scope": "GPT-SoVITS v3 voice acoustic models for educational dialogue synthesis",
+      "legalBasis": "AISHELL-3 is released under Apache 2.0. CSMSC is licensed for academic, non-commercial research and educational applications.",
+      "safeguardsInPlace": [
+        "Zero commercialization",
+        "Synthesized voices deployed solely for language educational pronunciation"
+      ]
+    },
+    "academic_open_access": {
+      "name": "arXiv, Nature & ScienceDirect (Seminar Papers)",
+      "status": "CLEARED_OPEN_ACCESS",
+      "scope": "Open-access preprints and DOIs for Agentic AI Seminar",
+      "legalBasis": "Direct links to public open-access preprint repositories (arXiv) and official DOI landing pages. No local hosting of restricted publisher PDFs.",
+      "safeguardsInPlace": [
+        "Direct hyperlinks to official arXiv preprints and publisher DOIs",
+        "No redistributing restricted proprietary full-text PDFs on Git"
+      ]
+    },
+    "original_artwork": {
+      "name": "Nick Blassmann Original & AI-Assisted Artworks",
+      "status": "CLEARED_ORIGINAL",
+      "scope": "Pixel art backgrounds and character avatars for Heidelberg student life & Japanese study",
+      "legalBasis": "Original pixel artwork and personal creations under Nick Blassmann's copyright."
+    }
+  },
+  "assetRegistry": [
+    {
+      "id": "chinese_dialogues_data",
+      "name": "Chinese Dialogues Structured Data",
+      "paths": [
+        "src/data/chineseDialogues.ts"
+      ],
+      "publisher": "schmetterling_verlag",
+      "status": "PENDING_PERMISSION",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Textbook dialogue texts parsed into interactive turns. Awaiting Schmetterling Verlag permission."
+    },
+    {
+      "id": "chinese_audio_dialogues",
+      "name": "Chinese Multi-Speaker Synthesized Audio",
+      "paths": [
+        "public/audio/dialogues/*.mp3"
+      ],
+      "publisher": "schmetterling_verlag",
+      "status": "PENDING_PERMISSION",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "GPT-SoVITS v3 synthesized dialogue audio. Hosted for on-site interactive stream playback without direct download links."
+    },
+    {
+      "id": "chinese_timestamps",
+      "name": "Chinese Dialogue Timestamps (JSON)",
+      "paths": [
+        "public/audio/dialogues/*.json"
+      ],
+      "publisher": "schmetterling_verlag",
+      "status": "PENDING_PERMISSION",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "JSON turn start and end offsets for interactive karaoke highlighting."
+    },
+    {
+      "id": "chinese_course_page",
+      "name": "Chinese Language Course Page & Anki Asset",
+      "paths": [
+        "src/content/docs/lectures/languages/chinese.mdx"
+      ],
+      "publisher": "schmetterling_verlag",
+      "status": "PENDING_PERMISSION",
+      "canSharePublicly": true,
+      "requiresWipGate": true,
+      "allowDirectDownload": false,
+      "notes": "107 MB Anki Deck is safely gated behind wip={true} until rights clearance is finalized."
+    },
+    {
+      "id": "japanese_language_vault",
+      "name": "Japanese B1 Track & Grammar References",
+      "paths": [
+        "src/content/docs/lectures/languages/japanese/index.mdx",
+        "src/content/docs/lectures/languages/japanese/b1-1/index.mdx",
+        "src/content/docs/lectures/languages/japanese/b1-1/de/index.mdx",
+        "src/content/docs/lectures/languages/japanese/b1-2/index.mdx"
+      ],
+      "publisher": "three_a_corporation",
+      "status": "CLEARED_FAIR_USE_SYNTHESIS",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Educational grammar synthesis, morphological matrices, and independent vocabulary tables under UrhG §51."
+    },
+    {
+      "id": "core_cs_vault",
+      "name": "Core Computer Science Course Summaries",
+      "paths": [
+        "src/content/docs/lectures/core-cs/algorithms.md",
+        "src/content/docs/lectures/core-cs/databases.md",
+        "src/content/docs/lectures/core-cs/ise.md",
+        "src/content/docs/lectures/core-cs/it-security.md",
+        "src/content/docs/lectures/core-cs/theoretical-cs.md"
+      ],
+      "publisher": "heidelberg_university",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Student-authored LaTeX derivations and memory protocols. Raw professor slides completely removed."
+    },
+    {
+      "id": "ai_seminar_workstation",
+      "name": "Agentic AI Seminar Workstation & Lexicon",
+      "paths": [
+        "src/content/docs/lectures/ai-and-med/seminar-agentic-ai/index.mdx",
+        "src/data/seminarAgenticAi.ts"
+      ],
+      "publisher": "academic_open_access",
+      "status": "CLEARED_OPEN_ACCESS",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Academic reading hub linking official open-access preprints (arXiv) and publisher DOIs."
+    },
+    {
+      "id": "ai_and_med_lectures",
+      "name": "Machine Learning & RMI Lecture Vault",
+      "paths": [
+        "src/content/docs/lectures/ai-and-med/machine-learning.mdx",
+        "src/content/docs/lectures/ai-and-med/rmi-anatomy.mdx"
+      ],
+      "publisher": "heidelberg_university",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Personal lecture notes and mathematical derivations. DriveAsset links point to generic drive root."
+    },
+    {
+      "id": "general_pages",
+      "name": "Landing, Heidelberg Guide, CV & Lecture Index",
+      "paths": [
+        "src/content/docs/index.mdx",
+        "src/content/docs/cv.md",
+        "src/content/docs/heidelberg.mdx",
+        "src/content/docs/lectures/index.mdx"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Personal digital garden pages, curriculum vitae, and university life reflections."
+    },
+    {
+      "id": "background_artworks",
+      "name": "Pixel Art Backgrounds",
+      "paths": [
+        "public/audimax-bg.jpg",
+        "public/cafe-park-bg.jpg",
+        "public/desk-bg.jpg",
+        "public/japanese-bg-mobile.jpg",
+        "public/japanese-bg.jpg",
+        "public/sakura-bg.jpg",
+        "public/uni-og-bg-mobile.jpg",
+        "public/uni-og-bg.jpg"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_ORIGINAL",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Custom pixel art backgrounds created for the digital garden theme."
+    },
+    {
+      "id": "character_avatars",
+      "name": "Pixel Art Character Avatars",
+      "paths": [
+        "public/characters/cafe-park/*.png",
+        "public/characters/og-friends/*.png",
+        "public/characters/standalones/*.png",
+        "public/characters/tandem/*.png",
+        "public/characters/uni-og/*.png"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_ORIGINAL",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Custom pixel art characters representing student study groups and tandem partners."
+    },
+    {
+      "id": "static_brand_assets",
+      "name": "Icons, Domain & Framework Assets",
+      "paths": [
+        "public/CNAME",
+        "public/favicon.svg",
+        "src/assets/houston.webp"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_ORIGINAL",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "DNS CNAME, SVG site favicon, and Starlight mascot asset."
+    }
+  ]
+}

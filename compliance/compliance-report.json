@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-10-25T13:42:14.289Z",
+  "passed": true,
+  "warnings": [],
+  "errors": [],
+  "metrics": {
+    "totalFilesAudited": 72,
+    "registeredFiles": 72,
+    "unmappedCount": 0,
+    "totalDependencies": 360,
+    "pendingPublishersCount": 1,
+    "executionTimeMs": 17
+  },
+  "scores": {
+    "totalScore": 100,
+    "grade": "A+",
+    "coverageScore": 100,
+    "gatingScore": 100,
+    "universityIpScore": 100,
+    "packageLicenseScore": 100,
+    "followUpScore": 100
+  }
+}
