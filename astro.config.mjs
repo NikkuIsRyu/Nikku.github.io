@@ -18,6 +18,16 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Nikku | Academic Vault & Portfolio',
+			head: [
+				{
+					tag: 'script',
+					attrs: {
+						defer: true,
+						src: 'https://cloud.umami.is/script.js',
+						'data-website-id': 'fa626c1d-716d-42d6-b58a-88bf59b35a19',
+					},
+				},
+			],
 			customCss: ['./src/styles/custom.css'],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/NikkuIsRyu' }
