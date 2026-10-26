@@ -1,6 +1,6 @@
 # 🛡️ Website Legal & Licensing Compliance Report
 
-**Audit Date**: 2026-10-25  
+**Audit Date**: 2026-10-26  
 **Benchmark Score**: **100 / 100** (Grade **A+**)  
 **Status**: ✅ **CLEARED FOR PUBLIC SHARING**  
 
@@ -8,7 +8,7 @@
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (72/72) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (105/105) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
@@ -20,7 +20,7 @@
 
 * **Items Under Review**: Chinese dialogue texts (Lektionen 2–4) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v3
 * **Contact Email**: `info@schmetterling-verlag.de`
-* **Initial Inquiry Sent**: 2026-10-18 (**7 days ago**)
+* **Initial Inquiry Sent**: 2026-10-18 (**8 days ago**)
 * **Current Safeguards on Site**:
   - ✅ Direct raw audio downloads are withheld and blocked
   - ✅ Anki deck download is gated behind WIP (wip={true}) in DriveAsset

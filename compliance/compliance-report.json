@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-10-25T13:42:14.289Z",
+  "timestamp": "2026-10-26T07:28:45.341Z",
   "passed": true,
   "warnings": [],
   "errors": [],
   "metrics": {
-    "totalFilesAudited": 72,
-    "registeredFiles": 72,
+    "totalFilesAudited": 105,
+    "registeredFiles": 105,
     "unmappedCount": 0,
     "totalDependencies": 360,
     "pendingPublishersCount": 1,
-    "executionTimeMs": 17
+    "executionTimeMs": 21
   },
   "scores": {
     "totalScore": 100,

@@ -235,11 +235,24 @@
       "id": "background_artworks",
       "name": "Pixel Art Backgrounds",
       "paths": [
+        "public/*-bg.jpg",
+        "public/*-bg-mobile.jpg",
+        "public/*-bg*.jpg",
         "public/audimax-bg.jpg",
         "public/cafe-park-bg.jpg",
+        "public/chinese-bg-mobile.jpg",
+        "public/chinese-bg.jpg",
+        "public/core-cs-bg-mobile.jpg",
+        "public/core-cs-bg.jpg",
+        "public/cs-lab-bg-mobile.jpg",
+        "public/cs-lab-bg.jpg",
         "public/desk-bg.jpg",
         "public/japanese-bg-mobile.jpg",
         "public/japanese-bg.jpg",
+        "public/ml-bg-mobile.jpg",
+        "public/ml-bg.jpg",
+        "public/rmi-anatomy-bg-mobile.jpg",
+        "public/rmi-anatomy-bg.jpg",
         "public/sakura-bg.jpg",
         "public/uni-og-bg-mobile.jpg",
         "public/uni-og-bg.jpg"
@@ -253,20 +266,23 @@
     },
     {
       "id": "character_avatars",
-      "name": "Pixel Art Character Avatars",
+      "name": "Pixel Art Character Avatars & Sprites",
       "paths": [
+        "public/characters/**",
         "public/characters/cafe-park/*.png",
         "public/characters/og-friends/*.png",
         "public/characters/standalones/*.png",
         "public/characters/tandem/*.png",
-        "public/characters/uni-og/*.png"
+        "public/characters/uni-og/*.png",
+        "public/characters/standing-sprites/*.png",
+        "public/characters/standing-sprites/sheets/*.jpg"
       ],
       "publisher": "original_artwork",
       "status": "CLEARED_ORIGINAL",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Custom pixel art characters representing student study groups and tandem partners."
+      "notes": "Custom pixel art characters and standing sprite sheets representing student study groups and tandem partners."
     },
     {
       "id": "static_brand_assets",

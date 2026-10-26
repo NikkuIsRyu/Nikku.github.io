@@ -61,6 +61,18 @@ function banner() {
   console.log(`${colors.reset}`);
 }
 
+function isUserBackupFile(filePath) {
+  const baseName = path.basename(filePath);
+  return (
+    baseName.includes('(Copy)') ||
+    baseName.includes('-Copy') ||
+    baseName.includes(' - Kopie') ||
+    baseName.includes('_backup') ||
+    baseName.endsWith('.bak') ||
+    baseName.endsWith('.tmp')
+  );
+}
+
 function walkDir(dir) {
   const fullPath = path.resolve(ROOT_DIR, dir);
   if (!fs.existsSync(fullPath)) return [];
@@ -69,6 +81,7 @@ function walkDir(dir) {
   for (const item of list) {
     const itemPath = path.join(fullPath, item);
     const relPath = path.relative(ROOT_DIR, itemPath).replace(/\\/g, '/');
+    if (isUserBackupFile(relPath)) continue;
     const stat = fs.statSync(itemPath);
     if (stat.isDirectory()) {
       results.push(...walkDir(relPath));
