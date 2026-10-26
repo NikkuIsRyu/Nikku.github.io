@@ -187,13 +187,13 @@ Als isolierte Zahl oder beim Zählen steht `一` im 1. Ton (*yī*).
 </div>
 
 {/* ========================================================================= */}
-{/* SECTION 4: KURS-ASSETS & SYNTHESE-ARCHITEKTUR */}
+{/* SECTION 4: KURS-ASSETS & DOWNLOADS */}
 {/* ========================================================================= */}
 <div id="study-mode-assets" class="study-mode-section" data-study-mode="assets" style="display: none;">
 
-## 🗂️ Modus: Kurs-Assets, Anki & Voice-ML <Badge text="Downloads & Tech" variant="note" />
+## 🗂️ Modus: Kurs-Assets & Anki-Deck <Badge text="Downloads (WIP)" variant="note" />
 
-In diesem Modus finden sich alle Download-Ressourcen, Vokabeldecks und die technische Synthese-Pipeline für die Audio-Generierung:
+In diesem Modus finden sich alle Download-Ressourcen und Vokabeldecks für den Kurs:
 
 ### 📥 Direkte Downloads
 
@@ -205,7 +205,8 @@ In diesem Modus finden sich alle Download-Ressourcen, Vokabeldecks und die techn
       title="Download 107 MB Anki Deck"
       type="anki"
       description="Google Drive: Chinese_Mandarin_Comprehensive_v4.apkg"
-      href="https://drive.google.com"
+      wip={true}
+      wipLabel="Work In Progress"
     />
   </Card>
 
@@ -216,26 +217,10 @@ In diesem Modus finden sich alle Download-Ressourcen, Vokabeldecks und die techn
       title="Dialogues Master Archive (WAV & JSON)"
       type="dataset"
       description="Google Drive: University/dialogues/"
-      href="https://drive.google.com"
+      wip={true}
+      wipLabel="Work In Progress"
     />
   </Card>
 </CardGrid>
-
----
-
-### 🎙️ Voice-ML Pipeline v4 Architektur
-
-```mermaid
-flowchart LR
-    A["CSMSC 7.5h Studio<br/>(BZNSYP 48 kHz)"] -->|Fine-Tuning| F["female_v4<br/>(Moderatorin / Kollegin A)"]
-    B["AISHELL-3 SSB0817<br/>(Fine-Tuning 2.5h)"] -->|Clean Male| M1["male_v1<br/>(Herr Chen / Kollege B)"]
-    C["AISHELL-3 SSB1630<br/>(Zero-Shot Profil)"] -->|Zero-Shot v2ProPlus| M2["male_zs<br/>(Herr Weber / Kollege C)"]
-    
-    F & M1 & M2 --> S["Sprecher-spezifisches Batching<br/>(Kein GPU-Thrashing)"]
-    S --> VAD["Spectral VAD Trimming<br/>(70-5000 Hz, RMS-Gate)"]
-    VAD --> N["EBU R128 Normalisierung<br/>(-16 LUFS Target)"]
-    N --> R["Room-Tone Stitching<br/>(-65 dBFS Pause + 15ms Fade)"]
-    R --> OUT["18 Multi-Speaker Audiofiles<br/>(1.0x Standard + 0.75x Slow)"]
-```
 
 </div>
