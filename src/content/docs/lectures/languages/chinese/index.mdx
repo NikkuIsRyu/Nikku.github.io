@@ -9,13 +9,20 @@ head:
 ---
 
 import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
-import DriveAsset from '../../../../components/DriveAsset.astro';
-import DialoguePlayer from '../../../../components/DialoguePlayer.astro';
-import { CHINESE_DIALOGUES } from '../../../../data/chineseDialogues';
+import DriveAsset from '../../../../../components/DriveAsset.astro';
+import DialoguePlayer from '../../../../../components/DialoguePlayer.astro';
+import LanguageSwitch from '../../../../../components/LanguageSwitch.astro';
+import { CHINESE_DIALOGUES } from '../../../../../data/chineseDialogues';
 
 <div class="page-bg-chinese" aria-hidden="true"></div>
 
 # Chinesisch (Mandarin) <Badge text="Grundkurs & Dialoge" variant="success" size="medium" />
+
+<LanguageSwitch current="de" enHref="/lectures/languages/chinese/en/" deHref="/lectures/languages/chinese/" />
+
+:::note[Urheberrechtlicher Hinweis zu den Audio-Dialogen]
+**Vorsorgliche Anpassung der Dialogtexte:** Aufgrund einer noch ungeklärten lizenzrechtlichen Frage bezüglich des Kurslehrbuchs wurden die Dialoge vorübergehend durch neu verfasste, lizenzfreie Dialoge ersetzt und mit der Voice-ML-Pipeline neu vertont. Sobald eine Bestätigung bzw. Freigabe des Verlags vorliegt, werden die Originaldialoge wieder eingefügt.
+:::
 
 Interaktives Studien- und Nachschlagewerk für den Grundkurs **Chinesisch (Mandarin Sprachpraxis I & II)** am Zentralen Sprachlabor (*ZSL / heiSKILLS*) der Universität Heidelberg. 
 

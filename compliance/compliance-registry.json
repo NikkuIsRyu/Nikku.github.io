@@ -145,7 +145,8 @@
       "id": "chinese_course_page",
       "name": "Chinese Language Course Page & Anki Asset",
       "paths": [
-        "src/content/docs/lectures/languages/chinese.mdx"
+        "src/content/docs/lectures/languages/chinese/index.mdx",
+        "src/content/docs/lectures/languages/chinese/en/index.mdx"
       ],
       "publisher": "schmetterling_verlag",
       "status": "PENDING_PERMISSION",

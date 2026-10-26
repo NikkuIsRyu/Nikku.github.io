@@ -4,40 +4,47 @@ import type { DialogueData } from '../data/chineseDialogues';
 interface Props {
 	dialogue: DialogueData;
 	driveFolderHref?: string;
+	lang?: 'de' | 'en';
 }
 
 const {
 	dialogue,
-	driveFolderHref
+	driveFolderHref,
+	lang = 'de'
 } = Astro.props;
 
 const containerId = `dialogue-player-${dialogue.id}`;
+const isEn = lang === 'en';
+const displayTitle = isEn && dialogue.titleEn ? dialogue.titleEn : dialogue.title;
+const displayLesson = isEn && dialogue.lessonEn ? dialogue.lessonEn : dialogue.lesson;
+const displayTopic = isEn && dialogue.topicEn ? dialogue.topicEn : dialogue.topic;
+const displayDesc = isEn && dialogue.descriptionEn ? dialogue.descriptionEn : dialogue.description;
 ---
 
 <div class="dialogue-player-card not-content" id={containerId} data-dialogue-id={dialogue.id}>
 	<!-- Header -->
 	<div class="player-header">
 		<div class="header-main">
-			<div class="lesson-badge">{dialogue.lesson}</div>
-			<h3 class="dialogue-title">{dialogue.title}</h3>
+			<div class="lesson-badge">{displayLesson}</div>
+			<h3 class="dialogue-title">{displayTitle}</h3>
 			<div class="chinese-title">{dialogue.chineseTitle}</div>
 		</div>
 		<div class="header-meta">
-			<span class="topic-tag">{dialogue.topic}</span>
+			<span class="topic-tag">{displayTopic}</span>
 			<span class="duration-badge">⏱️ {dialogue.durationS.toFixed(1)}s</span>
 		</div>
 	</div>
 
-	<p class="dialogue-desc">{dialogue.description}</p>
+	<p class="dialogue-desc">{displayDesc}</p>
 
 	<!-- Speakers Summary Bar -->
 	<div class="speakers-bar">
-		<span class="speakers-label">Rollen & Stimmen:</span>
+		<span class="speakers-label">{isEn ? 'Roles & Voices:' : 'Rollen & Stimmen:'}</span>
 		<div class="speakers-list">
 			{Object.entries(dialogue.speakers).map(([key, spk]) => (
 				<span class="speaker-chip" style={`--spk-color: ${spk.color};`}>
 					<span class="spk-indicator"></span>
-					<strong>{key}:</strong> {spk.label} <span class="voice-name">({spk.voiceLabel})</span>
+					<strong>{key}:</strong> {isEn && spk.labelEn ? spk.labelEn : spk.label} <span class="voice-name">({spk.voiceLabel})</span>
 				</span>
 			))}
 		</div>
@@ -48,7 +55,7 @@ const containerId = `dialogue-player-${dialogue.id}`;
 		<audio class="player-audio" preload="metadata" src={dialogue.audioSrc}></audio>
 
 		<div class="controls-row">
-			<button type="button" class="btn-play-master" aria-label="Audio abspielen oder pausieren">
+			<button type="button" class="btn-play-master" aria-label={isEn ? "Play or pause audio" : "Audio abspielen oder pausieren"}>
 				<span class="icon-play">▶</span>
 				<span class="icon-pause" style="display: none;">❚❚</span>
 			</button>
@@ -56,7 +63,7 @@ const containerId = `dialogue-player-${dialogue.id}`;
 			<div class="time-progress-wrap">
 				<div class="progress-bar-container">
 					<div class="progress-bar-fill"></div>
-					<input type="range" class="progress-scrubber" min="0" max={dialogue.durationS} step="0.05" value="0" aria-label="Wiedergabe-Fortschritt" />
+					<input type="range" class="progress-scrubber" min="0" max={dialogue.durationS} step="0.05" value="0" aria-label={isEn ? "Playback progress" : "Wiedergabe-Fortschritt"} />
 				</div>
 				<div class="time-display">
 					<span class="time-current">00:00</span> / <span class="time-total">{Math.floor(dialogue.durationS / 60).toString().padStart(2, '0')}:{(Math.floor(dialogue.durationS % 60)).toString().padStart(2, '0')}</span>
@@ -64,7 +71,7 @@ const containerId = `dialogue-player-${dialogue.id}`;
 			</div>
 
 			<div class="speed-control-group">
-				<span class="speed-label">Tempo:</span>
+				<span class="speed-label">{isEn ? 'Speed:' : 'Tempo:'}</span>
 				<button type="button" class="btn-speed active" data-speed="1.0">1.0x</button>
 				<button type="button" class="btn-speed" data-speed="0.85">0.85x</button>
 				<button type="button" class="btn-speed" data-speed="0.7">0.7x</button>
@@ -74,14 +81,14 @@ const containerId = `dialogue-player-${dialogue.id}`;
 		<!-- Interactive Practice Toolbar -->
 		<div class="practice-toolbar">
 			<div class="toggle-group">
-				<button type="button" class="btn-tool active" data-action="toggle-pinyin" title="Pinyin anzeigen oder ausblenden">
+				<button type="button" class="btn-tool active" data-action="toggle-pinyin" title={isEn ? "Toggle Pinyin transcription" : "Pinyin anzeigen oder ausblenden"}>
 					<span class="tool-icon">🔤</span> Pinyin
 				</button>
-				<button type="button" class="btn-tool active" data-action="toggle-trans" title="Deutsche Übersetzung anzeigen oder ausblenden">
-					<span class="tool-icon">🇩🇪</span> Übersetzung
+				<button type="button" class="btn-tool active" data-action="toggle-trans" title={isEn ? "Toggle English translation" : "Deutsche Übersetzung anzeigen oder ausblenden"}>
+					<span class="tool-icon">{isEn ? '🇬🇧' : '🇩🇪'}</span> {isEn ? 'Translation' : 'Übersetzung'}
 				</button>
-				<button type="button" class="btn-tool" data-action="toggle-loop-turn" title="Aktuellen Satz wiederholen (Shadowing)">
-					<span class="tool-icon">🔁</span> Satz-Loop
+				<button type="button" class="btn-tool" data-action="toggle-loop-turn" title={isEn ? "Repeat current turn (Shadowing)" : "Aktuellen Satz wiederholen (Shadowing)"}>
+					<span class="tool-icon">🔁</span> {isEn ? 'Turn Loop' : 'Satz-Loop'}
 				</button>
 			</div>
 
@@ -107,6 +114,8 @@ const containerId = `dialogue-player-${dialogue.id}`;
 				label: turn.speaker,
 				voiceLabel: turn.voiceLabel
 			};
+			const speakerTitle = isEn && turn.speakerRoleEn ? turn.speakerRoleEn : (isEn && spkInfo.labelEn ? spkInfo.labelEn : spkInfo.label);
+			const turnTranslation = isEn && turn.translationEn ? turn.translationEn : turn.translation;
 
 			return (
 				<div
@@ -116,18 +125,18 @@ const containerId = `dialogue-player-${dialogue.id}`;
 					data-end={turn.endS}
 					style={`--spk-color: ${spkInfo.color};`}
 				>
-					<div class="speaker-avatar" title={`${spkInfo.label} (${spkInfo.voiceLabel})`}>
+					<div class="speaker-avatar" title={`${speakerTitle} (${spkInfo.voiceLabel})`}>
 						<span class="avatar-letter">{turn.speaker}</span>
 					</div>
 
 					<div class="turn-bubble">
 						<div class="turn-top-bar">
 							<span class="turn-speaker-title">
-								{spkInfo.label} <span class="voice-badge">{turn.voiceLabel}</span>
+								{speakerTitle} <span class="voice-badge">{turn.voiceLabel}</span>
 							</span>
 							<div class="turn-actions">
 								<span class="turn-timestamp">{turn.startS.toFixed(1)}s – {turn.endS.toFixed(1)}s</span>
-								<button type="button" class="btn-play-turn" title="Diesen Einzelsatz abspielen" aria-label={`Satz ${turn.idx} abspielen`}>
+								<button type="button" class="btn-play-turn" title={isEn ? "Play this sentence" : "Diesen Einzelsatz abspielen"} aria-label={isEn ? `Play sentence ${turn.idx}` : `Satz ${turn.idx} abspielen`}>
 									▶
 								</button>
 							</div>
@@ -135,7 +144,7 @@ const containerId = `dialogue-player-${dialogue.id}`;
 
 						<div class="turn-hanzi">{turn.hanzi}</div>
 						<div class="turn-pinyin">{turn.pinyin}</div>
-						<div class="turn-translation">{turn.translation}</div>
+						<div class="turn-translation">{turnTranslation}</div>
 					</div>
 				</div>
 			);
