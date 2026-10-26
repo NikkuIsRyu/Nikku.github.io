@@ -35,14 +35,50 @@ Interactive prototypes based on the architectural recommendations from the Gemin
 
 Click any of the cards below to **dynamically switch visible page sections live**:
 
-<ChineseStudyDashboard activeSection="grammar" lang="en" />
+<ChineseStudyDashboard activeSection="dialogues" lang="en" />
 
 ---
 
 {/* ========================================================================= */}
-{/* SECTION 1: GRAMMAR EXPLORER (DEFAULT ACTIVE) */}
+{/* SECTION 1: AUDIO DIALOGUES (DEFAULT ACTIVE) */}
 {/* ========================================================================= */}
-<div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar">
+<div id="study-mode-dialogues" class="study-mode-section" data-study-mode="dialogues">
+
+## 🎙️ Mode: Multi-Speaker Audio Dialogues <Badge text="Voice-ML v4 • 18 Dialogues" variant="success" />
+
+In this mode, the page focuses completely on **spoken speech, shadowing, and listening comprehension**. Rather than scrolling past long grammar explanations, interactive dialogue players take center stage:
+
+* **Dual-Speed Playback**: 1.0x standard tempo & 0.75x slow learning pace.
+* **Sentence Looping (Shadowing)**: Repeat any individual turn in an infinite loop to perfect intonation.
+* **Live Synchronized Tracking**: Subtitles in Hanzi, Pinyin, and English follow the audio with millisecond accuracy.
+
+### Sample Players from Lesson 2 & Lesson 8:
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[0]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[1]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[12]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+:::tip[Complete Curriculum Vault]
+All **18 synthesized dialogues** across Lessons 2 through 10 are available with full multi-speaker profiles (CSMSC Studio Female v4, AISHELL-3 Male v1 & Zero-Shot SSB1630).
+:::
+
+</div>
+
+{/* ========================================================================= */}
+{/* SECTION 2: GRAMMAR EXPLORER */}
+{/* ========================================================================= */}
+<div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar" style="display: none;">
 
 ## 📐 Mode: Systematic Grammar Explorer <Badge text="26 Rules + Confusables" variant="success" />
 
@@ -104,42 +140,6 @@ The prototype provides a dedicated 2-column comparative layout featuring **✅ C
 | **Accordion List (`<details>`)** | Fitting 25+ rules cleanly on a single page | High density; learners only see titles + formulas until expanded. |
 | **Confusables Spotlight** | Error prevention & contrastive learning (`二/两`, `在/有`) | 2-column direct contrast with ✅/❌ examples prevents chronic grammar pitfalls. |
 | **Hover-Pinyin Active Recall** | Vocabulary & reading comprehension | Enables instant self-testing without pinyin training wheels cluttering the page. |
-
-</div>
-
-{/* ========================================================================= */}
-{/* SECTION 2: AUDIO DIALOGUES */}
-{/* ========================================================================= */}
-<div id="study-mode-dialogues" class="study-mode-section" data-study-mode="dialogues" style="display: none;">
-
-## 🎙️ Mode: Multi-Speaker Audio Dialogues <Badge text="Voice-ML v4 • 18 Dialogues" variant="success" />
-
-In this mode, the page focuses completely on **spoken speech, shadowing, and listening comprehension**. Rather than scrolling past long grammar explanations, interactive dialogue players take center stage:
-
-* **Dual-Speed Playback**: 1.0x standard tempo & 0.75x slow learning pace.
-* **Sentence Looping (Shadowing)**: Repeat any individual turn in an infinite loop to perfect intonation.
-* **Live Synchronized Tracking**: Subtitles in Hanzi, Pinyin, and English follow the audio with millisecond accuracy.
-
-### Sample Players from Lesson 2 & Lesson 8:
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[0]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[1]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[12]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-:::tip[Complete Curriculum Vault]
-All **18 synthesized dialogues** across Lessons 2 through 10 are available with full multi-speaker profiles (CSMSC Studio Female v4, AISHELL-3 Male v1 & Zero-Shot SSB1630).
-:::
 
 </div>
 

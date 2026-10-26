@@ -4,18 +4,9 @@ interface Props {
   lang?: 'de' | 'en';
 }
 
-const { activeSection = 'grammar', lang = 'de' } = Astro.props;
+const { activeSection = 'dialogues', lang = 'de' } = Astro.props;
 
 const modes = [
-  {
-    id: 'grammar',
-    icon: '📐',
-    labelDe: 'Systematischer Grammatik-Explorer',
-    labelEn: 'Systematic Grammar Explorer',
-    badge: '26 Regeln + Confusables',
-    descDe: 'Bento-Cards, Formel-Pills & Pinyin Active-Recall',
-    descEn: 'Bento Cards, Formula Pills & Pinyin Active Recall'
-  },
   {
     id: 'dialogues',
     icon: '🎙️',
@@ -24,6 +15,15 @@ const modes = [
     badge: '18 Dialoge',
     descDe: 'Lektionen 2–10 mit Dual-Speed (1.0x / 0.75x) & Satz-Looping',
     descEn: 'Lessons 2–10 with Dual-Speed (1.0x / 0.75x) & Shadowing Loop'
+  },
+  {
+    id: 'grammar',
+    icon: '📐',
+    labelDe: 'Systematischer Grammatik-Explorer',
+    labelEn: 'Systematic Grammar Explorer',
+    badge: '26 Regeln + Confusables',
+    descDe: 'Bento-Cards, Formel-Pills & Pinyin Active-Recall',
+    descEn: 'Bento Cards, Formula Pills & Pinyin Active Recall'
   },
   {
     id: 'tones',
@@ -85,7 +85,7 @@ const modes = [
   <div class="mode-active-bar" id="mode-active-bar">
     <span class="active-mode-label">{lang === 'en' ? 'Current Focus:' : 'Aktiver Fokusbereich:'}</span>
     <span class="active-mode-name" id="active-mode-display-name">
-      {lang === 'en' ? 'Systematic Grammar Explorer' : 'Systematischer Grammatik-Explorer'}
+      {lang === 'en' ? '🎙️ Multi-Speaker Audio Dialogues' : '🎙️ Multi-Speaker Audio-Dialoge'}
     </span>
     <span class="active-mode-hint">
       {lang === 'en' ? '(Click any card above to dynamically switch visible content)' : '(Klicke oben auf eine Kachel, um die sichtbaren Inhalte live umzuschalten)'}
@@ -108,13 +108,13 @@ const modes = [
     }
 
     const modeLabels: Record<string, { de: string; en: string }> = {
-      grammar: {
-        de: '📐 Systematischer Grammatik-Explorer (26 Regeln & Confusables)',
-        en: '📐 Systematic Grammar Explorer (26 Rules & Confusables)'
-      },
       dialogues: {
         de: '🎙️ Multi-Speaker Audio-Dialoge (18 Lektions-Dialoge)',
         en: '🎙️ Multi-Speaker Audio Dialogues (18 Lesson Dialogues)'
+      },
+      grammar: {
+        de: '📐 Systematischer Grammatik-Explorer (26 Regeln & Confusables)',
+        en: '📐 Systematic Grammar Explorer (26 Rules & Confusables)'
       },
       tones: {
         de: '🇨🇳 Tonsystem & Tone Sandhi (Aussprache & Töne)',
@@ -147,7 +147,7 @@ const modes = [
       // Update Display Text
       if (activeName) {
         const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/en/');
-        const labelObj = modeLabels[targetMode] || modeLabels['grammar'];
+        const labelObj = modeLabels[targetMode] || modeLabels['dialogues'];
         activeName.textContent = isEn ? labelObj.en : labelObj.de;
       }
 
@@ -183,7 +183,7 @@ const modes = [
     cards.forEach((card) => {
       card.addEventListener('click', (e) => {
         e.preventDefault();
-        const mode = card.dataset.modeId || 'grammar';
+        const mode = card.dataset.modeId || 'dialogues';
         switchMode(mode, true);
 
         // Smooth scroll to the content area
@@ -199,18 +199,18 @@ const modes = [
       btnToggleAll.addEventListener('click', (e) => {
         e.preventDefault();
         const currentlyAll = btnToggleAll.classList.contains('active');
-        switchMode(currentlyAll ? 'grammar' : 'all', true);
+        switchMode(currentlyAll ? 'dialogues' : 'all', true);
       });
     }
 
     // Initialize from URL Hash if present
     const hash = window.location.hash.replace('#', '').toLowerCase();
-    const validModes = ['grammar', 'dialogues', 'tones', 'assets', 'all'];
+    const validModes = ['dialogues', 'grammar', 'tones', 'assets', 'all'];
     if (validModes.includes(hash)) {
       switchMode(hash, false);
     } else {
-      // Default to grammar mode
-      switchMode('grammar', false);
+      // Default to dialogues mode
+      switchMode('dialogues', false);
     }
 
     // Handle hashchange event (browser back/forward)

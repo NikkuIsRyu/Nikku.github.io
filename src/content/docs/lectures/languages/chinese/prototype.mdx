@@ -35,14 +35,50 @@ Interaktive Prototypen auf Basis der architektonischen Empfehlungen aus der Gemi
 
 Klicke auf eine der Kacheln unten, um den **sichtbaren Inhalt der Seite live umzuschalten**:
 
-<ChineseStudyDashboard activeSection="grammar" lang="de" />
+<ChineseStudyDashboard activeSection="dialogues" lang="de" />
 
 ---
 
 {/* ========================================================================= */}
-{/* SECTION 1: GRAMMATIK-EXPLORER (DEFAULT ACTIVE) */}
+{/* SECTION 1: AUDIO-DIALOGE (DEFAULT ACTIVE) */}
 {/* ========================================================================= */}
-<div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar">
+<div id="study-mode-dialogues" class="study-mode-section" data-study-mode="dialogues">
+
+## 🎙️ Modus: Multi-Speaker Audio-Dialoge <Badge text="Voice-ML v4 • 18 Dialoge" variant="success" />
+
+In diesem Modus konzentriert sich die Seite vollständig auf die **gesprochene Sprache**, Satz-Shadowing und das Hörverständnis. Statt zwischen Grammatikregeln hin und her zu scrollen, stehen die interaktiven Player im Zentrum:
+
+* **Dual-Speed Bereitstellung**: 1.0x Standardtempo & 0.75x verlangsamtes Lerntempo.
+* **Satz-Looping (Shadowing)**: Wiederhole jeden beliebigen Turn in Endlosschleife, bis Intonation und Rhythmus sitzen.
+* **Live Untertitel-Tracking**: Hanzi, Pinyin und deutsche Übersetzung springen synchron zum Audio weiter.
+
+### Beispiel-Player aus Lektion 2 & Lektion 8:
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[0]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[1]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+<DialoguePlayer
+  dialogue={CHINESE_DIALOGUES[12]}
+  driveFolderHref="https://drive.google.com"
+/>
+
+:::tip[Vollständige Dialoge]
+In diesem Modus stehen alle **18 Dialoge** der Lektionen 2 bis 10 mit vollem Multi-Speaker Audio (CSMSC Studio Female v4, AISHELL-3 Male v1 & Zero-Shot SSB1630) zur Verfügung.
+:::
+
+</div>
+
+{/* ========================================================================= */}
+{/* SECTION 2: GRAMMATIK-EXPLORER */}
+{/* ========================================================================= */}
+<div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar" style="display: none;">
 
 ## 📐 Modus: Systematischer Grammatik-Explorer <Badge text="26 Regeln + Confusables" variant="success" />
 
@@ -104,42 +140,6 @@ Der Prototyp bietet hierfür dedizierte 2-Spalten-Gegenüberstellungen mit **✅
 | **Akkordeon-Liste (`<details>`)** | Kompaktes Kompendium auf einer Seite | Maximale Übersichtlichkeit; User sieht nur Titel + Formel, bis Details aufgeklappt werden. |
 | **Confusables Spotlight** | Problemwörter & Fehlerprävention (`二/两`, `在/有`) | 2-Spalten Direktvergleich mit ✅ und ❌ Beispielen verhindert typische Fallstricke. |
 | **Hover-Pinyin Active Recall** | Vokabel- & Schriftzeichentraining | Ermöglicht Selbsttests direkt im Fließtext ohne störende Pinyin-Trainingsräder. |
-
-</div>
-
-{/* ========================================================================= */}
-{/* SECTION 2: AUDIO-DIALOGE */}
-{/* ========================================================================= */}
-<div id="study-mode-dialogues" class="study-mode-section" data-study-mode="dialogues" style="display: none;">
-
-## 🎙️ Modus: Multi-Speaker Audio-Dialoge <Badge text="Voice-ML v4 • 18 Dialoge" variant="success" />
-
-In diesem Modus konzentriert sich die Seite vollständig auf die **gesprochene Sprache**, Satz-Shadowing und das Hörverständnis. Statt zwischen Grammatikregeln hin und her zu scrollen, stehen die interaktiven Player im Zentrum:
-
-* **Dual-Speed Bereitstellung**: 1.0x Standardtempo & 0.75x verlangsamtes Lerntempo.
-* **Satz-Looping (Shadowing)**: Wiederhole jeden beliebigen Turn in Endlosschleife, bis Intonation und Rhythmus sitzen.
-* **Live Untertitel-Tracking**: Hanzi, Pinyin und deutsche Übersetzung springen synchron zum Audio weiter.
-
-### Beispiel-Player aus Lektion 2 & Lektion 8:
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[0]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[1]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-<DialoguePlayer
-  dialogue={CHINESE_DIALOGUES[12]}
-  driveFolderHref="https://drive.google.com"
-/>
-
-:::tip[Vollständige Dialoge]
-In diesem Modus stehen alle **18 Dialoge** der Lektionen 2 bis 10 mit vollem Multi-Speaker Audio (CSMSC Studio Female v4, AISHELL-3 Male v1 & Zero-Shot SSB1630) zur Verfügung.
-:::
 
 </div>
 

@@ -31,6 +31,10 @@ const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
           <span class="tag-chip">#{tag}</span>
         ))}
       </div>
+      <div class="accordion-expand-badge" aria-hidden="true">
+        <span class="expand-state-text">{lang === 'en' ? 'Click to expand' : 'Aufklappen'}</span>
+        <span class="expand-state-icon">▾</span>
+      </div>
     </div>
 
     <h3 class="rule-title">{title}</h3>
@@ -162,6 +166,39 @@ const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
     background: rgba(255, 255, 255, 0.04);
     padding: 0.1rem 0.4rem;
     border-radius: 4px;
+  }
+
+  /* Accordion Mode Interactive Expand Indicator (hidden in bento/grid view) */
+  .accordion-expand-badge {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    margin-left: auto;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .expand-state-icon {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  :global(.grammar-card.expanded) .accordion-expand-badge {
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.45);
+  }
+
+  :global(.grammar-card.expanded) .expand-state-icon {
+    transform: rotate(180deg);
   }
 
   .rule-title {

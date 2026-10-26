@@ -68,20 +68,20 @@ const lessons = [
     <div class="control-row">
       <div class="control-label-group">
         <span class="control-icon">👁️</span>
-        <span class="control-title">Layout-Ansicht:</span>
+        <span class="control-title">{lang === 'en' ? 'Layout View:' : 'Layout-Ansicht:'}</span>
       </div>
       <div class="view-mode-buttons" id="view-mode-buttons">
         <button type="button" class="btn-view-mode active" data-view="bento">
           <span class="mode-icon">🗂️</span>
-          <span class="mode-text">Bento Grid (2–3 Spalten)</span>
+          <span class="mode-text">{lang === 'en' ? 'Bento Grid (2–3 Columns)' : 'Bento Grid (2–3 Spalten)'}</span>
         </button>
         <button type="button" class="btn-view-mode" data-view="accordion">
           <span class="mode-icon">📑</span>
-          <span class="mode-text">Akkordeon-Liste (Kompakt)</span>
+          <span class="mode-text">{lang === 'en' ? 'Accordion List (Compact)' : 'Akkordeon-Liste (Kompakt)'}</span>
         </button>
         <button type="button" class="btn-view-mode" data-view="confusables">
           <span class="mode-icon">⚖️</span>
-          <span class="mode-text">Confusables Spotlight ({CONFUSABLE_PAIRS.length})</span>
+          <span class="mode-text">{lang === 'en' ? `Confusables Spotlight (${CONFUSABLE_PAIRS.length})` : `Confusables Spotlight (${CONFUSABLE_PAIRS.length})`}</span>
         </button>
       </div>
     </div>
@@ -90,33 +90,33 @@ const lessons = [
     <div class="control-row secondary-controls">
       <!-- Pinyin Active Recall Mode -->
       <div class="sub-control-group">
-        <span class="sub-label">Pinyin-Modus (Active Recall):</span>
+        <span class="sub-label">{lang === 'en' ? 'Pinyin Mode (Active Recall):' : 'Pinyin-Modus (Active Recall):'}</span>
         <div class="toggle-switch-pills" id="pinyin-mode-pills">
-          <button type="button" class="btn-toggle-pill active" data-pinyin-mode="visible" title="Pinyin dauerhaft sichtbar">
-            <span>👁️ Immer sichtbar</span>
+          <button type="button" class="btn-toggle-pill active" data-pinyin-mode="visible" title={lang === 'en' ? 'Pinyin permanently visible' : 'Pinyin dauerhaft sichtbar'}>
+            <span>👁️ {lang === 'en' ? 'Always Visible' : 'Immer sichtbar'}</span>
           </button>
-          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hover" title="Pinyin wird erst bei Mouseover/Tap aufgedeckt (ideal zum Testen!)">
-            <span>👆 Hover-Modus</span>
+          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hover" title={lang === 'en' ? 'Pinyin reveals on hover/tap (ideal for self-testing!)' : 'Pinyin wird erst bei Mouseover/Tap aufgedeckt (ideal zum Testen!)'}>
+            <span>👆 {lang === 'en' ? 'Hover Mode' : 'Hover-Modus'}</span>
           </button>
-          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hidden" title="Pinyin vollständig ausblenden">
-            <span>🙈 Verbergen</span>
+          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hidden" title={lang === 'en' ? 'Hide Pinyin completely' : 'Pinyin vollständig ausblenden'}>
+            <span>🙈 {lang === 'en' ? 'Hidden' : 'Verbergen'}</span>
           </button>
         </div>
       </div>
 
       <!-- Tone Highlighting Toggle -->
       <div class="sub-control-group">
-        <span class="sub-label">Ton-Farben:</span>
+        <span class="sub-label">{lang === 'en' ? 'Tone Colors:' : 'Ton-Farben:'}</span>
         <button type="button" class="btn-tone-toggle" id="btn-tone-toggle" data-tone-active="false">
           <span class="toggle-bullet"></span>
-          <span class="tone-text">Ton-Farben aus</span>
+          <span class="tone-text">{lang === 'en' ? 'Tone Colors Off' : 'Ton-Farben aus'}</span>
         </button>
       </div>
     </div>
 
     <!-- Row 3: Category Filter Pills -->
     <div class="filter-pills-row">
-      <span class="pills-label">Kategorie:</span>
+      <span class="pills-label">{lang === 'en' ? 'Category:' : 'Kategorie:'}</span>
       <div class="pills-scroll-container" id="category-pills">
         {CHINESE_GRAMMAR_CATEGORIES.map((cat) => (
           <button
@@ -134,7 +134,7 @@ const lessons = [
 
     <!-- Row 4: Lesson Filter Row -->
     <div class="lesson-pills-row">
-      <span class="pills-label">Lektion:</span>
+      <span class="pills-label">{lang === 'en' ? 'Lesson:' : 'Lektion:'}</span>
       <div class="pills-scroll-container" id="lesson-pills">
         {lessons.map((les) => (
           <button
@@ -153,11 +153,15 @@ const lessons = [
   <div class="explorer-status-bar">
     <div class="status-left">
       <span class="live-dot"></span>
-      <span id="results-count-text">Zeige alle 26 Grammatikregeln</span>
+      <span id="results-count-text">{lang === 'en' ? `Showing all ${CHINESE_GRAMMAR_RULES.length} grammar rules` : `Zeige alle ${CHINESE_GRAMMAR_RULES.length} Grammatikregeln`}</span>
     </div>
     <div class="status-right">
+      <button type="button" id="btn-toggle-accordion-all" class="btn-toggle-accordion-all" style="display: none;">
+        <span class="btn-accordion-icon">↕️</span>
+        <span class="btn-accordion-text">{lang === 'en' ? 'Expand All' : 'Alle aufklappen'}</span>
+      </button>
       <button type="button" id="btn-reset-filters" class="btn-reset-filters">
-        <span>🔄 Filter zurücksetzen</span>
+        <span>🔄 {lang === 'en' ? 'Reset Filters' : 'Filter zurücksetzen'}</span>
       </button>
     </div>
   </div>
@@ -207,6 +211,7 @@ const lessons = [
     const toneToggle = document.getElementById('btn-tone-toggle');
     const resetFiltersBtn = document.getElementById('btn-reset-filters');
     const noResultsResetBtn = document.getElementById('btn-no-results-reset');
+    const btnToggleAccordionAll = document.getElementById('btn-toggle-accordion-all');
 
     const cardsWrapper = document.getElementById('grammar-cards-wrapper');
     const confusablesWrapper = document.getElementById('confusables-wrapper');
@@ -222,6 +227,24 @@ const lessons = [
     let currentView = 'bento';
     let currentPinyinMode = 'visible';
     let toneColorsActive = false;
+
+    // Helper: Update Accordion Expand/Collapse All button label
+    function updateAccordionToggleAllButton() {
+      if (!btnToggleAccordionAll) return;
+      const visibleCards = cards.filter((c) => c.style.display !== 'none');
+      if (visibleCards.length === 0) return;
+
+      const expandedCount = visibleCards.filter((c) => c.classList.contains('expanded')).length;
+      const allExpanded = expandedCount === visibleCards.length;
+      const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/en/');
+
+      const btnText = btnToggleAccordionAll.querySelector('.btn-accordion-text');
+      if (btnText) {
+        btnText.textContent = allExpanded
+          ? (isEn ? 'Collapse All' : 'Alle zuklappen')
+          : (isEn ? 'Expand All' : 'Alle aufklappen');
+      }
+    }
 
     // Apply Filter Function
     function applyFilters() {
@@ -267,6 +290,10 @@ const lessons = [
 
       if (noResultsState) {
         noResultsState.style.display = visibleCount === 0 ? 'flex' : 'none';
+      }
+
+      if (currentView === 'accordion') {
+        updateAccordionToggleAllButton();
       }
     }
 
@@ -337,9 +364,111 @@ const lessons = [
           }
         }
 
+        if (btnToggleAccordionAll) {
+          btnToggleAccordionAll.style.display = view === 'accordion' ? 'inline-flex' : 'none';
+          if (view === 'accordion') {
+            updateAccordionToggleAllButton();
+          }
+        }
+
         applyFilters();
       });
     });
+
+    // Accordion Mode: Click & Keyboard Expand/Collapse on Cards
+    cards.forEach((card) => {
+      // Make card keyboard focusable in accordion mode
+      card.setAttribute('tabindex', '0');
+
+      card.addEventListener('click', (e) => {
+        if (currentView !== 'accordion') return;
+
+        const target = e.target as HTMLElement;
+        // Don't toggle card if user clicked an interactive control inside body/footer (links, buttons, nuances details/summary, inputs)
+        if (target.closest('a, button, summary, details.grammar-nuances, input, select, textarea')) {
+          return;
+        }
+
+        // Don't toggle card if user highlighted/selected text to copy
+        const selection = window.getSelection();
+        if (selection && selection.toString().trim().length > 0) {
+          return;
+        }
+
+        const isExpanded = card.classList.contains('expanded');
+
+        // If already expanded, only collapse if clicked in header zone or on expand badge
+        if (isExpanded) {
+          const clickedHeader = target.closest('.card-header-zone, .accordion-expand-badge');
+          if (!clickedHeader) {
+            return; // Click was in body or footer zone, don't collapse unintentionally
+          }
+        }
+
+        // Toggle expanded state
+        const isNowExpanded = card.classList.toggle('expanded');
+        card.setAttribute('aria-expanded', String(isNowExpanded));
+
+        const badgeText = card.querySelector('.expand-state-text');
+        if (badgeText) {
+          const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/en/');
+          badgeText.textContent = isNowExpanded
+            ? (isEn ? 'Collapse' : 'Zuklappen')
+            : (isEn ? 'Click to expand' : 'Aufklappen');
+        }
+
+        updateAccordionToggleAllButton();
+      });
+
+      // Keyboard Accessibility (Enter / Space to expand/collapse)
+      card.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (currentView !== 'accordion') return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          const target = e.target as HTMLElement;
+          if (target.closest('a, button, summary, details, input, select')) return;
+          e.preventDefault();
+          const isNowExpanded = card.classList.toggle('expanded');
+          card.setAttribute('aria-expanded', String(isNowExpanded));
+
+          const badgeText = card.querySelector('.expand-state-text');
+          if (badgeText) {
+            const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/en/');
+            badgeText.textContent = isNowExpanded
+              ? (isEn ? 'Collapse' : 'Zuklappen')
+              : (isEn ? 'Click to expand' : 'Aufklappen');
+          }
+
+          updateAccordionToggleAllButton();
+        }
+      });
+    });
+
+    // Accordion Toggle All Button
+    if (btnToggleAccordionAll) {
+      btnToggleAccordionAll.addEventListener('click', (e) => {
+        e.preventDefault();
+        const visibleCards = cards.filter((c) => c.style.display !== 'none');
+        if (visibleCards.length === 0) return;
+
+        const expandedCount = visibleCards.filter((c) => c.classList.contains('expanded')).length;
+        const shouldExpand = expandedCount < visibleCards.length;
+        const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/en/');
+
+        visibleCards.forEach((card) => {
+          card.classList.toggle('expanded', shouldExpand);
+          card.setAttribute('aria-expanded', String(shouldExpand));
+
+          const badgeText = card.querySelector('.expand-state-text');
+          if (badgeText) {
+            badgeText.textContent = shouldExpand
+              ? (isEn ? 'Collapse' : 'Zuklappen')
+              : (isEn ? 'Click to expand' : 'Aufklappen');
+          }
+        });
+
+        updateAccordionToggleAllButton();
+      });
+    }
 
     // Pinyin Recall Mode
     pinyinPills.forEach((pill) => {
@@ -385,6 +514,10 @@ const lessons = [
       if (cardsWrapper) {
         cardsWrapper.classList.remove('view-accordion');
         cardsWrapper.classList.add('view-bento');
+      }
+
+      if (btnToggleAccordionAll) {
+        btnToggleAccordionAll.style.display = 'none';
       }
 
       applyFilters();
@@ -828,12 +961,37 @@ const lessons = [
   .grammar-content-container.view-accordion {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.75rem;
   }
 
   .grammar-content-container.view-accordion :global(.grammar-card) {
-    padding: 0.85rem 1.15rem;
-    gap: 0.5rem;
+    padding: 0.95rem 1.25rem;
+    gap: 0.65rem;
+    cursor: pointer;
+    border-left: 3px solid rgba(56, 189, 248, 0.45);
+    background: rgba(22, 23, 30, 0.95);
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .grammar-content-container.view-accordion :global(.grammar-card:hover) {
+    border-left-color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.4);
+    background: rgba(28, 31, 42, 0.95);
+    transform: translateX(3px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .grammar-content-container.view-accordion :global(.grammar-card:focus-visible) {
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
+  }
+
+  .grammar-content-container.view-accordion :global(.grammar-card.expanded) {
+    border-left: 3px solid var(--sl-color-accent, #6366f1);
+    border-color: rgba(99, 102, 241, 0.5);
+    background: var(--sl-color-gray-6, #181920);
+    transform: none;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
   }
 
   .grammar-content-container.view-accordion :global(.card-body-zone),
@@ -844,12 +1002,51 @@ const lessons = [
   .grammar-content-container.view-accordion :global(.grammar-card.expanded .card-body-zone),
   .grammar-content-container.view-accordion :global(.grammar-card.expanded .card-footer-zone) {
     display: flex;
-    animation: fadeIn 0.2s ease;
+    animation: accordionSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+  .grammar-content-container.view-accordion :global(.accordion-expand-badge) {
+    display: inline-flex;
+  }
+
+  @keyframes accordionSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Accordion Expand/Collapse All Button */
+  .btn-toggle-accordion-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+
+  .btn-toggle-accordion-all:hover {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: #38bdf8;
+    color: #e0f2fe;
+  }
+
+  .status-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   /* Container 2: Confusables View */
