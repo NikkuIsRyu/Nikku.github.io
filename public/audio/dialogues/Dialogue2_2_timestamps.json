@@ -1,62 +1,80 @@
 {
   "dialogue_id": "Dialogue2_2",
-  "total_duration_s": 22.79,
+  "total_duration_s": 33.94,
   "sample_rate": 32000,
-  "turns_count": 6,
+  "turns_count": 8,
   "turns": [
     {
       "turn_idx": 1,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "她的英语非常好，她叫什么名字？",
+      "voice": "female_v4",
+      "text": "前面那位女士的德语讲得很流利，请问她叫什么？",
       "start_ms": 0.0,
-      "end_ms": 3106.0,
-      "duration_ms": 3106.0
+      "end_ms": 3731.0,
+      "duration_ms": 3731.0
     },
     {
       "turn_idx": 2,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "她叫佐藤燕玲，是我们公司的翻译。",
-      "start_ms": 3726.0,
-      "end_ms": 7557.0,
-      "duration_ms": 3831.0
+      "text": "她叫田中雅慧，负责我们部的对外商务翻译。",
+      "start_ms": 4351.0,
+      "end_ms": 9152.0,
+      "duration_ms": 4801.0
     },
     {
       "turn_idx": 3,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "佐藤燕玲……她是中国人还是日本人？",
-      "start_ms": 8077.0,
-      "end_ms": 11513.0,
-      "duration_ms": 3436.0
+      "voice": "female_v4",
+      "text": "田中雅慧……看名字，她是日本人还是中国人呢？",
+      "start_ms": 9672.0,
+      "end_ms": 13613.0,
+      "duration_ms": 3941.0
     },
     {
       "turn_idx": 4,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "她是中国人，她说汉语、英语和日语。",
-      "start_ms": 12133.0,
-      "end_ms": 15784.0,
-      "duration_ms": 3651.0
+      "text": "她是在中国长大的，中文、日文和德文都特别好。",
+      "start_ms": 14233.0,
+      "end_ms": 18539.0,
+      "duration_ms": 4306.0
     },
     {
       "turn_idx": 5,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "\"佐藤燕玲\"是日本名字吧？",
-      "start_ms": 16304.0,
-      "end_ms": 18430.0,
-      "duration_ms": 2126.0
+      "voice": "female_v4",
+      "text": "难怪，\"田中\"听起来确实像日本的姓氏。",
+      "start_ms": 19059.0,
+      "end_ms": 21950.0,
+      "duration_ms": 2891.0
     },
     {
       "turn_idx": 6,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "是，她爸爸是日本人，妈妈是中国人。",
-      "start_ms": 19050.0,
-      "end_ms": 22791.0,
-      "duration_ms": 3741.0
+      "text": "没错，她的父亲是东京人，母亲是北京人。",
+      "start_ms": 22470.0,
+      "end_ms": 26771.0,
+      "duration_ms": 4301.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "这样的语言能力真让人羡慕。",
+      "start_ms": 27291.0,
+      "end_ms": 29342.0,
+      "duration_ms": 2051.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "是啊，她在跨国沟通方面帮了我们很大忙。",
+      "start_ms": 29862.0,
+      "end_ms": 33938.0,
+      "duration_ms": 4076.0
     }
   ]
 }

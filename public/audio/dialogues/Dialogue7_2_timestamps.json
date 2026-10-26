@@ -1,0 +1,98 @@
+{
+  "dialogue_id": "Dialogue7_2",
+  "total_duration_s": 62.2,
+  "sample_rate": 32000,
+  "turns_count": 10,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "各位吃得怎么样？刚才那道特色清蒸鱼的味道真是太绝了。",
+      "start_ms": 0.0,
+      "end_ms": 4466.0,
+      "duration_ms": 4466.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "确实美味，鱼肉口感细腻，调味也是咸淡适中，我很满意。",
+      "start_ms": 4986.0,
+      "end_ms": 11512.0,
+      "duration_ms": 6526.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "甜点红豆糕的甜度也恰到好处，既保留了豆香，又不会觉得太甜腻。",
+      "start_ms": 12032.0,
+      "end_ms": 18493.0,
+      "duration_ms": 6461.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "大家如果都吃饱了，我们就准备买单回酒店休息吧。",
+      "start_ms": 19013.0,
+      "end_ms": 23059.0,
+      "duration_ms": 4046.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "服务员，请帮我们算一下账单，今天这一桌一共是多少钱？",
+      "start_ms": 23579.0,
+      "end_ms": 29290.0,
+      "duration_ms": 5711.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "菜单上写着鱼是一百二十块，配菜加上茶水大概在两百元左右。",
+      "start_ms": 29910.0,
+      "end_ms": 35891.0,
+      "duration_ms": 5981.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "今天大家协同工作很辛苦，这顿饭我来请客，大家千万不要争。",
+      "start_ms": 36411.0,
+      "end_ms": 42027.0,
+      "duration_ms": 5616.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "那怎么好意思呢，说好了一起平摊餐费的，我们把各自那份转给你。",
+      "start_ms": 42547.0,
+      "end_ms": 49288.0,
+      "duration_ms": 6741.0
+    },
+    {
+      "turn_idx": 9,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "对啊，同事之间出来吃饭讲究互相支持，AA制大家心里都踏实。",
+      "start_ms": 49808.0,
+      "end_ms": 56819.0,
+      "duration_ms": 7011.0
+    },
+    {
+      "turn_idx": 10,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "那好吧，等回到办公室，我把电子账单明细发在工作群里。",
+      "start_ms": 57339.0,
+      "end_ms": 62195.0,
+      "duration_ms": 4856.0
+    }
+  ]
+}

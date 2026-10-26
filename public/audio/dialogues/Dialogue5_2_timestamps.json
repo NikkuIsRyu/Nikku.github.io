@@ -1,0 +1,98 @@
+{
+  "dialogue_id": "Dialogue5_2",
+  "total_duration_s": 52.23,
+  "sample_rate": 32000,
+  "turns_count": 10,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "请问从咱们办公楼到一号生产车间大概有多远？",
+      "start_ms": 0.0,
+      "end_ms": 3896.0,
+      "duration_ms": 3896.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "生产车间就在办公楼后边，走过去大概只有两百米，非常近。",
+      "start_ms": 4516.0,
+      "end_ms": 10727.0,
+      "duration_ms": 6211.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "对，穿过中间的小花园，前边那栋蓝色的大楼就是。",
+      "start_ms": 11247.0,
+      "end_ms": 16033.0,
+      "duration_ms": 4786.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "顺便问一下，附近有可以买咖啡和点心的小卖部吗？",
+      "start_ms": 16553.0,
+      "end_ms": 20904.0,
+      "duration_ms": 4351.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "有的，车间旁边就有一家小卖部，里边卖各种饮品和面包。",
+      "start_ms": 21524.0,
+      "end_ms": 27475.0,
+      "duration_ms": 5951.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "你们什么时候打算过去？如果现在走，我们可以一起顺路过去。",
+      "start_ms": 27995.0,
+      "end_ms": 33566.0,
+      "duration_ms": 5571.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "我现在就想去买一瓶矿泉水，正好活动一下。",
+      "start_ms": 34086.0,
+      "end_ms": 37922.0,
+      "duration_ms": 3836.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "那太好了，我桌上的文件看完了，咱们一起去透透气。",
+      "start_ms": 38442.0,
+      "end_ms": 44143.0,
+      "duration_ms": 5701.0
+    },
+    {
+      "turn_idx": 9,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "走吧，顺便看看车间外面的厂区路线地图。",
+      "start_ms": 44663.0,
+      "end_ms": 48494.0,
+      "duration_ms": 3831.0
+    },
+    {
+      "turn_idx": 10,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "好的，谢谢你们给我带路，辛苦大家了！",
+      "start_ms": 49014.0,
+      "end_ms": 52225.0,
+      "duration_ms": 3211.0
+    }
+  ]
+}

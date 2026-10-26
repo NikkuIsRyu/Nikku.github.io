@@ -1,62 +1,80 @@
 {
   "dialogue_id": "Dialogue4_1",
-  "total_duration_s": 17.63,
+  "total_duration_s": 40.09,
   "sample_rate": 32000,
-  "turns_count": 6,
+  "turns_count": 8,
   "turns": [
     {
       "turn_idx": 1,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "现在几点？",
+      "voice": "female_v4",
+      "text": "请看一下表，咱们这边目前是几点钟了？",
       "start_ms": 0.0,
-      "end_ms": 936.0,
-      "duration_ms": 936.0
+      "end_ms": 3261.0,
+      "duration_ms": 3261.0
     },
     {
       "turn_idx": 2,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "现在一点半。",
-      "start_ms": 1556.0,
-      "end_ms": 2842.0,
-      "duration_ms": 1286.0
+      "text": "刚好是上午十点一刻。",
+      "start_ms": 3881.0,
+      "end_ms": 6142.0,
+      "duration_ms": 2261.0
     },
     {
       "turn_idx": 3,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "你知道现在德国几点？",
-      "start_ms": 3362.0,
-      "end_ms": 5338.0,
-      "duration_ms": 1976.0
+      "voice": "female_v4",
+      "text": "你清楚苏黎世那边现在是什么时间吗？",
+      "start_ms": 6662.0,
+      "end_ms": 9553.0,
+      "duration_ms": 2891.0
     },
     {
       "turn_idx": 4,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "现在我们这儿是下午一点半，德国是早上六点半。",
-      "start_ms": 5958.0,
-      "end_ms": 11134.0,
-      "duration_ms": 5176.0
+      "text": "北京时间比瑞士快六个小时，那边现在应该还是凌晨四点一刻。",
+      "start_ms": 10173.0,
+      "end_ms": 16974.0,
+      "duration_ms": 6801.0
     },
     {
       "turn_idx": 5,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "德国现在是夏季时间。",
-      "start_ms": 11654.0,
-      "end_ms": 13670.0,
-      "duration_ms": 2016.0
+      "voice": "female_v4",
+      "text": "不过那边从上周起已经开始实行夏令时了吧？",
+      "start_ms": 17494.0,
+      "end_ms": 21035.0,
+      "duration_ms": 3541.0
     },
     {
       "turn_idx": 6,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "哦，对，对，那儿应该是早上七点半。",
-      "start_ms": 14190.0,
-      "end_ms": 17626.0,
-      "duration_ms": 3436.0
+      "text": "哎呀，多亏你提醒！夏令时时差是五个小时，所以那边是早晨五点一刻。",
+      "start_ms": 21655.0,
+      "end_ms": 29286.0,
+      "duration_ms": 7631.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "看来上午这个时间段确实不适合给欧洲同事安排线上会议。",
+      "start_ms": 29806.0,
+      "end_ms": 34672.0,
+      "duration_ms": 4866.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "对，咱们还是等下午三点以后再连线他们比较稳妥。",
+      "start_ms": 35192.0,
+      "end_ms": 40088.0,
+      "duration_ms": 4896.0
     }
   ]
 }

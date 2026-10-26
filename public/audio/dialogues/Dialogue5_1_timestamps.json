@@ -1,0 +1,98 @@
+{
+  "dialogue_id": "Dialogue5_1",
+  "total_duration_s": 58.41,
+  "sample_rate": 32000,
+  "turns_count": 10,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "两位同事，请问你们看到办公楼的设计图纸了吗？我正在到处找。",
+      "start_ms": 0.0,
+      "end_ms": 5371.0,
+      "duration_ms": 5371.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "图纸刚才还在王秘书的桌子上面，你找过抽屉里边没有？",
+      "start_ms": 5891.0,
+      "end_ms": 11392.0,
+      "duration_ms": 5501.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "我上午看到那些文件被放在书架第二层了，就在大沙发旁边。",
+      "start_ms": 12012.0,
+      "end_ms": 17198.0,
+      "duration_ms": 5186.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "找到了！多谢二位。顺便问一下，这间新办公室的空调遥控器在哪儿？",
+      "start_ms": 17718.0,
+      "end_ms": 23414.0,
+      "duration_ms": 5696.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "空调开关在门后边的墙上，下边还有暖气的控制面板。",
+      "start_ms": 24034.0,
+      "end_ms": 29820.0,
+      "duration_ms": 5786.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "现在的办公家具摆放得很舒服，桌子和椅子中间的空间挺宽敞的。",
+      "start_ms": 30340.0,
+      "end_ms": 36416.0,
+      "duration_ms": 6076.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "是啊，这几把新椅子坐起来很舒服，高低也可以随时调节。",
+      "start_ms": 36936.0,
+      "end_ms": 42172.0,
+      "duration_ms": 5236.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "咱们这栋办公楼前边的绿色植物也不少，采光特别好。",
+      "start_ms": 42692.0,
+      "end_ms": 48103.0,
+      "duration_ms": 5411.0
+    },
+    {
+      "turn_idx": 9,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "大家都收拾好了吗？等一下张经理要来检查新车间的布置。",
+      "start_ms": 48623.0,
+      "end_ms": 53819.0,
+      "duration_ms": 5196.0
+    },
+    {
+      "turn_idx": 10,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "准备得差不多了，我们马上下楼去车间迎接经理。",
+      "start_ms": 54339.0,
+      "end_ms": 58415.0,
+      "duration_ms": 4076.0
+    }
+  ]
+}

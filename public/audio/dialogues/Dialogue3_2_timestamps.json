@@ -1,71 +1,80 @@
 {
   "dialogue_id": "Dialogue3_2",
-  "total_duration_s": 22.83,
+  "total_duration_s": 38.89,
   "sample_rate": 32000,
-  "turns_count": 7,
+  "turns_count": 8,
   "turns": [
     {
       "turn_idx": 1,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "听说张小姐现在在天津工作。",
+      "voice": "female_v4",
+      "text": "听小李说，周明现在搬到成都市区居住了。",
       "start_ms": 0.0,
-      "end_ms": 2531.0,
-      "duration_ms": 2531.0
+      "end_ms": 3646.0,
+      "duration_ms": 3646.0
     },
     {
       "turn_idx": 2,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "张小姐？张小姐是谁？",
-      "start_ms": 3051.0,
-      "end_ms": 4242.0,
-      "duration_ms": 1191.0
+      "text": "周明？我对这个名字有点生疏，他是哪位？",
+      "start_ms": 4166.0,
+      "end_ms": 8482.0,
+      "duration_ms": 4316.0
     },
     {
       "turn_idx": 3,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "张丽佳，你认识她。她以前是汉堡大学的学生。",
-      "start_ms": 4862.0,
-      "end_ms": 9078.0,
-      "duration_ms": 4216.0
+      "voice": "female_v4",
+      "text": "就是周文强啊，以前在慕尼黑工业大学和我们一起上课的。",
+      "start_ms": 9102.0,
+      "end_ms": 13948.0,
+      "duration_ms": 4846.0
     },
     {
       "turn_idx": 4,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "哦，丽佳！你有她的地址吗？",
-      "start_ms": 9598.0,
-      "end_ms": 12589.0,
-      "duration_ms": 2991.0
+      "text": "啊，原来是文强！你有他现在的具体联络地址吗？",
+      "start_ms": 14468.0,
+      "end_ms": 19519.0,
+      "duration_ms": 5051.0
     },
     {
       "turn_idx": 5,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "有。她家在天津五一路十号。",
-      "start_ms": 13209.0,
-      "end_ms": 15965.0,
-      "duration_ms": 2756.0
+      "voice": "female_v4",
+      "text": "有的，他在青羊区春熙路六十八号开了一家咨询工作室。",
+      "start_ms": 20139.0,
+      "end_ms": 24690.0,
+      "duration_ms": 4551.0
     },
     {
       "turn_idx": 6,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "你有没有她的电话？",
-      "start_ms": 16485.0,
-      "end_ms": 18271.0,
-      "duration_ms": 1786.0
+      "text": "那么他的私人手机号码你存了没有？",
+      "start_ms": 25210.0,
+      "end_ms": 28521.0,
+      "duration_ms": 3311.0
     },
     {
       "turn_idx": 7,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "我只有她办公室的电话，还没有她的手机号码。",
-      "start_ms": 18891.0,
-      "end_ms": 22832.0,
-      "duration_ms": 3941.0
+      "voice": "female_v4",
+      "text": "我手头目前只有他工作室的固定电话，晚点我把号码发你微信。",
+      "start_ms": 29141.0,
+      "end_ms": 34352.0,
+      "duration_ms": 5211.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "太好了，改天我们一起约他在线聊聊。",
+      "start_ms": 34872.0,
+      "end_ms": 38888.0,
+      "duration_ms": 4016.0
     }
   ]
 }

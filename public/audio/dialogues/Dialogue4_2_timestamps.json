@@ -1,80 +1,80 @@
 {
   "dialogue_id": "Dialogue4_2",
-  "total_duration_s": 24.03,
+  "total_duration_s": 43.9,
   "sample_rate": 32000,
   "turns_count": 8,
   "turns": [
     {
       "turn_idx": 1,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "刘先生，今天几号，星期几？",
+      "voice": "female_v4",
+      "text": "赵主管，请问今天是几月几号，周几啊？",
       "start_ms": 0.0,
-      "end_ms": 2431.0,
-      "duration_ms": 2431.0
+      "end_ms": 3326.0,
+      "duration_ms": 3326.0
     },
     {
       "turn_idx": 2,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "今天？昨天星期六，是我妹妹的生日。今天是十号，星期天。",
-      "start_ms": 3051.0,
-      "end_ms": 9317.0,
-      "duration_ms": 6266.0
+      "text": "我想想看，前天周四是我母亲的生日，所以今天应该是二十五号，星期六。",
+      "start_ms": 3946.0,
+      "end_ms": 11512.0,
+      "duration_ms": 7566.0
     },
     {
       "turn_idx": 3,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "不对，你看，今天是十一号，星期天。",
-      "start_ms": 9837.0,
-      "end_ms": 12668.0,
-      "duration_ms": 2831.0
+      "voice": "female_v4",
+      "text": "好像有点不对，手机屏幕上明明显示今天是二十六号，周日呢。",
+      "start_ms": 12032.0,
+      "end_ms": 17218.0,
+      "duration_ms": 5186.0
     },
     {
       "turn_idx": 4,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "这是去年的月历。",
-      "start_ms": 13188.0,
-      "end_ms": 14864.0,
-      "duration_ms": 1676.0
+      "text": "让我瞧瞧墙上的挂历……哎，这张挂历居然是上个月的！",
+      "start_ms": 17738.0,
+      "end_ms": 23219.0,
+      "duration_ms": 5481.0
     },
     {
       "turn_idx": 5,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "是吗？",
-      "start_ms": 15384.0,
-      "end_ms": 15875.0,
-      "duration_ms": 491.0
+      "voice": "female_v4",
+      "text": "哈哈，怪不得咱们俩算出来的日子对不上。",
+      "start_ms": 23739.0,
+      "end_ms": 27070.0,
+      "duration_ms": 3331.0
     },
     {
       "turn_idx": 6,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "这是今天的报纸，二〇一〇年一月十日星期天。",
-      "start_ms": 16495.0,
-      "end_ms": 20886.0,
-      "duration_ms": 4391.0
+      "text": "你看桌上最新这份晨报，头版日期清清楚楚写着五月二十六日星期日。",
+      "start_ms": 27590.0,
+      "end_ms": 34751.0,
+      "duration_ms": 7161.0
     },
     {
       "turn_idx": 7,
       "speaker": "A",
-      "voice": "female_v3",
-      "text": "哦，对不起。",
-      "start_ms": 21406.0,
-      "end_ms": 22777.0,
-      "duration_ms": 1371.0
+      "voice": "female_v4",
+      "text": "抱歉抱歉，看来真的是我记混了。",
+      "start_ms": 35271.0,
+      "end_ms": 38047.0,
+      "duration_ms": 2776.0
     },
     {
       "turn_idx": 8,
       "speaker": "B",
       "voice": "male_v1",
-      "text": "没关系。",
-      "start_ms": 23297.0,
-      "end_ms": 24028.0,
-      "duration_ms": 731.0
+      "text": "哈哈，小事一桩，不用介意，周末过得糊涂也正常！",
+      "start_ms": 38567.0,
+      "end_ms": 43903.0,
+      "duration_ms": 5336.0
     }
   ]
 }
