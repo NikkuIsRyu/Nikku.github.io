@@ -1,0 +1,366 @@
+---
+import type { ConfusablePair } from '../../data/chineseGrammarData';
+
+interface Props {
+  pair: ConfusablePair;
+  lang?: 'de' | 'en';
+}
+
+const { pair, lang = 'de' } = Astro.props;
+
+const topic = lang === 'en' ? pair.topicEn : pair.topicDe;
+const mnemonic = lang === 'en' ? pair.mnemonicEn : pair.mnemonicDe;
+---
+
+<div class="confusable-card not-content" id={`confusable-${pair.id}`} data-confusable-id={pair.id}>
+  <!-- Card Header -->
+  <header class="confusable-header">
+    <div class="pair-meta">
+      <span class="compare-badge">⚖️ Confusable Pair</span>
+      <span class="lesson-tag">{pair.lesson}</span>
+    </div>
+    <h3 class="pair-title">{pair.pairLabel}</h3>
+    <p class="pair-topic">{topic}</p>
+  </header>
+
+  <!-- 2-Column Side-by-Side Comparison Grid -->
+  <div class="comparison-grid">
+    <!-- Left Column -->
+    <div class="comparison-side left-side">
+      <div class="side-header">
+        <div class="term-badge">{pair.left.term}</div>
+        <div class="term-meta">
+          <span class="term-pinyin">{pair.left.pinyin}</span>
+          <span class="term-concept">{lang === 'en' ? pair.left.conceptEn : pair.left.conceptDe}</span>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">Muster:</span>
+        <code>{pair.left.formula}</code>
+      </div>
+
+      <p class="rule-text">{lang === 'en' ? pair.left.ruleEn : pair.left.ruleDe}</p>
+
+      <!-- Monospace Correct Example -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">Richtig (Correct)</span>
+        </div>
+        <div class="case-hanzi">{pair.left.correct.hanzi}</div>
+        <div class="case-pinyin">{pair.left.correct.pinyin}</div>
+        <div class="case-trans">
+          {lang === 'en' ? pair.left.correct.translationEn : pair.left.correct.translationDe}
+        </div>
+      </div>
+
+      <!-- Monospace Incorrect Example -->
+      <div class="example-case incorrect-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">Falsch (Typischer Fehler)</span>
+        </div>
+        <div class="case-hanzi strikethrough">{pair.left.incorrect.hanzi}</div>
+        <div class="case-pinyin">{pair.left.incorrect.pinyin}</div>
+        <div class="case-explanation">
+          ⚠️ {lang === 'en' ? pair.left.incorrect.explanationEn : pair.left.incorrect.explanationDe}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="comparison-side right-side">
+      <div class="side-header">
+        <div class="term-badge right-accent">{pair.right.term}</div>
+        <div class="term-meta">
+          <span class="term-pinyin">{pair.right.pinyin}</span>
+          <span class="term-concept">{lang === 'en' ? pair.right.conceptEn : pair.right.conceptDe}</span>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">Muster:</span>
+        <code>{pair.right.formula}</code>
+      </div>
+
+      <p class="rule-text">{lang === 'en' ? pair.right.ruleEn : pair.right.ruleDe}</p>
+
+      <!-- Monospace Correct Example -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">Richtig (Correct)</span>
+        </div>
+        <div class="case-hanzi">{pair.right.correct.hanzi}</div>
+        <div class="case-pinyin">{pair.right.correct.pinyin}</div>
+        <div class="case-trans">
+          {lang === 'en' ? pair.right.correct.translationEn : pair.right.correct.translationDe}
+        </div>
+      </div>
+
+      <!-- Monospace Incorrect Example -->
+      <div class="example-case incorrect-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">Falsch (Typischer Fehler)</span>
+        </div>
+        <div class="case-hanzi strikethrough">{pair.right.incorrect.hanzi}</div>
+        <div class="case-pinyin">{pair.right.incorrect.pinyin}</div>
+        <div class="case-explanation">
+          ⚠️ {lang === 'en' ? pair.right.incorrect.explanationEn : pair.right.incorrect.explanationDe}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Mnemonic Banner -->
+  <footer class="mnemonic-banner">
+    <span class="mnemonic-icon">💡</span>
+    <span class="mnemonic-text">{mnemonic}</span>
+  </footer>
+</div>
+
+<style>
+  .confusable-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--sl-color-gray-6, #18191e);
+    border: 1px solid var(--sl-color-gray-5, #282a36);
+    border-radius: 14px;
+    padding: 1.3rem;
+    gap: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.25rem;
+  }
+
+  .confusable-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border-bottom: 1px solid var(--sl-color-gray-5, #282a36);
+    padding-bottom: 0.75rem;
+  }
+
+  .pair-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .compare-badge {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  .lesson-tag {
+    font-size: 0.72rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+  }
+
+  .pair-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sl-color-white, #f8fafc);
+    margin: 0;
+  }
+
+  .pair-topic {
+    font-size: 0.88rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    margin: 0;
+  }
+
+  /* 2-Column Comparison Grid */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  @media (min-width: 768px) {
+    .comparison-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .comparison-side {
+    display: flex;
+    flex-direction: column;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid var(--sl-color-gray-5, #334155);
+    border-radius: 10px;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .side-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .term-badge {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .term-badge.right-accent {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+
+  .term-meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .term-pinyin {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--sl-color-white, #ffffff);
+  }
+
+  .term-concept {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+  }
+
+  .formula-box {
+    background: rgba(0, 0, 0, 0.35);
+    border-left: 3px solid #38bdf8;
+    padding: 0.4rem 0.65rem;
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .box-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    color: #38bdf8;
+    font-weight: 700;
+  }
+
+  .formula-box code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #e0f2fe;
+    font-size: 0.82rem;
+    background: transparent;
+    padding: 0;
+  }
+
+  .rule-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2, #cbd5e1);
+    margin: 0;
+  }
+
+  /* Example cases */
+  .example-case {
+    display: flex;
+    flex-direction: column;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    gap: 0.25rem;
+  }
+
+  .correct-case {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .incorrect-case {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .case-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .correct-case .case-header {
+    color: #34d399;
+  }
+
+  .incorrect-case .case-header {
+    color: #f87171;
+  }
+
+  .case-hanzi {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--sl-color-white, #ffffff);
+    margin-top: 0.1rem;
+  }
+
+  .case-hanzi.strikethrough {
+    text-decoration: line-through;
+    color: #fca5a5;
+  }
+
+  .case-pinyin {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.78rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+  }
+
+  .case-trans {
+    font-size: 0.78rem;
+    color: var(--sl-color-gray-2, #cbd5e1);
+  }
+
+  .case-explanation {
+    font-size: 0.76rem;
+    color: #fecaca;
+    margin-top: 0.15rem;
+    line-height: 1.4;
+  }
+
+  /* Bottom Mnemonic Banner */
+  .mnemonic-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px dashed rgba(245, 158, 11, 0.4);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.85rem;
+    color: #fde68a;
+    line-height: 1.45;
+  }
+
+  .mnemonic-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+</style>

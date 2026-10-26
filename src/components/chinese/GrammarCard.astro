@@ -1,0 +1,373 @@
+---
+import type { GrammarRule } from '../../data/chineseGrammarData';
+
+interface Props {
+  rule: GrammarRule;
+  lang?: 'de' | 'en';
+}
+
+const { rule, lang = 'de' } = Astro.props;
+
+const title = lang === 'en' ? rule.titleEn : rule.titleDe;
+const summary = lang === 'en' ? rule.summaryEn : rule.summaryDe;
+const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
+---
+
+<article
+  class="grammar-card not-content"
+  id={`grammar-${rule.id}`}
+  data-rule-id={rule.id}
+  data-category={rule.category}
+  data-lesson={rule.lesson}
+  data-tags={rule.tags.join(',')}
+>
+  <!-- Zone 1: Header Zone (Title, Metadata & Formula Pill) -->
+  <header class="card-header-zone">
+    <div class="meta-row">
+      <span class="lesson-badge">{rule.lesson}</span>
+      <span class="part-badge">{rule.part.split(':')[0]}</span>
+      <div class="tag-list">
+        {rule.tags.map((tag) => (
+          <span class="tag-chip">#{tag}</span>
+        ))}
+      </div>
+    </div>
+
+    <h3 class="rule-title">{title}</h3>
+
+    <!-- Monospace Syntactic Skeleton Formula Pill -->
+    <div class="formula-pill-wrapper">
+      <span class="formula-label">Formel:</span>
+      <code class="formula-pill">{rule.formula}</code>
+    </div>
+  </header>
+
+  <!-- Zone 2: Body Zone (1-2 Sentence Rule & Collapsible Nuances) -->
+  <div class="card-body-zone">
+    <p class="rule-summary">{summary}</p>
+
+    {nuances && nuances.length > 0 && (
+      <details class="grammar-nuances">
+        <summary class="nuances-summary">
+          <span class="summary-icon">💡</span>
+          <span>{lang === 'en' ? 'Nuances, Edge Cases & Notes' : 'Ausnahmen, Feinheiten & Merkhilfen'}</span>
+          <span class="nuances-count">({nuances.length})</span>
+        </summary>
+        <ul class="nuances-list">
+          {nuances.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </details>
+    )}
+  </div>
+
+  <!-- Zone 3: Footer Zone (Aligned 3-Layer Example Grid) -->
+  <footer class="card-footer-zone">
+    <div class="examples-header">
+      <span class="examples-label">Beispiele / Examples</span>
+      <span class="ruby-hint">Tipp: Pinyin-Modus in der Leiste oben umschaltbar</span>
+    </div>
+
+    <div class="examples-stack">
+      {rule.examples.map((ex, idx) => (
+        <div class="example-grid-item" data-example-idx={idx}>
+          <!-- Row 1: Large Hanzi -->
+          <div class="example-hanzi-row">
+            <span class="hanzi-text">{ex.hanzi}</span>
+          </div>
+
+          <!-- Row 2: Muted Aligned Pinyin -->
+          <div class="example-pinyin-row">
+            <span class="pinyin-text">{ex.pinyin}</span>
+          </div>
+
+          <!-- Row 3: Translation -->
+          <div class="example-translation-row">
+            <span class="trans-de">🇩🇪 {ex.translationDe}</span>
+            {ex.translationEn && (
+              <span class="trans-en">🇬🇧 {ex.translationEn}</span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </footer>
+</article>
+
+<style>
+  .grammar-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--sl-color-gray-6, #18191e);
+    border: 1px solid var(--sl-color-gray-5, #282a36);
+    border-radius: 12px;
+    padding: 1.25rem;
+    gap: 1.1rem;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grammar-card:hover {
+    border-color: var(--sl-color-accent, #6366f1);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+  }
+
+  /* Zone 1: Header Zone */
+  .card-header-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lesson-badge {
+    background: rgba(99, 102, 241, 0.18);
+    color: var(--sl-color-accent-high, #818cf8);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .part-badge {
+    background: var(--sl-color-gray-5, #282a36);
+    color: var(--sl-color-gray-2, #c4c9d4);
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .tag-list {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .tag-chip {
+    font-size: 0.68rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  .rule-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sl-color-white, #f8fafc);
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  /* Monospace Formula Pill */
+  .formula-pill-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px dashed rgba(99, 102, 241, 0.4);
+    border-radius: 8px;
+    padding: 0.55rem 0.8rem;
+    margin-top: 0.2rem;
+  }
+
+  .formula-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-accent-high, #a5b4fc);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .formula-pill {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.88rem;
+    color: #38bdf8;
+    background: transparent;
+    padding: 0;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  /* Zone 2: Body Zone */
+  .card-body-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .rule-summary {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--sl-color-gray-2, #cbd5e1);
+    margin: 0;
+  }
+
+  .grammar-nuances {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid var(--sl-color-gray-5, #334155);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    transition: all 0.2s ease;
+  }
+
+  .grammar-nuances[open] {
+    background: rgba(99, 102, 241, 0.04);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .nuances-summary {
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2, #94a3b8);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    user-select: none;
+  }
+
+  .nuances-summary:hover {
+    color: var(--sl-color-accent-high, #818cf8);
+  }
+
+  .nuances-count {
+    font-size: 0.72rem;
+    color: var(--sl-color-gray-4, #64748b);
+  }
+
+  .nuances-list {
+    margin: 0.5rem 0 0.2rem 1.2rem;
+    padding: 0;
+    font-size: 0.84rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    line-height: 1.5;
+  }
+
+  .nuances-list li {
+    margin-bottom: 0.35rem;
+  }
+
+  /* Zone 3: Footer Zone (3-Layer Example Grid) */
+  .card-footer-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    border-top: 1px solid var(--sl-color-gray-5, #282a36);
+    padding-top: 0.8rem;
+  }
+
+  .examples-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .examples-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3, #94a3b8);
+    letter-spacing: 0.05em;
+  }
+
+  .ruby-hint {
+    font-size: 0.68rem;
+    color: var(--sl-color-gray-4, #64748b);
+  }
+
+  .examples-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .example-grid-item {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.25);
+    border-left: 3px solid var(--sl-color-accent, #6366f1);
+    border-radius: 0 8px 8px 0;
+    padding: 0.6rem 0.85rem;
+    gap: 0.25rem;
+    transition: background 0.15s ease;
+  }
+
+  .example-grid-item:hover {
+    background: rgba(99, 102, 241, 0.06);
+  }
+
+  /* Row 1: Hanzi */
+  .example-hanzi-row {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    font-size: 1.22rem;
+    font-weight: 600;
+    color: var(--sl-color-white, #ffffff);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  /* Row 2: Pinyin */
+  .example-pinyin-row {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.84rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    line-height: 1.4;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  /* Row 3: Translation */
+  .example-translation-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.82rem;
+    color: var(--sl-color-gray-2, #cbd5e1);
+    line-height: 1.45;
+    margin-top: 0.15rem;
+    gap: 0.15rem;
+  }
+
+  .trans-de {
+    color: var(--sl-color-gray-2, #e2e8f0);
+  }
+
+  .trans-en {
+    color: var(--sl-color-gray-4, #94a3b8);
+    font-size: 0.78rem;
+  }
+
+  /* Global Pinyin Toggle Support (applied via parent class or body class) */
+  :global(.pinyin-mode-hidden) .example-pinyin-row {
+    display: none !important;
+  }
+
+  :global(.pinyin-mode-hover) .example-pinyin-row {
+    opacity: 0;
+    filter: blur(4px);
+    transition: opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  :global(.pinyin-mode-hover) .example-grid-item:hover .example-pinyin-row {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  /* Tone Highlighting */
+  :global(.tone-colors-enabled) .pinyin-text {
+    color: #e2e8f0;
+  }
+</style>

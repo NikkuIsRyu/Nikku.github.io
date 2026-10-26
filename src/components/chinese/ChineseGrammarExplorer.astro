@@ -1,0 +1,925 @@
+---
+import GrammarCard from './GrammarCard.astro';
+import ConfusableCard from './ConfusableCard.astro';
+import {
+  CHINESE_GRAMMAR_RULES,
+  CHINESE_GRAMMAR_CATEGORIES,
+  CONFUSABLE_PAIRS,
+  type GrammarRule
+} from '../../data/chineseGrammarData';
+
+interface Props {
+  lang?: 'de' | 'en';
+}
+
+const { lang = 'de' } = Astro.props;
+
+const lessons = [
+  { id: 'all', labelDe: 'Alle Lektionen', labelEn: 'All Lessons' },
+  { id: 'Lektionen 2–4', labelDe: 'Lektionen 2–4 (Grundlagen)', labelEn: 'Lessons 2–4 (Basics)' },
+  { id: 'Lektion 5', labelDe: 'Lektion 5 (Büro & Raum)', labelEn: 'Lesson 5 (Office & Space)' },
+  { id: 'Lektion 6', labelDe: 'Lektion 6 (Reisen & Zeit)', labelEn: 'Lesson 6 (Travel & Time)' },
+  { id: 'Lektion 7', labelDe: 'Lektion 7 (Verkehr & Routen)', labelEn: 'Lesson 7 (Transit & Routes)' },
+  { id: 'Lektion 8', labelDe: 'Lektion 8 (Handel & Rabatte)', labelEn: 'Lesson 8 (Shopping & Discounts)' },
+  { id: 'Lektion 9', labelDe: 'Lektion 9 (Termine & Pivots)', labelEn: 'Lesson 9 (Events & Pivots)' },
+  { id: 'Lektion 10', labelDe: 'Lektion 10 (Gastro & Vergleiche)', labelEn: 'Lesson 10 (Dining & Comparisons)' },
+];
+---
+
+<div class="chinese-grammar-explorer not-content" id="grammar-explorer">
+  <!-- Top Banner & Dashboard Intro -->
+  <div class="explorer-header">
+    <div class="header-titles">
+      <div class="header-badge-row">
+        <span class="pulse-indicator"></span>
+        <span class="explorer-badge">Interaktiver Grammatik-Explorer (Interactive Grammar Dashboard)</span>
+      </div>
+      <h2 class="explorer-title">
+        {lang === 'en' ? '📐 Systematic Mandarin Grammar Dashboard' : '📐 Systematisches Mandarin Grammatik-Dashboard'}
+      </h2>
+      <p class="explorer-subtitle">
+        {lang === 'en'
+          ? 'Explore all 26 core grammar rules and confusable pairs across Lessons 2–10 with formula pills, 3-layer aligned examples, and interactive Pinyin active-recall modes.'
+          : 'Erkunde alle 26 grammatischen Kernregeln und Verwechslungspaare der Lektionen 2–10 mit prägnanten Formel-Pills, 3-Ebenen-Beispielen und interaktivem Pinyin-Hover-Modus für aktives Lernen.'}
+      </p>
+    </div>
+
+    <!-- Live Search Box with Keyboard Shortcut -->
+    <div class="search-panel">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="grammar-search-input"
+          class="grammar-search-input"
+          placeholder={lang === 'en' ? 'Search rule, Hanzi, Pinyin (e.g. zài, 比, 离, Modalverb)...' : 'Regel, Hanzi, Pinyin suchen (z. B. zài, 比, 离, Modalverb)...'}
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <kbd class="search-kbd">Ctrl+K</kbd>
+        <button type="button" id="grammar-search-clear" class="search-clear-btn" title="Suche leeren">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Control Center (Argon UI Features) -->
+  <div class="dashboard-control-center">
+    <!-- Row 1: View Layout Mode Switcher -->
+    <div class="control-row">
+      <div class="control-label-group">
+        <span class="control-icon">👁️</span>
+        <span class="control-title">Layout-Ansicht:</span>
+      </div>
+      <div class="view-mode-buttons" id="view-mode-buttons">
+        <button type="button" class="btn-view-mode active" data-view="bento">
+          <span class="mode-icon">🗂️</span>
+          <span class="mode-text">Bento Grid (2–3 Spalten)</span>
+        </button>
+        <button type="button" class="btn-view-mode" data-view="accordion">
+          <span class="mode-icon">📑</span>
+          <span class="mode-text">Akkordeon-Liste (Kompakt)</span>
+        </button>
+        <button type="button" class="btn-view-mode" data-view="confusables">
+          <span class="mode-icon">⚖️</span>
+          <span class="mode-text">Confusables Spotlight ({CONFUSABLE_PAIRS.length})</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 2: Study Mode & Pinyin Taming Controls (Argon Idea #3) -->
+    <div class="control-row secondary-controls">
+      <!-- Pinyin Active Recall Mode -->
+      <div class="sub-control-group">
+        <span class="sub-label">Pinyin-Modus (Active Recall):</span>
+        <div class="toggle-switch-pills" id="pinyin-mode-pills">
+          <button type="button" class="btn-toggle-pill active" data-pinyin-mode="visible" title="Pinyin dauerhaft sichtbar">
+            <span>👁️ Immer sichtbar</span>
+          </button>
+          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hover" title="Pinyin wird erst bei Mouseover/Tap aufgedeckt (ideal zum Testen!)">
+            <span>👆 Hover-Modus</span>
+          </button>
+          <button type="button" class="btn-toggle-pill" data-pinyin-mode="hidden" title="Pinyin vollständig ausblenden">
+            <span>🙈 Verbergen</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tone Highlighting Toggle -->
+      <div class="sub-control-group">
+        <span class="sub-label">Ton-Farben:</span>
+        <button type="button" class="btn-tone-toggle" id="btn-tone-toggle" data-tone-active="false">
+          <span class="toggle-bullet"></span>
+          <span class="tone-text">Ton-Farben aus</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 3: Category Filter Pills -->
+    <div class="filter-pills-row">
+      <span class="pills-label">Kategorie:</span>
+      <div class="pills-scroll-container" id="category-pills">
+        {CHINESE_GRAMMAR_CATEGORIES.map((cat) => (
+          <button
+            type="button"
+            class={`category-pill ${cat.id === 'all' ? 'active' : ''}`}
+            data-category={cat.id}
+          >
+            <span class="cat-icon">{cat.icon}</span>
+            <span>{lang === 'en' ? cat.labelEn : cat.labelDe}</span>
+            {cat.id === 'all' && <span class="count-chip">{CHINESE_GRAMMAR_RULES.length}</span>}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Row 4: Lesson Filter Row -->
+    <div class="lesson-pills-row">
+      <span class="pills-label">Lektion:</span>
+      <div class="pills-scroll-container" id="lesson-pills">
+        {lessons.map((les) => (
+          <button
+            type="button"
+            class={`lesson-pill ${les.id === 'all' ? 'active' : ''}`}
+            data-lesson={les.id}
+          >
+            <span>{lang === 'en' ? les.labelEn : les.labelDe}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Status & Stats Bar -->
+  <div class="explorer-status-bar">
+    <div class="status-left">
+      <span class="live-dot"></span>
+      <span id="results-count-text">Zeige alle 26 Grammatikregeln</span>
+    </div>
+    <div class="status-right">
+      <button type="button" id="btn-reset-filters" class="btn-reset-filters">
+        <span>🔄 Filter zurücksetzen</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Container 1: Grammar Cards (Bento Grid View & Accordion List View) -->
+  <div class="grammar-content-container view-bento" id="grammar-cards-wrapper">
+    {CHINESE_GRAMMAR_RULES.map((rule) => (
+      <GrammarCard rule={rule} lang={lang} />
+    ))}
+  </div>
+
+  <!-- Container 2: Confusables Spotlight Section -->
+  <div class="confusables-content-container" id="confusables-wrapper" style="display: none;">
+    <div class="spotlight-intro">
+      <h3>⚖️ Häufige Verwechslungspaare (Confusable Grammar Pairs)</h3>
+      <p>
+        Chinesisch-Lernende stoßen regelmäßig auf Wortpaare mit scheinbar gleicher Bedeutung, die jedoch strengen syntaktischen Verwendungsregeln unterliegen. 
+        Hier sind die wichtigsten Gegenüberstellungen mit ✅ Richtig- und ❌ Falsch-Mustern:
+      </p>
+    </div>
+    {CONFUSABLE_PAIRS.map((pair) => (
+      <ConfusableCard pair={pair} lang={lang} />
+    ))}
+  </div>
+
+  <!-- Empty State (When search yields no results) -->
+  <div class="no-results-state" id="no-results-state" style="display: none;">
+    <div class="no-results-icon">🔍</div>
+    <h4>Keine passende Grammatikregel gefunden</h4>
+    <p>Versuche einen anderen Suchbegriff (z. B. <em>zài</em>, <em>Satzstellung</em>, <em>Fragen</em>) oder setze die Filter zurück.</p>
+    <button type="button" class="btn-reset-large" id="btn-no-results-reset">Alle Filter zurücksetzen</button>
+  </div>
+</div>
+
+<!-- Client-side Interactive Hydration Script -->
+<script>
+  function setupChineseGrammarExplorer() {
+    const explorer = document.getElementById('grammar-explorer');
+    if (!explorer) return;
+
+    const searchInput = document.getElementById('grammar-search-input') as HTMLInputElement | null;
+    const searchClear = document.getElementById('grammar-search-clear');
+    const categoryPills = document.querySelectorAll('#category-pills .category-pill');
+    const lessonPills = document.querySelectorAll('#lesson-pills .lesson-pill');
+    const viewButtons = document.querySelectorAll('#view-mode-buttons .btn-view-mode');
+    const pinyinPills = document.querySelectorAll('#pinyin-mode-pills .btn-toggle-pill');
+    const toneToggle = document.getElementById('btn-tone-toggle');
+    const resetFiltersBtn = document.getElementById('btn-reset-filters');
+    const noResultsResetBtn = document.getElementById('btn-no-results-reset');
+
+    const cardsWrapper = document.getElementById('grammar-cards-wrapper');
+    const confusablesWrapper = document.getElementById('confusables-wrapper');
+    const noResultsState = document.getElementById('no-results-state');
+    const countText = document.getElementById('results-count-text');
+
+    const cards = Array.from(document.querySelectorAll('.grammar-card')) as HTMLElement[];
+    const totalCount = cards.length;
+
+    let currentCategory = 'all';
+    let currentLesson = 'all';
+    let currentSearch = '';
+    let currentView = 'bento';
+    let currentPinyinMode = 'visible';
+    let toneColorsActive = false;
+
+    // Apply Filter Function
+    function applyFilters() {
+      if (currentView === 'confusables') {
+        if (cardsWrapper) cardsWrapper.style.display = 'none';
+        if (confusablesWrapper) confusablesWrapper.style.display = 'flex';
+        if (noResultsState) noResultsState.style.display = 'none';
+        if (countText) countText.textContent = `Zeige alle 6 Confusable-Spotlight-Vergleiche`;
+        return;
+      }
+
+      if (cardsWrapper) cardsWrapper.style.display = 'grid';
+      if (confusablesWrapper) confusablesWrapper.style.display = 'none';
+
+      let visibleCount = 0;
+      const q = currentSearch.toLowerCase().trim();
+
+      cards.forEach((card) => {
+        const cat = card.dataset.category || '';
+        const lesson = card.dataset.lesson || '';
+        const tags = card.dataset.tags?.toLowerCase() || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchesCat = currentCategory === 'all' || cat === currentCategory;
+        const matchesLesson = currentLesson === 'all' || lesson === currentLesson;
+        const matchesSearch = !q || text.includes(q) || tags.includes(q);
+
+        if (matchesCat && matchesLesson && matchesSearch) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (countText) {
+        if (visibleCount === totalCount) {
+          countText.textContent = `Zeige alle ${totalCount} Grammatikregeln`;
+        } else {
+          countText.textContent = `${visibleCount} von ${totalCount} Grammatikregeln gefunden`;
+        }
+      }
+
+      if (noResultsState) {
+        noResultsState.style.display = visibleCount === 0 ? 'flex' : 'none';
+      }
+    }
+
+    // Search Input Listener
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        currentSearch = searchInput.value;
+        if (searchClear) {
+          searchClear.style.display = currentSearch ? 'block' : 'none';
+        }
+        applyFilters();
+      });
+
+      // Keyboard Shortcut (Ctrl+K or Slash)
+      window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+    }
+
+    if (searchClear && searchInput) {
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        currentSearch = '';
+        searchClear.style.display = 'none';
+        searchInput.focus();
+        applyFilters();
+      });
+    }
+
+    // Category Pill Listener
+    categoryPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        categoryPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentCategory = (pill as HTMLElement).dataset.category || 'all';
+        applyFilters();
+      });
+    });
+
+    // Lesson Pill Listener
+    lessonPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        lessonPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentLesson = (pill as HTMLElement).dataset.lesson || 'all';
+        applyFilters();
+      });
+    });
+
+    // View Mode Switcher
+    viewButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        viewButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const view = (btn as HTMLElement).dataset.view || 'bento';
+        currentView = view;
+
+        if (cardsWrapper) {
+          cardsWrapper.classList.remove('view-bento', 'view-accordion');
+          if (view === 'bento') {
+            cardsWrapper.classList.add('view-bento');
+          } else if (view === 'accordion') {
+            cardsWrapper.classList.add('view-accordion');
+          }
+        }
+
+        applyFilters();
+      });
+    });
+
+    // Pinyin Recall Mode
+    pinyinPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        pinyinPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        const mode = (pill as HTMLElement).dataset.pinyinMode || 'visible';
+        currentPinyinMode = mode;
+
+        explorer.classList.remove('pinyin-mode-visible', 'pinyin-mode-hover', 'pinyin-mode-hidden');
+        explorer.classList.add(`pinyin-mode-${mode}`);
+      });
+    });
+
+    // Tone Toggle
+    if (toneToggle) {
+      toneToggle.addEventListener('click', () => {
+        toneColorsActive = !toneColorsActive;
+        toneToggle.dataset.toneActive = String(toneColorsActive);
+        toneToggle.classList.toggle('active', toneColorsActive);
+        const textSpan = toneToggle.querySelector('.tone-text');
+        if (textSpan) {
+          textSpan.textContent = toneColorsActive ? 'Ton-Farben aktiv' : 'Ton-Farben aus';
+        }
+        explorer.classList.toggle('tone-colors-enabled', toneColorsActive);
+      });
+    }
+
+    // Reset Filters
+    function resetAll() {
+      if (searchInput) searchInput.value = '';
+      currentSearch = '';
+      if (searchClear) searchClear.style.display = 'none';
+
+      categoryPills.forEach((p) => p.classList.toggle('active', (p as HTMLElement).dataset.category === 'all'));
+      currentCategory = 'all';
+
+      lessonPills.forEach((p) => p.classList.toggle('active', (p as HTMLElement).dataset.lesson === 'all'));
+      currentLesson = 'all';
+
+      viewButtons.forEach((b) => b.classList.toggle('active', (b as HTMLElement).dataset.view === 'bento'));
+      currentView = 'bento';
+      if (cardsWrapper) {
+        cardsWrapper.classList.remove('view-accordion');
+        cardsWrapper.classList.add('view-bento');
+      }
+
+      applyFilters();
+    }
+
+    if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAll);
+    if (noResultsResetBtn) noResultsResetBtn.addEventListener('click', resetAll);
+
+    // Initial Filter
+    applyFilters();
+  }
+
+  // Run on first load and view transitions
+  document.addEventListener('DOMContentLoaded', setupChineseGrammarExplorer);
+  document.addEventListener('astro:page-load', setupChineseGrammarExplorer);
+</script>
+
+<style>
+  .chinese-grammar-explorer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.08), transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.06), transparent 50%),
+                var(--sl-color-gray-6, #111216);
+    border: 1px solid var(--sl-color-gray-5, #232530);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    margin: 2rem 0;
+  }
+
+  /* Header Zone */
+  .explorer-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 900px) {
+    .explorer-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    max-width: 650px;
+  }
+
+  .header-badge-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pulse-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  .explorer-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-accent-high, #818cf8);
+    letter-spacing: 0.06em;
+  }
+
+  .explorer-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--sl-color-white, #f8fafc);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .explorer-subtitle {
+    font-size: 0.92rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Search Panel */
+  .search-panel {
+    min-width: 300px;
+  }
+
+  @media (min-width: 900px) {
+    .search-panel {
+      width: 360px;
+    }
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid var(--sl-color-gray-5, #334155);
+    border-radius: 10px;
+    padding: 0 0.75rem;
+    transition: all 0.2s ease;
+  }
+
+  .search-input-wrapper:focus-within {
+    border-color: var(--sl-color-accent, #6366f1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    background: rgba(15, 23, 42, 0.85);
+  }
+
+  .search-icon {
+    font-size: 0.95rem;
+    opacity: 0.7;
+    margin-right: 0.5rem;
+  }
+
+  .grammar-search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0.65rem 0;
+    color: var(--sl-color-white, #ffffff);
+    font-size: 0.88rem;
+    outline: none;
+  }
+
+  .grammar-search-input::placeholder {
+    color: var(--sl-color-gray-4, #64748b);
+  }
+
+  .search-kbd {
+    font-size: 0.65rem;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    margin-left: 0.4rem;
+    pointer-events: none;
+  }
+
+  .search-clear-btn {
+    background: none;
+    border: none;
+    color: var(--sl-color-gray-4, #64748b);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    display: none;
+  }
+
+  .search-clear-btn:hover {
+    color: var(--sl-color-white, #ffffff);
+  }
+
+  /* Dashboard Control Center */
+  .dashboard-control-center {
+    display: flex;
+    flex-direction: column;
+    background: rgba(15, 23, 42, 0.35);
+    border: 1px solid var(--sl-color-gray-5, #232530);
+    border-radius: 12px;
+    padding: 1.15rem;
+    gap: 1rem;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .control-label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .control-icon {
+    font-size: 1rem;
+  }
+
+  .control-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-2, #cbd5e1);
+    letter-spacing: 0.04em;
+  }
+
+  .view-mode-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-view-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--sl-color-gray-5, #334155);
+    color: var(--sl-color-gray-3, #94a3b8);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-view-mode:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sl-color-white, #ffffff);
+  }
+
+  .btn-view-mode.active {
+    background: var(--sl-color-accent, #6366f1);
+    border-color: var(--sl-color-accent-high, #818cf8);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Secondary Controls (Pinyin & Tones) */
+  .secondary-controls {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 0.85rem;
+  }
+
+  .sub-control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .sub-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3, #94a3b8);
+  }
+
+  .toggle-switch-pills {
+    display: flex;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 0.18rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .btn-toggle-pill {
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3, #94a3b8);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-toggle-pill:hover {
+    color: var(--sl-color-white, #ffffff);
+  }
+
+  .btn-toggle-pill.active {
+    background: rgba(99, 102, 241, 0.25);
+    color: var(--sl-color-accent-high, #a5b4fc);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-tone-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--sl-color-gray-3, #94a3b8);
+    padding: 0.3rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .toggle-bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #64748b;
+  }
+
+  .btn-tone-toggle.active {
+    border-color: #10b981;
+    color: #34d399;
+  }
+
+  .btn-tone-toggle.active .toggle-bullet {
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+  }
+
+  /* Filter Pills Rows */
+  .filter-pills-row, .lesson-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pills-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-4, #64748b);
+    letter-spacing: 0.04em;
+    min-width: 65px;
+  }
+
+  .pills-scroll-container {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .category-pill, .lesson-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--sl-color-gray-5, #2d3748);
+    color: var(--sl-color-gray-3, #94a3b8);
+    padding: 0.28rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .category-pill:hover, .lesson-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sl-color-white, #ffffff);
+  }
+
+  .category-pill.active, .lesson-pill.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #7dd3fc;
+    font-weight: 600;
+  }
+
+  .count-chip {
+    font-size: 0.65rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0 0.35rem;
+    border-radius: 999px;
+  }
+
+  /* Status Bar */
+  .explorer-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    border-bottom: 1px solid var(--sl-color-gray-5, #282a36);
+    padding-bottom: 0.6rem;
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+  }
+
+  .btn-reset-filters {
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3, #94a3b8);
+    cursor: pointer;
+    font-size: 0.78rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+  }
+
+  .btn-reset-filters:hover {
+    color: var(--sl-color-accent-high, #818cf8);
+    text-decoration: underline;
+  }
+
+  /* Container 1: Cards View Modes */
+  .grammar-content-container.view-bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 860px) {
+    .grammar-content-container.view-bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1300px) {
+    .grammar-content-container.view-bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Accordion Mode Styling */
+  .grammar-content-container.view-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .grammar-content-container.view-accordion :global(.grammar-card) {
+    padding: 0.85rem 1.15rem;
+    gap: 0.5rem;
+  }
+
+  .grammar-content-container.view-accordion :global(.card-body-zone),
+  .grammar-content-container.view-accordion :global(.card-footer-zone) {
+    display: none;
+  }
+
+  .grammar-content-container.view-accordion :global(.grammar-card.expanded .card-body-zone),
+  .grammar-content-container.view-accordion :global(.grammar-card.expanded .card-footer-zone) {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Container 2: Confusables View */
+  .confusables-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .spotlight-intro {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .spotlight-intro h3 {
+    font-size: 1.15rem;
+    color: #fbbf24;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .spotlight-intro p {
+    font-size: 0.88rem;
+    color: var(--sl-color-gray-2, #cbd5e1);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* No Results State */
+  .no-results-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed var(--sl-color-gray-5, #334155);
+    border-radius: 12px;
+    gap: 0.6rem;
+  }
+
+  .no-results-icon {
+    font-size: 2.5rem;
+    opacity: 0.5;
+  }
+
+  .no-results-state h4 {
+    font-size: 1.2rem;
+    color: var(--sl-color-white, #ffffff);
+    margin: 0;
+  }
+
+  .no-results-state p {
+    font-size: 0.88rem;
+    color: var(--sl-color-gray-3, #94a3b8);
+    margin: 0;
+  }
+
+  .btn-reset-large {
+    margin-top: 0.75rem;
+    background: var(--sl-color-accent, #6366f1);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
