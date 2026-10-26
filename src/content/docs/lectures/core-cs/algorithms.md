@@ -3,7 +3,12 @@ title: Algorithmen & Datenstrukturen (AlDa)
 description: Asymptotic complexity, sorting algorithms, graph traversals, and dynamic programming.
 sidebar:
   order: 3
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'core-cs';
 ---
+
+<div class="page-bg-core-cs" aria-hidden="true"></div>
 
 :::tip[Exam Focus]
 Covers asymptotic notation, recurrent relations, greedy paradigms, dynamic programming, and amortized analysis.

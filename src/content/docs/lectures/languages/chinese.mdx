@@ -3,12 +3,17 @@ title: "Chinesisch (Mandarin) & Audio-Dialoge"
 description: "Mandarin-Chinesisch Grundkurs: Interaktive Multi-Speaker Audio-Dialoge (GPT-SoVITS v3), Tonal System, Satzstrukturen und 107 MB Anki-Deck."
 sidebar:
   order: 2
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'chinese';
 ---
 
 import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 import DriveAsset from '../../../../components/DriveAsset.astro';
 import DialoguePlayer from '../../../../components/DialoguePlayer.astro';
 import { CHINESE_DIALOGUES } from '../../../../data/chineseDialogues';
+
+<div class="page-bg-chinese" aria-hidden="true"></div>
 
 # Chinesisch (Mandarin) <Badge text="Grundkurs & Dialoge" variant="success" size="medium" />
 

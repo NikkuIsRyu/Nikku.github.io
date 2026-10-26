@@ -3,7 +3,12 @@ title: Theoretische Informatik
 description: Formal languages, automata theory, decidability, and computational complexity.
 sidebar:
   order: 1
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'core-cs';
 ---
+
+<div class="page-bg-core-cs" aria-hidden="true"></div>
 
 :::tip[Academic Vault Entry]
 Summary and exam memory protocols synthesized for the **Theoretische Informatik** curriculum.

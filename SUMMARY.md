@@ -70,25 +70,26 @@ Website_project/
 
 ---
 
-## 📑 Static Routes & Pages (17 Verified Routes)
+## 📑 Static Routes & Pages (18 Verified Routes)
 
 1. `/index.html`: Digital Garden Landing Page with quick-access cards to all semesters
 2. `/cv/index.html`: Curriculum Vitae, academic background, research interests, and project links
-3. `/lectures/index.html`: Academic Vault Directory & Google Drive hybrid CDN storage guide
-4. `/lectures/core-cs/theoretical-cs/index.html`: Theoretische Informatik
-5. `/lectures/core-cs/algorithms/index.html`: Algorithmen & Datenstrukturen
-6. `/lectures/core-cs/databases/index.html`: Datenbanken & Informationssysteme
-7. `/lectures/core-cs/ise/index.html`: Introduction to Software Engineering
-8. `/lectures/core-cs/it-security/index.html`: IT-Sicherheit & MCP Trust Boundaries
-9. `/lectures/ai-and-med/machine-learning/index.html`: Machine Learning & Voice ML Project
-10. `/lectures/ai-and-med/rmi-anatomy/index.html`: Robotics & Machine Intelligence + Anatomy
-11. `/lectures/ai-and-med/seminar-agentic-ai/index.html`: Agentic AI Seminar Hub (Interactive Progress Tracker & Per-Card EN/DE Lexicon)
-12. `/lectures/languages/chinese/index.html`: Mandarin Chinese & Interactive Multi-Speaker Dialogues
-13. `/lectures/languages/japanese/index.html`: Japanese Track Hub (Intermediate B1)
-14. `/lectures/languages/japanese/b1-1/index.html`: Japanese B1.1 Reference (English edition)
-15. `/lectures/languages/japanese/b1-1/de/index.html`: Japanese B1.1 Reference (German edition)
-16. `/lectures/languages/japanese/b1-2/index.html`: Japanese B1.2 Coursework (WS 2026/27 placeholder)
-17. `/404.html`: Custom 404 error page
+3. `/heidelberg/index.html`: Heidelberg University & Student Life Guide (dynamic multi-zone background transitions)
+4. `/lectures/index.html`: Academic Vault Directory & Google Drive hybrid CDN storage guide
+5. `/lectures/core-cs/theoretical-cs/index.html`: Theoretische Informatik (Core CS study lab pixel art overlay)
+6. `/lectures/core-cs/algorithms/index.html`: Algorithmen & Datenstrukturen (Core CS study lab pixel art overlay)
+7. `/lectures/core-cs/databases/index.html`: Datenbanken & Informationssysteme (Core CS study lab pixel art overlay)
+8. `/lectures/core-cs/ise/index.html`: Information Systems Engineering (Core CS study lab pixel art overlay)
+9. `/lectures/core-cs/it-security/index.html`: IT-Security & Exploitation (Core CS study lab pixel art overlay)
+10. `/lectures/ai-and-med/machine-learning/index.html`: Machine Learning & Gradient Descent (AI supercomputer datacenter pixel art overlay)
+11. `/lectures/ai-and-med/rmi-anatomy/index.html`: Robotics & Machine Intelligence + Anatomy (Nick & Rahul robotics lab pixel art overlay)
+12. `/lectures/ai-and-med/seminar-agentic-ai/index.html`: Agentic AI Seminar Hub (CS Lab pixel art overlay, Progress Tracker & EN/DE Lexicon)
+13. `/lectures/languages/chinese/index.html`: Mandarin Chinese & Audio Dialogues (Sakura hill & illuminated Beijing skyline pixel art overlay)
+14. `/lectures/languages/japanese/index.html`: Japanese Track Hub (Intermediate B1, Sakura Campfire pixel art overlay)
+15. `/lectures/languages/japanese/b1-1/index.html`: Japanese B1.1 Reference (English edition)
+16. `/lectures/languages/japanese/b1-1/de/index.html`: Japanese B1.1 Reference (German edition)
+17. `/lectures/languages/japanese/b1-2/index.html`: Japanese B1.2 Coursework (WS 2026/27 placeholder)
+18. `/404.html`: Custom 404 error page
 
 ---
 
@@ -120,6 +121,15 @@ Website_project/
 - **Cross-Device Handover**: Consolidated conversation histories and architectural plans from both the PC (`Website-project-pc/`) and Laptop environments.
 - **USB Migration Bundle**: Bundled full active Antigravity profile (`antigravity_user_data.tar.gz`, 469 MB) containing OAuth credentials, brain transcripts, and skills to USB storage (`/media/nick/Ventoy/antigravity_migration/`).
 - **Google Drive Sync**: Synchronized `SUMMARY.md` and `CONVERSATION_HISTORY.md` to Google Drive via `rclone` under `University/gemini_convos/Website-project-laptop/` and mirrored to `Website-project-omarchy/`.
+
+### Phase 6: Bespoke Pixel Art System & Character Customization (Sessions 16–19)
+- **Standing Character Sprites & Sheets**: Generated 19 individual transparent pixel art sprites and 4 master sprite sheets covering Japanese tandem friends, Heidelberg Uni friends, and OG friends with clean-shaven Nick.
+- **Dedicated Academic Backgrounds**: Replaced generic placeholders with 4 tailored 16-bit retro pixel art scenes:
+  1. *RMI & Anatomy*: Clean-shaven Nick and Rahul engineering robotic arm & bionic hand hardware (`rmi-anatomy-bg.jpg`, `rmi-anatomy-bg-mobile.jpg`).
+  2. *Machine Learning*: AI supercomputer datacenter with 3D gradient descent manifold and neural net visualizers (`ml-bg.jpg`, `ml-bg-mobile.jpg`).
+  3. *Core Computer Science*: Character-free study workstation at Mathematikon INF 205 with dual screens and theory blackboard (`core-cs-bg.jpg`, `core-cs-bg-mobile.jpg`).
+  4. *Chinese Language*: Front-page sakura tree on grassy hill with reading student, overlooking illuminated nighttime Beijing skyline (strictly flag-free) (`chinese-bg.jpg`, `chinese-bg-mobile.jpg`).
+- **Styling & Preservation**: Configured custom CSS selectors and mobile responsive media queries. Strictly protected all user backups (`*(Copy)*`) and backed up all assets to local `backups/assets/` and Google Drive `asset_vault`. Verified 18 static routes cleanly built with `npm run build`.
 
 ---
 

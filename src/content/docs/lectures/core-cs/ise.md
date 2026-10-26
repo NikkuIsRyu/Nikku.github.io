@@ -3,7 +3,12 @@ title: Information Systems Engineering (ISE)
 description: Enterprise software engineering, design patterns, microservices architecture, and requirements engineering.
 sidebar:
   order: 5
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'core-cs';
 ---
+
+<div class="page-bg-core-cs" aria-hidden="true"></div>
 
 :::tip[Assignment & Quiz Vault]
 Coursework materials, weekly assignments, and design patterns from Information Systems Engineering.

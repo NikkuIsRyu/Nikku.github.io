@@ -3,7 +3,12 @@ title: Datenbanken & Informationssysteme
 description: Relational model, relational algebra, SQL optimization, indexing, and Docker environments.
 sidebar:
   order: 2
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'core-cs';
 ---
+
+<div class="page-bg-core-cs" aria-hidden="true"></div>
 
 :::tip[Exam & Exercise Archives]
 Includes solutions and notes based on university exam archives and Docker-based database labs.

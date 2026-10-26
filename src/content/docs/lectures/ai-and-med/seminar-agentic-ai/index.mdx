@@ -4,11 +4,16 @@ description: "Interactive reading hub, paper access vault, progress tracker, and
 sidebar:
   order: 3
   label: "Seminar: Agentic AI (WS 26/27)"
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'cs-lab';
 ---
 
 import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
 import SeminarTracker from '../../../../../components/SeminarTracker.astro';
 import SeminarLexicon from '../../../../../components/SeminarLexicon.astro';
+
+<div class="page-bg-cs-lab" aria-hidden="true"></div>
 
 # Seminar: Agentic AI for Problem Solving <Badge text="WS 2026/27" variant="success" size="medium" />
 

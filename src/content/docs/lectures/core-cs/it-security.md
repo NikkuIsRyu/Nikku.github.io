@@ -3,7 +3,12 @@ title: IT-Security & Exploitation
 description: Cryptography basics, network security, web vulnerabilities, CTF challenge flags, and AI agent security.
 sidebar:
   order: 4
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'core-cs';
 ---
+
+<div class="page-bg-core-cs" aria-hidden="true"></div>
 
 :::tip[Lab & CTF Archive]
 Compiled writeups, security flags, practice exercise notes, and research topics from IT security coursework and the WS 2026/27 Seminar at Heidelberg University.

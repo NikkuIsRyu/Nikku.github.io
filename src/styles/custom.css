@@ -13,7 +13,12 @@ html[data-page-bg] body,
 body:has(.page-bg-desk),
 body:has(.page-bg-audimax),
 body:has(.page-bg-japanese),
-body:has(.page-bg-uni-og) {
+body:has(.page-bg-uni-og),
+body:has(.page-bg-cs-lab),
+body:has(.page-bg-core-cs),
+body:has(.page-bg-chinese),
+body:has(.page-bg-rmi-anatomy),
+body:has(.page-bg-ml) {
   position: relative;
   background-color: var(--sl-color-bg);
 }
@@ -23,10 +28,20 @@ html[data-page-bg="desk"] body::before,
 html[data-page-bg="audimax"] body::before,
 html[data-page-bg="japanese"] body::before,
 html[data-page-bg="uni-og"] body::before,
+html[data-page-bg="cs-lab"] body::before,
+html[data-page-bg="core-cs"] body::before,
+html[data-page-bg="chinese"] body::before,
+html[data-page-bg="rmi-anatomy"] body::before,
+html[data-page-bg="ml"] body::before,
 body:has(.page-bg-desk)::before,
 body:has(.page-bg-audimax)::before,
 body:has(.page-bg-japanese)::before,
-body:has(.page-bg-uni-og)::before {
+body:has(.page-bg-uni-og)::before,
+body:has(.page-bg-cs-lab)::before,
+body:has(.page-bg-core-cs)::before,
+body:has(.page-bg-chinese)::before,
+body:has(.page-bg-rmi-anatomy)::before,
+body:has(.page-bg-ml)::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -71,6 +86,41 @@ body:has(.page-bg-uni-og)::before {
   opacity: 0.28;
 }
 
+html[data-page-bg="cs-lab"] body::before,
+body:has(.page-bg-cs-lab)::before {
+  background-image: url('/cs-lab-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
+html[data-page-bg="core-cs"] body::before,
+body:has(.page-bg-core-cs)::before {
+  background-image: url('/core-cs-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
+html[data-page-bg="chinese"] body::before,
+body:has(.page-bg-chinese)::before {
+  background-image: url('/chinese-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
+html[data-page-bg="rmi-anatomy"] body::before,
+body:has(.page-bg-rmi-anatomy)::before {
+  background-image: url('/rmi-anatomy-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
+html[data-page-bg="ml"] body::before,
+body:has(.page-bg-ml)::before {
+  background-image: url('/ml-bg.jpg');
+  background-position: right bottom;
+  opacity: 0.28;
+}
+
 @media (max-width: 50rem), (orientation: portrait) {
   html[data-page-bg="japanese"] body::before,
   body:has(.page-bg-japanese)::before {
@@ -84,6 +134,46 @@ body:has(.page-bg-uni-og)::before {
   body:has(.page-bg-uni-og)::before {
     background-color: #242b3e;
     background-image: url('/uni-og-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="cs-lab"] body::before,
+  body:has(.page-bg-cs-lab)::before {
+    background-color: #242b3e;
+    background-image: url('/cs-lab-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="core-cs"] body::before,
+  body:has(.page-bg-core-cs)::before {
+    background-color: #242b3e;
+    background-image: url('/core-cs-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="chinese"] body::before,
+  body:has(.page-bg-chinese)::before {
+    background-color: #242b3e;
+    background-image: url('/chinese-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="rmi-anatomy"] body::before,
+  body:has(.page-bg-rmi-anatomy)::before {
+    background-color: #242b3e;
+    background-image: url('/rmi-anatomy-bg-mobile.jpg');
+    background-size: 100% auto;
+    background-position: center bottom;
+  }
+
+  html[data-page-bg="ml"] body::before,
+  body:has(.page-bg-ml)::before {
+    background-color: #242b3e;
+    background-image: url('/ml-bg-mobile.jpg');
     background-size: 100% auto;
     background-position: center bottom;
   }
@@ -206,7 +296,12 @@ html[data-page-bg] .page,
 body:has(.page-bg-desk) .page,
 body:has(.page-bg-audimax) .page,
 body:has(.page-bg-japanese) .page,
-body:has(.page-bg-uni-og) .page {
+body:has(.page-bg-uni-og) .page,
+body:has(.page-bg-cs-lab) .page,
+body:has(.page-bg-core-cs) .page,
+body:has(.page-bg-chinese) .page,
+body:has(.page-bg-rmi-anatomy) .page,
+body:has(.page-bg-ml) .page {
   position: relative;
   z-index: 1;
 }
@@ -216,7 +311,12 @@ html[data-page-bg] .header,
 body:has(.page-bg-desk) .header,
 body:has(.page-bg-audimax) .header,
 body:has(.page-bg-japanese) .header,
-body:has(.page-bg-uni-og) .header {
+body:has(.page-bg-uni-og) .header,
+body:has(.page-bg-cs-lab) .header,
+body:has(.page-bg-core-cs) .header,
+body:has(.page-bg-chinese) .header,
+body:has(.page-bg-rmi-anatomy) .header,
+body:has(.page-bg-ml) .header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
@@ -226,7 +326,12 @@ body:has(.page-bg-uni-og) .header {
   body:has(.page-bg-desk) .sidebar-pane,
   body:has(.page-bg-audimax) .sidebar-pane,
   body:has(.page-bg-japanese) .sidebar-pane,
-  body:has(.page-bg-uni-og) .sidebar-pane {
+  body:has(.page-bg-uni-og) .sidebar-pane,
+  body:has(.page-bg-cs-lab) .sidebar-pane,
+  body:has(.page-bg-core-cs) .sidebar-pane,
+  body:has(.page-bg-chinese) .sidebar-pane,
+  body:has(.page-bg-rmi-anatomy) .sidebar-pane,
+  body:has(.page-bg-ml) .sidebar-pane {
     background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 75%, transparent);
     backdrop-filter: blur(8px);
   }
@@ -237,7 +342,12 @@ html[data-page-bg] .card,
 body:has(.page-bg-desk) .card,
 body:has(.page-bg-audimax) .card,
 body:has(.page-bg-japanese) .card,
-body:has(.page-bg-uni-og) .card {
+body:has(.page-bg-uni-og) .card,
+body:has(.page-bg-cs-lab) .card,
+body:has(.page-bg-core-cs) .card,
+body:has(.page-bg-chinese) .card,
+body:has(.page-bg-rmi-anatomy) .card,
+body:has(.page-bg-ml) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
@@ -245,7 +355,12 @@ body:has(.page-bg-uni-og) .card {
 .page-bg-desk,
 .page-bg-audimax,
 .page-bg-japanese,
-.page-bg-uni-og {
+.page-bg-uni-og,
+.page-bg-cs-lab,
+.page-bg-core-cs,
+.page-bg-chinese,
+.page-bg-rmi-anatomy,
+.page-bg-ml {
   display: none;
 }
 
