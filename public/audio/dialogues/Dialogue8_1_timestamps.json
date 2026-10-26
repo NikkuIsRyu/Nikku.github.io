@@ -1,0 +1,107 @@
+{
+  "dialogue_id": "Dialogue8_1",
+  "total_duration_s": 54.65,
+  "sample_rate": 32000,
+  "turns_count": 11,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "两位好，欢迎光临！请问你们要买什么数码配件？",
+      "start_ms": 0.0,
+      "end_ms": 4891.0,
+      "duration_ms": 4891.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "我们先看看。请问这种高速优盘和光盘多少钱？",
+      "start_ms": 5511.0,
+      "end_ms": 9437.0,
+      "duration_ms": 3926.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "优盘五十五块一个，DVD光盘三十五块一盘。",
+      "start_ms": 10057.0,
+      "end_ms": 15148.0,
+      "duration_ms": 5091.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "那我们要两个优盘和这四盘光盘。",
+      "start_ms": 15668.0,
+      "end_ms": 18714.0,
+      "duration_ms": 3046.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "好的。请问还要别的吗？",
+      "start_ms": 19234.0,
+      "end_ms": 21325.0,
+      "duration_ms": 2091.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "还要一张一百块的手机充值卡，另外还要两个这种相机电池。",
+      "start_ms": 21945.0,
+      "end_ms": 26966.0,
+      "duration_ms": 5021.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "很抱歉，我们这儿没有这种型号的电池，也没有转换插头。您可以去三楼的佳能专卖店问问。",
+      "start_ms": 27486.0,
+      "end_ms": 37037.0,
+      "duration_ms": 9551.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "没关系，那先买这些吧。一共多少钱？",
+      "start_ms": 37557.0,
+      "end_ms": 40908.0,
+      "duration_ms": 3351.0
+    },
+    {
+      "turn_idx": 9,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "我算算：一共三百五十块五毛。",
+      "start_ms": 41528.0,
+      "end_ms": 44549.0,
+      "duration_ms": 3021.0
+    },
+    {
+      "turn_idx": 10,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "这是四百块。请给我们开一张公司的正式发票。",
+      "start_ms": 45069.0,
+      "end_ms": 48855.0,
+      "duration_ms": 3786.0
+    },
+    {
+      "turn_idx": 11,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "好的，这是发票，找您四十九块五毛，请点一下。",
+      "start_ms": 49375.0,
+      "end_ms": 54646.0,
+      "duration_ms": 5271.0
+    }
+  ]
+}

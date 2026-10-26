@@ -203,6 +203,22 @@ Website_project/
     * Verified 100% clean static production build (`npm run build`, 18 pages) and verified live routes on the background dev server.
 ---
 
+25. **Session 20 (Chinese Curriculum Expansion: 18 Multi-Speaker Dialogues & Comprehensive 7-Part Grammar Compendium)**:
+    * Synchronized all newly generated Voice-ML v4 audio and prepared Chinese course materials (`Chinese-Materials-prepared`) following completion of the training and synthesis pipeline in `@[conversation:"Chinese Learning Audio Generation"]`.
+    * Converted 12 newly synthesized 32 kHz WAV multi-speaker dialogues (Lessons 5–10, Dialogues 5.1–10.2) to high-efficiency ~80–85 kbps MP3 files with corresponding millisecond alignment JSON timestamps in `public/audio/dialogues/` (now totaling 18 dialogues: Dialogues 2.1 through 10.2).
+    * Enriched [`src/data/chineseDialogues.ts`](file:///d:/.D%20Dokuments/Uni%20Stuff/Website_project/src/data/chineseDialogues.ts) with all 18 complete dialogues, including full bilingual German and English titles, topic tags, descriptions, speaker profiles, and turn-by-turn subtitle translations.
+    * Expanded both the German ([`src/content/docs/lectures/languages/chinese/index.mdx`](file:///d:/.D%20Dokuments/Uni%20Stuff/Website_project/src/content/docs/lectures/languages/chinese/index.mdx)) and English ([`src/content/docs/lectures/languages/chinese/en/index.mdx`](file:///d:/.D%20Dokuments/Uni%20Stuff/Website_project/src/content/docs/lectures/languages/chinese/en/index.mdx)) pages with:
+      - Quick Navigation tables covering Lessons 2 through 10.
+      - Interactive `<DialoguePlayer />` components for all 18 dialogues with dual-speed audio playback (1.0x standard and 0.75x slow learning mode), turn repeat (shadowing), and live subtitle tracking.
+      - Comprehensive **Systematic Grammar Compendium (Lessons 2–10)** detailing 26 core grammar rules across 7 parts (Syntax, Locatives & Spatial Existence, Travel & Modal Verbs, Transit & Directional Vectors, Commerce & the Chinese Discount System, Schedules & Pivotal Clauses, and Banqueting & Comparisons).
+      - Course assets card updated to the 560-note Master Anki Deck (128 MB) with `wip={true}`.
+      - Technical synthesis architecture documentation with Voice-ML v4 pipeline mermaid flowchart.
+    * Updated lectures track overview card in [`src/content/docs/lectures/index.mdx`](file:///d:/.D%20Dokuments/Uni%20Stuff/Website_project/src/content/docs/lectures/index.mdx).
+    * Strictly respected audio privacy constraints: all dialogue audios are served locally without public Google Drive download links.
+    * Verified 100% clean production build (`npm run build`, 18 pages generated) with zero errors.
+
+---
+
 ## 🚀 How to Resume in Antigravity on Omarchy (Arch Linux) or PC
 1. Clone or extract the repository:
    ```bash

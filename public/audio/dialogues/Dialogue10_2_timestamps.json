@@ -1,0 +1,80 @@
+{
+  "dialogue_id": "Dialogue10_2",
+  "total_duration_s": 41.33,
+  "sample_rate": 32000,
+  "turns_count": 8,
+  "turns": [
+    {
+      "turn_idx": 1,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "这几道菜味道真不错！大卫，你觉得冰镇的青岛啤酒怎么样？",
+      "start_ms": 0.0,
+      "end_ms": 5006.0,
+      "duration_ms": 5006.0
+    },
+    {
+      "turn_idx": 2,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "啤酒味道很好，一点也不苦。不过跟啤酒比起来，我更爱喝这儿的红葡萄酒。",
+      "start_ms": 5626.0,
+      "end_ms": 13652.0,
+      "duration_ms": 8026.0
+    },
+    {
+      "turn_idx": 3,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "大卫，茅台酒你以前尝过吗？",
+      "start_ms": 14172.0,
+      "end_ms": 16968.0,
+      "duration_ms": 2796.0
+    },
+    {
+      "turn_idx": 4,
+      "speaker": "B",
+      "voice": "male_v1",
+      "text": "还没尝过呢。我听说茅台是中国最有名的白酒。",
+      "start_ms": 17588.0,
+      "end_ms": 22439.0,
+      "duration_ms": 4851.0
+    },
+    {
+      "turn_idx": 5,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "对，我们今天一起尝尝茅台，怎么样？服务员，请再来三小杯茅台！",
+      "start_ms": 22959.0,
+      "end_ms": 29025.0,
+      "duration_ms": 6066.0
+    },
+    {
+      "turn_idx": 6,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "来，为我们项目的成功合作，也为大卫的健康干杯！",
+      "start_ms": 29545.0,
+      "end_ms": 34166.0,
+      "duration_ms": 4621.0
+    },
+    {
+      "turn_idx": 7,
+      "speaker": "C",
+      "voice": "male_zs",
+      "text": "服务员，请过来结账吧。",
+      "start_ms": 34466.0,
+      "end_ms": 36532.0,
+      "duration_ms": 2066.0
+    },
+    {
+      "turn_idx": 8,
+      "speaker": "A",
+      "voice": "female_v4",
+      "text": "别争了，今天是我请你们两位，这顿饭我买单！",
+      "start_ms": 37052.0,
+      "end_ms": 41333.0,
+      "duration_ms": 4281.0
+    }
+  ]
+}
