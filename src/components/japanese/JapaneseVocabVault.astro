@@ -7,6 +7,24 @@ interface Props {
 
 const { lang = 'de' } = Astro.props;
 
+interface ParsedVocabTerm {
+  main: string;
+  note?: string;
+}
+
+function parseVocabTerm(term: string): ParsedVocabTerm {
+  if (!term) return { main: '' };
+  // Matches trailing brackets: （...）, (...), ［...］, [...]
+  const match = term.match(/^(.+?)\s*([（(\［\[].+[）)\］\]])$/);
+  if (match) {
+    return {
+      main: match[1].trim(),
+      note: match[2].trim()
+    };
+  }
+  return { main: term.trim() };
+}
+
 const lessons = [
   { id: 'all', labelDe: 'Alle Lektionen (335)', labelEn: 'All Lessons (335)' },
   { id: '26', labelDe: 'Lektion 26 (45)', labelEn: 'Lesson 26 (45)' },
@@ -92,22 +110,35 @@ const lessons = [
   <!-- VIEW A: Cards Grid -->
   <div class="vocab-grid-view" id="jp-vocab-grid-view">
     <div class="vocab-cards-grid" id="jp-vocab-cards-grid">
-      {JAPANESE_B1_VOCAB.map((v) => (
-        <div class="vocab-card" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
-          <div class="vcard-top">
-            <span class="vcard-lesson">L{v.lesson} #{v.num}</span>
+      {JAPANESE_B1_VOCAB.map((v) => {
+        const pk = parseVocabTerm(v.kanji);
+        const pr = parseVocabTerm(v.kana);
+        return (
+          <div class="vocab-card" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+            <div class="vcard-top">
+              <span class="vcard-lesson">L{v.lesson} #{v.num}</span>
+            </div>
+            <div class="vcard-kanji">
+              <span class="vocab-term-main">{pk.main}</span>
+              {pk.note && <span class="vocab-card-note">{pk.note}</span>}
+            </div>
+            <div class="vcard-kana">
+              <span class="vocab-kana-main">{pr.main}</span>
+              {pr.note && <span class="vocab-card-kana-note">{pr.note}</span>}
+            </div>
+            <div class="vcard-meaning">{lang === 'en' ? v.en : v.de}</div>
+            <div class="vcard-alt-trans">{lang === 'en' ? v.de : v.en}</div>
           </div>
-          <div class="vcard-kanji">{v.kanji}</div>
-          <div class="vcard-kana">{v.kana}</div>
-          <div class="vcard-meaning">{lang === 'en' ? v.en : v.de}</div>
-          <div class="vcard-alt-trans">{lang === 'en' ? v.de : v.en}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   </div>
 
   <!-- VIEW B: Compact Table View -->
   <div class="vocab-table-view" id="jp-vocab-table-view" style="display: none;">
+    <div class="table-scroll-hint">
+      <span>↔️ {lang === 'en' ? 'Tip: Scroll horizontally if table exceeds screen width' : 'Tipp: Tabelle lässt sich bei schmalem Display horizontal scrollen'}</span>
+    </div>
     <div class="table-scroll-wrapper">
       <table class="vocab-data-table" id="jp-vocab-table">
         <thead>
@@ -121,16 +152,30 @@ const lessons = [
           </tr>
         </thead>
         <tbody>
-          {JAPANESE_B1_VOCAB.map((v) => (
-            <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
-              <td class="col-num">{v.num}</td>
-              <td class="col-lesson"><span class="table-lbadge">L{v.lesson}</span></td>
-              <td class="col-kanji"><strong>{v.kanji}</strong></td>
-              <td class="col-kana"><code>{v.kana}</code></td>
-              <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
-              <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
-            </tr>
-          ))}
+          {JAPANESE_B1_VOCAB.map((v) => {
+            const pk = parseVocabTerm(v.kanji);
+            const pr = parseVocabTerm(v.kana);
+            return (
+              <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+                <td class="col-num">{v.num}</td>
+                <td class="col-lesson"><span class="table-lbadge">L{v.lesson}</span></td>
+                <td class="col-kanji">
+                  <div class="vocab-table-cell">
+                    <strong class="vocab-term-main">{pk.main}</strong>
+                    {pk.note && <span class="vocab-table-note">{pk.note}</span>}
+                  </div>
+                </td>
+                <td class="col-kana">
+                  <div class="vocab-table-cell">
+                    <code class="vocab-kana-badge">{pr.main}</code>
+                    {pr.note && <span class="vocab-kana-note">{pr.note}</span>}
+                  </div>
+                </td>
+                <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
+                <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -474,7 +519,16 @@ const lessons = [
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--sl-color-white);
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+    line-height: 1.35;
+  }
+
+  .vcard-kanji .vocab-term-main {
+    font-size: 1.15rem;
   }
 
   :global([data-theme='light']) .vcard-kanji {
@@ -486,6 +540,35 @@ const lessons = [
     color: #f43f5e;
     font-family: ui-monospace, SFMono-Regular, monospace;
     transition: all 0.2s ease;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-top: 0.15rem;
+  }
+
+  .vocab-kana-main {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  .vocab-card-note {
+    font-size: 0.725rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-3);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.25rem;
+    padding: 0.05rem 0.3rem;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  .vocab-card-kana-note {
+    font-size: 0.7rem;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap !important;
+    word-break: keep-all !important;
   }
 
   :global([data-furigana-mode='hover']) .vcard-kana {
@@ -499,7 +582,7 @@ const lessons = [
   }
 
   :global([data-furigana-mode='hidden']) .vcard-kana {
-    display: none;
+    visibility: hidden;
   }
 
   .vcard-meaning {
@@ -516,34 +599,73 @@ const lessons = [
     font-style: italic;
   }
 
+  /* Table View Hint */
+  .table-scroll-hint {
+    display: none;
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.4rem;
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .table-scroll-hint {
+      display: block;
+    }
+  }
+
   /* Table View */
   .table-scroll-wrapper {
     overflow-x: auto;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .table-scroll-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+  .table-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .table-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(244, 63, 94, 0.35);
+    border-radius: 3px;
+  }
+  .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(244, 63, 94, 0.6);
   }
 
   .vocab-data-table {
     width: 100%;
+    min-width: 820px;
     border-collapse: collapse;
     font-size: 0.825rem;
   }
 
   .vocab-data-table th,
   .vocab-data-table td {
-    padding: 0.55rem 0.85rem;
+    padding: 0.65rem 0.85rem;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
   }
 
   .vocab-data-table th {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
     font-weight: 700;
     color: var(--sl-color-gray-2);
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(244, 63, 94, 0.3);
   }
 
   :global([data-theme='light']) .vocab-data-table th {
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(241, 245, 249, 0.95);
+    border-bottom-color: rgba(244, 63, 94, 0.4);
+    color: #334155;
   }
 
   .table-lbadge {
@@ -553,25 +675,141 @@ const lessons = [
     background: rgba(225, 29, 72, 0.2);
     padding: 0.1rem 0.35rem;
     border-radius: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .col-num {
+    width: 48px;
+    text-align: center;
+    color: var(--sl-color-gray-4);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .col-lesson {
+    width: 64px;
+    text-align: center;
+    white-space: nowrap;
   }
 
   .col-kanji {
-    font-size: 0.95rem;
+    min-width: 170px;
+    white-space: nowrap;
   }
 
-  :global([data-furigana-mode='hover']) .col-kana code {
+  .col-kana {
+    min-width: 170px;
+    white-space: nowrap;
+  }
+
+  .col-primary {
+    min-width: 190px;
+    line-height: 1.45;
+    color: var(--sl-color-gray-1);
+    word-break: normal;
+  }
+
+  .col-secondary {
+    min-width: 170px;
+    line-height: 1.45;
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+    word-break: normal;
+  }
+
+  /* Cell layouts */
+  .vocab-table-cell {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.18rem;
+    line-height: 1.35;
+  }
+
+  @media (min-width: 1150px) {
+    .vocab-table-cell {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+  }
+
+  .vocab-term-main {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    letter-spacing: 0.02em;
+  }
+
+  :global([data-theme='light']) .vocab-term-main {
+    color: #0f172a;
+  }
+
+  .vocab-table-note {
+    font-size: 0.725rem;
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    padding: 0.05rem 0.35rem;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    line-height: 1.25;
+  }
+
+  :global([data-theme='light']) .vocab-table-note {
+    color: var(--sl-color-gray-2);
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .vocab-kana-badge {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.825rem;
+    color: #fda4af;
+    background: rgba(244, 63, 94, 0.12) !important;
+    border: 1px solid rgba(244, 63, 94, 0.25) !important;
+    padding: 0.1rem 0.4rem !important;
+    border-radius: 0.25rem !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  :global([data-theme='light']) .vocab-kana-badge {
+    color: #be123c;
+    background: rgba(244, 63, 94, 0.08) !important;
+    border-color: rgba(244, 63, 94, 0.2) !important;
+  }
+
+  .vocab-kana-note {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  /* Active Recall Furigana States */
+  :global([data-furigana-mode='hover']) .col-kana .vocab-table-cell {
     opacity: 0;
     filter: blur(4px);
     transition: all 0.2s ease;
   }
 
-  :global([data-furigana-mode='hover']) tr:hover .col-kana code {
+  :global([data-furigana-mode='hover']) tr:hover .col-kana .vocab-table-cell {
     opacity: 1;
     filter: none;
   }
 
-  :global([data-furigana-mode='hidden']) .col-kana code {
-    display: none;
+  :global([data-furigana-mode='hidden']) .col-kana .vocab-table-cell {
+    visibility: hidden;
   }
 
   .vocab-no-results {

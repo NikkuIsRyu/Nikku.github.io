@@ -404,6 +404,25 @@ body {
   overflow-x: auto;
 }
 
+/* Japanese & CJK Typography: Prevent mid-word and character-by-character line breaks */
+[data-page-bg="japanese"] .sl-markdown-content :not(pre) > code,
+.japanese-vocab-vault code,
+.japanese-grammar-explorer code {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  white-space: nowrap !important;
+}
+
+[data-page-bg="japanese"] ruby,
+.furigana-ruby {
+  white-space: nowrap !important;
+}
+
+[data-page-bg="japanese"] table th,
+[data-page-bg="japanese"] table td {
+  word-break: keep-all;
+}
+
 /* Responsive KaTeX Math Rendering (prevent unbroken long lines on mobile) */
 .katex-display {
   max-width: 100%;
