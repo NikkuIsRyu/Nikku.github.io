@@ -104,6 +104,18 @@ function renderFurigana(text: string): string {
     padding: 1.25rem;
     margin: 1.25rem 0;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .confusable-card {
+      padding: 0.85rem 0.75rem;
+      border-radius: 0.75rem;
+    }
   }
 
   :global([data-theme='light']) .confusable-card {
@@ -163,14 +175,17 @@ function renderFurigana(text: string): string {
 
   .comparison-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
     margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   @media (max-width: 768px) {
     .comparison-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 
@@ -182,6 +197,10 @@ function renderFurigana(text: string): string {
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   :global([data-theme='light']) .term-column {
@@ -193,6 +212,7 @@ function renderFurigana(text: string): string {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .term-name {
@@ -215,6 +235,8 @@ function renderFurigana(text: string): string {
     border: 1px solid rgba(225, 29, 72, 0.3);
     padding: 0.2rem 0.5rem;
     border-radius: 0.35rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   :global([data-theme='light']) .term-concept-pill {
@@ -227,7 +249,10 @@ function renderFurigana(text: string): string {
     border-radius: 0.35rem;
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
-    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   :global([data-theme='light']) .term-formula {
@@ -237,6 +262,9 @@ function renderFurigana(text: string): string {
   .term-formula code {
     font-family: ui-monospace, SFMono-Regular, monospace;
     color: var(--sl-color-gray-2);
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .term-rule {
@@ -244,6 +272,8 @@ function renderFurigana(text: string): string {
     color: var(--sl-color-gray-2);
     line-height: 1.45;
     margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .examples-contrast {
@@ -251,6 +281,9 @@ function renderFurigana(text: string): string {
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 0.25rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .contrast-box {
@@ -259,6 +292,10 @@ function renderFurigana(text: string): string {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .correct-box {
@@ -289,27 +326,33 @@ function renderFurigana(text: string): string {
     font-size: 0.925rem;
     font-weight: 600;
     color: var(--sl-color-white);
-    line-height: 1.5;
-    word-break: keep-all;
+    line-height: 1.6;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .box-kana {
     font-size: 0.75rem;
     color: var(--sl-color-gray-3);
     font-family: ui-monospace, SFMono-Regular, monospace;
-    word-break: keep-all;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .box-trans {
     font-size: 0.75rem;
     color: var(--sl-color-gray-2);
     font-style: italic;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .box-explanation {
     font-size: 0.725rem;
     color: #fca5a5;
     font-weight: 500;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .confusable-footer {

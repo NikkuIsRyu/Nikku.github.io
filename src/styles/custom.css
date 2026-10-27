@@ -404,13 +404,26 @@ body {
   overflow-x: auto;
 }
 
-/* Japanese & CJK Typography: Prevent mid-word and character-by-character line breaks */
-[data-page-bg="japanese"] .sl-markdown-content :not(pre) > code,
+/* Japanese & CJK Typography: Prevent mid-word and character-by-character line breaks for vocabulary terms */
+[data-page-bg="japanese"] .sl-markdown-content :not(pre):not(.formula-code):not(.acc-formula-code) > code,
 .japanese-vocab-vault code,
-.japanese-grammar-explorer code {
-  overflow-wrap: normal !important;
-  word-break: keep-all !important;
-  white-space: nowrap !important;
+.japanese-grammar-explorer code:not(.formula-code):not(.acc-formula-code) {
+  overflow-wrap: normal;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+/* Allow formula codes and syntax skeletons to wrap responsively on mobile screens */
+.formula-code,
+.acc-formula-code,
+.term-formula code,
+.japanese-grammar-explorer .formula-code,
+.japanese-grammar-explorer .acc-formula-code,
+.japanese-grammar-card .formula-code {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  max-width: 100%;
 }
 
 [data-page-bg="japanese"] ruby,
@@ -421,6 +434,33 @@ body {
 [data-page-bg="japanese"] table th,
 [data-page-bg="japanese"] table td {
   word-break: keep-all;
+}
+
+/* Mobile Responsiveness & Containment: Ensure cards and grids never blow out screen width on phones */
+[data-page-bg="japanese"] .sl-markdown-content,
+[data-page-bg="chinese"] .sl-markdown-content {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+[data-page-bg="japanese"] .card-grid,
+[data-page-bg="chinese"] .card-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 50rem) {
+  [data-page-bg="japanese"] .card-grid,
+  [data-page-bg="chinese"] .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+.card-grid > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Responsive KaTeX Math Rendering (prevent unbroken long lines on mobile) */

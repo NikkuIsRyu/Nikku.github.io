@@ -233,6 +233,11 @@ const modes = [
     border: 1px solid rgba(225, 29, 72, 0.3);
     border-radius: 1rem;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(225, 29, 72, 0.15);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   :global([data-theme='light']) .study-dashboard-nav {
@@ -315,9 +320,12 @@ const modes = [
 
   .nav-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
     gap: 0.75rem;
     margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .nav-card {
@@ -457,8 +465,11 @@ const modes = [
   }
 
   @media (max-width: 640px) {
+    .study-dashboard-nav {
+      padding: 0.85rem;
+    }
     .nav-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .active-mode-hint {
       margin-left: 0;

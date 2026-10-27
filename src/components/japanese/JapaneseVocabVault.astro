@@ -294,6 +294,10 @@ const lessons = [
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .vocab-header-card {
@@ -305,6 +309,16 @@ const lessons = [
     flex-direction: column;
     gap: 1rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 640px) {
+    .vocab-header-card {
+      padding: 1rem 0.85rem;
+    }
   }
 
   :global([data-theme='light']) .vocab-header-card {
@@ -474,8 +488,18 @@ const lessons = [
   /* Cards Grid */
   .vocab-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
     gap: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 640px) {
+    .vocab-cards-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .vocab-card {
@@ -487,6 +511,10 @@ const lessons = [
     flex-direction: column;
     gap: 0.35rem;
     transition: transform 0.15s ease, border-color 0.15s ease;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   :global([data-theme='light']) .vocab-card {
@@ -617,6 +645,10 @@ const lessons = [
   /* Table View */
   .table-scroll-wrapper {
     overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.75rem;
     -webkit-overflow-scrolling: touch;
