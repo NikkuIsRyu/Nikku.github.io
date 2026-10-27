@@ -1,6 +1,6 @@
 # 🛡️ Website Legal & Licensing Compliance Report
 
-**Audit Date**: 2026-10-26  
+**Audit Date**: 2026-10-27  
 **Benchmark Score**: **100 / 100** (Grade **A+**)  
 **Status**: ✅ **CLEARED FOR PUBLIC SHARING**  
 
@@ -8,7 +8,7 @@
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (123/123) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (124/124) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
@@ -18,22 +18,25 @@
 
 ### ⏳ Schmetterling Verlag Stuttgart (Status: `PENDING_PERMISSION`)
 
-* **Items Under Review**: Chinese dialogue texts (Lektionen 2–4) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v3
+* **Items Under Review**: Chinese dialogue texts (Lektionen 2–7) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus)
 * **Contact Email**: `info@schmetterling-verlag.de`
-* **Initial Inquiry Sent**: 2026-10-18 (**8 days ago**)
+* **Initial Inquiry Sent**: 2026-10-18 (**9 days ago**)
 * **Current Safeguards on Site**:
   - ✅ Direct raw audio downloads are withheld and blocked
   - ✅ Anki deck download is gated behind WIP (wip={true}) in DriveAsset
+  - ✅ Precautionary Fallback Active: Dialogues temporarily replaced with independently authored, royalty-free study scripts until publisher response
+  - ✅ Explicit copyright notice disclaimer prominently published on German (/chinese/) and English (/chinese/en/) pages
   - ✅ Strictly non-commercial academic study aid (zero monetization)
   - ✅ Textbook and publisher credited with full academic citation
-* **Fallback Plan**: If publisher declines or does not permit public distribution: (1) Replace textbook dialogue sentences with original conversational scripts crafted for practice, or (2) Gate audio/dialogue text behind local-only mode while keeping original phonetic and grammatical analyses.
+* **Fallback Plan**: Precautionary measure already executed: Dialogue sentences replaced with original conversational scripts crafted for practice, and prominent copyright disclaimers deployed. Upon affirmative response from Schmetterling Verlag, original textbook dialogues will be reinstated.
 
 ## 🏛️ Cleared Academic & Legal Frameworks
 
 * **German Copyright Law (UrhG § 51 - Zitatrecht)**: Covers independent grammar reference notes, morphological matrices, and language learning vocabulary tables (e.g. Minna no Nihongo II Japanese Track).
 * **German Copyright Law (UrhG § 60a - Unterricht und Lehre)**: Non-commercial educational study portal for university students and independent learners.
 * **Academic Open Access & Preprints**: Direct official hyperlinks to arXiv and DOIs for research seminar papers (e.g. Agentic AI Seminar).
-* **Original Artwork**: Pixel art backgrounds and character avatars are original works created by Nick Blassmann.
+* **Privacy & Analytics (GDPR / DSGVO & TDDDG § 25(2))**: Privacy-first Umami Cloud tracking without cookies, zero personal data storage, and no cross-site advertising networks.
+* **Original Artwork**: Pixel art backgrounds, standing sprites, and cutscenes are original works created by Nick Blassmann.
 
 ## 📦 Open Source Software Licenses
 

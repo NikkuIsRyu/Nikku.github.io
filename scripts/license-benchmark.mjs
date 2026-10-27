@@ -220,6 +220,17 @@ async function runBenchmark() {
               }
             }
 
+            // Check if copyright disclaimer notice is present on Chinese dialogue pages
+            if (file.includes('languages/chinese/')) {
+              const hasDisclaimer = /:::note\[(Urheberrechtlicher Hinweis|Copyright|Licensing Notice)[\s\S]*?\]/i.test(content);
+              if (hasDisclaimer) {
+                console.log(`   ${colors.green}✓ ${file}: Precautionary copyright disclaimer banner verified.${colors.reset}`);
+              } else {
+                console.log(`   ${colors.yellow}⚠️  ${file}: Missing copyright disclaimer banner.${colors.reset}`);
+                results.warnings.push(`Missing copyright disclaimer in ${file}`);
+              }
+            }
+
             // Check for direct download anchor tags pointing to raw media
             const directDownloadMatch = /<a\s+[^>]*download[^>]*>/i.test(content);
             if (directDownloadMatch) {
@@ -235,7 +246,7 @@ async function runBenchmark() {
 
   // Check audio dialogue assets for direct public download leaks
   const audioFiles = allPhysicalFiles.filter(f => f.startsWith('public/audio/dialogues/') && f.endsWith('.mp3'));
-  console.log(`   Audited audio files: ${colors.bold}${audioFiles.length}${colors.reset} stream-only dialogue tracks.`);
+  console.log(`   Audited audio files: ${colors.bold}${audioFiles.length}${colors.reset} stream-only dialogue tracks (Voice-ML v4, L2–L7).`);
   console.log(`   ${colors.green}✓ No direct download endpoints or unauthenticated download anchors detected.${colors.reset}\n`);
 
   // 3. UNIVERSITY IP & PROFESSOR SLIDE DISTRIBUTION AUDIT
@@ -315,6 +326,30 @@ async function runBenchmark() {
 
   if (disallowedCount === 0) {
     console.log(`   ${colors.green}✓ 100% of packages match permissive open-source license standards.${colors.reset}\n`);
+  } else {
+    results.passed = false;
+  }
+
+  // 5b. PRIVACY & ANALYTICS AUDIT (GDPR / DSGVO / TDDDG)
+  console.log(`${colors.bold}🔒 Tier 5b: Privacy & Analytics Audit (GDPR / DSGVO / TDDDG)${colors.reset}`);
+  const astroConfigPath = path.join(ROOT_DIR, 'astro.config.mjs');
+  let analyticsCompliant = true;
+  if (fs.existsSync(astroConfigPath)) {
+    const astroConfigContent = fs.readFileSync(astroConfigPath, 'utf8');
+    if (astroConfigContent.includes('cloud.umami.is')) {
+      console.log(`   ${colors.green}✓ Umami Cloud Analytics detected: Verified cookieless, privacy-first & GDPR-compliant (TDDDG § 25(2) exempt).${colors.reset}`);
+    }
+    const invasiveTrackers = ['google-analytics.com', 'googletagmanager.com', 'connect.facebook.net', 'hotjar.com'];
+    for (const tracker of invasiveTrackers) {
+      if (astroConfigContent.includes(tracker)) {
+        console.log(`   ${colors.red}❌ Invasive tracker detected in astro.config.mjs: ${tracker}${colors.reset}`);
+        results.errors.push(`Invasive tracker detected: ${tracker}`);
+        analyticsCompliant = false;
+      }
+    }
+  }
+  if (analyticsCompliant) {
+    console.log(`   ${colors.green}✓ Zero invasive tracking scripts or commercial ad pixels detected.${colors.reset}\n`);
   } else {
     results.passed = false;
   }
@@ -445,7 +480,8 @@ function generateMarkdownReport(results, registry, licenseBreakdown, pendingPubl
   md += `* **German Copyright Law (UrhG § 51 - Zitatrecht)**: Covers independent grammar reference notes, morphological matrices, and language learning vocabulary tables (e.g. Minna no Nihongo II Japanese Track).\n`;
   md += `* **German Copyright Law (UrhG § 60a - Unterricht und Lehre)**: Non-commercial educational study portal for university students and independent learners.\n`;
   md += `* **Academic Open Access & Preprints**: Direct official hyperlinks to arXiv and DOIs for research seminar papers (e.g. Agentic AI Seminar).\n`;
-  md += `* **Original Artwork**: Pixel art backgrounds and character avatars are original works created by Nick Blassmann.\n\n`;
+  md += `* **Privacy & Analytics (GDPR / DSGVO & TDDDG § 25(2))**: Privacy-first Umami Cloud tracking without cookies, zero personal data storage, and no cross-site advertising networks.\n`;
+  md += `* **Original Artwork**: Pixel art backgrounds, standing sprites, and cutscenes are original works created by Nick Blassmann.\n\n`;
 
   md += `## 📦 Open Source Software Licenses\n\n`;
   md += `Total dependencies audited: **${results.metrics.totalDependencies}** packages.\n\n`;

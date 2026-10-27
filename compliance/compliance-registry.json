@@ -2,11 +2,13 @@
   "$schema": "./compliance-schema.json",
   "project": "Website-Project (nikku.tech)",
   "auditor": "Antigravity Compliance Engine",
-  "lastAudited": "2026-10-25",
+  "lastAudited": "2026-10-27",
   "legalFramework": [
     "German Urheberrechtsgesetz (UrhG) § 51 (Zitatrecht)",
     "German Urheberrechtsgesetz (UrhG) § 60a (Unterricht und Lehre)",
     "EU Directive 2019/790 (Copyright in the Digital Single Market)",
+    "EU General Data Protection Regulation (GDPR / DSGVO)",
+    "Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG)",
     "Open Source Initiative (OSI) Approved License Standards"
   ],
   "settings": {
@@ -41,17 +43,19 @@
       "status": "PENDING_PERMISSION",
       "scope": "Permission to present synthesized dialogues and vocabulary learning aids on personal educational digital garden (nikku.tech) for students of Heidelberg University and public learners.",
       "itemsUnderReview": [
-        "Chinese dialogue texts (Lektionen 2–4) from course textbook",
+        "Chinese dialogue texts (Lektionen 2–7) from course textbook",
         "Dual-Audio 107 MB Anki Spaced-Repetition Deck",
-        "Web audio playback streams synthesized via Voice-ML v3"
+        "Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus)"
       ],
       "safeguardsInPlace": [
         "Direct raw audio downloads are withheld and blocked",
         "Anki deck download is gated behind WIP (wip={true}) in DriveAsset",
+        "Precautionary Fallback Active: Dialogues temporarily replaced with independently authored, royalty-free study scripts until publisher response",
+        "Explicit copyright notice disclaimer prominently published on German (/chinese/) and English (/chinese/en/) pages",
         "Strictly non-commercial academic study aid (zero monetization)",
         "Textbook and publisher credited with full academic citation"
       ],
-      "fallbackPlan": "If publisher declines or does not permit public distribution: (1) Replace textbook dialogue sentences with original conversational scripts crafted for practice, or (2) Gate audio/dialogue text behind local-only mode while keeping original phonetic and grammatical analyses."
+      "fallbackPlan": "Precautionary measure already executed: Dialogue sentences replaced with original conversational scripts crafted for practice, and prominent copyright disclaimers deployed. Upon affirmative response from Schmetterling Verlag, original textbook dialogues will be reinstated."
     },
     "three_a_corporation": {
       "name": "3A Corporation (Minna no Nihongo) / iMina App",
@@ -97,8 +101,19 @@
     "original_artwork": {
       "name": "Nick Blassmann Original & AI-Assisted Artworks",
       "status": "CLEARED_ORIGINAL",
-      "scope": "Pixel art backgrounds and character avatars for Heidelberg student life & Japanese study",
+      "scope": "Pixel art backgrounds, character avatars, cutscenes and sprites for Heidelberg student life & Japanese study",
       "legalBasis": "Original pixel artwork and personal creations under Nick Blassmann's copyright."
+    },
+    "umami_analytics": {
+      "name": "Umami Cloud Privacy-First Analytics",
+      "status": "CLEARED_GDPR_COMPLIANT",
+      "scope": "Pageview and performance metrics tracking on nikku.tech",
+      "legalBasis": "EU GDPR / DSGVO Art. 6(1)(f) legitimate interest & TDDDG § 25(2). Cookieless, no personal data stored, no IP addresses stored, zero cross-site profiling.",
+      "safeguardsInPlace": [
+        "No cookies stored on client devices (consent banner exempt under TTDSG/TDDDG § 25(2))",
+        "Anonymized hash-based daily visitor counts",
+        "Zero advertising network integration or commercial tracking"
+      ]
     }
   },
   "assetRegistry": [
@@ -113,7 +128,7 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Textbook dialogue texts parsed into interactive turns. Awaiting Schmetterling Verlag permission."
+      "notes": "12 interactive dialogues (Lektionen 2–7) with fallback royalty-free scripts active pending publisher response."
     },
     {
       "id": "chinese_audio_dialogues",
@@ -126,7 +141,7 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "GPT-SoVITS v3 synthesized dialogue audio. Hosted for on-site interactive stream playback without direct download links."
+      "notes": "12 Multi-Speaker Voice-ML v4 synthesized audio files (Dialogue2_1.mp3 to Dialogue7_2.mp3). Stream-only interactive playback without raw download links."
     },
     {
       "id": "chinese_timestamps",
@@ -139,7 +154,7 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "JSON turn start and end offsets for interactive karaoke highlighting."
+      "notes": "12 JSON turn start and end offsets for interactive karaoke highlighting."
     },
     {
       "id": "chinese_course_page",
@@ -153,7 +168,7 @@
       "canSharePublicly": true,
       "requiresWipGate": true,
       "allowDirectDownload": false,
-      "notes": "107 MB Anki Deck is safely gated behind wip={true} until rights clearance is finalized."
+      "notes": "Bilingual German & English study guides. Gated with wip={true} on Anki deck and verified copyright disclosure notices."
     },
     {
       "id": "japanese_language_vault",
