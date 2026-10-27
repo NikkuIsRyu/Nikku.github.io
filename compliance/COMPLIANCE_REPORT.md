@@ -1,5 +1,6 @@
 # 🛡️ Website Legal & Licensing Compliance Report
 
+**Benchmark Version**: `v1.3.0`  
 **Audit Date**: 2026-10-27  
 **Benchmark Score**: **100 / 100** (Grade **A+**)  
 **Status**: ✅ **CLEARED FOR PUBLIC SHARING**  
@@ -8,7 +9,7 @@
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (145/145) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (146/146) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
@@ -32,7 +33,7 @@
 
 ## 🏛️ Cleared Academic & Legal Frameworks
 
-* **German Copyright Law (UrhG § 51 - Zitatrecht)**: Covers independent grammar reference notes, morphological matrices, and language learning vocabulary tables (e.g. Minna no Nihongo II Japanese Track).
+* **German Copyright Law (UrhG § 51 - Zitatrecht)**: Covers independent grammar reference notes, morphological matrices, active recall vaults, and language learning vocabulary tables (e.g. Minna no Nihongo II Japanese Track).
 * **German Copyright Law (UrhG § 60a - Unterricht und Lehre)**: Non-commercial educational study portal for university students and independent learners.
 * **Academic Open Access & Preprints**: Direct official hyperlinks to arXiv and DOIs for research seminar papers (e.g. Agentic AI Seminar).
 * **Privacy & Analytics (GDPR / DSGVO & TDDDG § 25(2))**: Privacy-first Umami Cloud tracking without cookies, zero personal data storage, and no cross-site advertising networks.

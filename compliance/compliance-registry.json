@@ -1,6 +1,7 @@
 {
   "$schema": "./compliance-schema.json",
   "project": "Website-Project (nikku.tech)",
+  "version": "1.3.0",
   "auditor": "Antigravity Compliance Engine",
   "lastAudited": "2026-10-27",
   "legalFramework": [
@@ -199,20 +200,36 @@
     },
     {
       "id": "core_cs_vault",
-      "name": "Core Computer Science Course Summaries",
+      "name": "Core Computer Science Course Summaries & Prototypes",
       "paths": [
+        "src/content/docs/lectures/core-cs/**",
         "src/content/docs/lectures/core-cs/algorithms.md",
         "src/content/docs/lectures/core-cs/databases.md",
         "src/content/docs/lectures/core-cs/ise.md",
         "src/content/docs/lectures/core-cs/it-security.md",
-        "src/content/docs/lectures/core-cs/theoretical-cs.md"
+        "src/content/docs/lectures/core-cs/theoretical-cs.md",
+        "src/content/docs/lectures/core-cs/numerik-prototype.mdx",
+        "src/content/docs/lectures/core-cs/de/numerik-prototype.mdx"
       ],
       "publisher": "heidelberg_university",
       "status": "CLEARED_SELF_AUTHORED",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Student-authored LaTeX derivations and memory protocols. Raw professor slides completely removed."
+      "notes": "Student-authored LaTeX derivations, memory protocols, and bilingual Numerik Argon UX prototypes. Raw professor slides completely removed."
+    },
+    {
+      "id": "numerik_course_data",
+      "name": "Numerik Course Structured Data & Simulation Presets",
+      "paths": [
+        "src/data/numerikData.ts"
+      ],
+      "publisher": "heidelberg_university",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Self-authored numerical simulation presets (IEEE 754, Vieta, Taylor series, Pandemic model), C++ HDNum snippets, and 10 quiz items."
     },
     {
       "id": "ai_seminar_workstation",
