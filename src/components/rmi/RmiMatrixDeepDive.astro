@@ -5,11 +5,23 @@
  * Robotics & Machine Intelligence (RMI) · Heidelberg University
  */
 
+import { renderFormula } from './katexHelper';
+
 interface Props {
   lang?: 'en' | 'de';
 }
 
 const { lang = 'en' } = Astro.props;
+
+// Compile KaTeX equations at build time
+const f1 = renderFormula(String.raw`R_{sb} = \begin{bmatrix} \hat{x}_b & \hat{y}_b & \hat{z}_b \end{bmatrix} = \begin{bmatrix} r_{11} & r_{12} & r_{13} \\ r_{21} & r_{22} & r_{23} \\ r_{31} & r_{32} & r_{33} \end{bmatrix}`, true);
+const f2 = renderFormula(String.raw`R^T R = I \implies R^{-1} = R^T \quad \text{and} \quad \det(R) = +1`, true);
+const f3 = renderFormula(String.raw`[\omega] = \begin{bmatrix} 0 & -\omega_3 & \omega_2 \\ \omega_3 & 0 & -\omega_1 \\ -\omega_2 & \omega_1 & 0 \end{bmatrix} \in so(3)`, true);
+const f3_skew = renderFormula(String.raw`[\omega]^T = -[\omega]`);
+const f3_cube = renderFormula(String.raw`[\hat{\omega}]^3 = -[\hat{\omega}]`);
+const f4 = renderFormula(String.raw`e^{[\hat{\omega}]\theta} = I + \sin\theta [\hat{\omega}] + (1 - \cos\theta) [\hat{\omega}]^2 \in SO(3)`, true);
+const f5 = renderFormula(String.raw`T = \begin{bmatrix} R & p \\ \mathbf{0}^T & 1 \end{bmatrix} \implies T^{-1} = \begin{bmatrix} R^T & -R^T p \\ \mathbf{0}^T & 1 \end{bmatrix}`, true);
+const f6 = renderFormula(String.raw`m = 6(N - 1 - J) + \sum_{i=1}^J f_i \quad (\text{Spatial 3D})`, true);
 ---
 
 <div class="rmi-matrix-deepdive not-content">
@@ -38,9 +50,7 @@ const { lang = 'en' } = Astro.props;
           : 'A 3×3 matrix R_sb describes the orientation of the moving body {b} relative to the base space frame {s}. The columns are the projected unit vectors of {b}:'}
       </p>
       
-      <div class="matrix-formula-box">
-        <code>R_sb = [ x̂_b | ŷ_b | ẑ_b ] = [ r11, r12, r13; r21, r22, r23; r31, r32, r33 ]</code>
-      </div>
+      <div class="matrix-formula-box" set:html={f1} />
 
       <div class="callout-tip">
         <strong>💡 {lang === 'de' ? 'Goldene Examens-Regel:' : 'Golden Exam Rule:'}</strong>
@@ -62,15 +72,15 @@ const { lang = 'en' } = Astro.props;
           : 'Not every 3×3 matrix represents a rigid rotation. In the Special Orthogonal group SO(3), two conditions must strictly hold:'}
       </p>
 
+      <div class="matrix-formula-box" set:html={f2} />
+
       <ul class="property-list">
         <li>
           <span class="prop-badge">1. Orthogonalität</span>
-          <code>R^T R = R R^T = I ⟹ R⁻¹ = R^T</code>
-          <span class="prop-desc">{lang === 'de' ? 'Die Vektoren stehen senkrecht aufeinander und haben Länge 1. Die Inverse ist schlicht die Transponierte!' : 'All columns are mutually perpendicular unit vectors. Inversion requires only matrix transposition!'}</span>
+          <span class="prop-desc">{lang === 'de' ? 'Die Vektoren stehen paarweise senkrecht aufeinander und haben Einheitslänge. Die Inverse ist schlicht die Transponierte!' : 'All columns are mutually perpendicular unit vectors. Inversion requires only matrix transposition!'}</span>
         </li>
         <li>
-          <span class="prop-badge">2. Rechts-Händigkeit</span>
-          <code>det(R) = +1 (niemals -1)</code>
+          <span class="prop-badge">2. Rechts-Händigkeit (det = +1)</span>
           <span class="prop-desc">{lang === 'de' ? 'det(R) = -1 wäre eine Spiegelung (Improper Rotation), kein physisch möglicher Starrkörper!' : 'det(R) = -1 indicates a reflection (improper rotation), which is physically impossible for a rigid body.'}</span>
         </li>
       </ul>
@@ -86,18 +96,16 @@ const { lang = 'en' } = Astro.props;
           : 'The vector cross product a × b can be written as matrix multiplication [a] b. This maps ℝ³ isomorphically onto the Lie algebra so(3):'}
       </p>
 
-      <div class="matrix-formula-box">
-        <code>[ω] = [ 0, -ω3, ω2; ω3, 0, -ω1; -ω2, ω1, 0 ] ∈ so(3)</code>
-      </div>
+      <div class="matrix-formula-box" set:html={f3} />
 
       <div class="property-grid">
         <div class="mini-prop">
           <span class="prop-title">Schiefsymmetrie</span>
-          <code>[ω]^T = -[ω]</code>
+          <span set:html={f3_skew} />
         </div>
         <div class="mini-prop">
           <span class="prop-title">Zyklische Potenz</span>
-          <code>[ω̂]³ = -[ω̂]</code>
+          <span set:html={f3_cube} />
         </div>
       </div>
     </div>
@@ -112,13 +120,11 @@ const { lang = 'en' } = Astro.props;
           : 'A point orbiting an axis satisfies the differential equation ẋ = [ω̂] x. Its analytical closed-form solution is the matrix exponential:'}
       </p>
 
-      <div class="matrix-formula-box accent-border">
-        <code>e^[ω̂]θ = I + sin θ [ω̂] + (1 - cos θ) [ω̂]² ∈ SO(3)</code>
-      </div>
+      <div class="matrix-formula-box accent-border" set:html={f4} />
 
       <p class="card-footnote">
         {lang === 'de'
-          ? 'Verbindet die Drehgeschwindigkeit [ω̂] ∈ so(3) mit der endlichen Drehung R ∈ SO(3). Invers: Über die Spur tr(R) = 1 + 2 cos θ berechnet man den Winkel zurück!'
+          ? 'Verbindet die Drehgeschwindigkeit [ω̂] ∈ so(3) mit der endlichen Drehung R ∈ SO(3). Invers: Über die Spur tr(R) = 1 + 2 cos θ berechnet man den Drehwinkel zurück!'
           : 'Bridges instantaneous angular velocity in so(3) to finite rotation in SO(3). Inverse: The trace tr(R) = 1 + 2 cos θ extracts the rotation angle θ!'}
       </p>
     </div>
@@ -133,9 +139,7 @@ const { lang = 'en' } = Astro.props;
           : 'Combines rotation R and translation p into a single 4×4 matrix. Why is the inverse translation -R^T p instead of -p?'}
       </p>
 
-      <div class="matrix-formula-box">
-        <code>T = [ R, p; 0, 1 ] ⟹ T⁻¹ = [ R^T, -R^T p; 0, 1 ]</code>
-      </div>
+      <div class="matrix-formula-box" set:html={f5} />
 
       <div class="callout-tip">
         <strong>💡 {lang === 'de' ? 'Geometrische Erklärung für -R^T p:' : 'Geometric Intuition for -R^T p:'}</strong>
@@ -157,9 +161,7 @@ const { lang = 'en' } = Astro.props;
           : 'An unconstrained rigid body has 3 DoF in 2D (x, y, θ) and 6 DoF in 3D (x, y, z, Roll, Pitch, Yaw). For jointed mechanisms, Grübler’s formula determines mobility:'}
       </p>
 
-      <div class="matrix-formula-box">
-        <code>m = 6(N - 1 - J) + ∑ f_i (im 3D-Raum)</code>
-      </div>
+      <div class="matrix-formula-box" set:html={f6} />
 
       <p class="card-footnote">
         {lang === 'de'
@@ -266,10 +268,10 @@ const { lang = 'en' } = Astro.props;
     border: 1px solid #21262d;
     border-radius: 0.5rem;
     padding: 0.65rem 0.85rem;
-    font-family: var(--sl-font-mono, monospace);
-    font-size: 0.825rem;
     color: #58a6ff;
     overflow-x: auto;
+    display: flex;
+    justify-content: center;
   }
 
   .accent-border {
