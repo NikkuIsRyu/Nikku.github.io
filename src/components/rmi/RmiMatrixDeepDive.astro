@@ -1,0 +1,346 @@
+---
+/**
+ * RmiMatrixDeepDive.astro
+ * Comprehensive Pedagogical Guide: Matrices in Robotics, Kinematics & Product of Exponentials
+ * Robotics & Machine Intelligence (RMI) · Heidelberg University
+ */
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+---
+
+<div class="rmi-matrix-deepdive not-content">
+  <!-- Section Title -->
+  <div class="deepdive-header">
+    <div class="deepdive-badge">📐 {lang === 'de' ? 'Mathematische Grundlagen' : 'Mathematical Foundations'}</div>
+    <h3 class="deepdive-title">
+      {lang === 'de' ? 'Matrizen in der Robotik: Vom Vektorraum zur Lie-Gruppe' : 'Matrices in Robotics: From Vector Space to Lie Groups'}
+    </h3>
+    <p class="deepdive-intro">
+      {lang === 'de'
+        ? 'Warum reicht klassische lineare Algebra für Roboter nicht aus? In der Robotik sind Matrizen nicht bloße Zahlentabellen, sondern geometrische Operatoren, Koordinatentransformationen und Lie-Gruppen-Elemente.'
+        : 'Why standard linear algebra is not enough for robotics: In robotics, matrices are not just tables of numbers, but geometric operators, coordinate frames, and elements of Lie groups.'}
+    </p>
+  </div>
+
+  <!-- Bento Grid of Key Matrix Concepts -->
+  <div class="bento-matrix-grid">
+    <!-- Card 1: How to Read a Rotation Matrix -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-blue">🎯 {lang === 'de' ? 'Konzept 1' : 'Concept 1'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Wie liest man eine Drehmatrix R?' : 'Reading a Rotation Matrix R'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Eine 3×3-Matrix R_sb beschreibt die Orientierung des bewegten Körpers {b} im Basisraum {s}. Die Spalten sind keine zufälligen Zahlen, sondern die projizierten Einheitsvektoren:'
+          : 'A 3×3 matrix R_sb describes the orientation of the moving body {b} relative to the base space frame {s}. The columns are the projected unit vectors of {b}:'}
+      </p>
+      
+      <div class="matrix-formula-box">
+        <code>R_sb = [ x̂_b | ŷ_b | ẑ_b ] = [ r11, r12, r13; r21, r22, r23; r31, r32, r33 ]</code>
+      </div>
+
+      <div class="callout-tip">
+        <strong>💡 {lang === 'de' ? 'Goldene Examens-Regel:' : 'Golden Exam Rule:'}</strong>
+        <span>
+          {lang === 'de'
+            ? 'Spalte 1 ist der rote x-Vektor von {b} in {s}-Koordinaten. Spalte 2 ist der grüne y-Vektor. Spalte 3 ist der blaue z-Vektor. Siehe Visualisierer oben!'
+            : 'Column 1 is the red x-axis of {b} in {s}-coordinates. Column 2 is the green y-axis. Column 3 is the blue z-axis. Compare with the 3D visualizer above!'}
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 2: SO(3) Invariants -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-green">⚖️ {lang === 'de' ? 'Konzept 2' : 'Concept 2'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Wann ist eine Matrix eine echte Drehung?' : 'Valid SO(3) Rotation Invariants'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Nicht jede 3×3-Matrix ist eine Drehung. In SO(3) (Special Orthogonal Group) müssen zwei fundamentale Bedingungen exakt erfüllt sein:'
+          : 'Not every 3×3 matrix represents a rigid rotation. In the Special Orthogonal group SO(3), two conditions must strictly hold:'}
+      </p>
+
+      <ul class="property-list">
+        <li>
+          <span class="prop-badge">1. Orthogonalität</span>
+          <code>R^T R = R R^T = I ⟹ R⁻¹ = R^T</code>
+          <span class="prop-desc">{lang === 'de' ? 'Die Vektoren stehen senkrecht aufeinander und haben Länge 1. Die Inverse ist schlicht die Transponierte!' : 'All columns are mutually perpendicular unit vectors. Inversion requires only matrix transposition!'}</span>
+        </li>
+        <li>
+          <span class="prop-badge">2. Rechts-Händigkeit</span>
+          <code>det(R) = +1 (niemals -1)</code>
+          <span class="prop-desc">{lang === 'de' ? 'det(R) = -1 wäre eine Spiegelung (Improper Rotation), kein physisch möglicher Starrkörper!' : 'det(R) = -1 indicates a reflection (improper rotation), which is physically impossible for a rigid body.'}</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 3: The Skew-Symmetric Operator -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-purple">⚡ {lang === 'de' ? 'Konzept 3' : 'Concept 3'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Klammer-Operator [ω] & Lie-Algebra so(3)' : 'Bracket Operator [ω] & Lie Algebra so(3)'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Das Kreuzprodukt zweier Vektoren a × b kann als Matrixmultiplikation [a] b geschrieben werden. Dies bildet ℝ³ isomorph auf die Lie-Algebra so(3) ab:'
+          : 'The vector cross product a × b can be written as matrix multiplication [a] b. This maps ℝ³ isomorphically onto the Lie algebra so(3):'}
+      </p>
+
+      <div class="matrix-formula-box">
+        <code>[ω] = [ 0, -ω3, ω2; ω3, 0, -ω1; -ω2, ω1, 0 ] ∈ so(3)</code>
+      </div>
+
+      <div class="property-grid">
+        <div class="mini-prop">
+          <span class="prop-title">Schiefsymmetrie</span>
+          <code>[ω]^T = -[ω]</code>
+        </div>
+        <div class="mini-prop">
+          <span class="prop-title">Zyklische Potenz</span>
+          <code>[ω̂]³ = -[ω̂]</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Rodrigues Formula & Matrix Exponential -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-amber">🌀 {lang === 'de' ? 'Konzept 4' : 'Concept 4'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Matrix-Exponential & Rodrigues-Formel' : 'Matrix Exponential & Rodrigues Formula'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Ein Punkt, der um eine Drehachse kreist, erfüllt die Differentialgleichung ẋ = [ω̂] x. Die analytische Lösung ist das Matrix-Exponential:'
+          : 'A point orbiting an axis satisfies the differential equation ẋ = [ω̂] x. Its analytical closed-form solution is the matrix exponential:'}
+      </p>
+
+      <div class="matrix-formula-box accent-border">
+        <code>e^[ω̂]θ = I + sin θ [ω̂] + (1 - cos θ) [ω̂]² ∈ SO(3)</code>
+      </div>
+
+      <p class="card-footnote">
+        {lang === 'de'
+          ? 'Verbindet die Drehgeschwindigkeit [ω̂] ∈ so(3) mit der endlichen Drehung R ∈ SO(3). Invers: Über die Spur tr(R) = 1 + 2 cos θ berechnet man den Winkel zurück!'
+          : 'Bridges instantaneous angular velocity in so(3) to finite rotation in SO(3). Inverse: The trace tr(R) = 1 + 2 cos θ extracts the rotation angle θ!'}
+      </p>
+    </div>
+
+    <!-- Card 5: Homogeneous Transforms & Inverses -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-cyan">🔄 {lang === 'de' ? 'Konzept 5' : 'Concept 5'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Homogene Transformation SE(3) & Inverse' : 'Homogeneous Transformation SE(3) & Inverse'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Kombiniert Drehung R und Verschiebung p in einer einheitlichen 4×4-Matrix. Warum ist die Inverse nicht einfach -p?'
+          : 'Combines rotation R and translation p into a single 4×4 matrix. Why is the inverse translation -R^T p instead of -p?'}
+      </p>
+
+      <div class="matrix-formula-box">
+        <code>T = [ R, p; 0, 1 ] ⟹ T⁻¹ = [ R^T, -R^T p; 0, 1 ]</code>
+      </div>
+
+      <div class="callout-tip">
+        <strong>💡 {lang === 'de' ? 'Geometrische Erklärung für -R^T p:' : 'Geometric Intuition for -R^T p:'}</strong>
+        <span>
+          {lang === 'de'
+            ? 'Vektor p zeigt vom Raum-Ursprung zum Roboter-Ursprung. In der Inversen T_bs schauen wir aber vom gedrehten Roboter-Frame zurück zum Raum-Ursprung! Daher muss der Translationsvektor mit R^T in die Roboterachsen zurückgedreht werden.'
+            : 'Vector p points from the space origin to the body origin. In the inverse T_bs, we look from the rotated body frame back to the space origin! Thus the vector must be rotated by R^T into the body frame coordinates.'}
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 6: Degrees of Freedom & Gruebler -->
+    <div class="matrix-card">
+      <div class="card-icon-pill icon-pink">🦾 {lang === 'de' ? 'Konzept 6' : 'Concept 6'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Freiheitsgrade (DoF) & Grübler-Formel' : 'Degrees of Freedom (DoF) & Grübler Formula'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Ein freier Starrkörper hat in 2D genau 3 DoF (x, y, θ) und in 3D genau 6 DoF (x, y, z, Roll, Pitch, Yaw). Für vernetzte Gelenke gilt Grüblers Formel:'
+          : 'An unconstrained rigid body has 3 DoF in 2D (x, y, θ) and 6 DoF in 3D (x, y, z, Roll, Pitch, Yaw). For jointed mechanisms, Grübler’s formula determines mobility:'}
+      </p>
+
+      <div class="matrix-formula-box">
+        <code>m = 6(N - 1 - J) + ∑ f_i (im 3D-Raum)</code>
+      </div>
+
+      <p class="card-footnote">
+        {lang === 'de'
+          ? 'N = Anzahl Glieder (inkl. Basis), J = Anzahl Gelenke, f_i = Freiheitsgrade des i-ten Gelenks. Für den 6-Achs AR4: N=7, J=6, f_i=1 ⟹ m = 6(7 - 1 - 6) + 6 = 6 DoF!'
+          : 'N = number of links (including base), J = number of joints, f_i = degrees of freedom of joint i. For the 6-axis AR4: N=7, J=6, f_i=1 ⟹ m = 6(7 - 1 - 6) + 6 = 6 DoF!'}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rmi-matrix-deepdive {
+    margin: 2.5rem 0;
+  }
+
+  .deepdive-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .deepdive-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
+  }
+
+  .deepdive-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0.25rem 0;
+    color: #fff;
+  }
+
+  .deepdive-intro {
+    font-size: 0.9rem;
+    color: #8b949e;
+    line-height: 1.5;
+    margin: 0.25rem 0 0;
+  }
+
+  .bento-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .matrix-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .matrix-card:hover {
+    border-color: #58a6ff;
+    transform: translateY(-2px);
+  }
+
+  .card-icon-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    width: fit-content;
+  }
+
+  .icon-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+  .icon-green { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+  .icon-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+  .icon-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+  .icon-cyan { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+  .icon-pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    color: #f0f6fc;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    color: #c9d1d9;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .matrix-formula-box {
+    background: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.825rem;
+    color: #58a6ff;
+    overflow-x: auto;
+  }
+
+  .accent-border {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.05);
+  }
+
+  .callout-tip {
+    background: rgba(56, 189, 248, 0.08);
+    border-left: 3px solid #38bdf8;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0 0.4rem 0.4rem 0;
+    font-size: 0.8rem;
+    color: #bae6fd;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .property-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .property-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .prop-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4ade80;
+  }
+
+  .prop-desc {
+    font-size: 0.75rem;
+    color: #8b949e;
+  }
+
+  .property-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .mini-prop {
+    background: #0d1117;
+    border: 1px solid #21262d;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .prop-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #c084fc;
+  }
+
+  .card-footnote {
+    font-size: 0.75rem;
+    color: #8b949e;
+    line-height: 1.4;
+    margin: 0;
+  }
+</style>

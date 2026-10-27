@@ -232,15 +232,16 @@
       "id": "ai_and_med_lectures",
       "name": "Machine Learning & RMI Lecture Vault",
       "paths": [
-        "src/content/docs/lectures/ai-and-med/machine-learning.mdx",
-        "src/content/docs/lectures/ai-and-med/rmi-anatomy.mdx"
+        "src/content/docs/lectures/ai-and-med/**",
+        "src/data/rmiData.ts",
+        "public/assets/rmi/**"
       ],
       "publisher": "heidelberg_university",
       "status": "CLEARED_SELF_AUTHORED",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Personal lecture notes and mathematical derivations. DriveAsset links point to generic drive root."
+      "notes": "Personal lecture notes, mathematical derivations, matrix visualizers, exercise sheets and Python scripts self-authored for Heidelberg University RMI curriculum."
     },
     {
       "id": "general_pages",

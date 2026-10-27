@@ -1,0 +1,1932 @@
+---
+/**
+ * RmiMatrixVisualizer.astro
+ * Interactive 3D Graphical Kinematics Studio & Matrix Learning Lab
+ * Robotics & Machine Intelligence (RMI) · Heidelberg University
+ * 
+ * Features:
+ * 1. 3D SO(3) Rotation Matrix Visualizer with color-coded column vectors, Euler angles & Gimbal Lock demo.
+ * 2. 6-DoF AR4 / 2R / 3R Articulated Robot Arm with real-time Product of Exponentials (PoE) & Screw Axes.
+ * 3. Matrix Operator Sandbox: Skew-symmetric bracket [w], Rodrigues expansion, and SE(3) Inverses.
+ */
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+---
+
+<div class="rmi-visualizer-card not-content" id="rmi-visualizer-root">
+  <!-- Visualizer Header -->
+  <div class="vis-header">
+    <div class="vis-title-group">
+      <span class="vis-badge">🕹️ {lang === 'de' ? 'Interaktives Kinematik-Labor' : 'Interactive Kinematics Lab'}</span>
+      <h3 class="vis-title">
+        {lang === 'de' ? '3D Matrix- & Roboterarm-Visualisierer' : '3D Matrix & Robot Arm Kinematics Studio'}
+      </h3>
+      <p class="vis-subtitle">
+        {lang === 'de' 
+          ? 'Visuelle Geometrie statt reiner Theorie: Verstehe Drehmatrizen SO(3), Freiheitsgrade (DoF), Schraubenachsen & Product of Exponentials (PoE) in Echtzeit.' 
+          : 'Visual geometry beyond theory: Experience SO(3) rotation matrices, Degrees of Freedom (DoF), Screw Axes, and Product of Exponentials (PoE) in real time.'}
+      </p>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="vis-tabs" role="tablist">
+      <button type="button" class="vis-tab active" data-tab="rotation" role="tab" aria-selected="true">
+        <span class="tab-icon">🔄</span>
+        <span class="tab-text">{lang === 'de' ? 'SO(3) Drehmatrix & 3D-Frame' : 'SO(3) Rotation Matrix & Frame'}</span>
+      </button>
+      <button type="button" class="vis-tab" data-tab="robotarm" role="tab" aria-selected="false">
+        <span class="tab-icon">🦾</span>
+        <span class="tab-text">{lang === 'de' ? 'Roboterarm & PoE Kinematik' : 'Robot Arm & PoE Kinematics'}</span>
+      </button>
+      <button type="button" class="vis-tab" data-tab="matrixlab" role="tab" aria-selected="false">
+        <span class="tab-icon">📐</span>
+        <span class="tab-text">{lang === 'de' ? 'Matrix-Labor & Operatoren' : 'Matrix Lab & Operators'}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="vis-workspace">
+    <!-- LEFT: 3D INTERACTIVE CANVAS VIEWPORT -->
+    <div class="vis-canvas-container">
+      <canvas id="rmi-viewport-canvas" width="640" height="480"></canvas>
+      
+      <!-- Overlay Canvas Controls -->
+      <div class="canvas-overlay-top">
+        <span class="canvas-tag" id="canvas-active-mode-label">SO(3) Frame View</span>
+        <span class="canvas-hint">🖱️ {lang === 'de' ? 'Ziehen: Drehen · Rad: Zoom' : 'Drag: Orbit · Scroll: Zoom'}</span>
+      </div>
+
+      <div class="canvas-overlay-bottom">
+        <button type="button" class="btn-canvas-action" id="btn-reset-camera" title="Reset View">
+          ↺ {lang === 'de' ? 'Kamera Reset' : 'Reset Camera'}
+        </button>
+        <button type="button" class="btn-canvas-action" id="btn-toggle-grid" title="Toggle Ground Grid">
+          ▦ {lang === 'de' ? 'Gitter an/aus' : 'Toggle Grid'}
+        </button>
+        <button type="button" class="btn-canvas-action" id="btn-toggle-screws" title="Toggle Screw Axes" style="display: none;">
+          ⚡ {lang === 'de' ? 'Schraubenachsen' : 'Screw Axes'}
+        </button>
+      </div>
+
+      <!-- Gimbal Lock Alert Banner -->
+      <div class="gimbal-lock-alert" id="gimbal-lock-banner" style="display: none;">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-text">
+          <strong>{lang === 'de' ? 'Gimbal Lock (Singularität) erreicht!' : 'Gimbal Lock (Singularity) Reached!'}</strong>
+          <span>{lang === 'de' ? 'Pitch = ±90°: Roll- und Yaw-Achsen fallen zusammen. 1 DoF geht verloren!' : 'Pitch = ±90°: Roll and Yaw axes align. 1 DoF is lost!'}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: DYNAMIC CONTROLS & LIVE MATRIX READOUT -->
+    <div class="vis-control-panel">
+      <!-- PANEL 1: SO(3) ROTATION MATRIX CONTROLS -->
+      <div class="panel-section active" id="sec-rotation-controls">
+        <div class="section-badge-row">
+          <span class="ctrl-subbadge">SO(3) Lie Group</span>
+          <span class="ctrl-ortho-tag" id="ortho-status-tag">Orthogonal ✓</span>
+        </div>
+
+        <h4 class="ctrl-heading">{lang === 'de' ? 'Drehachsen & Euler-Winkel' : 'Rotation Angles & Orientation'}</h4>
+        
+        <!-- Euler Angle Sliders -->
+        <div class="slider-group">
+          <div class="slider-row">
+            <div class="slider-header">
+              <span class="axis-pill axis-x">Roll (X) · φ</span>
+              <span class="slider-val" id="val-roll">0°</span>
+            </div>
+            <input type="range" id="slider-roll" min="-180" max="180" value="0" step="1" class="custom-range" />
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span class="axis-pill axis-y">Pitch (Y) · θ</span>
+              <span class="slider-val" id="val-pitch">0°</span>
+            </div>
+            <input type="range" id="slider-pitch" min="-180" max="180" value="0" step="1" class="custom-range" />
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span class="axis-pill axis-z">Yaw (Z) · ψ</span>
+              <span class="slider-val" id="val-yaw">0°</span>
+            </div>
+            <input type="range" id="slider-yaw" min="-180" max="180" value="0" step="1" class="custom-range" />
+          </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="quick-presets">
+          <span class="preset-label">{lang === 'de' ? 'Presets:' : 'Presets:'}</span>
+          <button type="button" class="btn-preset" id="preset-rot-zero">Zero (Identity)</button>
+          <button type="button" class="btn-preset" id="preset-rot-gimbal">Pitch 90° (Gimbal Lock)</button>
+          <button type="button" class="btn-preset" id="preset-rot-x90">X +90°</button>
+          <button type="button" class="btn-preset" id="preset-rot-z90">Z +90°</button>
+        </div>
+
+        <!-- Live Color-Coded Rotation Matrix -->
+        <div class="matrix-card">
+          <div class="matrix-card-header">
+            <span class="mat-title">Rotation Matrix R ∈ SO(3)</span>
+            <span class="mat-rule-hint">💡 {lang === 'de' ? 'Spalten = Einheitsvektoren!' : 'Columns = Basis Vectors!'}</span>
+          </div>
+
+          <div class="matrix-grid-3x3" id="mat-so3-grid">
+            <!-- Row 1 -->
+            <span class="mat-cell col-x" id="m00">1.00</span>
+            <span class="mat-cell col-y" id="m01">0.00</span>
+            <span class="mat-cell col-z" id="m02">0.00</span>
+            <!-- Row 2 -->
+            <span class="mat-cell col-x" id="m10">0.00</span>
+            <span class="mat-cell col-y" id="m11">1.00</span>
+            <span class="mat-cell col-z" id="m12">0.00</span>
+            <!-- Row 3 -->
+            <span class="mat-cell col-x" id="m20">0.00</span>
+            <span class="mat-cell col-y" id="m21">0.00</span>
+            <span class="mat-cell col-z" id="m22">1.00</span>
+          </div>
+
+          <div class="matrix-legend">
+            <span class="leg-item leg-x">● Col 1: x̂_b (Red)</span>
+            <span class="leg-item leg-y">● Col 2: ŷ_b (Green)</span>
+            <span class="leg-item leg-z">● Col 3: ẑ_b (Blue)</span>
+          </div>
+
+          <div class="matrix-metrics">
+            <div class="metric-pill">
+              <span class="metric-k">det(R):</span>
+              <span class="metric-v" id="val-det">1.000</span>
+            </div>
+            <div class="metric-pill">
+              <span class="metric-k">tr(R):</span>
+              <span class="metric-v" id="val-trace">3.000</span>
+            </div>
+            <div class="metric-pill">
+              <span class="metric-k">Angle θ:</span>
+              <span class="metric-v" id="val-axis-angle">0.0°</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rotation Order Toggle -->
+        <div class="order-toggle-box">
+          <span class="order-title">⚙️ {lang === 'de' ? 'Rotationsreihenfolge:' : 'Order of Rotations:'}</span>
+          <div class="order-options">
+            <label class="radio-label">
+              <input type="radio" name="rot-order" value="fixed" checked />
+              <span>{lang === 'de' ? 'Fester Raum-Frame (Links-Multiplikation)' : 'Fixed Space Frame (Pre-multiplication)'}</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="rot-order" value="body" />
+              <span>{lang === 'de' ? 'Bewegter Körper-Frame (Rechts-Multiplikation)' : 'Moving Body Frame (Post-multiplication)'}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: ROBOT ARM & POE CONTROLS -->
+      <div class="panel-section" id="sec-robotarm-controls" style="display: none;">
+        <div class="section-badge-row">
+          <span class="ctrl-subbadge">Forward Kinematics (FK)</span>
+          <span class="ctrl-ortho-tag" id="arm-dof-badge">6-DoF Arm</span>
+        </div>
+
+        <div class="robot-model-selector">
+          <label class="selector-label">{lang === 'de' ? 'Roboter-Modell:' : 'Robot Model:'}</label>
+          <div class="model-buttons">
+            <button type="button" class="btn-model active" data-model="ar4">Annin AR4 (6-DoF)</button>
+            <button type="button" class="btn-model" data-model="planar2r">2R Planar (2-DoF)</button>
+            <button type="button" class="btn-model" data-model="spatial3r">3R Spatial (3-DoF)</button>
+          </div>
+        </div>
+
+        <!-- Joint Sliders (Dynamically Populated) -->
+        <div class="joint-sliders-container" id="joint-sliders-list">
+          <!-- Injected via JavaScript based on selected robot -->
+        </div>
+
+        <!-- Robot Presets -->
+        <div class="quick-presets">
+          <span class="preset-label">{lang === 'de' ? 'Posen:' : 'Poses:'}</span>
+          <button type="button" class="btn-preset" id="preset-arm-home">Home Pose (M)</button>
+          <button type="button" class="btn-preset" id="preset-arm-down">Lecture 3: Pointing Down</button>
+          <button type="button" class="btn-preset" id="preset-arm-reach">Reach Limit</button>
+        </div>
+
+        <!-- Live SE(3) End-Effector Pose Readout -->
+        <div class="matrix-card">
+          <div class="matrix-card-header">
+            <span class="mat-title">End-Effector Pose T(θ) = e^[S1]θ1 ··· M ∈ SE(3)</span>
+          </div>
+
+          <div class="matrix-grid-4x4" id="mat-se3-grid">
+            <!-- 4x4 Homogeneous Transform Matrix -->
+          </div>
+
+          <div class="end-effector-summary">
+            <div class="ee-pos-box">
+              <span class="ee-label">{lang === 'de' ? 'Position (x, y, z) in mm:' : 'Tip Position (x, y, z) mm:'}</span>
+              <span class="ee-val" id="ee-pos-val">x: 327.8, y: 0.0, z: 474.8</span>
+            </div>
+            <div class="ee-pos-box">
+              <span class="ee-label">{lang === 'de' ? 'DoF & Gruebler Mobilität:' : 'DoF & Grübler Mobility:'}</span>
+              <span class="ee-val text-accent" id="ee-dof-val">m = 6(7 - 1 - 6) + 6 = 6 DoF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: MATRIX LAB & OPERATORS -->
+      <div class="panel-section" id="sec-matrixlab-controls" style="display: none;">
+        <div class="section-badge-row">
+          <span class="ctrl-subbadge">Lie Algebra so(3) & SE(3)</span>
+          <span class="ctrl-ortho-tag">Interactive Sandbox</span>
+        </div>
+
+        <h4 class="ctrl-heading">{lang === 'de' ? 'Matrix-Operatoren testen' : 'Matrix Operator Playground'}</h4>
+
+        <!-- Operator 1: Skew-Symmetric Bracket [w] -->
+        <div class="lab-operator-box">
+          <div class="op-header">
+            <span class="op-num">1</span>
+            <div class="op-title-wrap">
+              <span class="op-title">Skew-Symmetric Bracket [ω] ∈ so(3)</span>
+              <span class="op-desc">{lang === 'de' ? 'Kreuzprodukt als Matrixmultiplikation: [ω]v = ω × v' : 'Cross product as matrix multiplication: [ω]v = ω × v'}</span>
+            </div>
+          </div>
+          <div class="vector-inputs">
+            <label>ωx: <input type="number" id="lab-wx" value="0" step="0.1" class="num-input" /></label>
+            <label>ωy: <input type="number" id="lab-wy" value="0" step="0.1" class="num-input" /></label>
+            <label>ωz: <input type="number" id="lab-wz" value="1" step="0.1" class="num-input" /></label>
+          </div>
+          <div class="lab-output-bracket" id="bracket-output-grid">
+            <!-- Skew matrix grid -->
+          </div>
+          <div class="op-property-check" id="bracket-prop-check">
+            ✓ [ω]^T = -[ω] (Skew-Symmetric) | [ω]^3 = -[ω] (Unit Axis)
+          </div>
+        </div>
+
+        <!-- Operator 2: Rodrigues Matrix Exponential -->
+        <div class="lab-operator-box">
+          <div class="op-header">
+            <span class="op-num">2</span>
+            <div class="op-title-wrap">
+              <span class="op-title">Rodrigues Formula: e^[ω̂]θ = I + sin θ [ω̂] + (1-cos θ)[ω̂]²</span>
+              <span class="op-desc">{lang === 'de' ? 'Drehung um beliebige Einheitsachse' : 'Analytical rotation around arbitrary unit axis'}</span>
+            </div>
+          </div>
+          <div class="angle-input-row">
+            <label>{lang === 'de' ? 'Winkel θ:' : 'Angle θ:'}</label>
+            <input type="range" id="lab-rodrigues-angle" min="-180" max="180" value="45" step="5" class="custom-range" />
+            <span class="slider-val" id="lab-rodrigues-angle-val">45°</span>
+          </div>
+          <div class="rodrigues-breakdown" id="rodrigues-breakdown-result">
+            <!-- Resulting SO(3) matrix -->
+          </div>
+        </div>
+
+        <!-- Operator 3: SE(3) Inverse Inversion -->
+        <div class="lab-operator-box">
+          <div class="op-header">
+            <span class="op-num">3</span>
+            <div class="op-title-wrap">
+              <span class="op-title">Homogeneous Inverse: T⁻¹ = [R^T, -R^T p; 0, 1]</span>
+              <span class="op-desc">{lang === 'de' ? 'Warum -R^T p statt -p? Weil der Ursprung im neuen Frame gedreht wird!' : 'Why -R^T p instead of -p? Because the origin must be viewed in rotated coordinates!'}</span>
+            </div>
+          </div>
+          <div class="se3-inv-display" id="se3-inv-explanation">
+            <code>T_sb = [R, p; 0, 1] ⟹ T_bs = (T_sb)⁻¹ = [R^T, -R^T p; 0, 1]</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rmi-visualizer-card {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    border: 1px solid var(--sl-color-hairline, #30363d);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    color: var(--sl-color-white, #f0f6fc);
+    font-family: inherit;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .vis-header {
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .vis-title-group {
+    margin-bottom: 1rem;
+  }
+
+  .vis-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
+  }
+
+  .vis-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0.25rem 0;
+    color: #fff;
+  }
+
+  .vis-subtitle {
+    font-size: 0.9rem;
+    color: #8b949e;
+    margin: 0.25rem 0 0;
+    line-height: 1.5;
+  }
+
+  /* Mode Tabs */
+  .vis-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .vis-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 0.5rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .vis-tab:hover {
+    background: #30363d;
+    color: #fff;
+  }
+
+  .vis-tab.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #38bdf8;
+  }
+
+  /* Workspace Layout */
+  .vis-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .vis-workspace {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 3D Canvas Viewport */
+  .vis-canvas-container {
+    position: relative;
+    border-radius: 0.75rem;
+    background: #090d13;
+    border: 1px solid #30363d;
+    overflow: hidden;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+  }
+
+  #rmi-viewport-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+  }
+
+  #rmi-viewport-canvas:active {
+    cursor: grabbing;
+  }
+
+  .canvas-overlay-top {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .canvas-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    background: rgba(22, 27, 34, 0.85);
+    border: 1px solid #30363d;
+    border-radius: 0.35rem;
+    color: #58a6ff;
+    backdrop-filter: blur(4px);
+  }
+
+  .canvas-hint {
+    font-size: 0.75rem;
+    color: #8b949e;
+    background: rgba(22, 27, 34, 0.85);
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.35rem;
+    border: 1px solid #30363d;
+    backdrop-filter: blur(4px);
+  }
+
+  .canvas-overlay-bottom {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .btn-canvas-action {
+    background: rgba(22, 27, 34, 0.85);
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.15s ease;
+  }
+
+  .btn-canvas-action:hover {
+    background: #30363d;
+    color: #fff;
+  }
+
+  /* Gimbal Lock Alert */
+  .gimbal-lock-alert {
+    position: absolute;
+    top: 3.25rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    animation: pulse-red 2s infinite;
+  }
+
+  @keyframes pulse-red {
+    0%, 100% { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+    50% { border-color: #f87171; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+  }
+
+  .gimbal-lock-alert .alert-icon {
+    font-size: 1.25rem;
+  }
+
+  .gimbal-lock-alert .alert-text {
+    font-size: 0.8rem;
+    color: #fecaca;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  /* Control Panel */
+  .vis-control-panel {
+    background: #11161d;
+    border: 1px solid #30363d;
+    border-radius: 0.75rem;
+    padding: 1.15rem;
+  }
+
+  .section-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+  }
+
+  .ctrl-subbadge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #a855f7;
+    letter-spacing: 0.05em;
+  }
+
+  .ctrl-ortho-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+
+  .ctrl-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.85rem;
+    color: #f0f6fc;
+  }
+
+  /* Sliders */
+  .slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .slider-row {
+    background: #161b22;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid #21262d;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+
+  .axis-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .axis-x { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+  .axis-y { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+  .axis-z { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+  .slider-val {
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .custom-range {
+    width: 100%;
+    accent-color: #38bdf8;
+    cursor: pointer;
+  }
+
+  /* Presets */
+  .quick-presets {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .preset-label {
+    font-size: 0.75rem;
+    color: #8b949e;
+    font-weight: 600;
+  }
+
+  .btn-preset {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 0.25rem 0.55rem;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-preset:hover {
+    background: #30363d;
+    color: #fff;
+    border-color: #58a6ff;
+  }
+
+  /* Matrix Display */
+  .matrix-card {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 0.65rem;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .matrix-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+  }
+
+  .mat-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #c9d1d9;
+  }
+
+  .mat-rule-hint {
+    font-size: 0.75rem;
+    color: #f59e0b;
+    font-weight: 600;
+  }
+
+  .matrix-grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.4rem;
+    background: #161b22;
+    border-radius: 0.45rem;
+    border: 1px solid #21262d;
+  }
+
+  .matrix-grid-4x4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.4rem;
+    background: #161b22;
+    border-radius: 0.45rem;
+    border: 1px solid #21262d;
+  }
+
+  .mat-cell {
+    padding: 0.35rem 0.2rem;
+    border-radius: 0.25rem;
+    font-weight: 700;
+  }
+
+  .col-x { color: #f87171; background: rgba(248, 113, 113, 0.08); }
+  .col-y { color: #4ade80; background: rgba(74, 222, 128, 0.08); }
+  .col-z { color: #38bdf8; background: rgba(56, 189, 248, 0.08); }
+  .col-p { color: #fbbf24; background: rgba(251, 191, 36, 0.08); }
+  .col-h { color: #8b949e; }
+
+  .matrix-legend {
+    display: flex;
+    justify-content: space-around;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .leg-x { color: #f87171; }
+  .leg-y { color: #4ade80; }
+  .leg-z { color: #38bdf8; }
+
+  .matrix-metrics {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.65rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid #21262d;
+  }
+
+  .metric-pill {
+    font-size: 0.75rem;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .metric-k { color: #8b949e; }
+  .metric-v { font-family: var(--sl-font-mono, monospace); font-weight: 700; color: #58a6ff; }
+
+  /* Rotation Order Box */
+  .order-toggle-box {
+    background: #161b22;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #21262d;
+  }
+
+  .order-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #c9d1d9;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .order-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #8b949e;
+    cursor: pointer;
+  }
+
+  .radio-label input {
+    accent-color: #38bdf8;
+  }
+
+  /* Robot Model Selector */
+  .robot-model-selector {
+    margin-bottom: 0.85rem;
+  }
+
+  .selector-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #8b949e;
+    margin-bottom: 0.35rem;
+  }
+
+  .model-buttons {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .btn-model {
+    flex: 1;
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-model:hover {
+    background: #30363d;
+    color: #fff;
+  }
+
+  .btn-model.active {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: #a855f7;
+    color: #c084fc;
+  }
+
+  .joint-sliders-container {
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 0.35rem;
+    margin-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .end-effector-summary {
+    margin-top: 0.65rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid #21262d;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .ee-pos-box {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+  }
+
+  .ee-label { color: #8b949e; }
+  .ee-val { font-family: var(--sl-font-mono, monospace); font-weight: 700; color: #fbbf24; }
+  .text-accent { color: #4ade80 !important; }
+
+  /* Lab Operators */
+  .lab-operator-box {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .op-header {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .op-num {
+    background: #38bdf8;
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 800;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    flex-shrink: 0;
+  }
+
+  .op-title-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .op-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .op-desc {
+    font-size: 0.7rem;
+    color: #8b949e;
+  }
+
+  .vector-inputs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .vector-inputs label {
+    font-size: 0.75rem;
+    color: #8b949e;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .num-input {
+    width: 3.5rem;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: #fff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.75rem;
+  }
+
+  .lab-output-bracket {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.75rem;
+    background: #0d1117;
+    padding: 0.4rem;
+    border-radius: 0.35rem;
+    border: 1px solid #21262d;
+    margin-bottom: 0.4rem;
+  }
+
+  .op-property-check {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #4ade80;
+  }
+
+  .angle-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .se3-inv-display {
+    background: #0d1117;
+    padding: 0.5rem;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+    color: #58a6ff;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  document.addEventListener('DOMContentLoaded', () => {
+    initRmiVisualizer();
+  });
+
+  function initRmiVisualizer() {
+    const canvas = document.getElementById('rmi-viewport-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // HiDPI Scaling
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // ==========================================
+    // STATE MANAGEMENT
+    // ==========================================
+    let currentTab = 'rotation'; // 'rotation' | 'robotarm' | 'matrixlab'
+    let currentModel = 'ar4'; // 'ar4' | 'planar2r' | 'spatial3r'
+    let showGrid = true;
+    let showScrews = false;
+
+    // 3D Camera Orbit State
+    let cameraAzimuth = 45 * (Math.PI / 180);
+    let cameraElevation = 25 * (Math.PI / 180);
+    let cameraDistance = 450;
+    let isDragging = false;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+
+    // Rotation Mode State (Euler Angles in Degrees)
+    let rollDeg = 0;
+    let pitchDeg = 0;
+    let yawDeg = 0;
+    let rotOrder = 'fixed'; // 'fixed' | 'body'
+
+    // Robot Arm Joint Angles (in Degrees)
+    const armAngles = {
+      ar4: [0, 0, 0, 0, 0, 0],
+      planar2r: [0, 0],
+      spatial3r: [0, 0, 0]
+    };
+
+    // Model Specifications
+    const ROBOT_SPECS = {
+      ar4: {
+        name: 'Annin AR4 (6-DoF)',
+        dof: 6,
+        joints: [
+          { name: 'J1 (Base Swivel)', axis: [0, 0, 1], min: -170, max: 170, q: [0, 0, 0] },
+          { name: 'J2 (Shoulder)',    axis: [0, 1, 0], min: -42,  max: 90,  q: [64.2, 0, 169.8] },
+          { name: 'J3 (Elbow)',       axis: [0, 1, 0], min: -89,  max: 52,  q: [64.2, 0, 474.8] },
+          { name: 'J4 (Forearm Roll)',axis: [1, 0, 0], min: -165, max: 165, q: [0, 0, 474.8] },
+          { name: 'J5 (Wrist Pitch)', axis: [0, 1, 0], min: -105, max: 105, q: [286.8, 0, 474.8] },
+          { name: 'J6 (Flange Roll)', axis: [1, 0, 0], min: -180, max: 180, q: [0, 0, 474.8] }
+        ],
+        // Dimensions in mm
+        d1: 169.8, a1: 64.2, a2: 305.0, d4: 222.6, d6: 41.0,
+        homePoseM: [
+          [0, 0, 1, 327.8],
+          [0, 1, 0, 0],
+          [-1, 0, 0, 474.8],
+          [0, 0, 0, 1]
+        ]
+      },
+      planar2r: {
+        name: '2R Planar Arm (2-DoF)',
+        dof: 2,
+        joints: [
+          { name: 'Joint 1 (Base)',  axis: [0, 0, 1], min: -180, max: 180, q: [0, 0, 0] },
+          { name: 'Joint 2 (Elbow)', axis: [0, 0, 1], min: -150, max: 150, q: [200, 0, 0] }
+        ],
+        l1: 200, l2: 150,
+        homePoseM: [
+          [1, 0, 0, 350],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1]
+        ]
+      },
+      spatial3r: {
+        name: '3R Spatial Arm (3-DoF)',
+        dof: 3,
+        joints: [
+          { name: 'J1 (Base Swivel)', axis: [0, 0, 1], min: -180, max: 180, q: [0, 0, 0] },
+          { name: 'J2 (Shoulder)',    axis: [0, 1, 0], min: -90,  max: 90,  q: [0, 0, 120] },
+          { name: 'J3 (Elbow)',       axis: [0, 1, 0], min: -120, max: 120, q: [180, 0, 120] }
+        ],
+        l1: 120, l2: 180, l3: 140,
+        homePoseM: [
+          [1, 0, 0, 320],
+          [0, 1, 0, 0],
+          [0, 0, 1, 120],
+          [0, 0, 0, 1]
+        ]
+      }
+    };
+
+    // ==========================================
+    // 3D MATH ENGINE (Linear Algebra in JS)
+    // ==========================================
+    function degToRad(deg) { return deg * (Math.PI / 180); }
+    function radToDeg(rad) { return rad * (180 / Math.PI); }
+
+    // 3D Vector Cross Product
+    function cross(a, b) {
+      return [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0]
+      ];
+    }
+
+    // Matrix Multiplication 3x3
+    function mult3x3(A, B) {
+      const C = [[0,0,0],[0,0,0],[0,0,0]];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          C[r][c] = A[r][0] * B[0][c] + A[r][1] * B[1][c] + A[r][2] * B[2][c];
+        }
+      }
+      return C;
+    }
+
+    // Matrix-Vector Product 3x3 * 3
+    function multMatVec3(M, v) {
+      return [
+        M[0][0]*v[0] + M[0][1]*v[1] + M[0][2]*v[2],
+        M[1][0]*v[0] + M[1][1]*v[1] + M[1][2]*v[2],
+        M[2][0]*v[0] + M[2][1]*v[1] + M[2][2]*v[2]
+      ];
+    }
+
+    // 4x4 Matrix Multiplication
+    function mult4x4(A, B) {
+      const C = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+      ];
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          let sum = 0;
+          for (let k = 0; k < 4; k++) {
+            sum += A[i][k] * B[k][j];
+          }
+          C[i][j] = sum;
+        }
+      }
+      return C;
+    }
+
+    // Identity 3x3
+    function eye3() {
+      return [[1,0,0],[0,1,0],[0,0,1]];
+    }
+
+    // Identity 4x4
+    function eye4() {
+      return [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
+    }
+
+    // Skew-symmetric bracket [w]
+    function vecToSkew(w) {
+      return [
+        [0, -w[2], w[1]],
+        [w[2], 0, -w[0]],
+        [-w[1], w[0], 0]
+      ];
+    }
+
+    // Rodrigues' Rotation Formula
+    function rodrigues(wUnit, thetaRad) {
+      const I = eye3();
+      const K = vecToSkew(wUnit);
+      const K2 = mult3x3(K, K);
+      const sinT = Math.sin(thetaRad);
+      const cosT = Math.cos(thetaRad);
+      const oneMinusCosT = 1 - cosT;
+
+      const R = [[0,0,0],[0,0,0],[0,0,0]];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          R[r][c] = I[r][c] + sinT * K[r][c] + oneMinusCosT * K2[r][c];
+        }
+      }
+      return R;
+    }
+
+    // Exponential of a Screw Axis: exp([S] * theta)
+    function expScrew(w, v, thetaRad) {
+      const R = rodrigues(w, thetaRad);
+      const I = eye3();
+      const K = vecToSkew(w);
+      const K2 = mult3x3(K, K);
+      const sinT = Math.sin(thetaRad);
+      const cosT = Math.cos(thetaRad);
+
+      // G = I*theta + (1-cosT)*K + (theta - sinT)*K2
+      const G = [[0,0,0],[0,0,0],[0,0,0]];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          G[r][c] = I[r][c] * thetaRad + (1 - cosT) * K[r][c] + (thetaRad - sinT) * K2[r][c];
+        }
+      }
+      const p = multMatVec3(G, v);
+
+      return [
+        [R[0][0], R[0][1], R[0][2], p[0]],
+        [R[1][0], R[1][1], R[1][2], p[1]],
+        [R[2][0], R[2][1], R[2][2], p[2]],
+        [0, 0, 0, 1]
+      ];
+    }
+
+    // Compute SO(3) from Roll, Pitch, Yaw
+    function computeRotationMatrix(rDeg, pDeg, yDeg, mode) {
+      const r = degToRad(rDeg);
+      const p = degToRad(pDeg);
+      const y = degToRad(yDeg);
+
+      const Rx = [
+        [1, 0, 0],
+        [0, Math.cos(r), -Math.sin(r)],
+        [0, Math.sin(r), Math.cos(r)]
+      ];
+      const Ry = [
+        [Math.cos(p), 0, Math.sin(p)],
+        [0, 1, 0],
+        [-Math.sin(p), 0, Math.cos(p)]
+      ];
+      const Rz = [
+        [Math.cos(y), -Math.sin(y), 0],
+        [Math.sin(y), Math.cos(y), 0],
+        [0, 0, 1]
+      ];
+
+      if (mode === 'fixed') {
+        // Space Frame: Pre-multiply R = Rz * Ry * Rx
+        return mult3x3(Rz, mult3x3(Ry, Rx));
+      } else {
+        // Body Frame: Post-multiply R = Rx * Ry * Rz
+        return mult3x3(Rx, mult3x3(Ry, Rz));
+      }
+    }
+
+    // 3D Projection to 2D Canvas
+    function project3D(x, y, z, originX, originY, scale = 1.0) {
+      // Rotate around Space Z by Azimuth
+      const cosA = Math.cos(cameraAzimuth);
+      const sinA = Math.sin(cameraAzimuth);
+      const x1 = x * cosA - y * sinA;
+      const y1 = x * sinA + y * cosA;
+      const z1 = z;
+
+      // Rotate around Space X by Elevation
+      const cosE = Math.cos(cameraElevation);
+      const sinE = Math.sin(cameraElevation);
+      const x2 = x1;
+      const y2 = y1 * cosE - z1 * sinE;
+      const z2 = y1 * sinE + z1 * cosE;
+
+      // Perspective Projection
+      const fov = 600;
+      const depth = cameraDistance + y2;
+      const factor = fov / Math.max(10, depth);
+
+      return {
+        px: originX + x2 * factor * scale,
+        py: originY - z2 * factor * scale,
+        depth: depth
+      };
+    }
+
+    // ==========================================
+    // RENDER LOOP
+    // ==========================================
+    function render() {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const originX = width / 2;
+      const originY = height / 2 + 30;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw Grid
+      if (showGrid) {
+        drawGroundGrid(ctx, originX, originY);
+      }
+
+      // 2. Draw Space Base Frame {s}
+      drawCoordinateFrame(ctx, eye3(), [0, 0, 0], originX, originY, 60, true);
+
+      // 3. Tab Specific Rendering
+      if (currentTab === 'rotation') {
+        renderRotationTab(ctx, originX, originY);
+      } else if (currentTab === 'robotarm') {
+        renderRobotArmTab(ctx, originX, originY);
+      } else if (currentTab === 'matrixlab') {
+        renderMatrixLabTab(ctx, originX, originY);
+      }
+    }
+
+    function drawGroundGrid(ctx, ox, oy) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(48, 54, 61, 0.4)';
+      ctx.lineWidth = 1;
+      const gridSize = 300;
+      const step = 50;
+
+      for (let x = -gridSize; x <= gridSize; x += step) {
+        const pA = project3D(x, -gridSize, 0, ox, oy);
+        const pB = project3D(x, gridSize, 0, ox, oy);
+        ctx.beginPath();
+        ctx.moveTo(pA.px, pA.py);
+        ctx.lineTo(pB.px, pB.py);
+        ctx.stroke();
+      }
+      for (let y = -gridSize; y <= gridSize; y += step) {
+        const pA = project3D(-gridSize, y, 0, ox, oy);
+        const pB = project3D(gridSize, y, 0, ox, oy);
+        ctx.beginPath();
+        ctx.moveTo(pA.px, pA.py);
+        ctx.lineTo(pB.px, pB.py);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Draw 3D Coordinate Frame (Red X, Green Y, Blue Z)
+    function drawCoordinateFrame(ctx, R, pos, ox, oy, length = 70, isFaint = false) {
+      ctx.save();
+      const originP = project3D(pos[0], pos[1], pos[2], ox, oy);
+
+      const axes = [
+        { dir: [R[0][0], R[1][0], R[2][0]], color: isFaint ? 'rgba(248,113,113,0.3)' : '#f87171', label: isFaint ? 'x_s' : 'x_b' },
+        { dir: [R[0][1], R[1][1], R[2][1]], color: isFaint ? 'rgba(74,222,128,0.3)' : '#4ade80', label: isFaint ? 'y_s' : 'y_b' },
+        { dir: [R[0][2], R[1][2], R[2][2]], color: isFaint ? 'rgba(56,189,248,0.3)' : '#38bdf8', label: isFaint ? 'z_s' : 'z_b' }
+      ];
+
+      axes.forEach(ax => {
+        const endP = project3D(
+          pos[0] + ax.dir[0] * length,
+          pos[1] + ax.dir[1] * length,
+          pos[2] + ax.dir[2] * length,
+          ox, oy
+        );
+
+        ctx.strokeStyle = ax.color;
+        ctx.lineWidth = isFaint ? 1.5 : 3.5;
+        ctx.beginPath();
+        ctx.moveTo(originP.px, originP.py);
+        ctx.lineTo(endP.px, endP.py);
+        ctx.stroke();
+
+        // Arrow head
+        ctx.fillStyle = ax.color;
+        ctx.font = 'bold 11px monospace';
+        ctx.fillText(ax.label, endP.px + 4, endP.py - 4);
+      });
+      ctx.restore();
+    }
+
+    // ------------------------------------------
+    // TAB 1: ROTATION MATRIX VISUALIZER
+    // ------------------------------------------
+    function renderRotationTab(ctx, ox, oy) {
+      const R = computeRotationMatrix(rollDeg, pitchDeg, yawDeg, rotOrder);
+
+      // Draw Rotated Body Frame {b}
+      drawCoordinateFrame(ctx, R, [0, 0, 0], ox, oy, 110, false);
+
+      // Draw Orbit Rings to show current rotation angles
+      drawRotationRings(ctx, R, ox, oy);
+
+      // Update UI Matrix Display
+      updateRotationMatrixHUD(R);
+    }
+
+    function drawRotationRings(ctx, R, ox, oy) {
+      ctx.save();
+      ctx.lineWidth = 1.5;
+      const ringRadius = 90;
+      const steps = 48;
+
+      // Pitch Ring (Y-axis tilt indicator)
+      ctx.strokeStyle = 'rgba(74, 222, 128, 0.4)';
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const a = (i / steps) * Math.PI * 2;
+        const pt = project3D(Math.cos(a) * ringRadius, 0, Math.sin(a) * ringRadius, ox, oy);
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.stroke();
+
+      // Yaw Ring (Z-axis rotation indicator)
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const a = (i / steps) * Math.PI * 2;
+        const pt = project3D(Math.cos(a) * ringRadius, Math.sin(a) * ringRadius, 0, ox, oy);
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function updateRotationMatrixHUD(R) {
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`m${r}${c}`);
+          if (el) {
+            el.textContent = R[r][c].toFixed(2);
+          }
+        }
+      }
+
+      // Determinant (should be 1.0)
+      const det = (
+        R[0][0] * (R[1][1] * R[2][2] - R[1][2] * R[2][1]) -
+        R[0][1] * (R[1][0] * R[2][2] - R[1][2] * R[2][0]) +
+        R[0][2] * (R[1][0] * R[2][1] - R[1][1] * R[2][0])
+      );
+      const detEl = document.getElementById('val-det');
+      if (detEl) detEl.textContent = det.toFixed(3);
+
+      // Trace = 1 + 2 cos(theta)
+      const trace = R[0][0] + R[1][1] + R[2][2];
+      const traceEl = document.getElementById('val-trace');
+      if (traceEl) traceEl.textContent = trace.toFixed(3);
+
+      // Angle theta
+      const cosAngle = Math.max(-1, Math.min(1, (trace - 1) / 2));
+      const angleDeg = radToDeg(Math.acos(cosAngle));
+      const angleEl = document.getElementById('val-axis-angle');
+      if (angleEl) angleEl.textContent = `${angleDeg.toFixed(1)}°`;
+
+      // Check Gimbal Lock (Pitch = ±90°)
+      const isGimbal = Math.abs(Math.abs(pitchDeg) - 90) < 1.0;
+      const banner = document.getElementById('gimbal-lock-banner');
+      if (banner) banner.style.display = isGimbal ? 'flex' : 'none';
+    }
+
+    // ------------------------------------------
+    // TAB 2: ROBOT ARM & PRODUCT OF EXPONENTIALS
+    // ------------------------------------------
+    function renderRobotArmTab(ctx, ox, oy) {
+      if (currentModel === 'ar4') {
+        renderAr4Arm(ctx, ox, oy);
+      } else if (currentModel === 'planar2r') {
+        renderPlanar2R(ctx, ox, oy);
+      } else if (currentModel === 'spatial3r') {
+        renderSpatial3R(ctx, ox, oy);
+      }
+    }
+
+    function renderAr4Arm(ctx, ox, oy) {
+      const angles = armAngles.ar4;
+      const th = angles.map(degToRad);
+      const specs = ROBOT_SPECS.ar4;
+
+      // Product of Exponentials: T(th) = e^[S1]th1 ... e^[S6]th6 * M
+      // Joint axes and origins from Heidelberg Lecture 3
+      const jSpecs = specs.joints;
+      let T = eye4();
+
+      // Collect joint positions in space
+      const jointPoints = [[0, 0, 0]]; // Base at origin
+
+      // Joint 1: [0, 0, 1] through [0, 0, 0]
+      const T1 = expScrew([0,0,1], [0,0,0], th[0]);
+      // Joint 2: [0, 1, 0] through [64.2, 0, 169.8]
+      const v2 = cross([0,1,0], [64.2, 0, 169.8]).map(x => -x);
+      const T2 = expScrew([0,1,0], v2, th[1]);
+      // Joint 3: [0, 1, 0] through [64.2, 0, 474.8]
+      const v3 = cross([0,1,0], [64.2, 0, 474.8]).map(x => -x);
+      const T3 = expScrew([0,1,0], v3, th[2]);
+      // Joint 4: [1, 0, 0] through [0, 0, 474.8]
+      const v4 = cross([1,0,0], [0, 0, 474.8]).map(x => -x);
+      const T4 = expScrew([1,0,0], v4, th[3]);
+      // Joint 5: [0, 1, 0] through [286.8, 0, 474.8]
+      const v5 = cross([0,1,0], [286.8, 0, 474.8]).map(x => -x);
+      const T5 = expScrew([0,1,0], v5, th[4]);
+      // Joint 6: [1, 0, 0] through [0, 0, 474.8]
+      const v6 = cross([1,0,0], [0, 0, 474.8]).map(x => -x);
+      const T6 = expScrew([1,0,0], v6, th[5]);
+
+      // Compose Forward Kinematics Chain
+      const T_1 = T1;
+      const T_2 = mult4x4(T_1, T2);
+      const T_3 = mult4x4(T_2, T3);
+      const T_4 = mult4x4(T_3, T4);
+      const T_5 = mult4x4(T_4, T5);
+      const T_6 = mult4x4(T_5, T6);
+      const T_final = mult4x4(T_6, specs.homePoseM);
+
+      // Extract positions for drawing (Scale down mm to pixels: 0.35 factor)
+      const scale = 0.35;
+      const pBase = [0, 0, 0];
+      const pJ2 = [T_1[0][0]*64.2 + T_1[0][3], T_1[1][0]*64.2 + T_1[1][3], T_1[2][3] + specs.d1];
+      const pJ3 = [T_2[0][3] + 64.2, T_2[1][3], T_2[2][3] + specs.d1 + specs.a2];
+      const pJ5 = [T_4[0][3] + 286.8, T_4[1][3], T_4[2][3] + specs.d1 + specs.a2];
+      const pTip = [T_final[0][3], T_final[1][3], T_final[2][3]];
+
+      // Draw AR4 Arm Links
+      drawArmSegment(ctx, pBase, [0, 0, specs.d1], ox, oy, scale, '#475569', 14);
+      drawArmSegment(ctx, [0, 0, specs.d1], pJ2, ox, oy, scale, '#3b82f6', 10);
+      drawArmSegment(ctx, pJ2, pJ3, ox, oy, scale, '#0ea5e9', 9);
+      drawArmSegment(ctx, pJ3, pJ5, ox, oy, scale, '#6366f1', 7);
+      drawArmSegment(ctx, pJ5, pTip, ox, oy, scale, '#f59e0b', 5);
+
+      // Draw End-Effector Tool Frame
+      const RotTip = [
+        [T_final[0][0], T_final[0][1], T_final[0][2]],
+        [T_final[1][0], T_final[1][1], T_final[1][2]],
+        [T_final[2][0], T_final[2][1], T_final[2][2]]
+      ];
+      drawCoordinateFrame(ctx, RotTip, pTip.map(v => v * scale), ox, oy, 40, false);
+
+      // Draw Screw Axes in Space (if toggled)
+      if (showScrews) {
+        drawScrewAxisLine(ctx, [0,0,1], [0,0,0], ox, oy, scale, '#fbbf24', 'S1');
+        drawScrewAxisLine(ctx, [0,1,0], [64.2, 0, 169.8], ox, oy, scale, '#fbbf24', 'S2');
+        drawScrewAxisLine(ctx, [0,1,0], [64.2, 0, 474.8], ox, oy, scale, '#fbbf24', 'S3');
+        drawScrewAxisLine(ctx, [1,0,0], [0, 0, 474.8], ox, oy, scale, '#38bdf8', 'S4');
+        drawScrewAxisLine(ctx, [0,1,0], [286.8, 0, 474.8], ox, oy, scale, '#fbbf24', 'S5');
+        drawScrewAxisLine(ctx, [1,0,0], [0, 0, 474.8], ox, oy, scale, '#38bdf8', 'S6');
+      }
+
+      // Update 4x4 HUD Matrix
+      update4x4HUD(T_final);
+    }
+
+    function renderPlanar2R(ctx, ox, oy) {
+      const th = armAngles.planar2r.map(degToRad);
+      const l1 = 200;
+      const l2 = 150;
+      const scale = 0.7;
+
+      // Planar FK
+      const x1 = l1 * Math.cos(th[0]);
+      const y1 = l1 * Math.sin(th[0]);
+      const x2 = x1 + l2 * Math.cos(th[0] + th[1]);
+      const y2 = y1 + l2 * Math.sin(th[0] + th[1]);
+
+      drawArmSegment(ctx, [0,0,0], [x1, y1, 0], ox, oy, scale, '#3b82f6', 10);
+      drawArmSegment(ctx, [x1, y1, 0], [x2, y2, 0], ox, oy, scale, '#0ea5e9', 8);
+
+      const R2 = [
+        [Math.cos(th[0] + th[1]), -Math.sin(th[0] + th[1]), 0],
+        [Math.sin(th[0] + th[1]), Math.cos(th[0] + th[1]), 0],
+        [0, 0, 1]
+      ];
+      drawCoordinateFrame(ctx, R2, [x2 * scale, y2 * scale, 0], ox, oy, 35, false);
+
+      const T = [
+        [R2[0][0], R2[0][1], 0, x2],
+        [R2[1][0], R2[1][1], 0, y2],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+      ];
+      update4x4HUD(T);
+    }
+
+    function renderSpatial3R(ctx, ox, oy) {
+      const th = armAngles.spatial3r.map(degToRad);
+      const l1 = 120;
+      const l2 = 180;
+      const l3 = 140;
+      const scale = 0.55;
+
+      const p0 = [0, 0, 0];
+      const p1 = [0, 0, l1];
+      const r_arm = l2 * Math.cos(th[1]);
+      const z2 = l1 + l2 * Math.sin(th[1]);
+      const x2 = r_arm * Math.cos(th[0]);
+      const y2 = r_arm * Math.sin(th[0]);
+
+      const r_tip = r_arm + l3 * Math.cos(th[1] + th[2]);
+      const z3 = z2 + l3 * Math.sin(th[1] + th[2]);
+      const x3 = r_tip * Math.cos(th[0]);
+      const y3 = r_tip * Math.sin(th[0]);
+
+      drawArmSegment(ctx, p0, p1, ox, oy, scale, '#475569', 12);
+      drawArmSegment(ctx, p1, [x2, y2, z2], ox, oy, scale, '#3b82f6', 10);
+      drawArmSegment(ctx, [x2, y2, z2], [x3, y3, z3], ox, oy, scale, '#0ea5e9', 8);
+
+      const T = [
+        [1, 0, 0, x3],
+        [0, 1, 0, y3],
+        [0, 0, 1, z3],
+        [0, 0, 0, 1]
+      ];
+      drawCoordinateFrame(ctx, eye3(), [x3*scale, y3*scale, z3*scale], ox, oy, 35, false);
+      update4x4HUD(T);
+    }
+
+    function drawArmSegment(ctx, pA, pB, ox, oy, scale, color, width) {
+      const a = project3D(pA[0] * scale, pA[1] * scale, pA[2] * scale, ox, oy);
+      const b = project3D(pB[0] * scale, pB[1] * scale, pB[2] * scale, ox, oy);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(a.px, a.py);
+      ctx.lineTo(b.px, b.py);
+      ctx.stroke();
+
+      // Joint Pivot Sphere
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(a.px, a.py, width * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(b.px, b.py, width * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawScrewAxisLine(ctx, w, q, ox, oy, scale, color, label) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+
+      const lineLen = 140;
+      const p1 = project3D((q[0] - w[0]*lineLen)*scale, (q[1] - w[1]*lineLen)*scale, (q[2] - w[2]*lineLen)*scale, ox, oy);
+      const p2 = project3D((q[0] + w[0]*lineLen)*scale, (q[1] + w[1]*lineLen)*scale, (q[2] + w[2]*lineLen)*scale, ox, oy);
+
+      ctx.beginPath();
+      ctx.moveTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.fillStyle = color;
+      ctx.font = 'bold 10px monospace';
+      ctx.fillText(`⚡ ${label}`, p2.px + 4, p2.py - 4);
+      ctx.restore();
+    }
+
+    function update4x4HUD(T) {
+      const grid = document.getElementById('mat-se3-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          const span = document.createElement('span');
+          span.className = 'mat-cell ' + (c === 3 ? 'col-p' : c === 0 ? 'col-x' : c === 1 ? 'col-y' : c === 2 ? 'col-z' : 'col-h');
+          span.textContent = T[r][c].toFixed(1);
+          grid.appendChild(span);
+        }
+      }
+
+      const posEl = document.getElementById('ee-pos-val');
+      if (posEl) {
+        posEl.textContent = `x: ${T[0][3].toFixed(1)}, y: ${T[1][3].toFixed(1)}, z: ${T[2][3].toFixed(1)}`;
+      }
+    }
+
+    // ------------------------------------------
+    // TAB 3: MATRIX LAB & OPERATORS
+    // ------------------------------------------
+    function renderMatrixLabTab(ctx, ox, oy) {
+      // Draw standard frame with interactive visual rotation
+      const wX = parseFloat(document.getElementById('lab-wx')?.value || '0');
+      const wY = parseFloat(document.getElementById('lab-wy')?.value || '0');
+      const wZ = parseFloat(document.getElementById('lab-wz')?.value || '1');
+      const angle = degToRad(parseFloat(document.getElementById('lab-rodrigues-angle')?.value || '45'));
+
+      // Normalize vector
+      const mag = Math.sqrt(wX*wX + wY*wY + wZ*wZ) || 1;
+      const wUnit = [wX/mag, wY/mag, wZ/mag];
+
+      const R = rodrigues(wUnit, angle);
+      drawCoordinateFrame(ctx, R, [0, 0, 0], ox, oy, 90, false);
+
+      // Draw rotation axis vector
+      const axisEnd = project3D(wUnit[0] * 120, wUnit[1] * 120, wUnit[2] * 120, ox, oy);
+      ctx.save();
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 5]);
+      const originP = project3D(0, 0, 0, ox, oy);
+      ctx.beginPath();
+      ctx.moveTo(originP.px, originP.py);
+      ctx.lineTo(axisEnd.px, axisEnd.py);
+      ctx.stroke();
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText('ω̂ (Axis)', axisEnd.px + 4, axisEnd.py);
+      ctx.restore();
+
+      updateBracketLabHUD(wUnit);
+    }
+
+    function updateBracketLabHUD(w) {
+      const bracketGrid = document.getElementById('bracket-output-grid');
+      if (!bracketGrid) return;
+      const K = vecToSkew(w);
+      bracketGrid.innerHTML = '';
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const span = document.createElement('span');
+          span.className = 'mat-cell';
+          span.textContent = K[r][c].toFixed(2);
+          bracketGrid.appendChild(span);
+        }
+      }
+    }
+
+    // ==========================================
+    // USER INTERACTION: ORBIT CAMERA & CONTROLS
+    // ==========================================
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - prevMouseX;
+      const dy = e.clientY - prevMouseY;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+
+      cameraAzimuth += dx * 0.008;
+      cameraElevation += dy * 0.008;
+
+      // Clamp Elevation to prevent upside-down flipping
+      cameraElevation = Math.max(-Math.PI * 0.45, Math.min(Math.PI * 0.45, cameraElevation));
+      render();
+    });
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      cameraDistance += e.deltaY * 0.5;
+      cameraDistance = Math.max(150, Math.min(900, cameraDistance));
+      render();
+    }, { passive: false });
+
+    // Touch support for mobile
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+      }
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - prevMouseX;
+      const dy = e.touches[0].clientY - prevMouseY;
+      prevMouseX = e.touches[0].clientX;
+      prevMouseY = e.touches[0].clientY;
+
+      cameraAzimuth += dx * 0.01;
+      cameraElevation += dy * 0.01;
+      cameraElevation = Math.max(-Math.PI * 0.45, Math.min(Math.PI * 0.45, cameraElevation));
+      render();
+    });
+
+    canvas.addEventListener('touchend', () => { isDragging = false; });
+
+    // Mode Tab Switching
+    document.querySelectorAll('.vis-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.vis-tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        currentTab = tab.getAttribute('data-tab');
+
+        // Toggle Right Panel Sections
+        const secRot = document.getElementById('sec-rotation-controls');
+        const secArm = document.getElementById('sec-robotarm-controls');
+        const secLab = document.getElementById('sec-matrixlab-controls');
+        const tagLabel = document.getElementById('canvas-active-mode-label');
+        const btnScrews = document.getElementById('btn-toggle-screws');
+
+        if (secRot) secRot.style.display = currentTab === 'rotation' ? 'block' : 'none';
+        if (secArm) secArm.style.display = currentTab === 'robotarm' ? 'block' : 'none';
+        if (secLab) secLab.style.display = currentTab === 'matrixlab' ? 'block' : 'none';
+        if (btnScrews) btnScrews.style.display = currentTab === 'robotarm' ? 'inline-flex' : 'none';
+
+        if (tagLabel) {
+          tagLabel.textContent = currentTab === 'rotation' ? 'SO(3) Frame View' :
+                                 currentTab === 'robotarm' ? `${ROBOT_SPECS[currentModel].name} PoE` :
+                                 'so(3) Operator Sandbox';
+        }
+
+        render();
+      });
+    });
+
+    // Rotation Sliders
+    const sRoll = document.getElementById('slider-roll');
+    const sPitch = document.getElementById('slider-pitch');
+    const sYaw = document.getElementById('slider-yaw');
+    const valRoll = document.getElementById('val-roll');
+    const valPitch = document.getElementById('val-pitch');
+    const valYaw = document.getElementById('val-yaw');
+
+    function syncRotationSliders() {
+      rollDeg = parseFloat(sRoll.value);
+      pitchDeg = parseFloat(sPitch.value);
+      yawDeg = parseFloat(sYaw.value);
+      valRoll.textContent = `${rollDeg}°`;
+      valPitch.textContent = `${pitchDeg}°`;
+      valYaw.textContent = `${yawDeg}°`;
+      render();
+    }
+
+    if (sRoll) sRoll.addEventListener('input', syncRotationSliders);
+    if (sPitch) sPitch.addEventListener('input', syncRotationSliders);
+    if (sYaw) sYaw.addEventListener('input', syncRotationSliders);
+
+    // Rotation Presets
+    document.getElementById('preset-rot-zero')?.addEventListener('click', () => {
+      sRoll.value = 0; sPitch.value = 0; sYaw.value = 0; syncRotationSliders();
+    });
+    document.getElementById('preset-rot-gimbal')?.addEventListener('click', () => {
+      sRoll.value = 30; sPitch.value = 90; sYaw.value = 45; syncRotationSliders();
+    });
+    document.getElementById('preset-rot-x90')?.addEventListener('click', () => {
+      sRoll.value = 90; sPitch.value = 0; sYaw.value = 0; syncRotationSliders();
+    });
+    document.getElementById('preset-rot-z90')?.addEventListener('click', () => {
+      sRoll.value = 0; sPitch.value = 0; sYaw.value = 90; syncRotationSliders();
+    });
+
+    // Rotation Order Radio
+    document.querySelectorAll('input[name="rot-order"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        rotOrder = e.target.value;
+        render();
+      });
+    });
+
+    // Canvas Buttons
+    document.getElementById('btn-reset-camera')?.addEventListener('click', () => {
+      cameraAzimuth = 45 * (Math.PI / 180);
+      cameraElevation = 25 * (Math.PI / 180);
+      cameraDistance = 450;
+      render();
+    });
+
+    document.getElementById('btn-toggle-grid')?.addEventListener('click', () => {
+      showGrid = !showGrid;
+      render();
+    });
+
+    document.getElementById('btn-toggle-screws')?.addEventListener('click', (e) => {
+      showScrews = !showScrews;
+      e.target.style.background = showScrews ? 'rgba(56, 189, 248, 0.3)' : '';
+      render();
+    });
+
+    // Model Switcher
+    document.querySelectorAll('.btn-model').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-model').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentModel = btn.getAttribute('data-model');
+
+        const dofBadge = document.getElementById('arm-dof-badge');
+        if (dofBadge) dofBadge.textContent = `${ROBOT_SPECS[currentModel].dof}-DoF Arm`;
+
+        populateJointSliders();
+        render();
+      });
+    });
+
+    // Populate Dynamic Joint Sliders for Active Robot
+    function populateJointSliders() {
+      const container = document.getElementById('joint-sliders-list');
+      if (!container) return;
+      container.innerHTML = '';
+      const joints = ROBOT_SPECS[currentModel].joints;
+      const angles = armAngles[currentModel];
+
+      joints.forEach((j, idx) => {
+        const row = document.createElement('div');
+        row.className = 'slider-row';
+        row.innerHTML = `
+          <div class="slider-header">
+            <span class="axis-pill axis-${idx % 2 === 0 ? 'x' : 'y'}">${j.name} · θ${idx+1}</span>
+            <span class="slider-val" id="val-joint-${idx}">${angles[idx]}°</span>
+          </div>
+          <input type="range" min="${j.min}" max="${j.max}" value="${angles[idx]}" step="1" class="custom-range" data-joint-idx="${idx}" />
+        `;
+        const input = row.querySelector('input');
+        input.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          armAngles[currentModel][idx] = val;
+          row.querySelector(`#val-joint-${idx}`).textContent = `${val}°`;
+          render();
+        });
+        container.appendChild(row);
+      });
+    }
+
+    populateJointSliders();
+
+    // Robot Poses Presets
+    document.getElementById('preset-arm-home')?.addEventListener('click', () => {
+      armAngles[currentModel] = armAngles[currentModel].map(() => 0);
+      populateJointSliders();
+      render();
+    });
+
+    document.getElementById('preset-arm-down')?.addEventListener('click', () => {
+      if (currentModel === 'ar4') {
+        // Lecture 3 Downward Pose: [0, 30, -30, 0, 90, 0]
+        armAngles.ar4 = [0, 30, -30, 0, 90, 0];
+      } else if (currentModel === 'planar2r') {
+        armAngles.planar2r = [45, -45];
+      } else {
+        armAngles.spatial3r = [0, 30, -30];
+      }
+      populateJointSliders();
+      render();
+    });
+
+    document.getElementById('preset-arm-reach')?.addEventListener('click', () => {
+      if (currentModel === 'ar4') {
+        armAngles.ar4 = [0, 0, 0, 0, 0, 0];
+      } else {
+        armAngles[currentModel] = armAngles[currentModel].map(() => 0);
+      }
+      populateJointSliders();
+      render();
+    });
+
+    // Matrix Lab Inputs
+    ['lab-wx', 'lab-wy', 'lab-wz'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', render);
+    });
+
+    const sRod = document.getElementById('lab-rodrigues-angle');
+    if (sRod) {
+      sRod.addEventListener('input', (e) => {
+        document.getElementById('lab-rodrigues-angle-val').textContent = `${e.target.value}°`;
+        render();
+      });
+    }
+
+    // Initial Render
+    render();
+  }
+</script>

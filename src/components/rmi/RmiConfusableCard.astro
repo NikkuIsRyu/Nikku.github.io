@@ -1,0 +1,428 @@
+---
+import type { RmiConfusablePair } from '../../data/rmiData';
+
+interface Props {
+  pair: RmiConfusablePair;
+  lang?: 'en' | 'de';
+}
+
+const { pair, lang = 'en' } = Astro.props;
+---
+
+<div class="rmi-confusable-card not-content" id={`confusable-${pair.id}`} data-confusable-id={pair.id}>
+  <!-- Card Header -->
+  <header class="confusable-header">
+    <div class="pair-meta">
+      <span class="compare-badge">⚖️ {lang === 'de' ? 'Fallstrick / Direktvergleich' : 'Robotics Confusable Pair'}</span>
+      <span class="lesson-tag">{pair.lesson}</span>
+    </div>
+    <h3 class="pair-title">{pair.topic}</h3>
+    <div class="mnemonic-pill">
+      <span class="mnemonic-label">💡 {lang === 'de' ? 'Faustregel:' : 'Rule of Thumb:'}</span>
+      <span class="mnemonic-text">{pair.mnemonic}</span>
+    </div>
+  </header>
+
+  <!-- 2-Column Comparison Grid -->
+  <div class="comparison-grid">
+    <!-- Left Side -->
+    <div class="comparison-side left-side">
+      <div class="side-header">
+        <div class="term-badge">{pair.left.term}</div>
+        <div class="term-concept">{pair.left.concept}</div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
+        <code>{pair.left.formula}</code>
+      </div>
+
+      <p class="rule-text">{pair.left.description}</p>
+
+      <!-- Correct Case -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">{lang === 'de' ? 'Richtig & Gültig' : 'Correct Application'}</span>
+        </div>
+        <div class="case-math"><code>{pair.left.correctCase.math}</code></div>
+        <div class="case-explanation">{pair.left.correctCase.explanation}</div>
+      </div>
+
+      <!-- Pitfall Case -->
+      <div class="example-case pitfall-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">{lang === 'de' ? 'Klassischer Klausurfehler' : 'Fatal Exam Trap'}</span>
+        </div>
+        <div class="case-math strikethrough"><code>{pair.left.pitfallCase.math}</code></div>
+        <div class="case-explanation">⚠️ {pair.left.pitfallCase.warning}</div>
+      </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="comparison-side right-side">
+      <div class="side-header">
+        <div class="term-badge right-accent">{pair.right.term}</div>
+        <div class="term-concept">{pair.right.concept}</div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
+        <code>{pair.right.formula}</code>
+      </div>
+
+      <p class="rule-text">{pair.right.description}</p>
+
+      <!-- Correct Case -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">{lang === 'de' ? 'Richtig & Gültig' : 'Correct Application'}</span>
+        </div>
+        <div class="case-math"><code>{pair.right.correctCase.math}</code></div>
+        <div class="case-explanation">{pair.right.correctCase.explanation}</div>
+      </div>
+
+      <!-- Pitfall Case -->
+      <div class="example-case pitfall-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">{lang === 'de' ? 'Klassischer Klausurfehler' : 'Fatal Exam Trap'}</span>
+        </div>
+        <div class="case-math strikethrough"><code>{pair.right.pitfallCase.math}</code></div>
+        <div class="case-explanation">⚠️ {pair.right.pitfallCase.warning}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rmi-confusable-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 16px;
+    padding: 1.35rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  :global([data-theme='light']) .rmi-confusable-card {
+    background: #ffffff;
+    border-color: rgba(59, 130, 246, 0.28);
+    box-shadow: 0 4px 18px rgba(59, 130, 246, 0.08);
+  }
+
+  .confusable-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  :global([data-theme='light']) .confusable-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .pair-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .compare-badge {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fbbf24;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+
+  :global([data-theme='light']) .compare-badge {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+  }
+
+  .lesson-tag {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--sl-color-gray-2);
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :global([data-theme='light']) .lesson-tag {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+  }
+
+  .pair-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  :global([data-theme='light']) .pair-title {
+    color: #0f172a;
+  }
+
+  .mnemonic-pill {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  :global([data-theme='light']) .mnemonic-pill {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+
+  .mnemonic-label {
+    font-weight: 700;
+    color: #60a5fa;
+    flex-shrink: 0;
+  }
+
+  :global([data-theme='light']) .mnemonic-label {
+    color: #1d4ed8;
+  }
+
+  .mnemonic-text {
+    color: var(--sl-color-gray-1);
+    font-weight: 500;
+  }
+
+  :global([data-theme='light']) .mnemonic-text {
+    color: #1e293b;
+  }
+
+  /* Comparison Grid */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .comparison-side {
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-sizing: border-box;
+  }
+
+  :global([data-theme='light']) .comparison-side {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .side-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .term-badge {
+    display: inline-block;
+    background: #1e3a8a;
+    color: #93c5fd;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    align-self: flex-start;
+  }
+
+  :global([data-theme='light']) .term-badge {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .term-badge.right-accent {
+    background: #064e3b;
+    color: #6ee7b7;
+  }
+
+  :global([data-theme='light']) .term-badge.right-accent {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .term-concept {
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-3);
+    font-weight: 600;
+  }
+
+  .formula-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.775rem;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .formula-box {
+    background: #ffffff;
+    border-color: #e2e8f0;
+  }
+
+  .box-label {
+    font-weight: 700;
+    color: #60a5fa;
+    flex-shrink: 0;
+  }
+
+  :global([data-theme='light']) .box-label {
+    color: #2563eb;
+  }
+
+  .formula-box code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #f1f5f9;
+    font-size: 0.775rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  :global([data-theme='light']) .formula-box code {
+    color: #0f172a;
+  }
+
+  .rule-text {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .rule-text {
+    color: #334155;
+  }
+
+  /* Examples */
+  .example-case {
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.775rem;
+  }
+
+  .correct-case {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  :global([data-theme='light']) .correct-case {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+  }
+
+  .pitfall-case {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+
+  :global([data-theme='light']) .pitfall-case {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+
+  .case-header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .correct-case .case-header {
+    color: #34d399;
+  }
+
+  :global([data-theme='light']) .correct-case .case-header {
+    color: #059669;
+  }
+
+  .pitfall-case .case-header {
+    color: #f87171;
+  }
+
+  :global([data-theme='light']) .pitfall-case .case-header {
+    color: #dc2626;
+  }
+
+  .case-math {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .case-math {
+    background: #ffffff;
+  }
+
+  .case-math code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    color: #e2e8f0;
+  }
+
+  :global([data-theme='light']) .case-math code {
+    color: #0f172a;
+  }
+
+  .case-math.strikethrough code {
+    text-decoration: line-through;
+    opacity: 0.75;
+  }
+
+  .case-explanation {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
+  }
+
+  :global([data-theme='light']) .case-explanation {
+    color: #475569;
+  }
+</style>

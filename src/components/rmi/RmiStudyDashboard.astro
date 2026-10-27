@@ -1,0 +1,519 @@
+---
+interface Props {
+  activeSection?: 'kinematics' | 'confusables' | 'quiz' | 'hardware' | 'course' | 'all';
+  lang?: 'en' | 'de';
+}
+
+const { activeSection = 'kinematics', lang = 'en' } = Astro.props;
+
+const modes = [
+  {
+    id: 'kinematics',
+    icon: '📐',
+    labelEn: 'Kinematics & Lie Group Explorer',
+    labelDe: 'Kinematik & Lie-Gruppen Explorer',
+    badgeEn: '8 Core Operators',
+    badgeDe: '8 Kern-Operatoren',
+    descEn: 'SO(3), SE(3), Rodrigues formula, Screw Axes, & PoE (Space & Body forms)',
+    descDe: 'SO(3), SE(3), Rodrigues-Formel, Schraubenachsen & PoE (Space & Body)'
+  },
+  {
+    id: 'confusables',
+    icon: '⚖️',
+    labelEn: 'Robotics Confusables & Pitfalls',
+    labelDe: 'Robotik-Fallstricke & Vergleiche',
+    badgeEn: '6 Contrast Pairs',
+    badgeDe: '6 Kontrastpaare',
+    descEn: 'Side-by-side contrasts: FK vs. IK, PoE vs. DH, Left vs. Right multi, Quaternions',
+    descDe: 'Direktvergleich: FK vs. IK, PoE vs. DH, Links-/Rechtsmultiplikation, Gimbal Lock'
+  },
+  {
+    id: 'quiz',
+    icon: '🎯',
+    labelEn: '60s Micro-Quiz Simulator',
+    labelDe: '60s Micro-Quiz Simulator',
+    badgeEn: '10 Practice Tasks',
+    badgeDe: '10 Übungsaufgaben',
+    descEn: 'Rapid-fire multiple choice with instant feedback, worked proofs & slide citations',
+    descDe: 'Schnelltests mit Sofort-Feedback, ausführlichen Herleitungen & Folienreferenzen'
+  },
+  {
+    id: 'hardware',
+    icon: '🤖',
+    labelEn: 'AR4 Robot & Python Lab',
+    labelDe: 'AR4 Roboter & Python-Labor',
+    badgeEn: 'Annin 6-DoF Specs',
+    badgeDe: 'Annin 6-DoF Daten',
+    descEn: 'Home pose M, joint screws table, URDF XML & runnable Modern Robotics code',
+    descDe: 'Home-Pose M, Schraubenachsen, URDF-XML & lauffähiger Modern Robotics Code'
+  },
+  {
+    id: 'course',
+    icon: '🗂️',
+    labelEn: 'Course Hub & Exam Logistics',
+    labelDe: 'Kurs-Hub & Prüfungslogistik',
+    badgeEn: '96/160 Pts · Bonus',
+    badgeDe: '96/160 Pkt. · Bonus',
+    descEn: 'Lecture slides s00–s03, exam conditions, quiz dates, and group software project',
+    descDe: 'Vorlesungsfolien s00–s03, Zulassungsregeln, Quiz-Termine & Gruppenprojekt'
+  }
+];
+---
+
+<nav class="rmi-dashboard-nav not-content" id="rmi-study-mode-dashboard-nav" aria-label="RMI Study Mode Navigation">
+  <div class="nav-intro">
+    <div class="nav-intro-left">
+      <span class="live-pulse"></span>
+      <span class="mode-badge">⚡ {lang === 'de' ? 'RMI Lernmodus-Dashboard' : 'RMI Study Mode Navigation'}</span>
+    </div>
+    <div class="nav-intro-right">
+      <button type="button" class="btn-show-all-modes" id="rmi-btn-toggle-all-modes" data-active-all="false">
+        <span class="btn-all-icon">🌐</span>
+        <span class="btn-all-text">{lang === 'de' ? 'Alle Bereiche anzeigen (Vollansicht)' : 'Show All Sections (Full Document)'}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-grid">
+    {modes.map((m) => (
+      <button
+        type="button"
+        class={`nav-card ${m.id === activeSection ? 'active' : ''}`}
+        data-mode-id={m.id}
+        title={lang === 'de' ? `Zu ${m.labelDe} wechseln` : `Switch to ${m.labelEn}`}
+      >
+        <div class="card-top">
+          <span class="card-icon">{m.icon}</span>
+          <span class="card-badge">{lang === 'de' ? m.badgeDe : m.badgeEn}</span>
+        </div>
+        <h4 class="card-title">{lang === 'de' ? m.labelDe : m.labelEn}</h4>
+        <p class="card-desc">{lang === 'de' ? m.descDe : m.descEn}</p>
+        <div class="active-indicator">
+          <span>{lang === 'de' ? 'Aktiver Modus' : 'Active Focus Mode'}</span>
+          <span class="indicator-arrow">→</span>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <div class="mode-active-bar" id="rmi-mode-active-bar">
+    <span class="active-mode-label">{lang === 'de' ? 'Aktiver Fokusbereich:' : 'Current Focus:'}</span>
+    <span class="active-mode-name" id="rmi-active-mode-display-name">
+      {lang === 'de' ? '📐 Kinematik & Lie-Gruppen Explorer' : '📐 Kinematics & Lie Group Explorer'}
+    </span>
+    <span class="active-mode-hint">
+      {lang === 'de' ? '(Klicke oben auf eine Kachel, um den sichtbaren Modus live umzuschalten)' : '(Click any card above to dynamically switch visible content)'}
+    </span>
+  </div>
+</nav>
+
+<script>
+  function setupRmiStudyDashboard() {
+    const nav = document.getElementById('rmi-study-mode-dashboard-nav');
+    if (!nav) return;
+
+    const cards = nav.querySelectorAll<HTMLButtonElement>('.nav-card');
+    const btnToggleAll = document.getElementById('rmi-btn-toggle-all-modes');
+    const activeName = document.getElementById('rmi-active-mode-display-name');
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.study-mode-section'));
+
+    if (sections.length === 0) return;
+
+    const modeLabels: Record<string, { de: string; en: string }> = {
+      kinematics: {
+        en: '📐 Kinematics & Lie Group Explorer (SO(3), SE(3), Rodrigues, PoE)',
+        de: '📐 Kinematik & Lie-Gruppen Explorer (SO(3), SE(3), Rodrigues, PoE)'
+      },
+      confusables: {
+        en: '⚖️ Robotics Confusables & Pitfalls (FK vs IK, PoE vs DH, Left vs Right)',
+        de: '⚖️ Robotik-Fallstricke & Vergleiche (FK vs IK, PoE vs DH, Links vs Rechts)'
+      },
+      quiz: {
+        en: '🎯 60s Micro-Quiz Simulator (10 Interactive Rapid-Fire Tasks)',
+        de: '🎯 60s Micro-Quiz Simulator (10 interaktive Übungsaufgaben)'
+      },
+      hardware: {
+        en: '🤖 AR4 Robot & Python Lab (Annin 6-DoF Specs, URDF & modern_robotics)',
+        de: '🤖 AR4 Roboter & Python-Labor (Annin 6-DoF Daten, URDF & modern_robotics)'
+      },
+      course: {
+        en: '🗂️ Course Hub & Exam Logistics (Heibox Slides, 96/160 Pts, Software Project)',
+        de: '🗂️ Kurs-Hub & Prüfungslogistik (Heibox Folien, 96/160 Pkt., Software-Projekt)'
+      },
+      all: {
+        en: '🌐 All Sections Active (Full Document View)',
+        de: '🌐 Alle Bereiche aktiv (Vollansicht ohne Filterung)'
+      }
+    };
+
+    function switchMode(targetMode: string, updateHash: boolean = true) {
+      const isAll = targetMode === 'all';
+
+      // Update Cards
+      cards.forEach((card) => {
+        const matches = card.dataset.modeId === targetMode;
+        card.classList.toggle('active', !isAll && matches);
+      });
+
+      // Update Toggle All Button
+      if (btnToggleAll) {
+        btnToggleAll.classList.toggle('active', isAll);
+      }
+
+      // Update Display Text
+      if (activeName) {
+        const isDe = document.documentElement.lang?.startsWith('de') || window.location.pathname.includes('/de/');
+        const labelObj = modeLabels[targetMode] || modeLabels['kinematics'];
+        activeName.textContent = isDe ? labelObj.de : labelObj.en;
+      }
+
+      // Dynamically Show / Hide Sections
+      sections.forEach((sec) => {
+        const secMode = sec.dataset.studyMode || sec.id.replace('study-mode-', '');
+        if (isAll) {
+          sec.style.display = 'block';
+          sec.classList.remove('study-section-hidden');
+          sec.classList.add('study-section-visible');
+        } else {
+          const isMatch = secMode === targetMode;
+          if (isMatch) {
+            sec.style.display = 'block';
+            sec.classList.remove('study-section-hidden');
+            sec.classList.add('study-section-visible');
+          } else {
+            sec.style.display = 'none';
+            sec.classList.add('study-section-hidden');
+            sec.classList.remove('study-section-visible');
+          }
+        }
+      });
+
+      // Update URL hash without jumping page
+      if (updateHash && window.history.replaceState) {
+        const hash = isAll ? '#all' : `#${targetMode}`;
+        window.history.replaceState(null, '', hash);
+      }
+    }
+
+    // Attach Click Handlers to Cards
+    cards.forEach((card) => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const mode = card.dataset.modeId || 'kinematics';
+        switchMode(mode, true);
+
+        const targetSec = document.getElementById(`study-mode-${mode}`);
+        if (targetSec) {
+          targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Toggle All Button
+    if (btnToggleAll) {
+      btnToggleAll.addEventListener('click', (e) => {
+        e.preventDefault();
+        const currentlyAll = btnToggleAll.classList.contains('active');
+        switchMode(currentlyAll ? 'kinematics' : 'all', true);
+      });
+    }
+
+    // Initialize from URL Hash
+    const hash = window.location.hash.replace('#', '').toLowerCase();
+    const validModes = ['kinematics', 'confusables', 'quiz', 'hardware', 'course', 'all'];
+    if (validModes.includes(hash)) {
+      switchMode(hash, false);
+    } else {
+      switchMode('kinematics', false);
+    }
+
+    // Handle hashchange event (browser back/forward)
+    window.addEventListener('hashchange', () => {
+      const newHash = window.location.hash.replace('#', '').toLowerCase();
+      if (validModes.includes(newHash)) {
+        switchMode(newHash, false);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', setupRmiStudyDashboard);
+  document.addEventListener('astro:page-load', setupRmiStudyDashboard);
+</script>
+
+<style>
+  .rmi-dashboard-nav {
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.12), transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.08), transparent 50%),
+                var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 16px;
+    padding: 1.35rem;
+    gap: 1.1rem;
+    margin: 1.5rem 0 2.25rem 0;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  :global([data-theme='light']) .rmi-dashboard-nav {
+    background: radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.08), transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.05), transparent 50%),
+                #ffffff;
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.08);
+  }
+
+  .nav-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+  }
+
+  :global([data-theme='light']) .nav-intro {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-intro-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .live-pulse {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    box-shadow: 0 0 10px #3b82f6;
+    animation: rmi-pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes rmi-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.35); opacity: 0.65; }
+  }
+
+  .mode-badge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #60a5fa;
+  }
+
+  :global([data-theme='light']) .mode-badge {
+    color: #2563eb;
+  }
+
+  .btn-show-all-modes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: var(--sl-color-gray-2);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .btn-show-all-modes {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-show-all-modes:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #60a5fa;
+  }
+
+  .btn-show-all-modes.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.45);
+  }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .nav-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  :global([data-theme='light']) .nav-card {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+
+  :global([data-theme='light']) .nav-card:hover {
+    background: #eff6ff;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);
+  }
+
+  .nav-card.active {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.22), rgba(16, 185, 129, 0.12));
+    border-color: #3b82f6;
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.35), inset 0 0 0 1px #3b82f6;
+  }
+
+  :global([data-theme='light']) .nav-card.active {
+    background: linear-gradient(145deg, rgba(219, 234, 254, 0.8), rgba(209, 250, 229, 0.5));
+    border-color: #2563eb;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-icon {
+    font-size: 1.45rem;
+    line-height: 1;
+  }
+
+  .card-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 9999px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+
+  :global([data-theme='light']) .card-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    border-color: #bfdbfe;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0 0 0.35rem 0;
+    line-height: 1.3;
+  }
+
+  :global([data-theme='light']) .card-title {
+    color: #0f172a;
+  }
+
+  .card-desc {
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+    margin: 0 0 0.65rem 0;
+    flex-grow: 1;
+  }
+
+  .active-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: #60a5fa;
+    opacity: 0;
+    transform: translateY(3px);
+    transition: all 0.2s ease;
+  }
+
+  .nav-card.active .active-indicator {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  :global([data-theme='light']) .active-indicator {
+    color: #2563eb;
+  }
+
+  .mode-active-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.9rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  :global([data-theme='light']) .mode-active-bar {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .active-mode-label {
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .active-mode-name {
+    font-weight: 700;
+    color: #60a5fa;
+  }
+
+  :global([data-theme='light']) .active-mode-name {
+    color: #2563eb;
+  }
+
+  .active-mode-hint {
+    color: var(--sl-color-gray-4);
+    font-size: 0.75rem;
+    margin-left: auto;
+  }
+
+  @media (max-width: 640px) {
+    .active-mode-hint {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

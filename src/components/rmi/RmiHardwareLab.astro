@@ -1,0 +1,544 @@
+---
+import { AR4_JOINT_SPECS } from '../../data/rmiData';
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+---
+
+<div class="rmi-hardware-lab not-content">
+  <!-- Section Intro Header -->
+  <header class="lab-header">
+    <div class="header-tag">
+      <span class="lab-badge">🤖 {lang === 'de' ? 'Roboter-Hardware' : 'Robot Hardware & Tooling'}</span>
+      <span class="ar4-tag">Annin Robotics AR4 MK5</span>
+    </div>
+    <h3 class="lab-title">{lang === 'de' ? 'Annin AR4 6-DoF Roboterarm & Python-Kinematik' : 'Annin AR4 6-DoF Industrial Desktop Arm & Kinematics'}</h3>
+    <p class="lab-desc">
+      {lang === 'de' 
+        ? 'Im Kurs Robotics & Machine Intelligence (RMI) arbeiten wir mit zwei physischen AR4-Roboterarmen und deren ROS 2 / Gazebo-Simulation. Hier findest du die exakten Spezifikationen, Schraubenachsen, das URDF-Modell und Python-Code.'
+        : 'In the Robotics & Machine Intelligence (RMI) lab, we work with two physical AR4 open-source robot arms and their ROS 2 / Gazebo digital twins. Explore the kinematic geometry, screw axes, URDF format, and executable Python routines below.'}
+    </p>
+  </header>
+
+  <!-- AR4 Quick Specs Bento -->
+  <div class="specs-grid">
+    <div class="spec-card">
+      <span class="spec-icon">🦾</span>
+      <div class="spec-info">
+        <span class="spec-label">{lang === 'de' ? 'Freiheitsgrade (DoF)' : 'Degrees of Freedom (DoF)'}</span>
+        <span class="spec-value">6 Revolute Joints (6R)</span>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="spec-icon">📏</span>
+      <div class="spec-info">
+        <span class="spec-label">{lang === 'de' ? 'Maximale Reichweite' : 'Max Reach'}</span>
+        <span class="spec-value">~ 630 mm (0.63 m)</span>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="spec-icon">🏋️</span>
+      <div class="spec-info">
+        <span class="spec-label">{lang === 'de' ? 'Nutzlast (Payload)' : 'Payload Capacity'}</span>
+        <span class="spec-value">~ 1.9 kg</span>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="spec-icon">⚙️</span>
+      <div class="spec-info">
+        <span class="spec-label">{lang === 'de' ? 'Handgelenkstyp' : 'Wrist Architecture'}</span>
+        <span class="spec-value">Spherical Wrist (J4-J6 intersect)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screw Axes Table -->
+  <div class="lab-card table-card">
+    <div class="card-top-bar">
+      <span class="table-title">📐 {lang === 'de' ? 'AR4 Schraubenachsen im Basis-Frame {s} bei Home-Pose' : 'AR4 Space Screw Axes S_i = (omega_i, v_i) at Home Pose'}</span>
+      <span class="dim-tag">MR § 4.1.1 (Units: mm & rad)</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="ar4-table">
+        <thead>
+          <tr>
+            <th>Joint</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>&omega;&#770;<sub>i</sub> (Axis)</th>
+            <th>q<sub>i</sub> (mm)</th>
+            <th>v<sub>i</sub> = -&omega;&#770;<sub>i</sub> &times; q<sub>i</sub></th>
+            <th>Joint Limits</th>
+          </tr>
+        </thead>
+        <tbody>
+          {AR4_JOINT_SPECS.map((spec) => (
+            <tr>
+              <td><span class="joint-pill">{spec.joint}</span></td>
+              <td><strong>{spec.name}</strong></td>
+              <td>{spec.type}</td>
+              <td><code>[{spec.omega.join(', ')}]</code></td>
+              <td><code>[{spec.q_mm.join(', ')}]</code></td>
+              <td><code>[{spec.v_mm.join(', ')}]</code></td>
+              <td>[{spec.limitsDeg[0]}°, +{spec.limitsDeg[1]}°]</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footnote">
+      💡 <strong>Home Pose M &in; SE(3)</strong>: Tool pointing forward along x&#770;<sub>s</sub> (d<sub>1</sub> = 169.77, a<sub>1</sub> = 64.2, a<sub>2</sub> = 305.0, d<sub>4</sub> = 222.63, d<sub>6</sub> = 41.0 mm):
+      <pre class="m-matrix-code"><code>M = np.array([
+  [ 0,  0, 1, 327.8],   # x_tool = a1 + d4 + d6 = 64.2 + 222.63 + 41.0 = 327.83 mm
+  [ 0,  1, 0,     0],
+  [-1,  0, 0, 474.8],   # z_tool = d1 + a2 = 169.77 + 305.0 = 474.77 mm
+  [ 0,  0, 0,     1]
+])</code></pre>
+    </div>
+  </div>
+
+  <!-- Comparison: URDF vs PoE Python Implementation -->
+  <div class="code-grid">
+    <div class="lab-card">
+      <div class="card-top-bar">
+        <span class="table-title">📄 {lang === 'de' ? '1. ROS 2 URDF XML (Kette von Transformationen)' : '1. ROS 2 URDF XML (Chain of Transforms)'}</span>
+      </div>
+      <p class="card-subtext">
+        {lang === 'de'
+          ? 'URDF speichert jeden Gelenk-Frame separat mit Relativ-Transformationen (Origin & Achse).'
+          : 'URDF stores coordinate frames on each link with relative offsets and rotational axes.'}
+      </p>
+      <pre class="code-block"><code>&lt;!-- Joint 1: Base to Link 1 --&gt;
+&lt;joint name="joint_1" type="revolute"&gt;
+  &lt;parent link="base_link"/&gt;
+  &lt;child link="link_1"/&gt;
+  &lt;origin xyz="0 0 0.16977" rpy="0 0 0"/&gt;
+  &lt;axis xyz="0 0 1"/&gt;
+  &lt;limit lower="-2.96" upper="2.96" velocity="2.5"/&gt;
+&lt;/joint&gt;
+
+&lt;!-- Joint 2: Link 1 to Link 2 (Shoulder) --&gt;
+&lt;joint name="joint_2" type="revolute"&gt;
+  &lt;parent link="link_1"/&gt;
+  &lt;child link="link_2"/&gt;
+  &lt;origin xyz="0.0642 0 0" rpy="0 0 0"/&gt;
+  &lt;axis xyz="0 1 0"/&gt;
+  &lt;limit lower="-0.73" upper="1.57" velocity="2.5"/&gt;
+&lt;/joint&gt;</code></pre>
+    </div>
+
+    <div class="lab-card">
+      <div class="card-top-bar">
+        <span class="table-title">🐍 {lang === 'de' ? '2. Product of Exponentials (Python modern_robotics)' : '2. Product of Exponentials (Python modern_robotics)'}</span>
+      </div>
+      <p class="card-subtext">
+        {lang === 'de'
+          ? 'Keine Zwischen-Frames! Nur Basis-Frame {s}, Home-Pose M und 6 Schraubenachsen.'
+          : 'Zero link frames! Only space frame {s}, home pose M, and 6 space screw axes.'}
+      </p>
+      <pre class="code-block"><code>import numpy as np
+import modern_robotics as mr
+
+# 1. Define dimensions (mm)
+d1, a1, a2, d4, d6 = 169.77, 64.2, 305.0, 222.63, 41.0
+h = d1 + a2
+
+# 2. Home pose M and Screw Axis list (6x6 transposed)
+M = np.array([[0,0,1, a1+d4+d6], [0,1,0, 0], [-1,0,0, h], [0,0,0, 1]])
+Slist = np.array([
+  [0, 0, 1,   0, 0,      0],     # J1
+  [0, 1, 0, -d1, 0,     a1],     # J2
+  [0, 1, 0,  -h, 0,     a1],     # J3
+  [1, 0, 0,   0, h,      0],     # J4
+  [0, 1, 0,  -h, 0, a1+d4],     # J5
+  [1, 0, 0,   0, h,      0]      # J6
+]).T
+
+# 3. Compute FK in space for gripper pointing down
+theta = np.radians([0, 30, -30, 0, 90, 0])
+T_tool = mr.FKinSpace(M, Slist, theta)
+print("Position (mm):", T_tool[:3, 3].round(1))
+# Output: [439.3, 0.0, 392.9]</code></pre>
+    </div>
+  </div>
+
+  <!-- Reality Check Note -->
+  <div class="reality-check-box">
+    <div class="reality-header">
+      <span class="reality-icon">⚠️</span>
+      <span class="reality-title">{lang === 'de' ? 'Reality Check: Mathematisches Modell vs. Physischer Roboter' : 'Reality Check: Mathematical Model vs. Real-World Robot'}</span>
+    </div>
+    <p class="reality-text">
+      {lang === 'de'
+        ? 'Die Vorwärtskinematik ist mathematisch exakt für das Modell. Am echten Roboter führen Zahnradspiel (Backlash in Getrieben), Materialelastizität unter Last und Fertigungstoleranzen zu Abweichungen (z. B. führt 0,5° Fehler in J2 zu ca. 5 mm Greifer-Abweichung!). Daher erfordert präzises Arbeiten Kalibrierung und sensorisches Feedback (Kameras / Visual Feedback in Part II).'
+        : 'Forward kinematics is exact for the idealized kinematic model. On the physical robot, gear backlash, structural bending under payload, and encoder zero-point offsets create positional drift (e.g. 0.5° error in joint 2 shifts the tool by ~5 mm!). Precision manipulation therefore necessitates sensor feedback and visual servoing.'}
+    </p>
+  </div>
+</div>
+
+<style>
+  .rmi-hardware-lab {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .lab-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  :global([data-theme='light']) .lab-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .header-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lab-badge {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+  }
+
+  :global([data-theme='light']) .lab-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+  }
+
+  .ar4-tag {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  :global([data-theme='light']) .ar4-tag {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+  }
+
+  .lab-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .lab-title {
+    color: #0f172a;
+  }
+
+  .lab-desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .lab-desc {
+    color: #475569;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  .spec-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+  }
+
+  :global([data-theme='light']) .spec-card {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+
+  .spec-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .spec-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .spec-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+    letter-spacing: 0.04em;
+  }
+
+  .spec-value {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+  }
+
+  :global([data-theme='light']) .spec-value {
+    color: #0f172a;
+  }
+
+  /* Lab Card */
+  .lab-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    border-radius: 14px;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  :global([data-theme='light']) .lab-card {
+    background: #ffffff;
+    border-color: rgba(59, 130, 246, 0.25);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.06);
+  }
+
+  .card-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.5rem;
+  }
+
+  :global([data-theme='light']) .card-top-bar {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .table-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #60a5fa;
+  }
+
+  :global([data-theme='light']) .table-title {
+    color: #2563eb;
+  }
+
+  .dim-tag {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .card-subtext {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  :global([data-theme='light']) .card-subtext {
+    color: #475569;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .ar4-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    text-align: left;
+  }
+
+  .ar4-table th, .ar4-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  :global([data-theme='light']) .ar4-table th,
+  :global([data-theme='light']) .ar4-table td {
+    border-bottom-color: #e2e8f0;
+  }
+
+  .ar4-table th {
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .joint-pill {
+    background: #1e3a8a;
+    color: #93c5fd;
+    font-weight: 700;
+    font-size: 0.725rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  :global([data-theme='light']) .joint-pill {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .ar4-table code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    color: #38bdf8;
+  }
+
+  :global([data-theme='light']) .ar4-table code {
+    color: #0284c7;
+  }
+
+  .table-footnote {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+  }
+
+  :global([data-theme='light']) .table-footnote {
+    background: #f8fafc;
+    color: #334155;
+  }
+
+  .m-matrix-code {
+    margin: 0.45rem 0 0 0;
+    background: transparent !important;
+    padding: 0;
+  }
+
+  .m-matrix-code code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    color: #34d399;
+  }
+
+  :global([data-theme='light']) .m-matrix-code code {
+    color: #059669;
+  }
+
+  /* Code Grid */
+  .code-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.15rem;
+    width: 100%;
+  }
+
+  @media (max-width: 860px) {
+    .code-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-block {
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .code-block {
+    background: #0f172a;
+    border-color: #334155;
+  }
+
+  .code-block code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    color: #38bdf8;
+    line-height: 1.4;
+  }
+
+  /* Reality Check */
+  .reality-check-box {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    padding: 1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  :global([data-theme='light']) .reality-check-box {
+    background: #fef3c7;
+    border-color: #fde68a;
+  }
+
+  .reality-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .reality-icon {
+    font-size: 1.1rem;
+  }
+
+  .reality-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fbbf24;
+  }
+
+  :global([data-theme='light']) .reality-title {
+    color: #b45309;
+  }
+
+  .reality-text {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .reality-text {
+    color: #78350f;
+  }
+</style>

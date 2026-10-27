@@ -1,0 +1,487 @@
+---
+import type { RmiFormulaRule } from '../../data/rmiData';
+
+interface Props {
+  rule: RmiFormulaRule;
+  lang?: 'en' | 'de';
+}
+
+const { rule, lang = 'en' } = Astro.props;
+---
+
+<div class="rmi-formula-card not-content" id={`formula-${rule.id}`} data-formula-id={rule.id}>
+  <!-- ZONE 1: HEADER -->
+  <div class="card-zone-header">
+    <div class="header-badges">
+      <span class="lesson-badge">{rule.lesson}</span>
+      <span class="category-pill">{rule.category}</span>
+    </div>
+    <h3 class="rule-title">{rule.title}</h3>
+    <div class="formula-pill">
+      <span class="formula-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
+      <div class="formula-math">
+        <code>{rule.formulaLaTeX}</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONE 2: BODY (Intuition & Invariants) -->
+  <div class="card-zone-body">
+    <p class="rule-summary">{rule.summary}</p>
+    
+    <div class="intuition-box">
+      <div class="intuition-header">
+        <span class="intuition-icon">💡</span>
+        <span class="intuition-title">{lang === 'de' ? 'Geometrische Intuition' : 'Geometric & Physical Intuition'}</span>
+      </div>
+      <p class="intuition-text">{rule.intuition}</p>
+    </div>
+
+    <!-- Invariants Checklist -->
+    <div class="invariants-section">
+      <span class="invariants-title">{lang === 'de' ? 'Wichtige Invarianten & Eigenschaften:' : 'Key Invariants & Properties:'}</span>
+      <ul class="invariants-list">
+        {rule.invariants.map((inv) => (
+          <li>
+            <span class="check-icon">✓</span>
+            <span class="inv-text">{inv}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Collapsible Nuances -->
+    {rule.nuances && rule.nuances.length > 0 && (
+      <details class="rule-nuances-accordion">
+        <summary class="nuances-summary">
+          <span class="summary-arrow">▶</span>
+          <span>{lang === 'de' ? 'Sonderfälle & Randbedingungen' : 'Special Cases & Boundary Conditions'}</span>
+        </summary>
+        <div class="nuances-content">
+          <ul>
+            {rule.nuances.map((nuance) => (
+              <li>{nuance}</li>
+            ))}
+          </ul>
+        </div>
+      </details>
+    )}
+  </div>
+
+  <!-- ZONE 3: FOOTER (Live Python Verification & Example) -->
+  <div class="card-zone-footer">
+    <div class="example-header">
+      <span class="example-icon">💻</span>
+      <span class="example-title">{lang === 'de' ? 'Python & NumPy Implementierung' : 'Python & NumPy Verification'}</span>
+    </div>
+    
+    <div class="code-block-wrapper">
+      <pre class="python-code"><code>{rule.pythonCode}</code></pre>
+    </div>
+
+    {rule.latexExample && (
+      <div class="numerical-check">
+        <span class="check-label">{lang === 'de' ? 'Zahlenbeispiel:' : 'Numerical Check:'}</span>
+        <code class="check-val">{rule.latexExample}</code>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .rmi-formula-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  :global([data-theme='light']) .rmi-formula-card {
+    background: #ffffff;
+    border-color: rgba(59, 130, 246, 0.25);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.08);
+  }
+
+  .rmi-formula-card:hover {
+    transform: translateY(-2px);
+    border-color: #3b82f6;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 12px rgba(59, 130, 246, 0.2);
+  }
+
+  :global([data-theme='light']) .rmi-formula-card:hover {
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.16);
+  }
+
+  /* Zone 1: Header */
+  .card-zone-header {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  :global([data-theme='light']) .card-zone-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .header-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lesson-badge {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+  }
+
+  :global([data-theme='light']) .lesson-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+  }
+
+  .category-pill {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  :global([data-theme='light']) .category-pill {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+  }
+
+  .rule-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0.15rem 0;
+    line-height: 1.35;
+  }
+
+  :global([data-theme='light']) .rule-title {
+    color: #0f172a;
+  }
+
+  .formula-pill {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  :global([data-theme='light']) .formula-pill {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  .formula-label {
+    font-weight: 700;
+    color: #60a5fa;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  :global([data-theme='light']) .formula-label {
+    color: #2563eb;
+  }
+
+  .formula-math code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #f8fafc;
+    font-size: 0.825rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  :global([data-theme='light']) .formula-math code {
+    color: #0f172a;
+  }
+
+  /* Zone 2: Body */
+  .card-zone-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rule-summary {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .rule-summary {
+    color: #334155;
+  }
+
+  .intuition-box {
+    background: rgba(30, 41, 59, 0.5);
+    border-left: 3px solid #3b82f6;
+    border-radius: 0 8px 8px 0;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  :global([data-theme='light']) .intuition-box {
+    background: #f8fafc;
+    border-left-color: #2563eb;
+  }
+
+  .intuition-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .intuition-icon {
+    font-size: 0.95rem;
+  }
+
+  .intuition-title {
+    font-size: 0.775rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+  }
+
+  :global([data-theme='light']) .intuition-title {
+    color: #1d4ed8;
+  }
+
+  .intuition-text {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  :global([data-theme='light']) .intuition-text {
+    color: #475569;
+  }
+
+  .invariants-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .invariants-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sl-color-gray-3);
+  }
+
+  .invariants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .invariants-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
+  }
+
+  :global([data-theme='light']) .invariants-list li {
+    color: #334155;
+  }
+
+  .check-icon {
+    color: #10b981;
+    font-weight: 800;
+    font-size: 0.8rem;
+    margin-top: 0.05rem;
+  }
+
+  .rule-nuances-accordion {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+
+  :global([data-theme='light']) .rule-nuances-accordion {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+  }
+
+  .nuances-summary {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    user-select: none;
+  }
+
+  .nuances-summary:hover {
+    color: #60a5fa;
+  }
+
+  .summary-arrow {
+    font-size: 0.65rem;
+    transition: transform 0.15s ease;
+  }
+
+  .rule-nuances-accordion[open] .summary-arrow {
+    transform: rotate(90deg);
+  }
+
+  .nuances-content {
+    padding: 0.5rem 0.85rem 0.75rem 1.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+  }
+
+  :global([data-theme='light']) .nuances-content {
+    color: #475569;
+    border-top-color: #e2e8f0;
+  }
+
+  .nuances-content ul {
+    margin: 0;
+    padding-left: 0.85rem;
+  }
+
+  /* Zone 3: Footer */
+  .card-zone-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  :global([data-theme='light']) .card-zone-footer {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .example-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .example-icon {
+    font-size: 0.95rem;
+  }
+
+  .example-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+  }
+
+  :global([data-theme='light']) .example-title {
+    color: #1d4ed8;
+  }
+
+  .code-block-wrapper {
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.75rem;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .code-block-wrapper {
+    background: #0f172a;
+    border-color: #334155;
+  }
+
+  .python-code {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+  }
+
+  .python-code code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    color: #38bdf8;
+    line-height: 1.4;
+  }
+
+  .numerical-check {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .numerical-check {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+
+  .check-label {
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    flex-shrink: 0;
+  }
+
+  .check-val {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #a78bfa;
+    word-break: break-word;
+  }
+
+  :global([data-theme='light']) .check-val {
+    color: #6d28d9;
+  }
+</style>
