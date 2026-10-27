@@ -14,7 +14,8 @@ const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
 ---
 
 <article
-  class="grammar-card not-content"
+  class="grammar-card not-content notranslate"
+  translate="no"
   id={`grammar-${rule.id}`}
   data-rule-id={rule.id}
   data-category={rule.category}
@@ -40,9 +41,9 @@ const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
     <h3 class="rule-title">{title}</h3>
 
     <!-- Monospace Syntactic Skeleton Formula Pill -->
-    <div class="formula-pill-wrapper">
+    <div class="formula-pill-wrapper notranslate" translate="no">
       <span class="formula-label">Formel:</span>
-      <code class="formula-pill">{rule.formula}</code>
+      <code class="formula-pill notranslate" translate="no">{rule.formula}</code>
     </div>
   </header>
 
@@ -73,17 +74,17 @@ const nuances = lang === 'en' ? rule.nuancesEn : rule.nuancesDe;
       <span class="ruby-hint">Tipp: Pinyin-Modus in der Leiste oben umschaltbar</span>
     </div>
 
-    <div class="examples-stack">
+    <div class="examples-stack notranslate" translate="no">
       {rule.examples.map((ex, idx) => (
         <div class="example-grid-item" data-example-idx={idx}>
           <!-- Row 1: Large Hanzi -->
           <div class="example-hanzi-row">
-            <span class="hanzi-text">{ex.hanzi}</span>
+            <span class="hanzi-text notranslate" translate="no" lang="zh">{ex.hanzi}</span>
           </div>
 
           <!-- Row 2: Muted Aligned Pinyin -->
           <div class="example-pinyin-row">
-            <span class="pinyin-text">{ex.pinyin}</span>
+            <span class="pinyin-text notranslate" translate="no" lang="zh-Latn">{ex.pinyin}</span>
           </div>
 
           <!-- Row 3: Translation -->

@@ -5,7 +5,11 @@ sidebar:
   order: 10
 head:
   - tag: script
-    content: document.documentElement.dataset.pageBg = 'japanese';
+    content: document.documentElement.dataset.pageBg = 'japanese'; document.documentElement.classList.add('notranslate');
+  - tag: meta
+    attrs:
+      name: google
+      content: notranslate
 ---
 
 import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';

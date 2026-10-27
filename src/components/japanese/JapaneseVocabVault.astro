@@ -37,7 +37,7 @@ const lessons = [
 ];
 ---
 
-<div class="japanese-vocab-vault not-content" id="japanese-vocab-vault">
+<div class="japanese-vocab-vault not-content notranslate" translate="no" id="japanese-vocab-vault">
   <!-- Vocab Header & Search -->
   <div class="vocab-header-card">
     <div class="vocab-title-row">
@@ -114,17 +114,17 @@ const lessons = [
         const pk = parseVocabTerm(v.kanji);
         const pr = parseVocabTerm(v.kana);
         return (
-          <div class="vocab-card" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+          <div class="vocab-card notranslate" translate="no" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
             <div class="vcard-top">
-              <span class="vcard-lesson">L{v.lesson} #{v.num}</span>
+              <span class="vcard-lesson notranslate" translate="no">L{v.lesson} #{v.num}</span>
             </div>
-            <div class="vcard-kanji">
-              <span class="vocab-term-main">{pk.main}</span>
-              {pk.note && <span class="vocab-card-note">{pk.note}</span>}
+            <div class="vcard-kanji notranslate" translate="no" lang="ja">
+              <span class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</span>
+              {pk.note && <span class="vocab-card-note notranslate" translate="no" lang="ja">{pk.note}</span>}
             </div>
-            <div class="vcard-kana">
-              <span class="vocab-kana-main">{pr.main}</span>
-              {pr.note && <span class="vocab-card-kana-note">{pr.note}</span>}
+            <div class="vcard-kana notranslate" translate="no" lang="ja">
+              <span class="vocab-kana-main notranslate" translate="no" lang="ja">{pr.main}</span>
+              {pr.note && <span class="vocab-card-kana-note notranslate" translate="no" lang="ja">{pr.note}</span>}
             </div>
             <div class="vcard-meaning">{lang === 'en' ? v.en : v.de}</div>
             <div class="vcard-alt-trans">{lang === 'en' ? v.de : v.en}</div>
@@ -140,13 +140,13 @@ const lessons = [
       <span>↔️ {lang === 'en' ? 'Tip: Scroll horizontally if table exceeds screen width' : 'Tipp: Tabelle lässt sich bei schmalem Display horizontal scrollen'}</span>
     </div>
     <div class="table-scroll-wrapper">
-      <table class="vocab-data-table" id="jp-vocab-table">
+      <table class="vocab-data-table notranslate" translate="no" id="jp-vocab-table">
         <thead>
           <tr>
             <th>#</th>
             <th>{lang === 'en' ? 'Lesson' : 'Lektion'}</th>
-            <th>Kanji</th>
-            <th>Kana</th>
+            <th class="notranslate" translate="no" lang="ja">Kanji</th>
+            <th class="notranslate" translate="no" lang="ja">Kana</th>
             <th>{lang === 'en' ? 'English Meaning' : 'Deutsche Bedeutung'}</th>
             <th>{lang === 'en' ? 'German Translation' : 'Englische Übersetzung'}</th>
           </tr>
@@ -158,17 +158,17 @@ const lessons = [
             return (
               <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
                 <td class="col-num">{v.num}</td>
-                <td class="col-lesson"><span class="table-lbadge">L{v.lesson}</span></td>
-                <td class="col-kanji">
-                  <div class="vocab-table-cell">
-                    <strong class="vocab-term-main">{pk.main}</strong>
-                    {pk.note && <span class="vocab-table-note">{pk.note}</span>}
+                <td class="col-lesson"><span class="table-lbadge notranslate" translate="no">L{v.lesson}</span></td>
+                <td class="col-kanji notranslate" translate="no" lang="ja">
+                  <div class="vocab-table-cell notranslate" translate="no" lang="ja">
+                    <strong class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</strong>
+                    {pk.note && <span class="vocab-table-note notranslate" translate="no" lang="ja">{pk.note}</span>}
                   </div>
                 </td>
-                <td class="col-kana">
-                  <div class="vocab-table-cell">
-                    <code class="vocab-kana-badge">{pr.main}</code>
-                    {pr.note && <span class="vocab-kana-note">{pr.note}</span>}
+                <td class="col-kana notranslate" translate="no" lang="ja">
+                  <div class="vocab-table-cell notranslate" translate="no" lang="ja">
+                    <code class="vocab-kana-badge notranslate" translate="no" lang="ja">{pr.main}</code>
+                    {pr.note && <span class="vocab-kana-note notranslate" translate="no" lang="ja">{pr.note}</span>}
                   </div>
                 </td>
                 <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>

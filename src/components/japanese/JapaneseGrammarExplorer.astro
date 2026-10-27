@@ -25,7 +25,7 @@ const lessons = [
 ];
 ---
 
-<div class="japanese-grammar-explorer not-content" id="japanese-grammar-explorer">
+<div class="japanese-grammar-explorer not-content notranslate" translate="no" id="japanese-grammar-explorer">
   <!-- Top Banner & Dashboard Intro -->
   <div class="explorer-header">
     <div class="header-titles">
@@ -169,9 +169,9 @@ const lessons = [
       {JAPANESE_GRAMMAR_RULES.map((rule) => (
         <details class="grammar-accordion-item" data-rule-id={rule.id} data-category={rule.category} data-lesson={rule.lesson}>
           <summary class="accordion-item-header">
-            <span class="acc-lesson-badge">{rule.lesson}</span>
-            <span class="acc-title">{lang === 'en' ? rule.titleEn : rule.titleDe}</span>
-            <code class="acc-formula-code">{rule.formula}</code>
+            <span class="acc-lesson-badge notranslate" translate="no">{rule.lesson}</span>
+            <span class="acc-title notranslate" translate="no">{lang === 'en' ? rule.titleEn : rule.titleDe}</span>
+            <code class="acc-formula-code notranslate" translate="no">{rule.formula}</code>
             <span class="acc-arrow">▼</span>
           </summary>
           <div class="accordion-item-content">

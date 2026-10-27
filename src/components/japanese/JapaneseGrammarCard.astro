@@ -10,21 +10,21 @@ const { rule, lang = 'de' } = Astro.props;
 
 // Helper to convert bracketed furigana "窓[まど]が 割[わ]れて います。" into ruby HTML
 function renderFurigana(text: string): string {
-  return text.replace(/([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g, '<ruby class="furigana-ruby">$1<rt class="furigana-rt">$2</rt></ruby>');
+  return text.replace(/([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g, '<ruby class="furigana-ruby notranslate" translate="no" lang="ja">$1<rt class="furigana-rt notranslate" translate="no" lang="ja">$2</rt></ruby>');
 }
 ---
 
-<article class="japanese-grammar-card not-content" data-rule-id={rule.id} data-category={rule.category} data-lesson={rule.lesson}>
+<article class="japanese-grammar-card not-content notranslate" translate="no" data-rule-id={rule.id} data-category={rule.category} data-lesson={rule.lesson}>
   <!-- Zone 1: Header Zone -->
   <header class="card-zone-header">
     <div class="header-badge-row">
-      <span class="lesson-badge">{rule.lesson}</span>
-      <span class="category-pill">{rule.category}</span>
+      <span class="lesson-badge notranslate" translate="no">{rule.lesson}</span>
+      <span class="category-pill notranslate" translate="no">{rule.category}</span>
     </div>
-    <h3 class="rule-title">{lang === 'en' ? rule.titleEn : rule.titleDe}</h3>
-    <div class="formula-pill">
+    <h3 class="rule-title notranslate" translate="no">{lang === 'en' ? rule.titleEn : rule.titleDe}</h3>
+    <div class="formula-pill notranslate" translate="no">
       <span class="formula-label">{lang === 'en' ? 'Formula:' : 'Formel:'}</span>
-      <code class="formula-code">{rule.formula}</code>
+      <code class="formula-code notranslate" translate="no">{rule.formula}</code>
     </div>
   </header>
 
@@ -54,16 +54,16 @@ function renderFurigana(text: string): string {
       <span class="examples-badge">💬 {lang === 'en' ? 'Example Sentences' : 'Beispielsätze'}</span>
     </div>
 
-    <div class="examples-container">
+    <div class="examples-container notranslate" translate="no">
       {rule.examples.map((ex, idx) => (
         <div class="example-box">
           <div class="example-index">0{idx + 1}</div>
           <div class="example-content">
             <!-- Layer 1: Kanji with Furigana -->
-            <div class="example-kanji" set:html={renderFurigana(ex.kanji)} />
+            <div class="example-kanji notranslate" translate="no" lang="ja" set:html={renderFurigana(ex.kanji)} />
 
             <!-- Layer 2: Full Kana -->
-            <div class="example-kana">{ex.kana}</div>
+            <div class="example-kana notranslate" translate="no" lang="ja">{ex.kana}</div>
 
             <!-- Layer 3: Translation -->
             <div class="example-translation">{lang === 'en' ? ex.en : ex.de}</div>
