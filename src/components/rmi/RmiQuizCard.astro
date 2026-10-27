@@ -1,5 +1,6 @@
 ---
 import type { RmiQuizItem } from '../../data/rmiData';
+import { renderMathInText } from './katexHelper';
 
 interface Props {
   item: RmiQuizItem;
@@ -22,7 +23,7 @@ const { item, lang = 'en' } = Astro.props;
 
   <!-- Question Prompt -->
   <div class="quiz-question-box">
-    <p class="question-text">{item.question}</p>
+    <p class="question-text" set:html={renderMathInText(item.question)} />
   </div>
 
   <!-- Interactive Options List -->
@@ -35,7 +36,7 @@ const { item, lang = 'en' } = Astro.props;
         aria-checked="false"
       >
         <span class="option-letter">{opt.id.toUpperCase()}</span>
-        <span class="option-text">{opt.text}</span>
+        <span class="option-text" set:html={renderMathInText(opt.text)} />
         <span class="option-feedback-icon" aria-hidden="true"></span>
       </button>
     ))}
@@ -63,7 +64,7 @@ const { item, lang = 'en' } = Astro.props;
 
     <div class="solution-explanation">
       <h4 class="explanation-heading">{lang === 'de' ? 'Ausführliche Herleitung:' : 'Step-by-Step Derivation:'}</h4>
-      <p class="explanation-text">{item.explanation}</p>
+      <p class="explanation-text" set:html={renderMathInText(item.explanation)} />
     </div>
 
     <!-- Distractors Analysis -->
@@ -73,7 +74,7 @@ const { item, lang = 'en' } = Astro.props;
         {item.distractorBreakdown.map((d) => (
           <li>
             <span class="distractor-id">({d.optionId.toUpperCase()}):</span>
-            <span class="distractor-why">{d.whyWrong}</span>
+            <span class="distractor-why" set:html={renderMathInText(d.whyWrong)} />
           </li>
         ))}
       </ul>

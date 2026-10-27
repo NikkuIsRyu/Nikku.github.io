@@ -1,5 +1,6 @@
 ---
 import type { RmiFormulaRule } from '../../data/rmiData';
+import { renderFormula, renderMathInText } from './katexHelper';
 
 interface Props {
   rule: RmiFormulaRule;
@@ -19,22 +20,20 @@ const { rule, lang = 'en' } = Astro.props;
     <h3 class="rule-title">{rule.title}</h3>
     <div class="formula-pill">
       <span class="formula-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
-      <div class="formula-math">
-        <code>{rule.formulaLaTeX}</code>
-      </div>
+      <div class="formula-math" set:html={renderFormula(rule.formulaLaTeX, true)} />
     </div>
   </div>
 
   <!-- ZONE 2: BODY (Intuition & Invariants) -->
   <div class="card-zone-body">
-    <p class="rule-summary">{rule.summary}</p>
+    <p class="rule-summary" set:html={renderMathInText(rule.summary)} />
     
     <div class="intuition-box">
       <div class="intuition-header">
         <span class="intuition-icon">💡</span>
         <span class="intuition-title">{lang === 'de' ? 'Geometrische Intuition' : 'Geometric & Physical Intuition'}</span>
       </div>
-      <p class="intuition-text">{rule.intuition}</p>
+      <p class="intuition-text" set:html={renderMathInText(rule.intuition)} />
     </div>
 
     <!-- Invariants Checklist -->
@@ -44,7 +43,7 @@ const { rule, lang = 'en' } = Astro.props;
         {rule.invariants.map((inv) => (
           <li>
             <span class="check-icon">✓</span>
-            <span class="inv-text">{inv}</span>
+            <span class="inv-text" set:html={renderMathInText(inv)} />
           </li>
         ))}
       </ul>
@@ -60,7 +59,7 @@ const { rule, lang = 'en' } = Astro.props;
         <div class="nuances-content">
           <ul>
             {rule.nuances.map((nuance) => (
-              <li>{nuance}</li>
+              <li set:html={renderMathInText(nuance)} />
             ))}
           </ul>
         </div>
@@ -82,7 +81,7 @@ const { rule, lang = 'en' } = Astro.props;
     {rule.latexExample && (
       <div class="numerical-check">
         <span class="check-label">{lang === 'de' ? 'Zahlenbeispiel:' : 'Numerical Check:'}</span>
-        <code class="check-val">{rule.latexExample}</code>
+        <div class="check-val" set:html={renderFormula(rule.latexExample, false)} />
       </div>
     )}
   </div>
@@ -187,13 +186,13 @@ const { rule, lang = 'en' } = Astro.props;
 
   .formula-pill {
     display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.35rem;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(59, 130, 246, 0.3);
-    padding: 0.45rem 0.75rem;
+    padding: 0.65rem 0.85rem;
     border-radius: 8px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     overflow-x: auto;
     width: 100%;
     box-sizing: border-box;
@@ -207,23 +206,24 @@ const { rule, lang = 'en' } = Astro.props;
   .formula-label {
     font-weight: 700;
     color: #60a5fa;
-    flex-shrink: 0;
-    margin-top: 0.1rem;
+    font-size: 0.725rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   :global([data-theme='light']) .formula-label {
     color: #2563eb;
   }
 
-  .formula-math code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  .formula-math {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 100%;
     color: #f8fafc;
-    font-size: 0.825rem;
-    word-break: break-word;
-    overflow-wrap: anywhere;
   }
 
-  :global([data-theme='light']) .formula-math code {
+  :global([data-theme='light']) .formula-math {
     color: #0f172a;
   }
 
@@ -313,7 +313,7 @@ const { rule, lang = 'en' } = Astro.props;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.35rem;
   }
 
   .invariants-list li {
@@ -321,7 +321,7 @@ const { rule, lang = 'en' } = Astro.props;
     align-items: flex-start;
     gap: 0.45rem;
     font-size: 0.8rem;
-    line-height: 1.4;
+    line-height: 1.45;
     color: var(--sl-color-gray-2);
   }
 
@@ -334,6 +334,7 @@ const { rule, lang = 'en' } = Astro.props;
     font-weight: 800;
     font-size: 0.8rem;
     margin-top: 0.05rem;
+    flex-shrink: 0;
   }
 
   .rule-nuances-accordion {
@@ -378,7 +379,7 @@ const { rule, lang = 'en' } = Astro.props;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.775rem;
     color: var(--sl-color-gray-3);
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   :global([data-theme='light']) .nuances-content {
@@ -455,10 +456,10 @@ const { rule, lang = 'en' } = Astro.props;
   .numerical-check {
     display: flex;
     align-items: baseline;
-    gap: 0.45rem;
-    font-size: 0.75rem;
+    gap: 0.55rem;
+    font-size: 0.775rem;
     background: rgba(255, 255, 255, 0.03);
-    padding: 0.35rem 0.65rem;
+    padding: 0.45rem 0.75rem;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     overflow-x: auto;
@@ -476,12 +477,11 @@ const { rule, lang = 'en' } = Astro.props;
   }
 
   .check-val {
-    font-family: ui-monospace, SFMono-Regular, monospace;
-    color: #a78bfa;
-    word-break: break-word;
+    color: #f1f5f9;
+    overflow-x: auto;
   }
 
   :global([data-theme='light']) .check-val {
-    color: #6d28d9;
+    color: #0f172a;
   }
 </style>
