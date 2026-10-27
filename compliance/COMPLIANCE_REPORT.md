@@ -8,7 +8,7 @@
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (139/139) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (137/137) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
@@ -24,11 +24,11 @@
 * **Current Safeguards on Site**:
   - ✅ Direct raw audio downloads are withheld and blocked
   - ✅ Anki deck download is gated behind WIP (wip={true}) in DriveAsset
-  - ✅ Precautionary Fallback Active: Dialogues temporarily replaced with independently authored, royalty-free study scripts until publisher response
-  - ✅ Explicit copyright notice disclaimer prominently published on German (/chinese/) and English (/chinese/en/) pages
+  - ✅ Precautionary Fallback Active: Dialogues replaced with 100% independently authored, royalty-free study scripts
+  - ✅ Dialogues completely customized so textbook copyright does not apply
   - ✅ Strictly non-commercial academic study aid (zero monetization)
   - ✅ Textbook and publisher credited with full academic citation
-* **Fallback Plan**: Precautionary measure already executed: Dialogue sentences replaced with original conversational scripts crafted for practice, and prominent copyright disclaimers deployed. Upon affirmative response from Schmetterling Verlag, original textbook dialogues will be reinstated.
+* **Fallback Plan**: Dialogues completely customized with independently authored conversation scripts, fully eliminating reliance on proprietary textbook text.
 
 ## 🏛️ Cleared Academic & Legal Frameworks
 

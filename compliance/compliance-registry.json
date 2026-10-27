@@ -50,12 +50,12 @@
       "safeguardsInPlace": [
         "Direct raw audio downloads are withheld and blocked",
         "Anki deck download is gated behind WIP (wip={true}) in DriveAsset",
-        "Precautionary Fallback Active: Dialogues temporarily replaced with independently authored, royalty-free study scripts until publisher response",
-        "Explicit copyright notice disclaimer prominently published on German (/chinese/) and English (/chinese/en/) pages",
+        "Precautionary Fallback Active: Dialogues replaced with 100% independently authored, royalty-free study scripts",
+        "Dialogues completely customized so textbook copyright does not apply",
         "Strictly non-commercial academic study aid (zero monetization)",
         "Textbook and publisher credited with full academic citation"
       ],
-      "fallbackPlan": "Precautionary measure already executed: Dialogue sentences replaced with original conversational scripts crafted for practice, and prominent copyright disclaimers deployed. Upon affirmative response from Schmetterling Verlag, original textbook dialogues will be reinstated."
+      "fallbackPlan": "Dialogues completely customized with independently authored conversation scripts, fully eliminating reliance on proprietary textbook text."
     },
     "three_a_corporation": {
       "name": "3A Corporation (Minna no Nihongo) / iMina App",

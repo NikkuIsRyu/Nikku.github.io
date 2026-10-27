@@ -9,6 +9,10 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
 	site: 'https://nikku.tech',
 	base: '/',
+	redirects: {
+		'/lectures/languages/chinese/prototype': '/lectures/languages/chinese/',
+		'/lectures/languages/chinese/en/prototype': '/lectures/languages/chinese/en/',
+	},
 	markdown: {
 		processor: unified({
 			remarkPlugins: [remarkMath],

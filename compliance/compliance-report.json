@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-10-27T10:11:31.092Z",
+  "timestamp": "2026-10-27T10:18:13.117Z",
   "passed": true,
   "warnings": [],
   "errors": [],
   "metrics": {
-    "totalFilesAudited": 139,
-    "registeredFiles": 139,
+    "totalFilesAudited": 137,
+    "registeredFiles": 137,
     "unmappedCount": 0,
     "totalDependencies": 360,
     "pendingPublishersCount": 1,
