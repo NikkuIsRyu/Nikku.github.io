@@ -246,7 +246,7 @@ async function runBenchmark() {
 
   // Check audio dialogue assets for direct public download leaks
   const audioFiles = allPhysicalFiles.filter(f => f.startsWith('public/audio/dialogues/') && f.endsWith('.mp3'));
-  console.log(`   Audited audio files: ${colors.bold}${audioFiles.length}${colors.reset} stream-only dialogue tracks (Voice-ML v4, L2–L7).`);
+  console.log(`   Audited audio files: ${colors.bold}${audioFiles.length}${colors.reset} stream-only dialogue tracks (Voice-ML v4, L2–L10).`);
   console.log(`   ${colors.green}✓ No direct download endpoints or unauthenticated download anchors detected.${colors.reset}\n`);
 
   // 3. UNIVERSITY IP & PROFESSOR SLIDE DISTRIBUTION AUDIT

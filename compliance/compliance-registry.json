@@ -43,9 +43,9 @@
       "status": "PENDING_PERMISSION",
       "scope": "Permission to present synthesized dialogues and vocabulary learning aids on personal educational digital garden (nikku.tech) for students of Heidelberg University and public learners.",
       "itemsUnderReview": [
-        "Chinese dialogue texts (Lektionen 2–7) from course textbook",
+        "Chinese dialogue texts (Lektionen 2–10) from course textbook",
         "Dual-Audio 107 MB Anki Spaced-Repetition Deck",
-        "Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus)"
+        "Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus, 18 dialogues)"
       ],
       "safeguardsInPlace": [
         "Direct raw audio downloads are withheld and blocked",
@@ -128,7 +128,20 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "12 interactive dialogues (Lektionen 2–7) with fallback royalty-free scripts active pending publisher response."
+      "notes": "18 interactive dialogues (Lektionen 2–10) with fallback royalty-free scripts active pending publisher response."
+    },
+    {
+      "id": "chinese_grammar_data",
+      "name": "Chinese Grammar Rules & Confusable Data",
+      "paths": [
+        "src/data/chineseGrammarData.ts"
+      ],
+      "publisher": "schmetterling_verlag",
+      "status": "CLEARED_FAIR_USE_SYNTHESIS",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Original 26 grammar compendium rules, 3-zone pattern matrices, and confusable character analyses under UrhG §51."
     },
     {
       "id": "chinese_audio_dialogues",
@@ -141,7 +154,7 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "12 Multi-Speaker Voice-ML v4 synthesized audio files (Dialogue2_1.mp3 to Dialogue7_2.mp3). Stream-only interactive playback without raw download links."
+      "notes": "18 Multi-Speaker Voice-ML v4 synthesized audio files (Dialogue2_1.mp3 to Dialogue10_2.mp3). Stream-only interactive playback without raw download links."
     },
     {
       "id": "chinese_timestamps",
@@ -154,21 +167,20 @@
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "12 JSON turn start and end offsets for interactive karaoke highlighting."
+      "notes": "18 JSON turn start and end offsets for interactive karaoke highlighting."
     },
     {
       "id": "chinese_course_page",
-      "name": "Chinese Language Course Page & Anki Asset",
+      "name": "Chinese Language Course Page, Prototypes & Anki Asset",
       "paths": [
-        "src/content/docs/lectures/languages/chinese/index.mdx",
-        "src/content/docs/lectures/languages/chinese/en/index.mdx"
+        "src/content/docs/lectures/languages/chinese/**"
       ],
       "publisher": "schmetterling_verlag",
       "status": "PENDING_PERMISSION",
       "canSharePublicly": true,
       "requiresWipGate": true,
       "allowDirectDownload": false,
-      "notes": "Bilingual German & English study guides. Gated with wip={true} on Anki deck and verified copyright disclosure notices."
+      "notes": "Bilingual German & English study guides and Argon UX prototypes. Gated with wip={true} on Anki deck and verified copyright disclosure notices."
     },
     {
       "id": "japanese_language_vault",

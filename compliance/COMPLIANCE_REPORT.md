@@ -8,7 +8,7 @@
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (124/124) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (139/139) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
@@ -18,7 +18,7 @@
 
 ### ⏳ Schmetterling Verlag Stuttgart (Status: `PENDING_PERMISSION`)
 
-* **Items Under Review**: Chinese dialogue texts (Lektionen 2–7) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus)
+* **Items Under Review**: Chinese dialogue texts (Lektionen 2–10) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus, 18 dialogues)
 * **Contact Email**: `info@schmetterling-verlag.de`
 * **Initial Inquiry Sent**: 2026-10-18 (**9 days ago**)
 * **Current Safeguards on Site**:
