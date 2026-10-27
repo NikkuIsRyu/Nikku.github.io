@@ -12,6 +12,8 @@ export default defineConfig({
 	redirects: {
 		'/lectures/languages/chinese/prototype': '/lectures/languages/chinese/',
 		'/lectures/languages/chinese/en/prototype': '/lectures/languages/chinese/en/',
+		'/lectures/languages/japanese/prototype': '/lectures/languages/japanese/b1-1/',
+		'/lectures/languages/japanese/de/prototype': '/lectures/languages/japanese/b1-1/de/',
 	},
 	markdown: {
 		processor: unified({

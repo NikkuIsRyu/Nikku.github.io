@@ -157,7 +157,7 @@ const modes = [
 
       // Update Display Text
       if (activeName) {
-        const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/languages/japanese/prototype');
+        const isEn = document.documentElement.lang?.startsWith('en') || (window.location.pathname.includes('/languages/japanese/') && !window.location.pathname.includes('/de/'));
         const labelObj = modeLabels[targetMode] || modeLabels['grammar'];
         activeName.textContent = isEn ? labelObj.en : labelObj.de;
       }

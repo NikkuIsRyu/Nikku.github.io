@@ -1,6 +1,6 @@
 ---
-title: "Japanisch B1.1 — Chapters 26–32 (Minna no Nihongo II)"
-description: "Complete grammar reference, conjugation matrices, and verified Anki vocabulary registers for Chapters 26–32."
+title: "Japanese B1.1 — Chapters 26–32 (Minna no Nihongo II)"
+description: "Interactive intermediate Japanese B1.1 study compendium: 3-Zone GrammarCards, Confusables Spotlight, Furigana Active Recall, Vocabulary Vault, and Conjugation Matrices."
 sidebar:
   order: 1
 head:
@@ -13,70 +13,141 @@ head:
 ---
 
 import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import JapaneseStudyDashboard from '../../../../../../components/japanese/JapaneseStudyDashboard.astro';
+import JapaneseGrammarExplorer from '../../../../../../components/japanese/JapaneseGrammarExplorer.astro';
+import JapaneseConfusableCard from '../../../../../../components/japanese/JapaneseConfusableCard.astro';
+import JapaneseGrammarCard from '../../../../../../components/japanese/JapaneseGrammarCard.astro';
+import JapaneseVocabVault from '../../../../../../components/japanese/JapaneseVocabVault.astro';
+import DriveAsset from '../../../../../../components/DriveAsset.astro';
 import LanguageSwitch from '../../../../../../components/LanguageSwitch.astro';
+import { JAPANESE_CONFUSABLE_PAIRS, JAPANESE_GRAMMAR_RULES } from '../../../../../../data/japaneseGrammarData';
 
 <div class="page-bg-japanese" aria-hidden="true"></div>
 
-# Japanisch B1.1 <Badge text="Chapters 26–32" variant="success" size="medium" />
+# 🇯🇵 Japanese B1.1 <Badge text="Minna no Nihongo II • Chapters 26–32" variant="success" size="medium" />
 
-<LanguageSwitch current="en" />
+<LanguageSwitch current="en" enHref="/lectures/languages/japanese/b1-1/" deHref="/lectures/languages/japanese/b1-1/de/" />
 
-:::tip[⚡ Interactive Argon UX Prototype Available]
-Explore Japanese B1.1 grammar rules and the complete 335-word vocabulary register in our new interactive workspace featuring **Furigana Active Recall** (Hover-to-Reveal / Hide furigana), comparative Confusable Spotlights, and live study mode filtering:  
-👉 **[🇬🇧 Open Interactive Japanese Prototype →](/lectures/languages/japanese/prototype/)** &nbsp;|&nbsp; **[🇩🇪 Interaktiven Prototyp öffnen →](/lectures/languages/japanese/de/prototype/)**
+Interactive study compendium and active-recall reference for the intermediate B1.1 level (**Minna no Nihongo Shokyu II**, Chapters 26 through 32) at Heidelberg University (*heiSKILLS & Central Language Laboratory*).
+
+Powered by the **Argon UX Architecture**, addressing the visual density of Japanese notes and equipping students with modular active-learning tools:
+
+:::tip[Why this architecture transforms Japanese learning]
+* **The Japanese Clutter Challenge**: Japanese intermediate notes naturally suffer from quadruple visual density: **Kanji**, **Kana/Furigana**, **Romaji/Pitch**, and **Translation**, paired with complex conjugation stems (Godan/Ichidan/Irregular). In linear documents, reading becomes overwhelming and students unintentionally cheat by glancing at the Furigana instead of reading the Kanji.
+* **The Argon Solution**: Transitioning to a **modular study dashboard** with 5 targeted focus modes:
+  1. **📐 Grammar Explorer**: 26 rules with Bento Grid cards, formula pills, and collapsible nuances.
+  2. **⚖️ Confusables Spotlight**: Direct side-by-side contrastive analysis of tricky grammar pairs (`〜ている` vs. `〜てある`, `見えます` vs. `見られます`, `〜つもり` vs. `〜予定`).
+  3. **🔤 Vocabulary Vault**: 335 verified words with **Furigana Active Recall** (Hover to Reveal!).
+  4. **🛠️ Conjugation Matrices**: Master cheat sheets for Potential, Volitional, and Clause attachment rules.
+  5. **🗂️ Course Assets**: Spaced repetition Anki decks and verified source errata audits.
 :::
 
-Comprehensive grammar synthesis and verified vocabulary registers for **Chapters 26–32** (*Minna no Nihongo Shokyu II*), compiled from the Free Available App **iMina** in the Playstore and the **Minna no Nihongo 1 & 2 Anki Deck** (`335` vocabulary entries across Lessons 26–32).
+---
+
+## 🧭 Study Mode Navigation Dashboard
+
+Click any tile below to **dynamically switch visible page sections live**:
+
+<JapaneseStudyDashboard activeSection="grammar" lang="en" />
 
 ---
 
-## 🗺️ Quick Chapter Navigation
+{/* ========================================================================= */}
+{/* SECTION 1: GRAMMAR EXPLORER (DEFAULT ACTIVE) */}
+{/* ========================================================================= */}
+<div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar">
 
-| Chapter | Core Grammar Topics | Vocab Register |
+## 📐 Mode: Systematic Grammar Explorer <Badge text="26 Rules • Lessons 26–32" variant="success" />
+
+The **Grammar Explorer** eliminates endless scrolling with live client-side search, customizable Furigana visibility, and responsive Bento card layouts:
+
+* **Live Search (`Ctrl+K`)**: Rapidly find rules by grammar pattern, Kanji, or meaning (e.g. `可能形`, `てある`, `見える`, `つもり`, `んです`).
+* **Layout Switcher**: Toggle seamlessly between **🗂️ Bento Grid** (desktop dashboard), **📑 Accordion List** (compact reference), and **⚖️ Confusables Spotlight**.
+* **Furigana Active Recall**:
+  * **👁️ Always Visible**: Standard continuous reference.
+  * **👆 Hover Mode**: Furigana is blurred/hidden and reveals on hover or tap — test your Kanji reading retention on the fly!
+  * **🙈 Hidden**: Complete removal of reading aids for full character immersion.
+
+<JapaneseGrammarExplorer lang="en" />
+
+---
+
+### 🔍 Standardized 3-Zone "GrammarCard" in Detail
+
+Argon's core principle for linguistic documentation: *"Standardize every grammar point into a visual component with three distinct functional zones."*
+
+```mermaid
+flowchart TD
+    subgraph Card["Japanese GrammarCard Architecture"]
+        Z1["Zone 1: Header Zone<br/>🏷️ Lesson Badge + Category Pill + Title + Monospace Formula"]
+        Z2["Zone 2: Body Zone<br/>📖 1-2 Sentence Core Rule + Collapsible Nuances & Exceptions"]
+        Z3["Zone 3: Footer Zone<br/>🔤 3-Layer Aligned Examples: Kanji with Ruby Furigana + Kana + Translation"]
+    end
+    Z1 --> Z2 --> Z3
+```
+
+Here are two isolated sample cards demonstrating the 3-zone architecture:
+
+<CardGrid>
+  <JapaneseGrammarCard rule={JAPANESE_GRAMMAR_RULES[0]} lang="en" />
+  <JapaneseGrammarCard rule={JAPANESE_GRAMMAR_RULES[4]} lang="en" />
+</CardGrid>
+
+---
+
+### 📊 Layout Pattern Comparison Matrix
+
+| Layout Pattern | Best For | Visual Impact & UX Dynamics |
 | :--- | :--- | :--- |
-| **[Lesson 26](#lesson-26--explanatory-んです-polite-requests--advice)** | `～んです` (Explanatory), `Vて いただけませんか`, `Interrogative + Vたら いいですか`, `Nは` (Topicalizing `が`-Marked Phrases) | [📖 45 words](#lesson-26-vocab) |
-| **[Lesson 27](#lesson-27--potential-verbs-可能形-見えます聞こえます--しか)** | Potential Form (`可能形`), `見えます・聞こえます`, `できます` (Completion), `～しか` (+ neg.), Contrastive `は` & `Particle + は` | [📖 41 words](#lesson-27-vocab) |
-| **[Lesson 28](#lesson-28--simultaneous-actions-ながら-habitual-ています--し)** | `V1ます-stem ながら V2`, Habitual `Vて います`, `Plain form し、～し`, `それで` | [📖 54 words](#lesson-28-vocab) |
-| **[Lesson 29](#lesson-29--resulting-states-自動詞-ています--completionregret-てしまいます)** | `Nが/は Vて います` (Intransitive State), `Vて しまいます / しまいました` (Completion & Regret) | [📖 51 words](#lesson-29-vocab) |
-| **[Lesson 30](#lesson-30--intentional-states-他動詞-てあります--preparation-ておきます)** | `Vて あります` (Transitive Result State), `Vて おきます` (`～ときます`), `まだ Vて います` | [📖 48 words](#lesson-30-vocab) |
-| **[Lesson 31](#lesson-31--volitional-form-意向形-intentions-つもり--schedules-よてい)** | Volitional Form (`～(よ)う`), `～と 思って います`, `～つもりです`, `～予定です`, `まだ Vて いません` | [📖 39 words](#lesson-31-vocab) |
-| **[Lesson 32](#lesson-32--advice-ほうがいい--conjecture-でしょう--かもしれません)** | `Vた/ない ほうが いいです`, `Plain form でしょう`, `Plain form かもしれません`, `もしかしたら` | [📖 57 words](#lesson-32-vocab) |
+| **Bento Grid Cards** | Rapid scanning & reference on desktop | Modern dashboard feel; formula pills catch the eye immediately. |
+| **Accordion List (`<details>`)** | Fitting 26+ rules cleanly on a single page | High density; learners only see titles + formulas until expanded. |
+| **Confusables Spotlight** | Error prevention & contrastive learning (`ている / てある`, `見える / 見られる`) | 2-column direct contrast with ✅/❌ examples prevents chronic grammar pitfalls. |
+| **Hover-Furigana Active Recall** | Vocabulary & reading comprehension | Enables instant self-testing without kana training wheels cluttering the page. |
 
----
+</div>
 
-<details>
-<summary><strong>🔍 Source Audit: Errata & Orthographic Standardizations (iMina App & Anki Deck)</strong> — Click to inspect</summary>
+{/* ========================================================================= */}
+{/* SECTION 2: CONFUSABLES SPOTLIGHT */}
+{/* ========================================================================= */}
+<div id="study-mode-confusables" class="study-mode-section" data-study-mode="confusables" style="display: none;">
 
-During verification of the 27 **iMina** screenshots and the **Anki `.apkg` database**, the following source errors and standardizations were applied to this reference page (separating genuine linguistic/typographical fixes from stylistic conventions):
+## ⚖️ Mode: Confusables Spotlight <Badge text="5 Key Comparative Pairs" variant="tip" />
 
-#### 1. Genuine Japanese Grammar, Conjugation & Kana/Furigana Fixes (11 Fixes)
-1. **Lesson 30 (`て-form あります` screenshot)**: The app wrote `✕ まどが しめって あります`. Since `閉めます` (`しめます`, to close) is a **Group II (Ichidan)** transitive verb, its て-form is **`しめて`** (`〇 まどが しめて あります`), never `しめって` (`閉まります` is the Group I intransitive counterpart, which becomes `しまって います`).
-2. **Lesson 30 (`て-form おきます` screenshot)**: The app wrote `✕ はさみを つかたら`. Since `使います` (`つかいます`, to use) is a **Group I (Godan)** verb ending in `う`, its た-conditional is **`つかったら`** (`〇 はさみを つかったら`), never `つかたら`.
-3. **Lesson 30 (`て-form おきます` colloquial note)**: The app explanation wrote *"In daily conversation, て おきます often becomes て きます"*. In reality, `～て おきます` contracts to **`～ときます`** (and `～て おいて` → **`～といて`**, `～で おきます` → **`～どきます`**), as shown in the example `おいといて ください`.
-4. **Lesson 31 (`よていです` screenshot)**: The app wrote `✕ ドイツへ しゅちょうする よていです`. "Business trip" (`出張`) is **`しゅっちょう`** (with a geminate `っ`), whereas `しゅちょう` (`主張`) means "assertion/claim".
-5. **Lesson 27 (`できます` screenshot)**: The app wrote `✕ とかいの しゅうりは いつ できますか？`. "Watch repair" (`時計の修理`) is **`とけいの しゅうり`**, not `とかい` (`都会`, city).
-6. **Lesson 28 (`Plain form-し` screenshot)**: The app wrote `✕ さかなも あたらしし` (missing `い`). Corrected to **`さかなも あたらしいし`** (`魚も 新しいし`).
-7. **Lesson 29 Anki Card #1 (`開きます［ドアが〜］`)**: The Anki card furigana was marked `✕ 開[ひら]きます`. For an intransitive door opening in Lesson 29, the reading is **`開[あ]きます`** (`あきます`).
-8. **Lesson 29 Anki Card #16 (`to wipe`)**: The Anki card was spelled `✕ ふさます`. Corrected to **`ふきます（拭きます）`**.
-9. **Lesson 29 Anki Card #30 (`After you`)**: The Anki card was spelled `✕ お先に どうそ。` (missing dakuten). Corrected to **`お先に どうぞ。`**
-10. **Lesson 27 Anki Card #23 (`other`)**: The Anki card was spelled `✕ はかの`. Corrected to **`ほかの（他の）`**.
-11. **Lesson 32 Anki Card #46 (`I'm sorry to hear that`)**: The Anki card was spelled `✕ それは いけませんえ。`. Corrected to **`それは いけませんね。`**
+Intermediate Japanese learners frequently confuse semantically adjacent expressions governed by strict syntactic conditions. Inspect direct side-by-side contrasts with correct usage and common errors below:
 
-#### 2. English Gloss & Typo Corrections (3 Fixes)
-1. **Lesson 26 Anki Card #30 (`片づきます［荷物が〜］`)**: The Anki deck glossed this intransitive verb (`自動詞`) as *"to be put in order, to tidy up"*. Because *"to tidy (something) up"* corresponds to the transitive counterpart **`片づけます`** (`他動詞`, introduced in Lesson 29 #18), the gloss was corrected to **`[things/luggage] to get tidied up, to be put in order / put away`**.
-2. **Lesson 26 (`～んです` screenshot)**: Fixed English spelling typo (`"to state a resaon"` → `"to state a reason"`).
-3. **Lesson 28 Anki Card #35 (`娘`)**: Fixed English spelling typo (`"daugher"` → `"daughter"`).
+<JapaneseConfusableCard pair={JAPANESE_CONFUSABLE_PAIRS[0]} lang="en" />
 
-#### 3. Orthographic Standardizations & Textbook Formatting (Not Grammatical Errors)
-* **Lesson 29 (`て-form しまいました` screenshot)**: The app's kana line omitted the topic particle (`しゅくだい もう やって しまいました`), which is natural and grammatical in colloquial speech. Added parenthetical/explicit **`は`** (`宿題[しゅくだい]は もう やって しまいました。`) to match standard written textbook formatting.
-* **Lesson 28 (`Plain form-し` screenshot)**: Standardized the loanword `だんす` in the kana line to standard Katakana **`ダンス`**.
-* **Lesson 26 Anki Card #9 (`気分が 悪い`)**: Replaced the traditional character form (`kyūjitai`) `惡` with the modern standard Jōyō kanji **`悪`**.
+<JapaneseConfusableCard pair={JAPANESE_CONFUSABLE_PAIRS[1]} lang="en" />
 
-</details>
+<JapaneseConfusableCard pair={JAPANESE_CONFUSABLE_PAIRS[2]} lang="en" />
 
----
+<JapaneseConfusableCard pair={JAPANESE_CONFUSABLE_PAIRS[3]} lang="en" />
 
-## 🛠️ Master Verb & Clause Conjugation Reference
+<JapaneseConfusableCard pair={JAPANESE_CONFUSABLE_PAIRS[4]} lang="en" />
+
+</div>
+
+{/* ========================================================================= */}
+{/* SECTION 3: VOCABULARY VAULT */}
+{/* ========================================================================= */}
+<div id="study-mode-vocab" class="study-mode-section" data-study-mode="vocab" style="display: none;">
+
+## 🔤 Mode: Vocabulary Vault & Furigana Trainer <Badge text="335 Verified Words" variant="note" />
+
+Access the verified vocabulary registers of *Minna no Nihongo Shokyu II* (Lessons 26–32). Use the live filter pills or search bar to inspect individual words, and switch Furigana to **Hover Mode** to test your character recognition!
+
+<JapaneseVocabVault lang="en" />
+
+</div>
+
+{/* ========================================================================= */}
+{/* SECTION 4: CONJUGATION MATRICES & CHEAT SHEETS */}
+{/* ========================================================================= */}
+<div id="study-mode-conjugations" class="study-mode-section" data-study-mode="conjugations" style="display: none;">
+
+## 🛠️ Mode: Conjugation Matrices & Cheat Sheets <Badge text="B1.1 Master Tables" variant="success" />
+
+Master intermediate verb conjugations and clause attachment rules with these high-density reference tables:
 
 ### 1. Potential (`可能形`, L27) vs. Volitional (`意向形`, L31)
 
@@ -86,7 +157,9 @@ During verification of the 27 **iMina** screenshots and the **Anki `.apkg` datab
 | **Group II (`一段`)**<br/>*Rule: stem + `られます` / `よう`* | 食**べ**ます (*tabe-masu*)<br/>見ます (*mi-masu*)<br/>寝ます (*ne-masu*) | 食**べる** (*taberu*)<br/>見る (*miru*)<br/>寝る (*neru*) | 食べ**られます** / 食べ**られる**<br/>見**られます** / 見**られる**<br/>寝**られます** / 寝**られる** | 食べ**よう** (*tabeyō*)<br/>見**よう** (*miyō*)<br/>寝**よう** (*neyō*) |
 | **Group III (Irregular)** | **します** (*shi-masu*)<br/>**来[き]ます** (*ki-masu*) | **する** (*suru*)<br/>**来[く]る** (*kuru*) | **できます** / **できる**<br/>**来[こ]られます** / **来[こ]られる** | **しよう** (*shiyō*)<br/>**来[こ]よう** (*koyō*) |
 
-### 2. Clause Attachment Matrix (`～んです`, `～し`, `～でしょう`, `～かもしれません`)
+---
+
+### 2. Clause Attachment Matrix (`〜んです`, `〜し`, `〜でしょう`, `〜かもしれません`)
 
 | Word Class | `+ んです` (L26) | `+ し` (L28) | `+ でしょう` (L32) | `+ かもしれません` (L32) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -95,907 +168,78 @@ During verification of the 27 **iMina** screenshots and the **Anki `.apkg` datab
 | **な-Adjective** | 暇**なんです** / 暇だったんです / 暇じゃないんです / 暇じゃなかったんです | 暇**だ** / 暇だった **+ し** | 暇 *(no だ)* / 暇だった **+ でしょう** | 暇 *(no だ)* / 暇だった **+ かもしれません** |
 | **Noun** | 雨**なんです** / 雨だったんです / 雨じゃないんです / 雨じゃなかったんです | 雨**だ** / 雨だった **+ し** | 雨 *(no だ)* / 雨だった **+ でしょう** | 雨 *(no だ)* / 雨だった **+ かもしれません** |
 
-:::tip[Key Exam Trap]
+:::tip[Crucial Exam Pitfall]
 Notice what happens to present-affirmative **Nouns** and **な-Adjectives** (`だ`):
-- Before **`～んです`** (L26): `だ` changes to **`な`** (`好きなんです`, `先生なんです`).
-- Before **`～し`** (L28): `だ` is **kept** (`まじめだし`, `上手だし`).
-- Before **`～でしょう`** and **`～かもしれません`** (L32): `だ` is **dropped completely** (`先生でしょう`, `先生かもしれません`).
+* Before **`〜んです`** (L26): `だ` changes to **`な`** (`好きなんです`, `先生なんです`).
+* Before **`〜し`** (L28): `だ` is **kept** (`まじめだし`, `上手だし`).
+* Before **`〜でしょう`** and **`〜かもしれません`** (L32): `だ` is **dropped completely** (`先生でしょう`, `先生かもしれません`).
 :::
 
 ---
 
-## Lesson 26 — Explanatory `～んです`, Polite Requests & Advice
+### 3. Transitive (`他動詞`) vs. Intransitive (`自動詞`) Verb Pairs (L29 vs. L30)
 
-### 26.1 `～んです` / `～のです` (Explanatory Predicate)
+| Action / Meaning | Intransitive (`自動詞` + `が 湧/割/開... 〜ています`) | Transitive (`他動詞` + `を/が 〜てあります`) |
+| :--- | :--- | :--- |
+| **Open** | ドアが **開[あ]きます** (`開いています`) | ドアを **開[あ]けます** (`開けてあります`) |
+| **Close** | ドアが **閉[し]まります** (`閉まっています`) | ドアを **閉[し]めます** (`閉めてあります`) |
+| **Turn on (light)** | 電気[でんき]が **つきます** (`ついています`) | 電気[でんき]を **つけます** (`つけてあります`) |
+| **Turn off (light)** | 電気[でんき]が **消[き]えます** (`消えています`) | 電気[でんき]を **消[け]します** (`消してあります`) |
+| **Break / Snap** | 木[き]が **折[お]れます** (`折れています`) | 木[き]を **折[お]ります** (`折ってあります`) |
+| **Break down** | 機械[きかい]が **壊[こわ]れます** (`壊れています`) | 機械[きかい]を **壊[こわ]します** (`壊してあります`) |
+| **Drop / Fall** | 財布[さいふ]が **落[お]ちます** (`落ちています`) | 財布[さいふ]を **落[お]とします** (`落としてあります`) |
 
-> **Formation**: `[Verb / い-Adj Plain Form]` + **`んです`** | `[な-Adj / Noun]` + **`なんです`** *(Past/Negative follow regular plain form)*
+</div>
 
-`～んです` (`～のです`) adds an **explanatory or contextual nuance**—indicating that the speaker is explaining background circumstances, clarifying a cause or reason, or speaking with reference to an observable situation shared with the listener. As a general register tendency, **`～んです`** is used in spoken conversation, while **`～のです`** is more formal and typically used in writing or formal speech.
+{/* ========================================================================= */}
+{/* SECTION 5: COURSE ASSETS & ERRATA */}
+{/* ========================================================================= */}
+<div id="study-mode-assets" class="study-mode-section" data-study-mode="assets" style="display: none;">
 
-#### 1.1 `～んですか` (Asking for Confirmation, Information, or Explanation)
+## 🗂️ Mode: Course Assets & Verified Errata Audit <Badge text="Downloads & Reports" variant="note" />
 
-1. **To confirm the reason or background for something observed**:
-   - **JP (Kanji)**: 渡辺[わたなべ]さんは ときどき 大阪弁[おおさかべん]を 使[つか]いますね。大阪[おおさか]に 住[す]んで いたんですか。
-   - **Kana (iMina)**: `わたなべさんは ときどき おおさかべんを つかいますね。おおさかに すんで いたんですか。`
-   - **EN**: *Ms. Watanabe, you sometimes speak Osaka dialect. Have you lived in Osaka?*
+Access flashcard exports, study resources, and our academic errata audit for the *Minna no Nihongo Shokyu II* dataset:
 
-2. **To ask for more information about what one has seen or heard**:
-   - **JP (Kanji)**: おもしろい デザインの 靴[くつ]ですね。どこで 買[か]ったんですか。
-   - **Kana (iMina)**: `おもしろい デザインの くつですね。どこで かったんですか。`
-   - **EN**: *These shoes have an interesting design. Where did you buy them?*
+### 📥 Direct Downloads
 
-3. **To ask explicitly for the reason of something**:
-   - **JP (Kanji)**: どうして 遅[おく]れたんですか。
-   - **Kana (iMina)**: `どうして おくれたんですか。`
-   - **EN**: *Why were you late?*
+<CardGrid>
+  <Card title="335-Note Anki Spaced Repetition Deck" icon="document">
+    Verified Anki package (.apkg) containing all 335 vocabulary entries across Lessons 26–32 with standardized furigana and dual EN/DE translations.
+    
+    <DriveAsset
+      title="Download Japanese B1.1 Anki Deck"
+      type="anki"
+      description="Google Drive: Japanese_Minna_no_Nihongo_B1_1_v2.apkg"
+      wip={true}
+      wipLabel="Work In Progress"
+    />
+  </Card>
 
-4. **To ask for an explanation of a situation/state**:
-   - **JP (Kanji)**: どうしたんですか。
-   - **Kana (iMina)**: `どうしたんですか？`
-   - **EN**: *What's the matter? / What happened?*
-
-#### 1.2 `～んです` (Stating a Reason or Explanation)
-When answering a question such as `どうして ～んですか` or `どうしたんですか`, `～んです` itself conveys the explanatory meaning ("It's because..."), so an additional `から` is not needed in this response pattern *(note: while `～んですから` / `～んだから` is grammatical in other contexts to emphasize a known reason, a direct neutral answer to `どうして～んですか` ends simply with `～んです`)*:
-- **JP (Kanji)**: バスが 来[こ]なかったんです。
-- **Kana (iMina)**: `バスが こなかったんです。`
-- **EN**: *(I was late) Because the bus didn't come.*
-
-#### 1.3 `～んですが、…` (Introducing a Topic / Situation Before a Request)
-Used to explain background circumstances as a polite lead-in before making a request, invitation, or asking for advice:
-- **JP (Kanji)**: 日本語[にほんご]で 手紙[てがみ]を 書[か]いたんですが、ちょっと 見[み]て いただけませんか。
-- **Kana (iMina)**: `にほんごで てがみを かいたんですが、ちょっと みて いただけませんか。`
-- **EN**: *I wrote a letter in Japanese; could you do me the favor of taking a look?*
-
----
-
-### 26.2 `Vて-form いただけませんか` (Polite Request)
-
-> **Formation**: `[Verb て-form]` + **`いただけませんか`**
-
-Used to ask someone for a favor politely (significantly more polite and respectful than `Vて ください`):
-- **JP (Kanji)**: いい 先生[せんせい]を 紹介[しょうかい]して いただけませんか。
-- **Kana (iMina)**: `いい せんせいを しょうかいして いただけませんか。`
-- **EN**: *Could you please introduce me to a good teacher?*
+  <Card title="Grammar Matrices Cheat Sheet (PDF)" icon="laptop">
+    Printable 2-page summary cheat sheet compiling the Potential, Volitional, and Clause Attachment matrices.
+    
+    <DriveAsset
+      title="Japanese B1.1 Grammar Cheat Sheet (PDF)"
+      type="dataset"
+      description="Google Drive: University/Japanese_B1_1_CheatSheet.pdf"
+      wip={true}
+      wipLabel="Work In Progress"
+    />
+  </Card>
+</CardGrid>
 
 ---
 
-### 26.3 `Interrogative + Vたら いいですか` (Asking for Advice / Instructions)
-
-> **Formation**: `[Question Word: どこで / いつ / だれに / なにを / どう]` + `[Verb た-form]` + **`ら いいですか`**
-
-Used when asking for advice, recommendations, or instructions on what to do ("What / When / Where should I...?"):
-- **JP (Kanji)**: どこで カメラを 買[か]ったら いいですか。
-- **Kana (iMina)**: `どこで カメラを かったら いいですか。`
-- **EN**: *Where should I buy a camera?*
-
----
-
-### 26.4 Topicalizing Noun Phrases Normally Marked by `が` (`Nは [好きです / 嫌いです / 上手です / あります / etc.]`)
-
-> **Rule**: Noun phrases normally marked with **`が`** in predicates of preference, skill, possession, or comprehension (`好きです`, `嫌いです`, `上手です`, `下手です`, `あります`, `わかります`, etc.) are marked with **`は`** when highlighted as the topic of the sentence.
-
-Just as subjects (`が`) and direct objects (`を`) replace their particle with `は` when made the sentence topic (Lessons 10 & 17), noun phrases taking `が` with these expressions also replace `が` with `は` when topicalized:
-- **Neutral (`が`)**: わたしは 日本料理[にほんりょうり]**が** 好[す]きです。 (*I like Japanese food.*)
-- **Topicalized (`は`)**: 日本料理[にほんりょうり]**は** あまり 好[す]きじゃ ありません。 (*As for Japanese food, I don't like it very much.*)
-
----
-
-### 26.5 📖 Vocabulary Register (45 Words) <a id="lesson-26-vocab"></a>
-
-<details id="lesson-26-vocab-table">
-<summary><strong>Click to expand Lesson 26 Vocabulary Table (45 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **見ます（診ます）** | `みます` | to check, take a look, examine |
-| 2 | **探します（捜します）** | `さがします` | to look for, search |
-| 3 | **遅れます［時間に〜］** | `おくれます［じかんに〜］` | to be late [for an appointment, etc.] |
-| 4 | **間に 合います［時間に〜］** | `まにあいます［じかんに〜］` | to be on time [for an appointment, etc.] |
-| 5 | **やります** | `やります` | To do |
-| 6 | **拾います** | `ひろいます` | to pick up |
-| 7 | **連絡します** | `れんらくします` | to contact, get in touch with |
-| 8 | **気分が いい** | `きぶんが いい` | feel well |
-| 9 | **気分が 悪い** | `きぶんが わるい` | to feel ill, feel unwell |
-| 10 | **運動会** | `うんどうかい` | athletic meeting, sports day |
-| 11 | **盆踊り** | `ぼんおどり` | Bon Festival dance |
-| 12 | **フリーマーケット** | `フリーマーケット` | flea market |
-| 13 | **場所** | `ばしょ` | place |
-| 14 | **ボランティア** | `ボランティア` | volunteer |
-| 15 | **財布** | `さいふ` | wallet, purse |
-| 16 | **ごみ** | `ごみ` | garbage, rubbish, dust |
-| 17 | **国会議事堂** | `こっかいぎじどう` | the Diet Building |
-| 18 | **平日** | `へいじつ` | weekday |
-| 19 | **〜弁** | `〜べん` | ~ dialect |
-| 20 | **今度** | `こんど` | next time, another time |
-| 21 | **ずいぶん** | `ずいぶん` | very, pretty |
-| 22 | **直接** | `ちょくせつ` | directly |
-| 23 | **いつでも** | `いつでも` | any time |
-| 24 | **どこでも** | `どこでも` | anywhere |
-| 25 | **だれでも** | `だれでも` | anybody |
-| 26 | **何でも** | `なんでも` | anything |
-| 27 | **こんな〜** | `こんな〜` | ~ like this |
-| 28 | **そんな〜** | `そんな〜` | ~ like that (near the listener) |
-| 29 | **あんな 〜** | `あんな 〜` | ~ like that (far from both the speaker and the listener) |
-| 30 | **片づきます［荷物が〜］** | `かたづきます［にもつが〜］` | [boxes/luggage] to be put in order, to get tidied up / put away (intransitive; cf. transitive 片づけます in L29) |
-| 31 | **出します［ごみを〜］** | `だします［ごみを〜］` | To put out [the rubbish] |
-| 32 | **燃える ごみ** | `もえる ごみ` | burnable rubbish |
-| 33 | **置き場** | `おきば` | place where something is put |
-| 34 | **横** | `よこ` | side |
-| 35 | **瓶** | `びん` | bottle |
-| 36 | **缶** | `かん` | can |
-| 37 | **ガス** | `ガス` | gas |
-| 38 | **〜会社** | `〜がいしゃ` | ~ company |
-| 39 | **宇宙** | `うちゅう` | space, universe |
-| 40 | **〜様** | `〜さま` | Mr. ~ / Mrs. ~ (respectful equivalent of 〜さん） |
-| 41 | **宇宙船** | `うちゅうせん` | spaceship |
-| 42 | **怖い** | `こわい` | To be afraid of |
-| 43 | **宇宙ステーション** | `うちゅうステーション` | space station |
-| 44 | **違います** | `ちがいます` | To be different |
-| 45 | **宇宙飛行士** | `うちゅうひこうし` | astronaut |
-
-</details>
-
----
-
-## Lesson 27 — Potential Verbs (`可能形`), `見えます・聞こえます` & `～しか`
-
-### 27.1 Potential / Capable Form (`可能動詞` — "can do...")
-
-> **Formation**: Group I: `i`-row → `e`-row + `ます` | Group II: stem + `られます` | Group III: `します` → `できます`, `きます` → `こられます`  
-> **Particle Rule**: Direct objects normally marked with **`を`** are typically marked with **`が`** with potential verbs.
-
-Potential verbs focus on **ability or possibility** rather than active performance. Consequently, the object of a transitive verb (normally marked with `を`) is usually marked with **`が`** (though `を` can also occur depending on context):
-
-| Type | Japanese (Kanji) | Kana (iMina) | English |
-| :--- | :--- | :--- | :--- |
-| **Action (`を`)** | わたしは 日本語[にほんご]**を** 話[はな]します。 | `わたしは にほんごを はなします。` | *I speak Japanese.* |
-| **Potential (`が`)** | わたしは 日本語[にほんご]**が** 話[はな]せます。 | `わたしは にほんごが はなせます。` | *I can speak Japanese.* |
-
-*(Note: Intransitive verbs such as `行きます` → `行けます` keep their other particles like `へ`, `に`, `で` unchanged.)*
-
----
-
-### 27.2 `できます` ("Come into being / Be completed / Be built")
-
-> **Formation**: `Nが できます` / `Nが できました`
-
-In addition to its meaning of "being able to" (introduced in Lesson 18), `できます` also means **"to come into being"**, **"to be completed"**, **"to be built"**, or **"to be made/ready"**:
-- **JP (Kanji)**: 駅[えき]の 前[まえ]に 大[おお]きい スーパーが できました。
-- **Kana (iMina)**: `えきの まえに おおきい スーパーが できました。`
-- **EN**: *A big supermarket was built in front of the station.*
-
-- **JP (Kanji)**: 時計[とけい]の 修理[しゅうり]は いつ できますか。
-- **Kana (Corrected)**: `とけいの しゅうりは いつ できますか？` *(App screenshot had typo `とかい`)*
-- **EN**: *When will the watch repair be finished? / When will the watch be ready?*
-
----
-
-### 27.3 `～しか + Negative` ("Only / Nothing but...")
-
-> **Formation**: `[Noun / Quantifier]` + **`しか`** + `[Negative Predicate]`  
-> **Particle Rule**: Replaces `が` and `を`; appended **after** other particles (`にしか`, `でしか`, `へしか`, `からしか`).
-
-`しか` is appended to nouns, quantifiers, etc., and is **always used with a negative verb**. It emphasizes that the quantity or scope is insufficient or restricted ("nothing except ~"), in contrast to `だけ` (which is neutral and used with affirmative verbs):
-
-| Pattern | Japanese | Kana (iMina) | English & Nuance |
-| :--- | :--- | :--- | :--- |
-| **`～しか … ません`** | ローマ字[じ]**しか** 書[か]**けません**。 | `ローマじしか かけません。` | *I can **only** write Romaji, nothing more.* (Emphasizes limitation) |
-| **`～だけ … ます`** | ローマ字[じ]**だけ** 書[か]**けます**。 | `ローマじだけ かけます。` | *I can write Romaji.* (Neutral statement of scope) |
-
----
-
-### 27.4 `Nは` (Contrastive `は`)
-
-In addition to introducing the topic of a sentence, `は` is used to place two nouns in **contrast**:
-- **JP (Kanji)**: ワイン**は** 飲[の]みますが、ビール**は** 飲[の]みません。
-- **Kana (iMina)**: `ワインは のみますが、ビールは のみません。`
-- **EN**: *I drink wine, but I do not drink beer.*
-
----
-
-### 27.5 `Particle + は` (Highlighting Phrases with Other Particles)
-
-> **Rule**: `が` / `を` are replaced by `は`. Other particles (`で`, `に`, `へ`, `から`, `まで`, `と`) **keep the particle and append `は`** (`では`, `には`, `へは`, `からは`, `までは`).
-
-When `は` highlights or contrasts a noun to which another particle (other than `が` or `を`) is attached, `は` is placed immediately after that particle:
-- **JP (Kanji)**: 日本[にほん]**では** 馬[うま]を 見[み]る ことが できません。
-- **Kana (iMina)**: `にほんでは うまを みる ことが できません。`
-- **EN**: *In Japan, you cannot see any horses.* *(Textbook illustration of contrastive `では`)*
-
----
-
-### 27.6 📖 Vocabulary Register (41 Words) <a id="lesson-27-vocab"></a>
-
-<details id="lesson-27-vocab-table">
-<summary><strong>Click to expand Lesson 27 Vocabulary Table (41 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **飼います** | `かいます` | to keep (a pet), raise (an animal) |
-| 2 | **走ります［道を〜］** | `はしります［みちを〜］` | to run, drive [along a road] |
-| 3 | **見えます［山が〜］** | `みえます［やまが〜］` | [a mountain] can be seen |
-| 4 | **聞こえます［音が〜］** | `きこえます［おとが〜］` | [a sound] can be heard |
-| 5 | **できます［道が〜］** | `できます［みちが〜］` | [a road] to be made, be completed, come into existence |
-| 6 | **開きます［教室を〜］** | `ひらきます［きょうしつを〜］` | set up [a class], open, hold |
-| 7 | **心配［な］** | `しんぱい［な］` | worried, anxious |
-| 8 | **ペット** | `ペット` | pet |
-| 9 | **鳥** | `とり` | bird |
-| 10 | **声** | `こえ` | voice |
-| 11 | **波** | `なみ` | wave |
-| 12 | **花火** | `はなび` | fireworks |
-| 13 | **道具** | `どうぐ` | tool, instrument, equipment |
-| 14 | **クリーニング** | `クリーニング` | (dry) cleaning, laundry |
-| 15 | **家** | `いえ` | house, home |
-| 16 | **マンション** | `マンション` | condominium, apartment house, blocks of flats |
-| 17 | **キッチン** | `キッチン` | kitchen |
-| 18 | **〜教室** | `〜きょうしつ` | ~ class |
-| 19 | **パーティールーム** | `パーティールーム` | party room |
-| 20 | **方** | `かた` | person (respectful equivalent of ひと) |
-| 21 | **〜後** | `〜ご` | after ~ (duration of time) |
-| 22 | **〜しか** | `〜しか` | only ~ (used with negatives) |
-| 23 | **ほかの（他の）** | `ほかの` | other |
-| 24 | **はっきり** | `はっきり` | clearly |
-| 25 | **家具** | `かぐ` | furniture |
-| 26 | **本棚** | `ほんだな` | bookcase |
-| 27 | **いつか** | `いつか` | one day, some day |
-| 28 | **建てます** | `たてます` | to build |
-| 29 | **すばらしい** | `すばらしい` | wonderful |
-| 30 | **子どもたち** | `こどもたち` | children |
-| 31 | **大好き［な］** | `だいすき［な］` | like very much |
-| 32 | **主人公** | `しゅじんこう` | hero, heroine |
-| 33 | **形** | `かたち` | shape |
-| 34 | **不思議［な］** | `ふしぎ［な］` | fantastic, mysterious |
-| 35 | **ポケット** | `ポケット` | pocket |
-| 36 | **例えば** | `たとえば` | for example |
-| 37 | **付けます** | `つけます` | to attach, put on |
-| 38 | **空** | `そら` | sky |
-| 39 | **飛びます** | `とびます` | fly |
-| 40 | **自分** | `じぶん` | oneself |
-| 41 | **将来** | `しょうらい` | future |
-
-</details>
-
----
-
-## Lesson 28 — Simultaneous Actions (`ながら`), Habitual `ています` & `～し`
-
-### 28.1 `V1ます-stem ながら V2` (Simultaneous Actions)
-
-> **Formation**: `[Verb 1 ます-stem (drop ます)]` + **`ながら`** + `[Verb 2]`
-
-Indicates that a single person performs action `V1` while simultaneously performing another action `V2`, where **`V2` is the main/primary action** and `V1` is the accompanying secondary action:
-- **JP (Kanji)**: 音楽[おんがく]を 聞[き]き**ながら** 食事[しょくじ]します。
-- **Kana (iMina)**: `おんがくを ききながら しょくじします。`
-- **EN**: *I eat while listening to music.* *(Main action: `食事します`, eating)*
-
-- **JP (Kanji)**: 働[はたら]き**ながら** 日本語[にほんご]を 勉強[べんきょう]します。
-- **Kana (iMina)**: `はたらきながら にほんごを べんきょうします。`
-- **EN**: *While working, I study Japanese.* *(Main action: `勉強します`, studying Japanese)*
-
----
-
-### 28.2 `Vて-form います` (Habitual Behavior)
-
-> **Formation**: Present habit: `Vて います` | Past habit ("used to V"): `Vて いました`
-
-In addition to indicating an action happening right now, `Vて います` also expresses a **regular, habitual behavior or routine**. Habitual behavior in the past is expressed by **`Vて いました`**:
-- **JP (Kanji)**: 毎朝[まいあさ] ジョギングを **して います**。
-- **Kana (iMina)**: `まいあさ ジョギングを して います。`
-- **EN**: *I go jogging every morning.*
-
-- **JP (Kanji)**: 子[こ]どものとき、毎晩[まい晩] 8時[じ]に **寝[ね]て いました**。
-- **Kana (iMina)**: `こどものとき、まいばん 8じに ねて いました。`
-- **EN**: *When I was a child, I used to go to bed at eight every evening.*
-
----
-
-### 28.3 `Plain form し、Plain form し、～` (Listing Multiple Qualities or Reasons)
-
-> **Formation**: `[Verb / い-Adj Plain Form]` + **`し`** | `[な-Adj / Noun]` + **`だし`** *(Past: `だったし`)*
-
-#### 3.1 Mentioning Two or More Similar Qualities About a Topic
-Since this pattern expresses the speaker's desire to list multiple parallel points about a topic, the particle **`も`** ("also") regularly replaces `が` or `を`. **`それに`** ("moreover / besides") can also be added before the final clause to make the cumulative effect even clearer:
-- **JP (Kanji)**: 鈴木[すずき]さんは ピアノ**も** 弾[ひ]ける**し**、歌[うた]**も** 歌[うた]える**し**、ダンス**も** できます。
-- **Kana (Corrected)**: `すずきさんは ピアノも ひけるし、うたも うたえるし、ダンスも できます。`
-- **EN**: *Mr. Suzuki can play the piano, sing, and also dance.*
-
-- **JP (Kanji)**: 田中[たなか]さんは まじめ**だし**、中国語[ちゅうごくご]**も** 上手[じょうず]**だし**、**それに** 経験[けいけん]**も** あります。
-- **Kana (iMina)**: `たなかさんは まじめだし、ちゅうごくごも じょうずだし、それに けいけんも あります。`
-- **EN**: *Mr. Tanaka is serious, speaks good Chinese, and moreover has experience.*
-
-#### 3.2 Giving Multiple Reasons for a Conclusion
-`～し、～し` is also used to state multiple reasons that lead to the conclusion in the main clause:
-- **JP (Kanji)**: ここは 値段[ねだん]も 安[やす]い**し**、魚[さかな]も 新[あたら]しい**し**、よく 食[た]べに 来[き]ます。
-- **Kana (Corrected)**: `ここは ねだんも やすいし、さかなも あたらしいし、よく たべに きます。` *(App screenshot had typo `あたらしし`)*
-- **EN**: *The prices are low here and the fish is fresh, so I often come here to eat.*
-
-When answering a "why" (`どうして`) question, the final `し` can be replaced by **`から`** ("because"):
-- **JP (Kanji)**: どうして アニメが 好[す]きなんですか。 ― 話[はなし]も おもしろい**し**、音楽[おんがく]も すてきです**から**。
-- **Kana (iMina)**: `どうして アニメが すきなんですか。 ― はなしも おもしろいし、おんがくも すてきですから。`
-- **EN**: *Why do you like Anime? — Because the stories are interesting and the music is lovely.*
-
----
-
-### 28.4 `それで` ("That's why / And so")
-
-Indicates that what is about to be said follows naturally as a consequence/result of what has just been said:
-- **JP (Kanji)**: 将来[しょうらい] 小説家[しょうせつか]に なりたいです。**それで** 今[いま]は アルバイトを しながら 小説[しょうせつ]を 書[か]いて います。
-- **Kana (iMina)**: `しょうらい しょうせつかに なりたいです。それで いまは アルバイトを しながら しょうせつを かいて います。`
-- **EN**: *I want to be a novelist in the future, so now I'm writing novels while working part-time.*
-
-- **JP (Kanji)**: ここは コーヒーも おいしいし、食事[しょくじ]も できるし。 ― **それで** 人気[にんき]が あるんですね。
-- **Kana (iMina)**: `ここは コーヒーも おいしいし、しょくじも できるし。 ～ それで にんきが あるんですね。`
-- **EN**: *The coffee's good here, and you can also have food. — So that's why it's popular, isn't it?*
-
----
-
-### 28.5 📖 Vocabulary Register (54 Words) <a id="lesson-28-vocab"></a>
-
-<details id="lesson-28-vocab-table">
-<summary><strong>Click to expand Lesson 28 Vocabulary Table (54 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **売れます ［パンが〜］** | `うれます［パンが〜］` | to sell [bread], be sold |
-| 2 | **踊ります** | `おどります` | to dance |
-| 3 | **かみます** | `かみます` | to chew, bite |
-| 4 | **選びます** | `えらびます` | to choose |
-| 5 | **通います［大学に〜］** | `かよいます［だいがくに〜］` | to go to and from [university], commute |
-| 6 | **メモします** | `メモします` | to take a memo |
-| 7 | **まじめ［な］** | `まじめ［な］` | serious |
-| 8 | **熱心［な］** | `ねっしん［な］` | earnest |
-| 9 | **偉い** | `えらい` | great, admirable |
-| 10 | **ちょうど いい** | `ちょうど いい` | proper, just right |
-| 11 | **景色** | `けしき` | scenery, view |
-| 12 | **美容院** | `びよういん` | hair salon |
-| 13 | **台所** | `だいどころ` | kitchen |
-| 14 | **経験** | `けいけん` | experience (〜が あります：to be experienced, 〜を します：to experience) |
-| 15 | **力** | `ちから` | power |
-| 16 | **人気** | `にんき` | popularity (［がくせいに］〜が あります：to be popular [with students]) |
-| 17 | **形** | `かたち` | form, shape |
-| 18 | **色** | `いろ` | color |
-| 19 | **味** | `あじ` | taste |
-| 20 | **ガム** | `ガム` | chewing gum |
-| 21 | **品物** | `しなもの` | goods |
-| 22 | **値段** | `ねだん` | price |
-| 23 | **給料** | `きゅうりょう` | salary |
-| 24 | **ボーナス** | `ボーナス` | bonus |
-| 25 | **ゲーム** | `ゲーム` | (computer) game |
-| 26 | **番組** | `ばんぐみ` | program |
-| 27 | **ドラマ** | `ドラマ` | drama |
-| 28 | **歌手** | `かしゅ` | singer |
-| 29 | **小説** | `しょうせつ` | novel |
-| 30 | **小説家** | `しょうせつか` | novelist |
-| 31 | **〜家** | `〜か` | -er, -ist, etc. (e.g., painter, novelist) |
-| 32 | **〜機** | `〜き` | ~ machine |
-| 33 | **息子** | `むすこ` | (my) son |
-| 34 | **息子さん** | `むすこさん` | (someone else's) son |
-| 35 | **娘** | `むすめ` | (my) daughter |
-| 36 | **娘さん** | `むすめさん` | (someone else's) daughter |
-| 37 | **自分** | `じぶん` | oneself |
-| 38 | **将来** | `しょうらい` | future |
-| 39 | **しばらく** | `しばらく` | a little while |
-| 40 | **たいてい** | `たいてい` | usually, mostly |
-| 41 | **それに** | `それに` | in addition |
-| 42 | **それで** | `それで` | and so |
-| 43 | **［ちょっと］お願いが あるんですが。** | `［ちょっと］おねがいが あるんですが。` | I have a [small] favor to ask. |
-| 44 | **実は** | `じつは` | as a matter of fact |
-| 45 | **会話** | `かいわ` | conversation |
-| 46 | **うーん** | `うーん` | well, let me see, hmm... |
-| 47 | **お知らせ** | `おしらせ` | notice |
-| 48 | **参加します** | `さんかします` | to participate, join, attend |
-| 49 | **日にち** | `ひにち` | date |
-| 50 | **土（土曜日）** | `ど` | Saturday (abbreviation `（土）` used on schedules/notices) |
-| 51 | **体育館** | `たいいくかん` | gymnasium |
-| 52 | **無料** | `むりょう` | free of charge |
-| 53 | **誘います** | `さそいます` | to invite, ask someone to join |
-| 54 | **イベント** | `イベント` | event |
-
-</details>
-
----
-
-## Lesson 29 — Resulting States (`自動詞 ています`) & Completion/Regret (`てしまいます`)
-
-### 29.1 `Nが / Nは Vて-form います` (Resulting State of Intransitive Verbs)
-
-> **Formation**: `[Noun]` + **`が` / `は`** + `[Intransitive Verb (自動詞) て-form]` + **`います`**
-
-Expresses a **state of being** that currently exists as the result of a past change or event (using punctual intransitive verbs like `割れます`, `壊れます`, `つきます`, `消えます`, `開きます`, `閉まります`, `汚れます`, `破れます`, `折れます`, `止まります`).
-
-#### 1.1 `Nが Vて-form います` (Describing an Observed State Directly)
-When describing the state of a subject as you perceive it, the subject is marked with **`が`**:
-- **JP (Kanji)**: 窓[まど]**が** 割[わ]れて います。
-- **Kana (iMina)**: `まどが われて います。`
-- **EN**: *The window is broken.*
-
-- **JP (Kanji)**: 電気[でんき]**が** ついて います。
-- **Kana (iMina)**: `でんきが ついて います。`
-- **EN**: *The light is on.*
-
-#### 1.2 `Nは Vて-form います` (Taking Up the Subject as a Topic)
-When the subject is singled out as the topic of conversation (often accompanied by `この`, `その`, `あの`), it is marked with **`は`**:
-- **JP (Kanji)**: この いす**は** 壊[こわ]れて います。
-- **Kana (iMina)**: `この いすは こわれて います。`
-- **EN**: *This chair is broken.*
-
----
-
-### 29.2 `Vて-form しまいました / しまいます` (Complete Action & Regret)
-
-> **Formation**: `[Verb て-form]` + **`しまいます` / `しまいました`**
-
-#### 2.1 Emphasizing Complete Execution of an Action (`しまいました`)
-Emphasizes that an action or event has been **completely finished** (often paired with adverbs like `もう` "already" or `ぜんぶ` "all"):
-- **JP (Kanji)**: ワインは 飲[の]んで しまいました。
-- **Kana (iMina)**: `ワインは のんで しまいました。`
-- **EN**: *We drank (all the) wine.*
-
-- **JP (Kanji)**: 宿題[しゅくだい]は もう やって しまいました。
-- **Kana (iMina / Textbook)**: `しゅくだい(は) もう やって しまいました。` *(Note: `は` is often omitted in casual speech)*
-- **EN**: *I have done my homework already.*
-
-#### 2.2 Intention to Complete an Action in the Future (`しまいます`)
-Expresses the speaker's determination to finish an action completely by a certain deadline:
-- **JP (Kanji)**: 昼[ひる]ごはんまでに レポートを 書[か]いて しまいます。
-- **Kana (iMina)**: `ひるごはんまでに レポートを かいて しまいます。`
-- **EN**: *I intend to finish writing the report by lunchtime.*
-
-#### 2.3 Expressing Regret, Embarrassment, or Unintended Mishap (`しまいました`)
-Used in the past tense (`しまいました`) when something undesirable or accidental happened, conveying the speaker's regret or dismay:
-- **JP (Kanji)**: パスポートを なくして しまいました。
-- **Kana (iMina)**: `パスポートを なくして しまいました。`
-- **EN**: *I (unfortunately) lost my passport.*
-
----
-
-### 29.3 📖 Vocabulary Register (51 Words) <a id="lesson-29-vocab"></a>
-
-<details id="lesson-29-vocab-table">
-<summary><strong>Click to expand Lesson 29 Vocabulary Table (51 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **開きます［ドアが〜］** | `あきます［ドアが〜］` | [a door] to open (intransitive) |
-| 2 | **閉まります［ドアが〜］** | `しまります［ドアが〜］` | to close, shut [a door] |
-| 3 | **つきます［電気が〜］** | `つきます［でんきが〜］` | [a light] to come on, be turned on |
-| 4 | **消えます［電気が〜］** | `きえます［でんきが〜］` | [a light] to go off |
-| 5 | **壊れます［いすが〜］** | `こわれます［いすが〜］` | to break [a chair] |
-| 6 | **割れます［コップが〜］** | `われます［コップが〜］` | to break [a glass], smash, shatter |
-| 7 | **折れます［木が〜］** | `おれます［きが〜］` | to break [a tree], snap |
-| 8 | **破れます［紙が〜］** | `やぶれます［かみが〜］` | to tear [paper] |
-| 9 | **汚れます［服が〜］** | `よごれます［ふくが〜］` | to get dirty [clothes] |
-| 10 | **付きます［ポケットが〜］** | `つきます［ポケットが〜］` | [a pocket] to be attached |
-| 11 | **外れます［ボタンが〜］** | `はずれます［ボタンが〜］` | [a button] to be undone |
-| 12 | **止まります［車が〜］** | `とまります［くるまが〜］` | to stop [a car], park |
-| 13 | **まちがえます** | `まちがえます` | to make a mistake |
-| 14 | **落とします** | `おとします` | to drop, lose |
-| 15 | **掛かります［かぎが〜］** | `かかります［かぎが〜］` | to be locked |
-| 16 | **ふきます（拭きます）** | `ふきます` | to wipe |
-| 17 | **取り替えます** | `とりかえます` | to change |
-| 18 | **片づけます** | `かたづけます` | to put (things) in order, tidy up |
-| 19 | **［お］皿** | `［お］さら` | plate, dish |
-| 20 | **［お］ちゃわん** | `［お］ちゃわん` | (rice) bowl |
-| 21 | **コップ** | `コップ` | glass (vessel) |
-| 22 | **ガラス** | `ガラス` | glass (material) |
-| 23 | **袋** | `ふくろ` | bag |
-| 24 | **書類** | `しょるい` | document, papers |
-| 25 | **枝** | `えだ` | branch, twig |
-| 26 | **駅員** | `えきいん` | station attendant |
-| 27 | **交番** | `こうばん` | police box |
-| 28 | **スピーチ** | `スピーチ` | speech (〜を します：to give/make a speech) |
-| 29 | **返事** | `へんじ` | reply, answer (〜を します：to reply, answer) |
-| 30 | **お先に どうぞ。** | `おさきに どうぞ。` | After you. / Go ahead, please. |
-| 31 | **源氏物語** | `げんじものがたり` | 'The Tale of Genji' (a novel written by Murasaki Shikibu in the Heian Era) |
-| 32 | **今の 電車** | `いまのでんしゃ` | the train which has just left |
-| 33 | **忘れ物** | `わすれもの` | things left behind, lost property |
-| 34 | **この くらい** | `この くらい` | about this (big) |
-| 35 | **〜側** | `〜がわ` | ~ side |
-| 36 | **ポケット** | `ポケット` | pocket |
-| 37 | **〜辺** | `〜へん` | around ~, ~ about |
-| 38 | **覚えて いません** | `おぼえて いません` | I don't remember. |
-| 39 | **網棚** | `あみだな` | overhead rack |
-| 40 | **確か** | `たしか` | I'm pretty sure |
-| 41 | **［ああ、］よかった。** | `［ああ、］よかった。` | [Oh,] that's great! / Thank goodness! (used to express a feeling of relief) |
-| 42 | **地震** | `じしん` | earthquake |
-| 43 | **壁** | `かべ` | wall |
-| 44 | **針** | `はり` | hands (of a clock) |
-| 45 | **指します** | `さします` | to point |
-| 46 | **駅前** | `えきまえ` | the area in front of a station |
-| 47 | **倒れます** | `たおれます` | to fall down |
-| 48 | **西** | `にし` | west |
-| 49 | **〜の 方** | `〜のほう` | direction of ~ |
-| 50 | **燃えます** | `もえます` | to burn |
-| 51 | **レポーター** | `レポーター` | reporter |
-
-</details>
-
----
-
-## Lesson 30 — Intentional States (`他動詞 てあります`) & Preparation (`ておきます`)
-
-### 30.1 `Vて-form あります` (State Resulting from an Intentional Action)
-
-> **Formation**: `N1(place)に N2が Vて-form あります` | `N2は N1(place)に Vて-form あります`  
-> **Verb Type**: Uses **Transitive Verbs (`他動詞`)** (e.g., `置きます`, `書きます`, `貼ります`, `掛けます`, `並べます`, `閉めます`).
-
-Indicates a state that currently exists **as the result of someone intentionally performing an action** for a purpose. Even though the verb is transitive, the object (`N2`) is described as being in a state and is therefore marked with **`が`** (or **`は`** when topicalized), **not** `を`:
-
-#### 1.1 `N1に N2が Vて-form あります` (Describing What Has Been Put/Written Somewhere)
-- **JP (Kanji)**: 机[つくえ]の 上[うえ]に メモ**が** 置[お]いて あります。
-- **Kana (iMina)**: `つくえの うえに メモが おいて あります。`
-- **EN**: *A memo has been put on the desk.*
-
-- **JP (Kanji)**: カレンダーに 予定[よてい]**が** 書[か]いて あります。
-- **Kana (iMina)**: `カレンダーに よていが かいて あります。`
-- **EN**: *The schedule is written on the calendar.*
-
-#### 1.2 `N2は N1に Vて-form あります` (Picking Up `N2` as the Topic)
-- **JP (Kanji)**: メモ**は** 机[つくえ]の 上[うえ]に 置[お]いて あります。
-- **Kana (iMina)**: `メモは つくえの うえに おいて あります。`
-- **EN**: *The memo has been put on the desk.*
-
-#### 1.3 Crucial Comparison: `Vて-form います` (L29) vs. `Vて-form あります` (L30)
-
-| Pattern | Verb Type | Example (Kanji) | Kana (Corrected) | Meaning & Nuance |
-| :--- | :--- | :--- | :--- | :--- |
-| **`Vて います`** | **Intransitive (`自動詞`)**<br/>(`閉[し]まります`) | 窓[まど]が **閉[し]まって います**。 | `まどが しまって います。` | *The window is closed.* (Objective description of current state) |
-| **`Vて あります`** | **Transitive (`他動詞`)**<br/>(`閉[し]めます`) | 窓[まど]が **閉[し]めて あります**。 | `まどが しめて あります。`<br/>*(Fixed app typo `しめって`)* | *The window has been closed.* (Implies someone intentionally closed it for a reason) |
-
----
-
-### 30.2 `Vて-form おきます` (Preparation & Leaving a State As-Is)
-
-> **Formation**: `[Verb て-form]` + **`おきます`** *(Colloquial contraction: `～ておきます` → **`～ときます`**, `～でおきます` → **`～どきます`**)*
-
-#### 2.1 Completion of a Necessary Action in Advance by a Given Time
-- **JP (Kanji)**: 旅行[りょこう]の 前[まえ]に 切符[きっぷ]を 買[か]って おきます。
-- **Kana (iMina)**: `りょこうの まえに きっぷを かって おきます。`
-- **EN**: *I'll buy a ticket (in advance) before the trip.*
-
-- **JP (Kanji)**: 会議[かいぎ]までに この 資料[しりょう]を 読[よ]んで おいて ください。
-- **Kana (iMina)**: `かいぎまでに この しりょうを よんで おいて ください。`
-- **EN**: *Please read these materials before the meeting.*
-
-#### 2.2 Preparatory / Restorative Action for the Next Use of Something
-- **JP (Kanji)**: はさみを **使[つか]ったら**、元[もと]の 所[ところ]に 戻[もど]して おいて ください。
-- **Kana (Corrected)**: `はさみを つかったら、もとの ところに もどして おいて ください。` *(Fixed app typo `つかたら` → `つかったら`)*
-- **EN**: *When you've finished using the scissors, please put them back in their original place.*
-
-#### 2.3 Keeping / Leaving Something As It Is
-- **JP (Kanji)**: そこに 置[お]いて おいて ください。
-- **Kana (iMina)**: `そこに おいて おいて ください。`
-- **EN**: *Please leave it there.*
-
-:::note[Colloquial Contraction (`～ときます` / `～といて`)]
-In daily conversation, **`～て おきます`** contracts to **`～ときます`** (and **`～て おいて`** becomes **`～といて`**; after `で`, **`～で おきます`** becomes **`～どきます`**):
-- `そこに 置[お]いて おいて ください。` → **`そこに 置[お]いといて ください。`** (`そこに おいといて ください。`)
-:::
-
----
-
-### 30.3 `まだ Vて-form います` ("Still V-ing")
-
-Indicates that an action or state is still ongoing:
-- **JP (Kanji)**: **まだ** 雨[あめ]が 降[ふ]って います。
-- **Kana (iMina)**: `まだ あめが ふって います。`
-- **EN**: *It's still raining.*
-
----
-
-### 30.4 📖 Vocabulary Register (48 Words) <a id="lesson-30-vocab"></a>
-
-<details id="lesson-30-vocab-table">
-<summary><strong>Click to expand Lesson 30 Vocabulary Table (48 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **はります** | `はります` | to put up, post, paste |
-| 2 | **掛けます** | `かけます` | to hang |
-| 3 | **飾ります** | `かざります` | to display, decorate |
-| 4 | **並べます** | `ならべます` | to arrange, line up |
-| 5 | **植えます** | `うえます` | to plant |
-| 6 | **戻します** | `もどします` | to return, put ~ back |
-| 7 | **まとめます** | `まとめます` | to put ~ together, put ~ in shape, sum up |
-| 8 | **しまいます** | `しまいます` | to put (things) away |
-| 9 | **決めます** | `きめます` | to decide |
-| 10 | **予習します** | `よしゅうします` | to prepare one's lesson |
-| 11 | **復習します** | `ふくしゅうします` | to review one's lesson |
-| 12 | **そのままに します** | `そのままに します` | to leave things as they are |
-| 13 | **授業** | `じゅぎょう` | class |
-| 14 | **講義** | `こうぎ` | lecture |
-| 15 | **ミーティング** | `ミーティング` | meeting |
-| 16 | **予定** | `よてい` | plan, schedule |
-| 17 | **お知らせ** | `おしらせ` | notice |
-| 18 | **ガイドブック** | `ガイドブック` | guidebook |
-| 19 | **カレンダー** | `カレンダー` | calendar |
-| 20 | **ポスター** | `ポスター` | poster |
-| 21 | **予定表** | `よていひょう` | schedule |
-| 22 | **ごみ箱** | `ごみばこ` | trash can, dustbin |
-| 23 | **人形** | `にんぎょう` | doll |
-| 24 | **花瓶** | `かびん` | vase |
-| 25 | **鏡** | `かがみ` | mirror |
-| 26 | **引き出し** | `ひきだし` | drawer |
-| 27 | **玄関** | `げんかん` | front door, porch, entrance hall |
-| 28 | **廊下** | `ろうか` | corridor, hallway |
-| 29 | **壁** | `かべ` | wall |
-| 30 | **池** | `いけ` | pond |
-| 31 | **元の 所** | `もとのところ` | original place |
-| 32 | **周り** | `まわり` | round, around |
-| 33 | **真ん中** | `まんなか` | center |
-| 34 | **隅** | `すみ` | corner |
-| 35 | **まだ** | `まだ` | still |
-| 36 | **リュック** | `リュック` | rucksack |
-| 37 | **非常袋** | `ひじょうぶくろ` | emergency kit |
-| 38 | **非常時** | `ひじょうじ` | emergency |
-| 39 | **生活します** | `せいかつします` | to live |
-| 40 | **懐中電灯** | `かいちゅうでんとう` | torch, flashlight |
-| 41 | **〜とか、〜とか** | `〜とか、〜とか` | ~, ~, and so on |
-| 42 | **丸い** | `まるい` | round |
-| 43 | **ある 〜** | `ある 〜` | one ~, a certain ~ |
-| 44 | **夢を 見ます** | `ゆめをみます` | to dream |
-| 45 | **うれしい** | `うれしい` | glad, happy |
-| 46 | **嫌［な］** | `いや［な］` | unpleasant, disagreeable (also: hateful) |
-| 47 | **すると** | `すると` | and, then |
-| 48 | **目が 覚めます** | `めがさめます` | to wake up |
-
-</details>
-
----
-
-## Lesson 31 — Volitional Form (`意向形`), Intentions (`つもり`) & Schedules (`よてい`)
-
-### 31.1 Volitional Form (`意向形` — "Let's...")
-
-> **Formation**:  
-> - **Group I (`五段`)**: Replace the final `i`-sound of the `ます`-stem with the corresponding **`o`-sound + `う`** (`いきます` → **`いこう`**, `やすみます` → **`やすもう`**)  
-> - **Group II (`一段`)**: Attach **`よう`** to the `ます`-stem (`たべます` → **`たべよう`**)  
-> - **Group III (Irregular)**: `します` → **`しよう`**, `きます` → **`こよう`**
-
-In suggestions, the plain volitional form corresponds to the polite `～ましょう` ("Let's..."). Depending on context, it can also express the speaker's own resolve or self-encouragement:
-- **JP (Kanji)**: 休[やす]もう。 *(Plain equivalent of `休[やす]みましょう`)*
-- **Kana (iMina)**: `やすもう。`
-- **EN**: *Let's take a rest.*
-
-- **JP (Kanji)**: 少[すこ]し 休[やす]もうか。 *(Plain equivalent of `休[やす]みませんか` / `休[やす]みましょうか`)*
-- **Kana (iMina)**: `すこし やすもうか。`
-- **EN**: *How about taking a short rest?*
-
----
-
-### 31.2 `Volitional Form + と 思って います / と 思います` (Expressing Intention)
-
-> **Formation**: `[Verb Volitional Form]` + **`と 思って います`** *(settled intention)* / **`と 思います`** *(on-the-spot intention)*
-
-- **`～と 思って います`**: Typically indicates an ongoing intention that was formed previously and continues into the present (can also be used to describe a third person's intention).
-- **`～と 思います`**: Typically expresses a first-person intention formed or stated at the moment of speaking ("I think I'll...").
-
-| Pattern | Japanese (Kanji) | Kana (iMina) | English |
-| :--- | :--- | :--- | :--- |
-| **`～と 思って います`** | 週末[しゅうまつ]は 海[うみ]に 行[い]こう**と 思[おも]って います**。 | `しゅうまつは うみに いこうと おもって います。` | *I have been thinking about going to the beach on the weekend.* |
-| **`～と 思います`** | 海[うみ]に 行[い]こう**と 思[おも]います**。 | `うみに いこうと おもいます。` | *I think I'll go to the beach.* |
-
----
-
-### 31.3 `V (Dict.-form / ない-form) + つもりです` (Firm Personal Intention)
-
-> **Formation**: `[Verb Dictionary Form / ない-Form]` + **`つもりです`**
-
-Expresses a firm personal intention or determination to do (or not do) something:
-- **JP (Kanji)**: 柔道[じゅうどう]を **続[つづ]ける つもりです**。
-- **Kana (iMina)**: `じゅうどうを つづける つもり です。`
-- **EN**: *I intend to continue with my judo.*
-
-- **JP (Kanji)**: たばこを **吸[す]わない つもりです**。
-- **Kana (iMina)**: `たばこを すわない つもり です。`
-- **EN**: *I intend not to smoke / to quit smoking.*
-
----
-
-### 31.4 `V (Dict.-form) / Nの + 予定です` (Schedule / Fixed Plan)
-
-> **Formation**: `[Verb Dictionary Form]` + **`予定です`** | `[Noun]` + **`の 予定です`**
-
-Used to inform people of planned arrangements, scheduled events, or predetermined itineraries (whereas `つもり` focuses more on personal resolve; the distinction is a general tendency rather than a rigid boundary):
-- **JP (Kanji)**: 7月[がつ]の 終[お]わりに ドイツへ **出張[しゅっちょう]する 予定[よてい]です**。
-- **Kana (Corrected)**: `7がつの おわりに ドイツへ しゅっちょうする よていです。` *(Fixed app typo `しゅちょう` → `しゅっちょう`)*
-- **EN**: *I'm scheduled to go on a business trip to Germany at the end of July. / I plan to go on a business trip to Germany at the end of July.*
-
-- **JP (Kanji)**: 旅行[りょこう]は 1週間[しゅうかん]ぐらい**の 予定[よてい]です**。
-- **Kana (iMina)**: `りょこうは 1しゅうかんぐらいの よていです。`
-- **EN**: *The trip is scheduled to last about one week.*
-
----
-
-### 31.5 `まだ Vて-form いません` ("Not yet...")
-
-Expresses that an action has not yet been completed or a state has not yet occurred:
-- **JP (Kanji)**: 銀行[ぎんこう]は、**まだ 開[あ]いて いません**。
-- **Kana (iMina)**: `ぎんこうは、まだ あいて いません。`
-- **EN**: *The bank is not open yet.*
-
----
-
-### 31.6 📖 Vocabulary Register (39 Words) <a id="lesson-31-vocab"></a>
-
-<details id="lesson-31-vocab-table">
-<summary><strong>Click to expand Lesson 31 Vocabulary Table (39 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **続けます** | `つづけます` | to continue |
-| 2 | **見つけます** | `みつけます` | to find |
-| 3 | **取ります［休みを〜］** | `とります［やすみを〜］` | to take [a holiday] |
-| 4 | **受けます［試験を〜］** | `うけます［しけんを〜］` | to take [an examination] |
-| 5 | **申し込みます** | `もうしこみます` | to apply for, enter for |
-| 6 | **休憩します** | `きゅうけいします` | to take a break, take a rest |
-| 7 | **連休** | `れんきゅう` | consecutive holidays |
-| 8 | **作文** | `さくぶん` | essay, composition |
-| 9 | **発表** | `はっぴょう` | announcement, presentation (〜します：to announce) |
-| 10 | **展覧会** | `てんらんかい` | exhibition |
-| 11 | **結婚式** | `けっこんしき` | wedding ceremony |
-| 12 | **［お］葬式** | `［お］そうしき` | funeral |
-| 13 | **式** | `しき` | ceremony |
-| 14 | **本社** | `ほんしゃ` | head office (HQ) |
-| 15 | **支店** | `してん` | branch office |
-| 16 | **教会** | `きょうかい` | church |
-| 17 | **大学院** | `だいがくいん` | graduate school |
-| 18 | **動物園** | `どうぶつえん` | zoo |
-| 19 | **温泉** | `おんせん` | hot spring, spa |
-| 20 | **帰り** | `かえり` | return |
-| 21 | **お子さん** | `おこさん` | (someone else's) child |
-| 22 | **ー号** | `ーごう` | train number, typhoon number, etc. |
-| 23 | **〜の 方** | `〜のほう` | place toward ~, direction of ~ |
-| 24 | **ずっと** | `ずっと` | the whole time |
-| 25 | **バリ** | `バリ` | Bali (Indonesian island) |
-| 26 | **ピカソ** | `ピカソ` | Pablo Picasso, Spanish painter (1881-1973) |
-| 27 | **のぞみ** | `のぞみ` | name of a Shinkansen train (~42号：Nozomi Superexpress No. 42) |
-| 28 | **残ります** | `のこります` | to remain, be left, stay behind |
-| 29 | **入学試験** | `にゅうがくしけん` | entrance examination |
-| 30 | **月に** | `つきに` | per month |
-| 31 | **村** | `むら` | village |
-| 32 | **卒業します** | `そつぎょうします` | to graduate |
-| 33 | **映画館** | `えいがかん` | movie theater, cinema |
-| 34 | **嫌［な］** | `いや［な］` | unpleasant, disagreeable (also: hateful) |
-| 35 | **空** | `そら` | sky |
-| 36 | **閉じます** | `とじます` | to close |
-| 37 | **都会** | `とかい` | city |
-| 38 | **子どもたち** | `こどもたち` | children |
-| 39 | **自由に** | `じゆうに` | freely |
-
-</details>
-
----
-
-## Lesson 32 — Advice (`ほうがいい`) & Conjecture (`でしょう` / `かもしれません`)
-
-### 32.1 `V (た-form / ない-form) + ほうが いいです` (Suggestions & Advice)
-
-> **Formation**: Affirmative: `[Verb た-form]` + **`ほうが いいです`** | Negative: `[Verb ない-form]` + **`ほうが いいです`**
-
-Used to make suggestions or give advice ("You had better... / It is good to..."):
-- **JP (Kanji)**: 毎日[まいにち] **運動[うんどう]した ほうが いいです**。
-- **Kana (iMina)**: `まいにち うんどうした ほうが いいです。`
-- **EN**: *It is good to exercise daily. / You should exercise every day.*
-
-- **JP (Kanji)**: お風呂[ふろ]に **入[はい]らない ほうが いいです**。
-- **Kana (iMina)**: `おふろに はいらない ほうが いいです。`
-- **EN**: *You'd better not take a bath.*
-
-:::tip[Difference Between `～た ほうが いい` and `～たら いい`]
-- **`～た ほうが いい`** typically implies a **comparison and a choice between two alternatives** (doing vs. not doing), making it sound like firmer, direct advice (e.g., from a doctor or friend).
-- **`～たら いい`** gives a **general recommendation or suggestion** when someone asks what they should do:
-  - **JP (Kanji)**: お寺[てら]が 見[み]たいんですが…。 ― 京都[きょうと]へ **行[い]ったら いいですよ**。
-  - **Kana (iMina)**: `おてらが みたいんですが…。 - きょうとへ いったら いいですよ。`
-  - **EN**: *I'd like to see temples... — You should go to Kyoto.*
-:::
-
----
-
-### 32.2 `Plain Form + でしょう` (Probable Inference — "Probably / I think it will...")
-
-> **Formation**: `[Verb / い-Adj Plain Form]` + **`でしょう`** | `[な-Adj / Noun (drop だ)]` + **`でしょう`**
-
-Expresses the speaker's inference/prediction based on information they have, or asks for the listener's inference (`でしょうか`):
-- **JP (Kanji)**: あした 雨[あめ]が **降[ふ]るでしょう**。
-- **Kana (iMina)**: `あした あめが ふるでしょう。`
-- **EN**: *I think it will rain tomorrow. / It will probably rain tomorrow.*
-
-- **JP (Kanji)**: タワポンさんは **合格[ごうかく]するでしょうか**。
-- **Kana (iMina)**: `タワポンさんは ごうかくするでしょうか。`
-- **EN**: *Do you think Mr. Tawapon will pass the exam?*
-
----
-
-### 32.3 `Plain Form + かもしれません` (Possibility — "Might / May")
-
-> **Formation**: `[Verb / い-Adj Plain Form]` + **`かもしれません`** | `[な-Adj / Noun (drop だ)]` + **`かもしれません`** *(Plain: `かもしれない`)*
-
-Expresses the possibility that something **might be true** (present state), **might happen** (future event), or **might have happened** (past event), conveying a much lower degree of certainty than `でしょう`. Note that **Noun and `な`-adjective present-affirmative clauses must NOT use `だ`**:
-- **Rule Check**: `✕ 先生[せんせい]だかもしれない` → **`〇 先生[せんせい]かもしれない`** (*He might be a teacher.*)
-
-- **JP (Kanji)**: 約束[やくそく]の 時間[じかん]に **間[ま]に 合[あ]わないかもしれません**。
-- **Kana (iMina)**: `やくそくの じかんに まに あわないかもしれません。`
-- **EN**: *We might be late for the appointment.*
-
-- **JP (Kanji)**: 映画[えいが]を **見[み]たかもしれない**。
-- **Kana (iMina)**: `えいがを みたかもしれない。`
-- **EN**: *I might have seen the movie.*
-
----
-
-### 32.4 `もしかしたら ～かもしれません` ("Perhaps / By some chance... might")
-
-`もしかしたら` ("perchance / perhaps / by some chance") is placed at the beginning of a sentence and used together with `かもしれません` to emphasize uncertainty or possibility:
-- **JP (Kanji)**: **もしかしたら** 3月[がつ]に 卒業[そつぎょう] できない**かもしれません**。
-- **Kana (iMina)**: `もしかしたら 3がつに そつぎょう できないかも しれません。`
-- **EN**: *Perhaps I might not be able to graduate in March.*
-
----
-
-### 32.5 📖 Vocabulary Register (57 Words) <a id="lesson-32-vocab"></a>
-
-<details id="lesson-32-vocab-table">
-<summary><strong>Click to expand Lesson 32 Vocabulary Table (57 Words)</strong></summary>
-
-| # | Kanji / Expression | Reading (Kana) | Meaning |
-| :--- | :--- | :--- | :--- |
-| 1 | **運動します** | `うんどうします` | to (take) exercise |
-| 2 | **成功します** | `せいこうします` | to succeed |
-| 3 | **失敗します［試験に〜］** | `しっぱいします［しけんに〜］` | to fail [an examination] |
-| 4 | **合格します［試験に〜］** | `ごうかくします［しけんに〜］` | to pass [an examination] |
-| 5 | **やみます［雨が〜］** | `やみます［あめが〜］` | [rain] to stop |
-| 6 | **晴れます** | `はれます` | to clear up |
-| 7 | **曇ります** | `くもります` | to get cloudy |
-| 8 | **続きます［熱が〜］** | `つづきます［ねつが〜］` | to continue [a high temperature/fever] |
-| 9 | **ひきます［かぜを〜］** | `ひきます［かぜを〜］` | to catch [a cold] |
-| 10 | **冷やします** | `ひやします` | to cool |
-| 11 | **込みます［道が〜］** | `こみます［みちが〜］` | [a road] to get crowded |
-| 12 | **すきます［道が〜］** | `すきます［みちが〜］` | [a road] to get less crowded |
-| 13 | **出ます［試合に〜］［パーティーに〜］** | `でます［しあいに〜］［パーティーに〜］` | to participate [in a match]; to attend [a party] |
-| 14 | **無理を します** | `むりを します` | to overdo things |
-| 15 | **十分［な］** | `じゅうぶん［な］` | enough, sufficient |
-| 16 | **おかしい** | `おかしい` | strange, funny |
-| 17 | **うるさい** | `うるさい` | noisy |
-| 18 | **先生** | `せんせい` | doctor, physician (in medical contexts; general meaning: teacher) |
-| 19 | **やけど** | `やけど` | burning (〜を します：to get burned) |
-| 20 | **けが** | `けが` | injury (〜を します：to get injured) |
-| 21 | **せき** | `せき` | cough (〜を します／〜が 出ます：to have a cough) |
-| 22 | **インフルエンザ** | `インフルエンザ` | influenza (i.e., the flu) |
-| 23 | **空** | `そら` | sky |
-| 24 | **太陽** | `たいよう` | sun |
-| 25 | **星** | `ほし` | star |
-| 26 | **風** | `かぜ` | wind |
-| 27 | **東** | `ひがし` | east |
-| 28 | **西** | `にし` | west |
-| 29 | **南** | `みなみ` | south |
-| 30 | **北** | `きた` | north |
-| 31 | **国際 〜** | `こくさい 〜` | international ~ |
-| 32 | **水道** | `すいどう` | faucet, tap, water supply |
-| 33 | **エンジン** | `エンジン` | engine |
-| 34 | **チーム** | `チーム` | team |
-| 35 | **今夜** | `こんや` | this evening |
-| 36 | **夕方** | `ゆうがた` | late afternoon |
-| 37 | **まえ** | `まえ` | a time in the past, before |
-| 38 | **遅く** | `おそく` | late (time) |
-| 39 | **こんなに** | `こんなに` | this (much, etc.) |
-| 40 | **そんなに** | `そんなに` | that (much, etc.) (concerning a matter related to the listener) |
-| 41 | **あんなに** | `あんなに` | that (much, etc.) (concerning a matter not related to the speaker or the listener) |
-| 42 | **ヨーロッパ** | `ヨーロッパ` | Europe |
-| 43 | **元気** | `げんき` | vigor, energy, etc. |
-| 44 | **胃** | `い` | stomach |
-| 45 | **ストレス** | `ストレス` | stress |
-| 46 | **それは いけませんね。** | `それは いけませんね。` | I'm sorry to hear that. / That's too bad. |
-| 47 | **星占い** | `ほしうらない` | horoscope |
-| 48 | **牡牛座** | `おうしざ` | Taurus |
-| 49 | **働きすぎ** | `はたらきすぎ` | overworking |
-| 50 | **困ります** | `こまります` | to be in trouble, have a problem |
-| 51 | **宝くじ** | `たからくじ` | lottery |
-| 52 | **当たります［宝くじが〜］** | `あたります［たからくじが〜］` | to win [a lottery] |
-| 53 | **健康** | `けんこう` | health |
-| 54 | **恋愛** | `れんあい` | romantic love |
-| 55 | **恋人** | `こいびと` | sweetheart, boyfriend, girlfriend |
-| 56 | **ラッキーアイテム** | `ラッキーアイテム` | something lucky |
-| 57 | **石** | `いし` | stone |
-
-</details>
+### 🔍 Source Audit: Errata & Orthographic Standardizations
+
+During our verification of the 27 **iMina** screenshots and the **Anki `.apkg` database**, 14 corrections were rigorously applied:
+
+1. **Lesson 30 (`て-form あります`)**: Fixed `✕ まどが しめって あります` $\to$ **`〇 まどが しめて あります`** (transitive Group II verb `閉めます` takes `しめて`, not `しめって`).
+2. **Lesson 30 (`て-form おきます`)**: Fixed `✕ はさみを つかたら` $\to$ **`〇 つかったら`** (`使います` takes geminate `っ`).
+3. **Lesson 30 (Colloquial contraction)**: Corrected explanation: `〜ておきます` contracts to **`〜ときます`** (`おいといて`), not `てきます`.
+4. **Lesson 31 (`予定です`)**: Fixed `✕ しゅちょう` $\to$ **`出張［しゅっちょう］`** ("business trip", geminate `っ`).
+5. **Lesson 27 (`できます`)**: Fixed `✕ とかいの しゅうり` $\to$ **`時計［とけい］の 修理［しゅうり］`** ("watch repair").
+6. **Lesson 28 (`Plain-し`)**: Fixed `✕ あたらしし` $\to$ **`新しいし［あたらしいし］`**.
+7. **Lesson 29 (`開きます`)**: Standardized intransitive door reading to **`開［あ］きます`** (not `ひらきます`).
+
+</div>
