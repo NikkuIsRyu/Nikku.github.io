@@ -1,0 +1,334 @@
+---
+import type { JapaneseConfusablePair } from '../../data/japaneseGrammarData';
+
+interface Props {
+  pair: JapaneseConfusablePair;
+  lang?: 'de' | 'en';
+}
+
+const { pair, lang = 'de' } = Astro.props;
+
+function renderFurigana(text: string): string {
+  return text.replace(/([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g, '<ruby class="furigana-ruby">$1<rt class="furigana-rt">$2</rt></ruby>');
+}
+---
+
+<article class="confusable-card not-content" data-confusable-id={pair.id}>
+  <!-- Card Header -->
+  <header class="confusable-header">
+    <div class="badge-row">
+      <span class="confusable-badge">⚖️ Confusables Spotlight</span>
+      <span class="lesson-badge">{pair.lesson}</span>
+    </div>
+    <h3 class="pair-title">{pair.pairLabel}</h3>
+    <p class="pair-topic">{lang === 'en' ? pair.topicEn : pair.topicDe}</p>
+  </header>
+
+  <!-- 2-Column Comparison Grid -->
+  <div class="comparison-grid">
+    <!-- Left Term Column -->
+    <div class="term-column term-left">
+      <div class="term-header">
+        <h4 class="term-name">{pair.left.term}</h4>
+        <span class="term-kana">{pair.left.kana}</span>
+      </div>
+      <div class="term-concept-pill">{lang === 'en' ? pair.left.conceptEn : pair.left.conceptDe}</div>
+      <div class="term-formula">
+        <code>{pair.left.formula}</code>
+      </div>
+      <p class="term-rule">{lang === 'en' ? pair.left.ruleEn : pair.left.ruleDe}</p>
+
+      <div class="examples-contrast">
+        <!-- Correct Example -->
+        <div class="contrast-box correct-box">
+          <div class="box-tag tag-correct">✅ {lang === 'en' ? 'Correct Usage' : 'Richtiges Muster'}</div>
+          <div class="box-kanji" set:html={renderFurigana(pair.left.correct.kanji)} />
+          <div class="box-kana">{pair.left.correct.kana}</div>
+          <div class="box-trans">{lang === 'en' ? pair.left.correct.en : pair.left.correct.de}</div>
+        </div>
+
+        <!-- Incorrect Example -->
+        <div class="contrast-box incorrect-box">
+          <div class="box-tag tag-incorrect">❌ {lang === 'en' ? 'Common Error' : 'Häufiger Fehler'}</div>
+          <div class="box-kanji" set:html={renderFurigana(pair.left.incorrect.kanji)} />
+          <div class="box-kana">{pair.left.incorrect.kana}</div>
+          <div class="box-explanation">⚠️ {lang === 'en' ? pair.left.incorrect.explanationEn : pair.left.incorrect.explanationDe}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Term Column -->
+    <div class="term-column term-right">
+      <div class="term-header">
+        <h4 class="term-name">{pair.right.term}</h4>
+        <span class="term-kana">{pair.right.kana}</span>
+      </div>
+      <div class="term-concept-pill">{lang === 'en' ? pair.right.conceptEn : pair.right.conceptDe}</div>
+      <div class="term-formula">
+        <code>{pair.right.formula}</code>
+      </div>
+      <p class="term-rule">{lang === 'en' ? pair.right.ruleEn : pair.right.ruleDe}</p>
+
+      <div class="examples-contrast">
+        <!-- Correct Example -->
+        <div class="contrast-box correct-box">
+          <div class="box-tag tag-correct">✅ {lang === 'en' ? 'Correct Usage' : 'Richtiges Muster'}</div>
+          <div class="box-kanji" set:html={renderFurigana(pair.right.correct.kanji)} />
+          <div class="box-kana">{pair.right.correct.kana}</div>
+          <div class="box-trans">{lang === 'en' ? pair.right.correct.en : pair.right.correct.de}</div>
+        </div>
+
+        <!-- Incorrect Example -->
+        <div class="contrast-box incorrect-box">
+          <div class="box-tag tag-incorrect">❌ {lang === 'en' ? 'Common Error' : 'Häufiger Fehler'}</div>
+          <div class="box-kanji" set:html={renderFurigana(pair.right.incorrect.kanji)} />
+          <div class="box-kana">{pair.right.incorrect.kana}</div>
+          <div class="box-explanation">⚠️ {lang === 'en' ? pair.right.incorrect.explanationEn : pair.right.incorrect.explanationDe}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Mnemonic Banner -->
+  <footer class="confusable-footer">
+    <span class="mnemonic-icon">💡</span>
+    <span class="mnemonic-text"><strong>{lang === 'en' ? 'Takeaway Mnemonic:' : 'Merkhilfe:'}</strong> {lang === 'en' ? pair.mnemonicEn : pair.mnemonicDe}</span>
+  </footer>
+</article>
+
+<style>
+  .confusable-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  :global([data-theme='light']) .confusable-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border-color: rgba(244, 63, 94, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .confusable-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  :global([data-theme='light']) .confusable-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .confusable-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fb7185;
+    background: rgba(225, 29, 72, 0.2);
+    border: 1px solid rgba(225, 29, 72, 0.4);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+
+  .lesson-badge {
+    font-size: 0.7rem;
+    color: var(--sl-color-gray-3);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+
+  .pair-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0.25rem 0;
+  }
+
+  .pair-topic {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-3);
+    margin: 0;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .term-column {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  :global([data-theme='light']) .term-column {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.06);
+  }
+
+  .term-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .term-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fda4af;
+    margin: 0;
+  }
+
+  .term-kana {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .term-concept-pill {
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    background: rgba(225, 29, 72, 0.15);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+
+  :global([data-theme='light']) .term-concept-pill {
+    color: #881337;
+    background: rgba(225, 29, 72, 0.08);
+  }
+
+  .term-formula {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 0.35rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .term-formula {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .term-formula code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: var(--sl-color-gray-2);
+  }
+
+  .term-rule {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .examples-contrast {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .contrast-box {
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .correct-box {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .incorrect-box {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .box-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .tag-correct {
+    color: #34d399;
+  }
+
+  .tag-incorrect {
+    color: #f87171;
+  }
+
+  .box-kanji {
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    line-height: 1.5;
+  }
+
+  .box-kana {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .box-trans {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-2);
+    font-style: italic;
+  }
+
+  .box-explanation {
+    font-size: 0.725rem;
+    color: #fca5a5;
+    font-weight: 500;
+  }
+
+  .confusable-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(225, 29, 72, 0.1);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    border-radius: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-2);
+  }
+
+  :global([data-theme='light']) .confusable-footer {
+    background: rgba(225, 29, 72, 0.05);
+    color: #4c0519;
+  }
+
+  .mnemonic-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+</style>

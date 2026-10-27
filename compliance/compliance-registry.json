@@ -184,19 +184,18 @@
     },
     {
       "id": "japanese_language_vault",
-      "name": "Japanese B1 Track & Grammar References",
+      "name": "Japanese B1 Track, Grammar References & Argon Prototypes",
       "paths": [
-        "src/content/docs/lectures/languages/japanese/index.mdx",
-        "src/content/docs/lectures/languages/japanese/b1-1/index.mdx",
-        "src/content/docs/lectures/languages/japanese/b1-1/de/index.mdx",
-        "src/content/docs/lectures/languages/japanese/b1-2/index.mdx"
+        "src/content/docs/lectures/languages/japanese/**",
+        "src/data/japaneseGrammarData.ts",
+        "src/data/japaneseVocabData.ts"
       ],
       "publisher": "three_a_corporation",
       "status": "CLEARED_FAIR_USE_SYNTHESIS",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Educational grammar synthesis, morphological matrices, and independent vocabulary tables under UrhG §51."
+      "notes": "Educational grammar synthesis, morphological matrices, active recall vaults, and independent vocabulary tables under UrhG §51."
     },
     {
       "id": "core_cs_vault",

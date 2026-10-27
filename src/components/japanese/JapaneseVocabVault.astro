@@ -1,0 +1,582 @@
+---
+import { JAPANESE_B1_VOCAB, type JapaneseVocabItem } from '../../data/japaneseVocabData';
+
+interface Props {
+  lang?: 'de' | 'en';
+}
+
+const { lang = 'de' } = Astro.props;
+
+const lessons = [
+  { id: 'all', labelDe: 'Alle Lektionen (335)', labelEn: 'All Lessons (335)' },
+  { id: '26', labelDe: 'Lektion 26 (45)', labelEn: 'Lesson 26 (45)' },
+  { id: '27', labelDe: 'Lektion 27 (41)', labelEn: 'Lesson 27 (41)' },
+  { id: '28', labelDe: 'Lektion 28 (54)', labelEn: 'Lesson 28 (54)' },
+  { id: '29', labelDe: 'Lektion 29 (51)', labelEn: 'Lesson 29 (51)' },
+  { id: '30', labelDe: 'Lektion 30 (48)', labelEn: 'Lesson 30 (48)' },
+  { id: '31', labelDe: 'Lektion 31 (39)', labelEn: 'Lesson 31 (39)' },
+  { id: '32', labelDe: 'Lektion 32 (57)', labelEn: 'Lesson 32 (57)' },
+];
+---
+
+<div class="japanese-vocab-vault not-content" id="japanese-vocab-vault">
+  <!-- Vocab Header & Search -->
+  <div class="vocab-header-card">
+    <div class="vocab-title-row">
+      <div class="vocab-badge-group">
+        <span class="vocab-icon">🔤</span>
+        <span class="vocab-badge">Vokabel-Vault & Furigana Active Recall</span>
+      </div>
+      <h3 class="vocab-main-title">
+        {lang === 'en' ? 'Verified Minna no Nihongo B1.1 Vocabulary Vault' : 'Verifizierter Minna no Nihongo B1.1 Vokabel-Vault'}
+      </h3>
+      <p class="vocab-subtitle">
+        {lang === 'en'
+          ? 'Browse, search, and self-test 335 verified vocabulary entries from Lessons 26–32 with interactive Furigana active-recall modes and bilingual English/German glosses.'
+          : 'Durchsuche und trainiere 335 verifizierte Vokabeln der Lektionen 26–32 mit interaktivem Furigana-Hover-Modus und bilingualen Übersetzungen.'}
+      </p>
+    </div>
+
+    <!-- Search Input -->
+    <div class="vocab-search-row">
+      <div class="search-input-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="jp-vocab-search-input"
+          class="vocab-search-input"
+          placeholder={lang === 'en' ? 'Search Kanji, Kana, English or German meaning...' : 'Kanji, Kana, deutsche oder englische Bedeutung suchen...'}
+          autocomplete="off"
+        />
+        <button type="button" id="jp-vocab-search-clear" class="vocab-search-clear" title="Löschen">✕</button>
+      </div>
+
+      <!-- View Switcher (Cards vs. Table) -->
+      <div class="vocab-layout-toggle" id="jp-vocab-layout-toggle">
+        <button type="button" class="btn-layout-mode active" data-layout="grid" title="Karten-Ansicht">
+          <span>🗂️ Grid</span>
+        </button>
+        <button type="button" class="btn-layout-mode" data-layout="table" title="Tabellen-Ansicht">
+          <span>📋 Table</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Lesson Filter Pills -->
+    <div class="vocab-lesson-filters" id="jp-vocab-lesson-filters">
+      <span class="filter-label">{lang === 'en' ? 'Lesson Filter:' : 'Lektionsfilter:'}</span>
+      <div class="pills-scroll">
+        {lessons.map((ls) => (
+          <button
+            type="button"
+            class={`btn-vocab-pill ${ls.id === 'all' ? 'active' : ''}`}
+            data-lesson={ls.id}
+          >
+            {lang === 'en' ? ls.labelEn : ls.labelDe}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="vocab-stats-row">
+    <span class="stats-text">
+      {lang === 'en' ? 'Showing' : 'Zeige'} <strong id="jp-vocab-count">{JAPANESE_B1_VOCAB.length}</strong> {lang === 'en' ? 'words' : 'Vokabeln'}
+    </span>
+    <span class="furigana-hint">
+      💡 {lang === 'en' ? 'Tip: Switch to "Hover Mode" in the Grammar Explorer to test your Kanji readings!' : 'Tipp: Schalte oben auf "Hover-Modus", um deine Kanji-Lesung zu testen!'}
+    </span>
+  </div>
+
+  <!-- VIEW A: Cards Grid -->
+  <div class="vocab-grid-view" id="jp-vocab-grid-view">
+    <div class="vocab-cards-grid" id="jp-vocab-cards-grid">
+      {JAPANESE_B1_VOCAB.map((v) => (
+        <div class="vocab-card" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+          <div class="vcard-top">
+            <span class="vcard-lesson">L{v.lesson} #{v.num}</span>
+          </div>
+          <div class="vcard-kanji">{v.kanji}</div>
+          <div class="vcard-kana">{v.kana}</div>
+          <div class="vcard-meaning">{lang === 'en' ? v.en : v.de}</div>
+          <div class="vcard-alt-trans">{lang === 'en' ? v.de : v.en}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- VIEW B: Compact Table View -->
+  <div class="vocab-table-view" id="jp-vocab-table-view" style="display: none;">
+    <div class="table-scroll-wrapper">
+      <table class="vocab-data-table" id="jp-vocab-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{lang === 'en' ? 'Lesson' : 'Lektion'}</th>
+            <th>Kanji</th>
+            <th>Kana</th>
+            <th>{lang === 'en' ? 'English Meaning' : 'Deutsche Bedeutung'}</th>
+            <th>{lang === 'en' ? 'German Translation' : 'Englische Übersetzung'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {JAPANESE_B1_VOCAB.map((v) => (
+            <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+              <td class="col-num">{v.num}</td>
+              <td class="col-lesson"><span class="table-lbadge">L{v.lesson}</span></td>
+              <td class="col-kanji"><strong>{v.kanji}</strong></td>
+              <td class="col-kana"><code>{v.kana}</code></td>
+              <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
+              <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- No Vocab Matches State -->
+  <div class="vocab-no-results" id="jp-vocab-no-results" style="display: none;">
+    <p>🔍 {lang === 'en' ? 'No vocabulary entries match your query.' : 'Keine passenden Vokabeln gefunden.'}</p>
+  </div>
+</div>
+
+<script>
+  function setupJapaneseVocabVault() {
+    const root = document.getElementById('japanese-vocab-vault');
+    if (!root) return;
+
+    const input = document.getElementById('jp-vocab-search-input') as HTMLInputElement | null;
+    const btnClear = document.getElementById('jp-vocab-search-clear');
+    const lessonButtons = root.querySelectorAll<HTMLButtonElement>('#jp-vocab-lesson-filters .btn-vocab-pill');
+    const layoutButtons = root.querySelectorAll<HTMLButtonElement>('#jp-vocab-layout-toggle .btn-layout-mode');
+    const viewGrid = document.getElementById('jp-vocab-grid-view');
+    const viewTable = document.getElementById('jp-vocab-table-view');
+    const noResults = document.getElementById('jp-vocab-no-results');
+    const countDisplay = document.getElementById('jp-vocab-count');
+
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('#jp-vocab-cards-grid .vocab-card'));
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('#jp-vocab-table tbody tr'));
+
+    let activeLesson = 'all';
+    let searchQuery = '';
+    let currentLayout = 'grid';
+
+    // 1. Layout Mode (Grid vs Table)
+    layoutButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        layoutButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLayout = btn.dataset.layout || 'grid';
+
+        if (viewGrid) viewGrid.style.display = currentLayout === 'grid' ? 'block' : 'none';
+        if (viewTable) viewTable.style.display = currentLayout === 'table' ? 'block' : 'none';
+      });
+    });
+
+    // 2. Lesson Filter
+    lessonButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lessonButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeLesson = btn.dataset.lesson || 'all';
+        filterVocab();
+      });
+    });
+
+    // 3. Search Handler
+    function handleInput(val: string) {
+      searchQuery = val.toLowerCase().trim();
+      if (btnClear) btnClear.style.display = searchQuery ? 'block' : 'none';
+      filterVocab();
+    }
+
+    if (input) {
+      input.addEventListener('input', (e) => handleInput((e.target as HTMLInputElement).value));
+    }
+
+    if (btnClear) {
+      btnClear.addEventListener('click', () => {
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+        handleInput('');
+      });
+    }
+
+    // 4. Filtering Engine
+    function filterVocab() {
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const lesson = card.dataset.lesson || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchLesson = activeLesson === 'all' || lesson === activeLesson;
+        const matchSearch = !searchQuery || text.includes(searchQuery);
+        const isMatch = matchLesson && matchSearch;
+
+        card.style.display = isMatch ? 'flex' : 'none';
+        if (isMatch) visible++;
+      });
+
+      rows.forEach((row) => {
+        const lesson = row.dataset.lesson || '';
+        const text = row.textContent?.toLowerCase() || '';
+
+        const matchLesson = activeLesson === 'all' || lesson === activeLesson;
+        const matchSearch = !searchQuery || text.includes(searchQuery);
+
+        row.style.display = matchLesson && matchSearch ? '' : 'none';
+      });
+
+      if (countDisplay) countDisplay.textContent = visible.toString();
+      if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    filterVocab();
+  }
+
+  setupJapaneseVocabVault();
+  document.addEventListener('astro:page-load', setupJapaneseVocabVault);
+</script>
+
+<style>
+  .japanese-vocab-vault {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .vocab-header-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  :global([data-theme='light']) .vocab-header-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%);
+    border-color: rgba(244, 63, 94, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .vocab-badge-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .vocab-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fb7185;
+    letter-spacing: 0.05em;
+  }
+
+  .vocab-main-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--sl-color-white);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .vocab-subtitle {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-2);
+    margin: 0.25rem 0 0 0;
+    line-height: 1.45;
+  }
+
+  .vocab-search-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.65rem;
+    padding: 0.4rem 0.85rem;
+    flex-grow: 1;
+  }
+
+  :global([data-theme='light']) .search-input-box {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
+  .vocab-search-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--sl-color-white);
+    font-size: 0.875rem;
+  }
+
+  :global([data-theme='light']) .vocab-search-input {
+    color: #0f172a;
+  }
+
+  .vocab-search-clear {
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  .vocab-layout-toggle {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .btn-layout-mode {
+    padding: 0.3rem 0.65rem;
+    border-radius: 0.35rem;
+    border: none;
+    background: transparent;
+    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-layout-mode.active {
+    background: #e11d48;
+    color: #ffffff;
+  }
+
+  .vocab-lesson-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    text-transform: uppercase;
+  }
+
+  .pills-scroll {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-vocab-pill {
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--sl-color-gray-3);
+    font-size: 0.725rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-vocab-pill:hover {
+    color: var(--sl-color-white);
+  }
+
+  .btn-vocab-pill.active {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: #f43f5e;
+    color: #fda4af;
+  }
+
+  .vocab-stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    padding: 0 0.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .furigana-hint {
+    color: #fb7185;
+    font-style: italic;
+  }
+
+  /* Cards Grid */
+  .vocab-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .vocab-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.75) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  :global([data-theme='light']) .vocab-card {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .vocab-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(244, 63, 94, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .vcard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .vcard-lesson {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    border-radius: 0.25rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .vcard-kanji {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin-top: 0.15rem;
+  }
+
+  :global([data-theme='light']) .vcard-kanji {
+    color: #0f172a;
+  }
+
+  .vcard-kana {
+    font-size: 0.8rem;
+    color: #f43f5e;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-furigana-mode='hover']) .vcard-kana {
+    opacity: 0;
+    filter: blur(4px);
+  }
+
+  :global([data-furigana-mode='hover']) .vocab-card:hover .vcard-kana {
+    opacity: 1;
+    filter: none;
+  }
+
+  :global([data-furigana-mode='hidden']) .vcard-kana {
+    display: none;
+  }
+
+  .vcard-meaning {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-2);
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 0.2rem;
+  }
+
+  .vcard-alt-trans {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+  }
+
+  /* Table View */
+  .table-scroll-wrapper {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+  }
+
+  .vocab-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.825rem;
+  }
+
+  .vocab-data-table th,
+  .vocab-data-table td {
+    padding: 0.55rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .vocab-data-table th {
+    background: rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    color: var(--sl-color-gray-2);
+  }
+
+  :global([data-theme='light']) .vocab-data-table th {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .table-lbadge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+  }
+
+  .col-kanji {
+    font-size: 0.95rem;
+  }
+
+  :global([data-furigana-mode='hover']) .col-kana code {
+    opacity: 0;
+    filter: blur(4px);
+    transition: all 0.2s ease;
+  }
+
+  :global([data-furigana-mode='hover']) tr:hover .col-kana code {
+    opacity: 1;
+    filter: none;
+  }
+
+  :global([data-furigana-mode='hidden']) .col-kana code {
+    display: none;
+  }
+
+  .vocab-no-results {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>

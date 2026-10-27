@@ -1,0 +1,344 @@
+---
+import type { JapaneseGrammarRule } from '../../data/japaneseGrammarData';
+
+interface Props {
+  rule: JapaneseGrammarRule;
+  lang?: 'de' | 'en';
+}
+
+const { rule, lang = 'de' } = Astro.props;
+
+// Helper to convert bracketed furigana "窓[まど]が 割[わ]れて います。" into ruby HTML
+function renderFurigana(text: string): string {
+  return text.replace(/([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g, '<ruby class="furigana-ruby">$1<rt class="furigana-rt">$2</rt></ruby>');
+}
+---
+
+<article class="japanese-grammar-card not-content" data-rule-id={rule.id} data-category={rule.category} data-lesson={rule.lesson}>
+  <!-- Zone 1: Header Zone -->
+  <header class="card-zone-header">
+    <div class="header-badge-row">
+      <span class="lesson-badge">{rule.lesson}</span>
+      <span class="category-pill">{rule.category}</span>
+    </div>
+    <h3 class="rule-title">{lang === 'en' ? rule.titleEn : rule.titleDe}</h3>
+    <div class="formula-pill">
+      <span class="formula-label">{lang === 'en' ? 'Formula:' : 'Formel:'}</span>
+      <code class="formula-code">{rule.formula}</code>
+    </div>
+  </header>
+
+  <!-- Zone 2: Body Zone -->
+  <section class="card-zone-body">
+    <p class="rule-summary">{lang === 'en' ? rule.summaryEn : rule.summaryDe}</p>
+
+    {((lang === 'en' ? rule.nuancesEn : rule.nuancesDe) || []).length > 0 && (
+      <details class="rule-nuances-accordion">
+        <summary class="nuances-summary">
+          <span class="nuances-icon">💡</span>
+          <span class="nuances-text">{lang === 'en' ? 'Nuances & Exceptions' : 'Nuancen & Ausnahmen'}</span>
+          <span class="nuances-count">({(lang === 'en' ? rule.nuancesEn : rule.nuancesDe)?.length})</span>
+        </summary>
+        <ul class="nuances-list">
+          {(lang === 'en' ? rule.nuancesEn : rule.nuancesDe)?.map((nuance) => (
+            <li>{nuance}</li>
+          ))}
+        </ul>
+      </details>
+    )}
+  </section>
+
+  <!-- Zone 3: Footer Zone (3-Layer Aligned Examples with Furigana) -->
+  <footer class="card-zone-footer">
+    <div class="examples-header">
+      <span class="examples-badge">💬 {lang === 'en' ? 'Example Sentences' : 'Beispielsätze'}</span>
+    </div>
+
+    <div class="examples-container">
+      {rule.examples.map((ex, idx) => (
+        <div class="example-box">
+          <div class="example-index">0{idx + 1}</div>
+          <div class="example-content">
+            <!-- Layer 1: Kanji with Furigana -->
+            <div class="example-kanji" set:html={renderFurigana(ex.kanji)} />
+
+            <!-- Layer 2: Full Kana -->
+            <div class="example-kana">{ex.kana}</div>
+
+            <!-- Layer 3: Translation -->
+            <div class="example-translation">{lang === 'en' ? ex.en : ex.de}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </footer>
+</article>
+
+<style>
+  .japanese-grammar-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(225, 29, 72, 0.25);
+    border-radius: 0.85rem;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  :global([data-theme='light']) .japanese-grammar-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border-color: rgba(225, 29, 72, 0.18);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .japanese-grammar-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(225, 29, 72, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), 0 0 12px rgba(225, 29, 72, 0.15);
+  }
+
+  /* Zone 1: Header */
+  .card-zone-header {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.75rem;
+  }
+
+  :global([data-theme='light']) .card-zone-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .header-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .lesson-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(225, 29, 72, 0.25);
+    color: #fda4af;
+    border: 1px solid rgba(225, 29, 72, 0.4);
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.3rem;
+  }
+
+  .category-pill {
+    font-size: 0.65rem;
+    color: var(--sl-color-gray-3);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.3rem;
+  }
+
+  .rule-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0.2rem 0 0.5rem 0;
+    line-height: 1.35;
+  }
+
+  .formula-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  :global([data-theme='light']) .formula-pill {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .formula-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #fb7185;
+    flex-shrink: 0;
+  }
+
+  .formula-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #e2e8f0;
+    font-size: 0.775rem;
+    white-space: nowrap;
+  }
+
+  :global([data-theme='light']) .formula-code {
+    color: #0f172a;
+  }
+
+  /* Zone 2: Body */
+  .card-zone-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rule-summary {
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+  }
+
+  .rule-nuances-accordion {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+
+  :global([data-theme='light']) .rule-nuances-accordion {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.06);
+  }
+
+  .nuances-summary {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    user-select: none;
+  }
+
+  .nuances-summary:hover {
+    color: #fda4af;
+  }
+
+  .nuances-count {
+    font-size: 0.675rem;
+    color: var(--sl-color-gray-4);
+  }
+
+  .nuances-list {
+    margin: 0;
+    padding: 0.4rem 0.8rem 0.6rem 1.6rem;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+  }
+
+  /* Zone 3: Footer / Examples */
+  .card-zone-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.65rem;
+  }
+
+  :global([data-theme='light']) .card-zone-footer {
+    border-top-color: rgba(0, 0, 0, 0.06);
+  }
+
+  .examples-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .examples-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .examples-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .example-box {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    padding: 0.5rem 0.65rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+  }
+
+  :global([data-theme='light']) .example-box {
+    background: rgba(0, 0, 0, 0.025);
+    border-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .example-index {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.675rem;
+    font-weight: 700;
+    color: #fb7185;
+    opacity: 0.8;
+    margin-top: 0.2rem;
+  }
+
+  .example-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .example-kanji {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    line-height: 1.6;
+  }
+
+  :global(.furigana-ruby) {
+    ruby-align: center;
+    position: relative;
+  }
+
+  :global(.furigana-rt) {
+    font-size: 0.625rem;
+    font-weight: 400;
+    color: #fda4af;
+    transition: all 0.2s ease;
+  }
+
+  /* Active Recall Furigana States */
+  :global([data-furigana-mode='hover']) :global(.furigana-rt) {
+    opacity: 0;
+    filter: blur(4px);
+  }
+
+  :global([data-furigana-mode='hover']) :global(.example-kanji:hover) :global(.furigana-rt),
+  :global([data-furigana-mode='hover']) :global(.furigana-ruby:hover) :global(.furigana-rt) {
+    opacity: 1;
+    filter: none;
+  }
+
+  :global([data-furigana-mode='hidden']) :global(.furigana-rt) {
+    display: none;
+  }
+
+  .example-kana {
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-3);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .example-translation {
+    font-size: 0.775rem;
+    color: var(--sl-color-gray-2);
+    font-style: italic;
+  }
+</style>

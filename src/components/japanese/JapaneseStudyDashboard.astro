@@ -1,0 +1,468 @@
+---
+interface Props {
+  activeSection?: 'grammar' | 'confusables' | 'vocab' | 'conjugations' | 'assets' | 'all';
+  lang?: 'de' | 'en';
+}
+
+const { activeSection = 'grammar', lang = 'de' } = Astro.props;
+
+const modes = [
+  {
+    id: 'grammar',
+    icon: '📐',
+    labelDe: 'Grammatik-Explorer',
+    labelEn: 'Grammar Explorer',
+    badge: '26 Regeln (L26–L32)',
+    descDe: 'Bento-Cards, Formel-Pills & Furigana Active-Recall',
+    descEn: 'Bento Cards, Formula Pills & Furigana Active Recall'
+  },
+  {
+    id: 'confusables',
+    icon: '⚖️',
+    labelDe: 'Confusables Spotlight',
+    labelEn: 'Confusables Spotlight',
+    badge: '5 Schlüssel-Paare',
+    descDe: '〜ている vs. 〜てある, 見える vs. 見られる, つもり vs. 予定',
+    descEn: '〜ている vs. 〜てある, 見える vs. 見られる, つもり vs. 予定'
+  },
+  {
+    id: 'vocab',
+    icon: '🔤',
+    labelDe: 'Vokabel-Vault (335 Wörter)',
+    labelEn: 'Vocabulary Vault (335 Words)',
+    badge: 'Active Recall',
+    descDe: 'Interaktive Vokabelkarten mit Kanji, Furigana & Lektionsfilter',
+    descEn: 'Interactive Vocab Cards with Kanji, Furigana & Lesson Filter'
+  },
+  {
+    id: 'conjugations',
+    icon: '🛠️',
+    labelDe: 'Konjugations-Matrizen',
+    labelEn: 'Conjugation Matrices',
+    badge: 'Cheat Sheets',
+    descDe: 'Möglichkeitsform, Volitionalform & Prädikatsanschlüsse',
+    descEn: 'Potential Form, Volitional Form & Clause Attachments'
+  },
+  {
+    id: 'assets',
+    icon: '🗂️',
+    labelDe: 'Kurs-Assets & Anki-Deck',
+    labelEn: 'Course Assets & Anki Deck',
+    badge: '335 Noten (.apkg)',
+    descDe: 'Minna no Nihongo Anki-Deck & iMina App Errata-Report',
+    descEn: 'Minna no Nihongo Anki Deck & iMina App Errata Audit'
+  }
+];
+---
+
+<nav class="study-dashboard-nav not-content" id="japanese-study-dashboard-nav" aria-label="Lernbereich-Umschalter">
+  <div class="nav-intro">
+    <div class="nav-intro-left">
+      <span class="live-pulse"></span>
+      <span class="mode-badge">⚡ {lang === 'en' ? 'Japanese Study Mode Navigation' : 'Japanisch Lernmodus-Dashboard'}</span>
+    </div>
+    <div class="nav-intro-right">
+      <button type="button" class="btn-show-all-modes" id="btn-toggle-all-japanese-modes" data-active-all="false">
+        <span class="btn-all-icon">🌐</span>
+        <span class="btn-all-text">{lang === 'en' ? 'Show All Sections (Full View)' : 'Alle Bereiche anzeigen (Vollansicht)'}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-grid">
+    {modes.map((m) => (
+      <button
+        type="button"
+        class={`nav-card ${m.id === activeSection ? 'active' : ''}`}
+        data-mode-id={m.id}
+        title={lang === 'en' ? `Switch to ${m.labelEn}` : `Zu ${m.labelDe} wechseln`}
+      >
+        <div class="card-top">
+          <span class="card-icon">{m.icon}</span>
+          <span class="card-badge">{m.badge}</span>
+        </div>
+        <h4 class="card-title">{lang === 'en' ? m.labelEn : m.labelDe}</h4>
+        <p class="card-desc">{lang === 'en' ? m.descEn : m.descDe}</p>
+        <div class="active-indicator">
+          <span>{lang === 'en' ? 'Active Focus Mode' : 'Aktiver Modus'}</span>
+          <span class="indicator-arrow">→</span>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <div class="mode-active-bar" id="japanese-mode-active-bar">
+    <span class="active-mode-label">{lang === 'en' ? 'Current Focus:' : 'Aktiver Fokusbereich:'}</span>
+    <span class="active-mode-name" id="japanese-active-mode-display-name">
+      {lang === 'en' ? '📐 Systematic Grammar Explorer' : '📐 Systematischer Grammatik-Explorer'}
+    </span>
+    <span class="active-mode-hint">
+      {lang === 'en' ? '(Click any card above to dynamically switch visible content)' : '(Klicke oben auf eine Kachel, um die sichtbaren Inhalte live umzuschalten)'}
+    </span>
+  </div>
+</nav>
+
+<script>
+  function setupJapaneseStudyDashboard() {
+    const nav = document.getElementById('japanese-study-dashboard-nav');
+    if (!nav) return;
+
+    const cards = nav.querySelectorAll<HTMLButtonElement>('.nav-card');
+    const btnToggleAll = document.getElementById('btn-toggle-all-japanese-modes');
+    const activeName = document.getElementById('japanese-active-mode-display-name');
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.study-mode-section'));
+
+    if (sections.length === 0) return;
+
+    const modeLabels: Record<string, { de: string; en: string }> = {
+      grammar: {
+        de: '📐 Systematischer Grammatik-Explorer (26 Regeln)',
+        en: '📐 Systematic Grammar Explorer (26 Rules)'
+      },
+      confusables: {
+        de: '⚖️ Confusables Spotlight (5 Schlüssel-Gegenüberstellungen)',
+        en: '⚖️ Confusables Spotlight (5 Key Comparative Pairs)'
+      },
+      vocab: {
+        de: '🔤 Vokabel-Vault & Furigana Trainer (335 Wörter)',
+        en: '🔤 Vocabulary Vault & Furigana Trainer (335 Words)'
+      },
+      conjugations: {
+        de: '🛠️ Konjugations-Matrizen & Cheat Sheets',
+        en: '🛠️ Conjugation Matrices & Cheat Sheets'
+      },
+      assets: {
+        de: '🗂️ Kurs-Assets & Anki-Deck (335 Noten)',
+        en: '🗂️ Course Assets & Anki Deck (335 Notes)'
+      },
+      all: {
+        de: '🌐 Alle Bereiche aktiv (Vollansicht ohne Filterung)',
+        en: '🌐 All Sections Active (Full Document View)'
+      }
+    };
+
+    function switchMode(targetMode: string, updateHash: boolean = true) {
+      const isAll = targetMode === 'all';
+
+      // Update Cards
+      cards.forEach((card) => {
+        const matches = card.dataset.modeId === targetMode;
+        card.classList.toggle('active', !isAll && matches);
+      });
+
+      // Update Toggle All Button
+      if (btnToggleAll) {
+        btnToggleAll.classList.toggle('active', isAll);
+      }
+
+      // Update Display Text
+      if (activeName) {
+        const isEn = document.documentElement.lang?.startsWith('en') || window.location.pathname.includes('/languages/japanese/prototype');
+        const labelObj = modeLabels[targetMode] || modeLabels['grammar'];
+        activeName.textContent = isEn ? labelObj.en : labelObj.de;
+      }
+
+      // Show/Hide page sections with smooth transition
+      sections.forEach((sec) => {
+        const secMode = sec.dataset.studyMode;
+        if (isAll || secMode === targetMode) {
+          sec.style.display = 'block';
+          sec.classList.remove('study-mode-hidden');
+          sec.classList.add('study-mode-visible');
+        } else {
+          sec.style.display = 'none';
+          sec.classList.remove('study-mode-visible');
+          sec.classList.add('study-mode-hidden');
+        }
+      });
+
+      // Update URL hash without jumping page
+      if (updateHash && !isAll) {
+        history.replaceState(null, '', `#study-mode-${targetMode}`);
+      } else if (updateHash && isAll) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    // Attach card click handlers
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const mode = card.dataset.modeId;
+        if (mode) switchMode(mode, true);
+      });
+    });
+
+    // Toggle All Button Handler
+    if (btnToggleAll) {
+      btnToggleAll.addEventListener('click', () => {
+        const currentlyAll = btnToggleAll.classList.contains('active');
+        if (currentlyAll) {
+          switchMode('grammar', true);
+        } else {
+          switchMode('all', true);
+        }
+      });
+    }
+
+    // Check initial URL hash on page load
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#study-mode-')) {
+      const requestedMode = hash.replace('#study-mode-', '');
+      if (['grammar', 'confusables', 'vocab', 'conjugations', 'assets'].includes(requestedMode)) {
+        switchMode(requestedMode, false);
+      } else {
+        switchMode('grammar', false);
+      }
+    } else {
+      switchMode('grammar', false);
+    }
+  }
+
+  // Run on first load
+  setupJapaneseStudyDashboard();
+
+  // Re-run on Astro view transitions
+  document.addEventListener('astro:page-load', setupJapaneseStudyDashboard);
+</script>
+
+<style>
+  .study-dashboard-nav {
+    margin: 1.5rem 0 2rem 0;
+    padding: 1.25rem;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(225, 29, 72, 0.15);
+  }
+
+  :global([data-theme='light']) .study-dashboard-nav {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+    border-color: rgba(225, 29, 72, 0.25);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 0 15px rgba(225, 29, 72, 0.08);
+  }
+
+  .nav-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  :global([data-theme='light']) .nav-intro {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+  }
+
+  .nav-intro-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .live-pulse {
+    width: 0.55rem;
+    height: 0.55rem;
+    background-color: #f43f5e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f43f5e;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+  }
+
+  .mode-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fb7185;
+  }
+
+  .btn-show-all-modes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.5rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.775rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-show-all-modes:hover {
+    background: rgba(225, 29, 72, 0.15);
+    border-color: rgba(225, 29, 72, 0.4);
+    color: var(--sl-color-white);
+  }
+
+  .btn-show-all-modes.active {
+    background: #e11d48;
+    border-color: #f43f5e;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+  }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.85rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  :global([data-theme='light']) .nav-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(225, 29, 72, 0.5);
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  :global([data-theme='light']) .nav-card:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 16px rgba(225, 29, 72, 0.12);
+  }
+
+  .nav-card.active {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.18) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border-color: #f43f5e;
+    box-shadow: 0 0 0 1px #f43f5e, 0 8px 20px rgba(225, 29, 72, 0.25);
+  }
+
+  :global([data-theme='light']) .nav-card.active {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-color: #e11d48;
+    box-shadow: 0 0 0 1px #e11d48, 0 6px 16px rgba(225, 29, 72, 0.15);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-icon {
+    font-size: 1.35rem;
+  }
+
+  .card-badge {
+    font-size: 0.675rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.35rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sl-color-gray-2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-card.active .card-badge {
+    background: rgba(225, 29, 72, 0.3);
+    color: #fda4af;
+    border-color: rgba(225, 29, 72, 0.5);
+  }
+
+  .card-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: var(--sl-color-white);
+    line-height: 1.25;
+  }
+
+  .card-desc {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.35;
+    flex-grow: 1;
+  }
+
+  .active-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fb7185;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s ease;
+  }
+
+  .nav-card.active .active-indicator {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .mode-active-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 0.5rem;
+    font-size: 0.775rem;
+    flex-wrap: wrap;
+  }
+
+  :global([data-theme='light']) .mode-active-bar {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .active-mode-label {
+    color: var(--sl-color-gray-3);
+  }
+
+  .active-mode-name {
+    font-weight: 700;
+    color: #fb7185;
+  }
+
+  .active-mode-hint {
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+    font-size: 0.725rem;
+    margin-left: auto;
+  }
+
+  @media (max-width: 640px) {
+    .nav-grid {
+      grid-template-columns: 1fr;
+    }
+    .active-mode-hint {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

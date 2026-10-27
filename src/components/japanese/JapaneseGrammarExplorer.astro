@@ -1,0 +1,878 @@
+---
+import JapaneseGrammarCard from './JapaneseGrammarCard.astro';
+import JapaneseConfusableCard from './JapaneseConfusableCard.astro';
+import {
+  JAPANESE_GRAMMAR_RULES,
+  JAPANESE_GRAMMAR_CATEGORIES,
+  JAPANESE_CONFUSABLE_PAIRS
+} from '../../data/japaneseGrammarData';
+
+interface Props {
+  lang?: 'de' | 'en';
+}
+
+const { lang = 'de' } = Astro.props;
+
+const lessons = [
+  { id: 'all', labelDe: 'Alle Lektionen (26–32)', labelEn: 'All Lessons (26–32)' },
+  { id: 'Lesson 26', labelDe: 'Lektion 26 (〜んです・お願い)', labelEn: 'Lesson 26 (〜んです・Requests)' },
+  { id: 'Lesson 27', labelDe: 'Lektion 27 (可能形・見える・しか)', labelEn: 'Lesson 27 (Potential・Sensory)' },
+  { id: 'Lesson 28', labelDe: 'Lektion 28 (ながら・〜し〜し)', labelEn: 'Lesson 28 (ながら・Multiple)' },
+  { id: 'Lesson 29', labelDe: 'Lektion 29 (自動詞・てしまう)', labelEn: 'Lesson 29 (Intransitive・Regret)' },
+  { id: 'Lesson 30', labelDe: 'Lektion 30 (他動詞 てある・ておく)', labelEn: 'Lesson 30 (Intentional・Prep)' },
+  { id: 'Lesson 31', labelDe: 'Lektion 31 (意向形・つもり・予定)', labelEn: 'Lesson 31 (Volitional・Plans)' },
+  { id: 'Lesson 32', labelDe: 'Lektion 32 (ほうがいい・でしょう)', labelEn: 'Lesson 32 (Advice・Conjecture)' },
+];
+---
+
+<div class="japanese-grammar-explorer not-content" id="japanese-grammar-explorer">
+  <!-- Top Banner & Dashboard Intro -->
+  <div class="explorer-header">
+    <div class="header-titles">
+      <div class="header-badge-row">
+        <span class="pulse-indicator"></span>
+        <span class="explorer-badge">Interaktiver Grammatik-Explorer (Interactive Grammar Dashboard)</span>
+      </div>
+      <h2 class="explorer-title">
+        {lang === 'en' ? '📐 Systematic Japanese Grammar Dashboard' : '📐 Systematisches Japanisch Grammatik-Dashboard'}
+      </h2>
+      <p class="explorer-subtitle">
+        {lang === 'en'
+          ? 'Explore all 26 core grammar rules and confusable pairs across Minna no Nihongo II (Lessons 26–32) with formula pills, 3-layer aligned examples, and interactive Furigana active-recall modes.'
+          : 'Erkunde alle 26 grammatischen Kernregeln und Verwechslungspaare aus Minna no Nihongo II (Lektionen 26–32) mit prägnanten Formel-Pills, 3-Ebenen-Beispielen und interaktivem Furigana-Hover-Modus für aktives Kanji-Lernen.'}
+      </p>
+    </div>
+
+    <!-- Live Search Box with Keyboard Shortcut -->
+    <div class="search-panel">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="jp-grammar-search-input"
+          class="grammar-search-input"
+          placeholder={lang === 'en' ? 'Search rule, Kanji, Kana (e.g. 可能形, てある, 見える, つもり)...' : 'Regel, Kanji, Kana suchen (z. B. 可能形, てある, 見える, つもり)...'}
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <kbd class="search-kbd">Ctrl+K</kbd>
+        <button type="button" id="jp-grammar-search-clear" class="search-clear-btn" title="Suche leeren">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Control Center -->
+  <div class="dashboard-control-center">
+    <!-- Row 1: View Layout Mode Switcher -->
+    <div class="control-row">
+      <div class="control-label-group">
+        <span class="control-icon">👁️</span>
+        <span class="control-title">{lang === 'en' ? 'Layout View:' : 'Layout-Ansicht:'}</span>
+      </div>
+      <div class="view-mode-buttons" id="jp-view-mode-buttons">
+        <button type="button" class="btn-view-mode active" data-view="bento">
+          <span class="mode-icon">🗂️</span>
+          <span class="mode-text">{lang === 'en' ? 'Bento Grid (2–3 Columns)' : 'Bento Grid (2–3 Spalten)'}</span>
+        </button>
+        <button type="button" class="btn-view-mode" data-view="accordion">
+          <span class="mode-icon">📑</span>
+          <span class="mode-text">{lang === 'en' ? 'Accordion List (Compact)' : 'Akkordeon-Liste (Kompakt)'}</span>
+        </button>
+        <button type="button" class="btn-view-mode" data-view="confusables">
+          <span class="mode-icon">⚖️</span>
+          <span class="mode-text">{lang === 'en' ? `Confusables Spotlight (${JAPANESE_CONFUSABLE_PAIRS.length})` : `Confusables Spotlight (${JAPANESE_CONFUSABLE_PAIRS.length})`}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 2: Furigana Active Recall Controls -->
+    <div class="control-row secondary-controls">
+      <div class="sub-control-group">
+        <span class="sub-label">{lang === 'en' ? 'Furigana Mode (Active Recall):' : 'Furigana-Modus (Active Recall):'}</span>
+        <div class="toggle-switch-pills" id="jp-furigana-mode-pills">
+          <button type="button" class="btn-toggle-pill active" data-furigana-mode="visible" title={lang === 'en' ? 'Furigana permanently visible' : 'Furigana dauerhaft sichtbar'}>
+            <span>👁️ {lang === 'en' ? 'Always Visible' : 'Immer sichtbar'}</span>
+          </button>
+          <button type="button" class="btn-toggle-pill" data-furigana-mode="hover" title={lang === 'en' ? 'Furigana reveals on hover/tap (test your Kanji reading!)' : 'Furigana wird erst bei Mouseover/Tap aufgedeckt (teste deine Kanji-Lesung!)'}>
+            <span>👆 {lang === 'en' ? 'Hover Mode' : 'Hover-Modus'}</span>
+          </button>
+          <button type="button" class="btn-toggle-pill" data-furigana-mode="hidden" title={lang === 'en' ? 'Furigana completely hidden (pure character immersion)' : 'Furigana komplett verbergen (pures Schriftzeichentraining)'}>
+            <span>🙈 {lang === 'en' ? 'Hidden' : 'Verbergen'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Lesson Selector Pills -->
+    <div class="control-row filter-row">
+      <div class="control-label-group">
+        <span class="control-icon">📖</span>
+        <span class="control-title">{lang === 'en' ? 'Lesson Filter:' : 'Lektionsfilter:'}</span>
+      </div>
+      <div class="filter-pills-scroll" id="jp-lesson-filter-pills">
+        {lessons.map((ls) => (
+          <button
+            type="button"
+            class={`btn-filter-pill ${ls.id === 'all' ? 'active' : ''}`}
+            data-lesson-id={ls.id}
+          >
+            {lang === 'en' ? ls.labelEn : ls.labelDe}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Row 4: Category Pills -->
+    <div class="control-row filter-row">
+      <div class="control-label-group">
+        <span class="control-icon">🏷️</span>
+        <span class="control-title">{lang === 'en' ? 'Category:' : 'Kategorie:'}</span>
+      </div>
+      <div class="filter-pills-scroll" id="jp-category-filter-pills">
+        {JAPANESE_GRAMMAR_CATEGORIES.map((cat) => (
+          <button
+            type="button"
+            class={`btn-filter-pill ${cat.id === 'all' ? 'active' : ''}`}
+            data-category-id={cat.id}
+          >
+            <span>{cat.icon}</span>
+            <span>{lang === 'en' ? cat.labelEn : cat.labelDe}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Stats Bar -->
+  <div class="stats-bar" id="jp-stats-bar">
+    <div class="stats-left">
+      <span class="stats-count" id="jp-results-count">{JAPANESE_GRAMMAR_RULES.length}</span>
+      <span class="stats-text">{lang === 'en' ? 'rules active' : 'Regeln aktiv'}</span>
+    </div>
+    <div class="stats-right" id="jp-active-filters-summary">
+      <span class="filter-tag">{lang === 'en' ? 'All Lessons' : 'Alle Lektionen'}</span>
+    </div>
+  </div>
+
+  <!-- VIEW 1: Bento Grid View (Default) -->
+  <div class="grammar-view-container view-bento" id="jp-view-container-bento">
+    <div class="bento-grid" id="jp-bento-grid">
+      {JAPANESE_GRAMMAR_RULES.map((rule) => (
+        <JapaneseGrammarCard rule={rule} lang={lang} />
+      ))}
+    </div>
+  </div>
+
+  <!-- VIEW 2: Accordion List View -->
+  <div class="grammar-view-container view-accordion" id="jp-view-container-accordion" style="display: none;">
+    <div class="accordion-list" id="jp-accordion-list">
+      {JAPANESE_GRAMMAR_RULES.map((rule) => (
+        <details class="grammar-accordion-item" data-rule-id={rule.id} data-category={rule.category} data-lesson={rule.lesson}>
+          <summary class="accordion-item-header">
+            <span class="acc-lesson-badge">{rule.lesson}</span>
+            <span class="acc-title">{lang === 'en' ? rule.titleEn : rule.titleDe}</span>
+            <code class="acc-formula-code">{rule.formula}</code>
+            <span class="acc-arrow">▼</span>
+          </summary>
+          <div class="accordion-item-content">
+            <JapaneseGrammarCard rule={rule} lang={lang} />
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <!-- VIEW 3: Confusables Spotlight View -->
+  <div class="grammar-view-container view-confusables" id="jp-view-container-confusables" style="display: none;">
+    <div class="confusables-intro-card">
+      <h3 class="conf-intro-title">⚖️ {lang === 'en' ? 'Side-by-Side Confusables Comparison' : 'Schlüssel-Verwechslungspaare im Direktvergleich'}</h3>
+      <p class="conf-intro-desc">
+        {lang === 'en'
+          ? 'Japanese intermediate learners frequently confuse structurally similar expressions with distinct nuance constraints. Inspect direct side-by-side contrasts with correct vs. common error examples below.'
+          : 'Lernende verwechseln häufig scheinbar ähnliche Ausdrücke (z. B. 〜ている vs. 〜てある, 見える vs. 見られる). Hier findest du die fünf wichtigsten Stolperfallen mit ✅ Richtig- und ❌ Fehler-Mustern gegenübergestellt.'}
+      </p>
+    </div>
+    <div class="confusables-grid" id="jp-confusables-grid">
+      {JAPANESE_CONFUSABLE_PAIRS.map((pair) => (
+        <JapaneseConfusableCard pair={pair} lang={lang} />
+      ))}
+    </div>
+  </div>
+
+  <!-- No Results Found State -->
+  <div class="no-results-card" id="jp-no-results-card" style="display: none;">
+    <div class="no-results-icon">🔍</div>
+    <h4 class="no-results-title">{lang === 'en' ? 'No matching grammar rules found' : 'Keine passenden Grammatikregeln gefunden'}</h4>
+    <p class="no-results-desc">
+      {lang === 'en'
+        ? 'Try refining your search keyword or clearing the active lesson/category filters.'
+        : 'Versuche es mit einem anderen Suchbegriff oder setze die Filter zurück.'}
+    </p>
+    <button type="button" class="btn-reset-filters" id="jp-btn-reset-filters">
+      {lang === 'en' ? 'Reset All Filters' : 'Filter zurücksetzen'}
+    </button>
+  </div>
+</div>
+
+<script>
+  function setupJapaneseGrammarExplorer() {
+    const root = document.getElementById('japanese-grammar-explorer');
+    if (!root) return;
+
+    // View Containers
+    const containerBento = document.getElementById('jp-view-container-bento');
+    const containerAccordion = document.getElementById('jp-view-container-accordion');
+    const containerConfusables = document.getElementById('jp-view-container-confusables');
+    const noResults = document.getElementById('jp-no-results-card');
+
+    // Controls
+    const viewButtons = root.querySelectorAll<HTMLButtonElement>('#jp-view-mode-buttons .btn-view-mode');
+    const furiganaButtons = root.querySelectorAll<HTMLButtonElement>('#jp-furigana-mode-pills .btn-toggle-pill');
+    const lessonButtons = root.querySelectorAll<HTMLButtonElement>('#jp-lesson-filter-pills .btn-filter-pill');
+    const categoryButtons = root.querySelectorAll<HTMLButtonElement>('#jp-category-filter-pills .btn-filter-pill');
+    const searchInput = document.getElementById('jp-grammar-search-input') as HTMLInputElement | null;
+    const searchClear = document.getElementById('jp-grammar-search-clear');
+    const btnReset = document.getElementById('jp-btn-reset-filters');
+    const countDisplay = document.getElementById('jp-results-count');
+
+    // Cards and Items
+    const bentoCards = Array.from(root.querySelectorAll<HTMLElement>('#jp-bento-grid .japanese-grammar-card'));
+    const accordionItems = Array.from(root.querySelectorAll<HTMLElement>('#jp-accordion-list .grammar-accordion-item'));
+    const confusableCards = Array.from(root.querySelectorAll<HTMLElement>('#jp-confusables-grid .confusable-card'));
+
+    let currentView = 'bento';
+    let currentLesson = 'all';
+    let currentCategory = 'all';
+    let currentSearch = '';
+
+    // 1. View Switching
+    function setView(view: string) {
+      currentView = view;
+      viewButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.view === view));
+
+      if (containerBento) containerBento.style.display = view === 'bento' ? 'block' : 'none';
+      if (containerAccordion) containerAccordion.style.display = view === 'accordion' ? 'block' : 'none';
+      if (containerConfusables) containerConfusables.style.display = view === 'confusables' ? 'block' : 'none';
+
+      filterItems();
+    }
+
+    viewButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const view = btn.dataset.view;
+        if (view) setView(view);
+      });
+    });
+
+    // 2. Furigana Active Recall Switching
+    function setFuriganaMode(mode: string) {
+      furiganaButtons.forEach((btn) => btn.classList.toggle('active', btn.dataset.furiganaMode === mode));
+      root?.setAttribute('data-furigana-mode', mode);
+      document.documentElement.setAttribute('data-furigana-mode', mode);
+    }
+
+    furiganaButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.furiganaMode;
+        if (mode) setFuriganaMode(mode);
+      });
+    });
+
+    // 3. Lesson Filtering
+    lessonButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lessonButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLesson = btn.dataset.lessonId || 'all';
+        filterItems();
+      });
+    });
+
+    // 4. Category Filtering
+    categoryButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.categoryId || 'all';
+        filterItems();
+      });
+    });
+
+    // 5. Search Filtering & Keyboard Shortcut (Ctrl+K)
+    function handleSearch(term: string) {
+      currentSearch = term.toLowerCase().trim();
+      if (searchClear) {
+        searchClear.style.display = currentSearch ? 'block' : 'none';
+      }
+      filterItems();
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        handleSearch((e.target as HTMLInputElement).value);
+      });
+    }
+
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
+        handleSearch('');
+      });
+    }
+
+    // Global Ctrl+K / Cmd+K listener
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        const activeSection = document.getElementById('study-mode-grammar');
+        if (activeSection && activeSection.style.display !== 'none') {
+          e.preventDefault();
+          searchInput?.focus();
+        }
+      }
+    });
+
+    // 6. Reset Filters
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        currentSearch = '';
+        currentLesson = 'all';
+        currentCategory = 'all';
+
+        lessonButtons.forEach((b) => b.classList.toggle('active', b.dataset.lessonId === 'all'));
+        categoryButtons.forEach((b) => b.classList.toggle('active', b.dataset.categoryId === 'all'));
+        if (searchClear) searchClear.style.display = 'none';
+
+        filterItems();
+      });
+    }
+
+    // 7. Core Filtering Engine
+    function filterItems() {
+      let visibleCount = 0;
+
+      // Filter Bento Cards
+      bentoCards.forEach((card) => {
+        const matches = checkMatch(card);
+        card.style.display = matches ? 'flex' : 'none';
+        if (matches && currentView === 'bento') visibleCount++;
+      });
+
+      // Filter Accordion Items
+      accordionItems.forEach((item) => {
+        const matches = checkMatch(item);
+        item.style.display = matches ? 'block' : 'none';
+        if (matches && currentView === 'accordion') visibleCount++;
+      });
+
+      // Filter Confusables (if in confusables view)
+      if (currentView === 'confusables') {
+        confusableCards.forEach((card) => {
+          const text = card.textContent?.toLowerCase() || '';
+          const matches = !currentSearch || text.includes(currentSearch);
+          card.style.display = matches ? 'block' : 'none';
+          if (matches) visibleCount++;
+        });
+      }
+
+      // Update Result Count
+      if (countDisplay) {
+        countDisplay.textContent = visibleCount.toString();
+      }
+
+      // Show/Hide No Results State
+      if (noResults) {
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    function checkMatch(el: HTMLElement): boolean {
+      const lesson = el.dataset.lesson || '';
+      const category = el.dataset.category || '';
+      const text = el.textContent?.toLowerCase() || '';
+
+      const matchLesson = currentLesson === 'all' || lesson === currentLesson;
+      const matchCategory = currentCategory === 'all' || category === currentCategory;
+      const matchSearch = !currentSearch || text.includes(currentSearch);
+
+      return matchLesson && matchCategory && matchSearch;
+    }
+
+    // Initialize
+    setFuriganaMode('visible');
+    filterItems();
+  }
+
+  setupJapaneseGrammarExplorer();
+  document.addEventListener('astro:page-load', setupJapaneseGrammarExplorer);
+</script>
+
+<style>
+  .japanese-grammar-explorer {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .explorer-header {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+
+  :global([data-theme='light']) .explorer-header {
+    background: linear-gradient(135deg, #ffffff 0%, #fdf2f4 100%);
+    border-color: rgba(244, 63, 94, 0.25);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  .header-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .pulse-indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #f43f5e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f43f5e;
+  }
+
+  .explorer-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fb7185;
+    letter-spacing: 0.05em;
+  }
+
+  .explorer-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--sl-color-white);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .explorer-subtitle {
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Search Panel */
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.65rem;
+    padding: 0.4rem 0.85rem;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .search-input-wrapper {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
+  .search-input-wrapper:focus-within {
+    border-color: #f43f5e;
+    box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.25);
+  }
+
+  .search-icon {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .grammar-search-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--sl-color-white);
+    font-size: 0.875rem;
+  }
+
+  :global([data-theme='light']) .grammar-search-input {
+    color: #0f172a;
+  }
+
+  .search-kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.3rem;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: var(--sl-color-gray-3);
+  }
+
+  .search-clear-btn {
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    margin-left: 0.3rem;
+    display: none;
+  }
+
+  .search-clear-btn:hover {
+    color: var(--sl-color-white);
+  }
+
+  /* Control Center */
+  .dashboard-control-center {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  :global([data-theme='light']) .dashboard-control-center {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .control-label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .control-icon {
+    font-size: 1rem;
+  }
+
+  .control-title {
+    font-size: 0.775rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* View Mode Buttons */
+  .view-mode-buttons {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-view-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.775rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-view-mode:hover {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: rgba(244, 63, 94, 0.3);
+    color: var(--sl-color-white);
+  }
+
+  .btn-view-mode.active {
+    background: #e11d48;
+    border-color: #f43f5e;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(225, 29, 72, 0.35);
+  }
+
+  /* Furigana Switcher */
+  .sub-control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .sub-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fb7185;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .toggle-switch-pills {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-toggle-pill {
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--sl-color-gray-3);
+    font-size: 0.725rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-toggle-pill:hover {
+    color: var(--sl-color-white);
+    border-color: rgba(244, 63, 94, 0.4);
+  }
+
+  .btn-toggle-pill.active {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: #f43f5e;
+    color: #fda4af;
+  }
+
+  /* Filter Pills */
+  .filter-pills-scroll {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    overflow-x: auto;
+  }
+
+  .btn-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.45rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--sl-color-gray-3);
+    font-size: 0.725rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+
+  .btn-filter-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sl-color-white);
+  }
+
+  .btn-filter-pill.active {
+    background: rgba(244, 63, 94, 0.2);
+    border-color: #f43f5e;
+    color: #fda4af;
+    font-weight: 700;
+  }
+
+  /* Stats Bar */
+  .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.85rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  :global([data-theme='light']) .stats-bar {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .stats-count {
+    font-weight: 800;
+    color: #fb7185;
+    margin-right: 0.25rem;
+  }
+
+  .stats-text {
+    color: var(--sl-color-gray-3);
+  }
+
+  /* Bento Grid */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .bento-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Accordion List */
+  .accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .grammar-accordion-item {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.65rem;
+    overflow: hidden;
+  }
+
+  :global([data-theme='light']) .grammar-accordion-item {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .accordion-item-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.875rem;
+    transition: background 0.15s ease;
+  }
+
+  .accordion-item-header:hover {
+    background: rgba(225, 29, 72, 0.08);
+  }
+
+  .acc-lesson-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    background: rgba(225, 29, 72, 0.2);
+    color: #fda4af;
+    border: 1px solid rgba(225, 29, 72, 0.35);
+    flex-shrink: 0;
+  }
+
+  .acc-title {
+    font-weight: 700;
+    color: var(--sl-color-white);
+    flex-grow: 1;
+  }
+
+  :global([data-theme='light']) .acc-title {
+    color: #0f172a;
+  }
+
+  .acc-formula-code {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.3rem;
+  }
+
+  .acc-arrow {
+    font-size: 0.7rem;
+    color: var(--sl-color-gray-3);
+    transition: transform 0.2s ease;
+  }
+
+  .grammar-accordion-item[open] .acc-arrow {
+    transform: rotate(180deg);
+  }
+
+  .accordion-item-content {
+    padding: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Confusables Intro */
+  .confusables-intro-card {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    border-radius: 0.85rem;
+    padding: 1.15rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .conf-intro-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fda4af;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .conf-intro-desc {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* No Results */
+  .no-results-card {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 0.85rem;
+  }
+
+  .no-results-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .no-results-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .no-results-desc {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-3);
+    margin: 0 0 1rem 0;
+  }
+
+  .btn-reset-filters {
+    padding: 0.4rem 0.9rem;
+    background: #e11d48;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
