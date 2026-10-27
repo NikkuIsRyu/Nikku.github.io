@@ -130,32 +130,81 @@ const { lang = 'en' } = Astro.props;
           <button type="button" class="btn-preset" id="preset-rot-z90">Z +90°</button>
         </div>
 
-        <!-- Live Color-Coded Rotation Matrix -->
+        <!-- Live Color-Coded Rotation Matrix with Bidirectional Input -->
         <div class="matrix-card">
           <div class="matrix-card-header">
-            <span class="mat-title">Rotation Matrix R ∈ SO(3)</span>
+            <div class="mat-header-left">
+              <span class="mat-title">Rotation Matrix R ∈ SO(3)</span>
+              <span class="mat-edit-badge" id="mat-interactive-badge">✍️ {lang === 'de' ? 'Interaktiv editierbar' : 'Directly Editable'}</span>
+            </div>
             <span class="mat-rule-hint">💡 {lang === 'de' ? 'Spalten = Einheitsvektoren!' : 'Columns = Basis Vectors!'}</span>
           </div>
 
+          <p class="matrix-input-hint">
+            {lang === 'de'
+              ? 'Tippe Werte direkt in die Matrixzellen ein oder wähle eine Vorlesungsmatrix: Eulerwinkel & 3D-Frame passen sich automatisch an!'
+              : 'Type values directly into matrix cells or pick a lecture preset: Euler angles & 3D frame update in real time!'}
+          </p>
+
           <div class="matrix-grid-3x3" id="mat-so3-grid">
             <!-- Row 1 -->
-            <span class="mat-cell col-x" id="m00">1.00</span>
-            <span class="mat-cell col-y" id="m01">0.00</span>
-            <span class="mat-cell col-z" id="m02">0.00</span>
+            <input type="number" step="0.05" class="mat-cell-input col-x" id="m00" value="1.00" title="R[0,0] (Col 1: x_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-y" id="m01" value="0.00" title="R[0,1] (Col 2: y_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-z" id="m02" value="0.00" title="R[0,2] (Col 3: z_b)" />
             <!-- Row 2 -->
-            <span class="mat-cell col-x" id="m10">0.00</span>
-            <span class="mat-cell col-y" id="m11">1.00</span>
-            <span class="mat-cell col-z" id="m12">0.00</span>
+            <input type="number" step="0.05" class="mat-cell-input col-x" id="m10" value="0.00" title="R[1,0] (Col 1: x_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-y" id="m11" value="1.00" title="R[1,1] (Col 2: y_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-z" id="m12" value="0.00" title="R[1,2] (Col 3: z_b)" />
             <!-- Row 3 -->
-            <span class="mat-cell col-x" id="m20">0.00</span>
-            <span class="mat-cell col-y" id="m21">0.00</span>
-            <span class="mat-cell col-z" id="m22">1.00</span>
+            <input type="number" step="0.05" class="mat-cell-input col-x" id="m20" value="0.00" title="R[2,0] (Col 1: x_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-y" id="m21" value="0.00" title="R[2,1] (Col 2: y_b)" />
+            <input type="number" step="0.05" class="mat-cell-input col-z" id="m22" value="1.00" title="R[2,2] (Col 3: z_b)" />
+          </div>
+
+          <div class="matrix-actions-strip">
+            <button type="button" class="btn-mat-action btn-proj" id="btn-ortho-proj" title="Orthonormalize columns via Gram-Schmidt">
+              ⚡ {lang === 'de' ? 'Auf SO(3) projizieren' : 'Orthonormalize SO(3)'}
+            </button>
+            <button type="button" class="btn-mat-action btn-reset" id="btn-matrix-identity" title="Reset to Identity matrix">
+              ↺ {lang === 'de' ? 'Identität I' : 'Identity I'}
+            </button>
           </div>
 
           <div class="matrix-legend">
             <span class="leg-item leg-x">● Col 1: x̂_b (Red)</span>
             <span class="leg-item leg-y">● Col 2: ŷ_b (Green)</span>
             <span class="leg-item leg-z">● Col 3: ẑ_b (Blue)</span>
+          </div>
+
+          <!-- Presets from Heidelberg Lectures -->
+          <div class="lecture-matrix-presets">
+            <span class="lecture-presets-title">📚 {lang === 'de' ? 'Matrizen aus den Vorlesungsfolien:' : 'Lecture Slide Matrices:'}</span>
+            <div class="lecture-presets-grid">
+              <button type="button" class="btn-lecture-mat" id="mat-preset-rz90" title="Rot(z, 90°): x_b points to y_s">
+                <strong>Rot(z, 90°)</strong>
+                <code>[0,-1,0; 1,0,0; 0,0,1]</code>
+              </button>
+              <button type="button" class="btn-lecture-mat" id="mat-preset-ry90" title="Rot(y, 90°): z_b points to x_s">
+                <strong>Rot(y, 90°)</strong>
+                <code>[0,0,1; 0,1,0; -1,0,0]</code>
+              </button>
+              <button type="button" class="btn-lecture-mat" id="mat-preset-rx180" title="Rot(x, 180°): Upside down about x">
+                <strong>Rot(x, 180°)</strong>
+                <code>[1,0,0; 0,-1,0; 0,0,-1]</code>
+              </button>
+              <button type="button" class="btn-lecture-mat" id="mat-preset-down" title="AR4 Gripper pointing straight down">
+                <strong>AR4 Gripper Down</strong>
+                <code>[-1,0,0; 0,1,0; 0,0,-1]</code>
+              </button>
+              <button type="button" class="btn-lecture-mat" id="mat-preset-ar4-l2" title="AR4 Tool Rot(z, 90)*Rot(y, 90)">
+                <strong>AR4 Tool Turn (L2)</strong>
+                <code>[0,0,-1; -1,0,0; 0,1,0]</code>
+              </button>
+              <button type="button" class="btn-lecture-mat btn-warn-mat" id="mat-preset-mirror" title="Reflection test (det = -1, not in SO(3))">
+                <strong>Reflection (det = -1)</strong>
+                <code>[1,0,0; 0,1,0; 0,0,-1]</code>
+              </button>
+            </div>
           </div>
 
           <div class="matrix-metrics">
@@ -663,6 +712,36 @@ const { lang = 'en' } = Astro.props;
     margin-bottom: 0.65rem;
   }
 
+  .mat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .mat-edit-badge {
+    background: rgba(59, 130, 246, 0.18);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  :global([data-theme='light']) .mat-edit-badge {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .matrix-input-hint {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    margin: 0.25rem 0 0.5rem 0;
+    line-height: 1.35;
+  }
+
   .mat-title {
     font-size: 0.8rem;
     font-weight: 700;
@@ -705,6 +784,153 @@ const { lang = 'en' } = Astro.props;
     padding: 0.35rem 0.2rem;
     border-radius: 0.25rem;
     font-weight: 700;
+  }
+
+  .mat-cell-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.3rem;
+    padding: 0.35rem 0.15rem;
+    text-align: center;
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.85rem;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+    -moz-appearance: textfield;
+  }
+
+  .mat-cell-input::-webkit-outer-spin-button,
+  .mat-cell-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .mat-cell-input:focus {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
+  }
+
+  :global([data-theme='light']) .mat-cell-input {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+
+  .matrix-actions-strip {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-mat-action {
+    flex: 1;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.725rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.15s ease;
+  }
+
+  .btn-proj {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+
+  .btn-proj:hover {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: #10b981;
+  }
+
+  :global([data-theme='light']) .btn-proj {
+    background: #ecfdf5;
+    color: #065f46;
+    border-color: #a7f3d0;
+  }
+
+  .btn-reset {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--sl-color-gray-2);
+  }
+
+  .btn-reset:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--sl-color-white);
+  }
+
+  .lecture-matrix-presets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-top: 0.5rem;
+  }
+
+  .lecture-presets-title {
+    font-size: 0.725rem;
+    font-weight: 700;
+    color: #93c5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  :global([data-theme='light']) .lecture-presets-title {
+    color: #1d4ed8;
+  }
+
+  .lecture-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.4rem;
+  }
+
+  .btn-lecture-mat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.35rem 0.5rem;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+  }
+
+  :global([data-theme='light']) .btn-lecture-mat {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+
+  .btn-lecture-mat:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+  }
+
+  .btn-lecture-mat strong {
+    font-size: 0.7rem;
+    color: #60a5fa;
+  }
+
+  :global([data-theme='light']) .btn-lecture-mat strong {
+    color: #2563eb;
+  }
+
+  .btn-lecture-mat code {
+    font-family: var(--sl-font-mono, monospace);
+    font-size: 0.625rem;
+    color: var(--sl-color-gray-3);
+    margin-top: 0.15rem;
+  }
+
+  .btn-warn-mat strong {
+    color: #f87171 !important;
   }
 
   .col-x { color: #f87171; background: rgba(248, 113, 113, 0.08); }
@@ -1000,6 +1226,7 @@ const { lang = 'en' } = Astro.props;
     let pitchDeg = 0;
     let yawDeg = 0;
     let rotOrder = 'fixed'; // 'fixed' | 'body'
+    let activeCustomMatrix = null; // null | number[3][3]
 
     // Robot Arm Joint Angles (in Degrees)
     const armAngles = {
@@ -1212,6 +1439,150 @@ const { lang = 'en' } = Astro.props;
       }
     }
 
+    // 3x3 Determinant
+    function computeDet3x3(M) {
+      return (
+        M[0][0] * (M[1][1] * M[2][2] - M[1][2] * M[2][1]) -
+        M[0][1] * (M[1][0] * M[2][2] - M[1][2] * M[2][0]) +
+        M[0][2] * (M[1][0] * M[2][1] - M[1][1] * M[2][0])
+      );
+    }
+
+    // Gram-Schmidt Projection to SO(3)
+    function projectToSO3(M) {
+      // Column 0: x_b
+      let c0 = [M[0][0], M[1][0], M[2][0]];
+      let norm0 = Math.hypot(c0[0], c0[1], c0[2]);
+      if (norm0 < 1e-6) c0 = [1, 0, 0];
+      else c0 = [c0[0] / norm0, c0[1] / norm0, c0[2] / norm0];
+
+      // Column 1: y_b (orthogonalize against c0)
+      let c1 = [M[0][1], M[1][1], M[2][1]];
+      let dot01 = c0[0] * c1[0] + c0[1] * c1[1] + c0[2] * c1[2];
+      c1 = [c1[0] - dot01 * c0[0], c1[1] - dot01 * c0[1], c1[2] - dot01 * c0[2]];
+      let norm1 = Math.hypot(c1[0], c1[1], c1[2]);
+      if (norm1 < 1e-6) {
+        const fallback = Math.abs(c0[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0];
+        const perp = cross(c0, fallback);
+        const nPerp = Math.hypot(perp[0], perp[1], perp[2]);
+        c1 = [perp[0] / nPerp, perp[1] / nPerp, perp[2] / nPerp];
+      } else {
+        c1 = [c1[0] / norm1, c1[1] / norm1, c1[2] / norm1];
+      }
+
+      // Column 2: z_b = c0 x c1 (ensures right-handed coordinate frame det = +1)
+      const c2 = cross(c0, c1);
+
+      return [
+        [c0[0], c1[0], c2[0]],
+        [c0[1], c1[1], c2[1]],
+        [c0[2], c1[2], c2[2]]
+      ];
+    }
+
+    // Matrix to Euler Inversion
+    function rotationMatrixToEuler(R, mode) {
+      let roll = 0, pitch = 0, yaw = 0;
+
+      if (mode === 'fixed') {
+        const cosPitch = Math.hypot(R[0][0], R[1][0]);
+        pitch = Math.atan2(-R[2][0], cosPitch);
+
+        if (cosPitch > 1e-5) {
+          roll = Math.atan2(R[2][1], R[2][2]);
+          yaw = Math.atan2(R[1][0], R[0][0]);
+        } else {
+          yaw = 0;
+          if (R[2][0] < 0) {
+            roll = Math.atan2(R[0][1], R[1][1]);
+          } else {
+            roll = Math.atan2(-R[0][1], R[1][1]);
+          }
+        }
+      } else {
+        const cosPitch = Math.hypot(R[0][0], R[0][1]);
+        pitch = Math.atan2(R[0][2], cosPitch);
+
+        if (cosPitch > 1e-5) {
+          roll = Math.atan2(-R[1][2], R[2][2]);
+          yaw = Math.atan2(-R[0][1], R[0][0]);
+        } else {
+          yaw = 0;
+          if (R[0][2] > 0) {
+            roll = Math.atan2(R[1][0], R[1][1]);
+          } else {
+            roll = Math.atan2(-R[1][0], R[1][1]);
+          }
+        }
+      }
+
+      return [radToDeg(roll), radToDeg(pitch), radToDeg(yaw)];
+    }
+
+    function getMatrixFromInputs() {
+      const M = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`m${r}${c}`);
+          const val = parseFloat(el ? el.value : '0');
+          M[r][c] = isNaN(val) ? 0 : val;
+        }
+      }
+      return M;
+    }
+
+    function setInputsFromMatrix(M) {
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`m${r}${c}`);
+          if (el && document.activeElement !== el) {
+            el.value = M[r][c].toFixed(2);
+          }
+        }
+      }
+    }
+
+    function applyMatrixToVisualizer(rawM, writeToInputs = false) {
+      activeCustomMatrix = rawM;
+      const det = computeDet3x3(rawM);
+
+      // If close to valid SO(3) (det > 0.1), extract Euler angles and update sliders
+      if (det > 0.1) {
+        const R_so3 = projectToSO3(rawM);
+        const [rDeg, pDeg, yDeg] = rotationMatrixToEuler(R_so3, rotOrder);
+        rollDeg = Math.round(rDeg * 10) / 10;
+        pitchDeg = Math.round(pDeg * 10) / 10;
+        yawDeg = Math.round(yDeg * 10) / 10;
+
+        if (sRoll) sRoll.value = rollDeg;
+        if (sPitch) sPitch.value = pitchDeg;
+        if (sYaw) sYaw.value = yawDeg;
+        if (valRoll) valRoll.textContent = `${rollDeg.toFixed(1)}°`;
+        if (valPitch) valPitch.textContent = `${pitchDeg.toFixed(1)}°`;
+        if (valYaw) valYaw.textContent = `${yawDeg.toFixed(1)}°`;
+
+        if (writeToInputs) {
+          activeCustomMatrix = R_so3;
+          for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) {
+              const el = document.getElementById(`m${r}${c}`);
+              if (el) el.value = R_so3[r][c].toFixed(2);
+            }
+          }
+        }
+      } else if (writeToInputs) {
+        // Write raw values directly (e.g. for reflection preset test)
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            const el = document.getElementById(`m${r}${c}`);
+            if (el) el.value = rawM[r][c].toFixed(2);
+          }
+        }
+      }
+
+      render();
+    }
+
     // 3D Projection to 2D Canvas
     function project3D(x, y, z, originX, originY, scale = 1.0) {
       // Rotate around Space Z by Azimuth
@@ -1334,7 +1705,12 @@ const { lang = 'en' } = Astro.props;
     // TAB 1: ROTATION MATRIX VISUALIZER
     // ------------------------------------------
     function renderRotationTab(ctx, ox, oy) {
-      const R = computeRotationMatrix(rollDeg, pitchDeg, yawDeg, rotOrder);
+      let R;
+      if (activeCustomMatrix) {
+        R = activeCustomMatrix;
+      } else {
+        R = computeRotationMatrix(rollDeg, pitchDeg, yawDeg, rotOrder);
+      }
 
       // Draw Rotated Body Frame {b}
       drawCoordinateFrame(ctx, R, [0, 0, 0], ox, oy, 110, false);
@@ -1380,20 +1756,25 @@ const { lang = 'en' } = Astro.props;
       for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
           const el = document.getElementById(`m${r}${c}`);
-          if (el) {
-            el.textContent = R[r][c].toFixed(2);
+          if (el && document.activeElement !== el) {
+            el.value = R[r][c].toFixed(2);
           }
         }
       }
 
       // Determinant (should be 1.0)
-      const det = (
-        R[0][0] * (R[1][1] * R[2][2] - R[1][2] * R[2][1]) -
-        R[0][1] * (R[1][0] * R[2][2] - R[1][2] * R[2][0]) +
-        R[0][2] * (R[1][0] * R[2][1] - R[1][1] * R[2][0])
-      );
+      const det = computeDet3x3(R);
       const detEl = document.getElementById('val-det');
-      if (detEl) detEl.textContent = det.toFixed(3);
+      if (detEl) {
+        detEl.textContent = det.toFixed(3);
+        if (Math.abs(det - 1.0) > 0.05) {
+          detEl.style.color = '#ef4444';
+          detEl.title = 'Warning: det ≠ 1 (Not in SO(3))';
+        } else {
+          detEl.style.color = '#38bdf8';
+          detEl.title = 'Valid SO(3): det = 1';
+        }
+      }
 
       // Trace = 1 + 2 cos(theta)
       const trace = R[0][0] + R[1][1] + R[2][2];
@@ -1783,6 +2164,7 @@ const { lang = 'en' } = Astro.props;
     const valYaw = document.getElementById('val-yaw');
 
     function syncRotationSliders() {
+      activeCustomMatrix = null;
       rollDeg = parseFloat(sRoll.value);
       pitchDeg = parseFloat(sPitch.value);
       yawDeg = parseFloat(sYaw.value);
@@ -1798,15 +2180,19 @@ const { lang = 'en' } = Astro.props;
 
     // Rotation Presets
     document.getElementById('preset-rot-zero')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
       sRoll.value = 0; sPitch.value = 0; sYaw.value = 0; syncRotationSliders();
     });
     document.getElementById('preset-rot-gimbal')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
       sRoll.value = 30; sPitch.value = 90; sYaw.value = 45; syncRotationSliders();
     });
     document.getElementById('preset-rot-x90')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
       sRoll.value = 90; sPitch.value = 0; sYaw.value = 0; syncRotationSliders();
     });
     document.getElementById('preset-rot-z90')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
       sRoll.value = 0; sPitch.value = 0; sYaw.value = 90; syncRotationSliders();
     });
 
@@ -1814,8 +2200,111 @@ const { lang = 'en' } = Astro.props;
     document.querySelectorAll('input[name="rot-order"]').forEach(radio => {
       radio.addEventListener('change', (e) => {
         rotOrder = e.target.value;
-        render();
+        if (activeCustomMatrix) {
+          applyMatrixToVisualizer(activeCustomMatrix, false);
+        } else {
+          render();
+        }
       });
+    });
+
+    // Bidirectional Matrix Cell Inputs (m00 .. m22)
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 3; c++) {
+        const el = document.getElementById(`m${r}${c}`);
+        if (!el) continue;
+
+        // Real-time update on typing
+        el.addEventListener('input', () => {
+          const M = getMatrixFromInputs();
+          applyMatrixToVisualizer(M, false);
+        });
+
+        // When user blurs input or presses Enter
+        el.addEventListener('change', () => {
+          const M = getMatrixFromInputs();
+          const det = computeDet3x3(M);
+          if (det > 0.05) {
+            applyMatrixToVisualizer(M, true);
+          }
+        });
+
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            el.blur();
+          }
+        });
+      }
+    }
+
+    // Gram-Schmidt Project to SO(3) Button
+    document.getElementById('btn-ortho-proj')?.addEventListener('click', () => {
+      const M = getMatrixFromInputs();
+      const R_so3 = projectToSO3(M);
+      applyMatrixToVisualizer(R_so3, true);
+    });
+
+    // Reset Matrix to Identity
+    document.getElementById('btn-matrix-identity')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
+      rollDeg = 0; pitchDeg = 0; yawDeg = 0;
+      if (sRoll) sRoll.value = 0;
+      if (sPitch) sPitch.value = 0;
+      if (sYaw) sYaw.value = 0;
+      if (valRoll) valRoll.textContent = '0°';
+      if (valPitch) valPitch.textContent = '0°';
+      if (valYaw) valYaw.textContent = '0°';
+      setInputsFromMatrix(eye3());
+      render();
+    });
+
+    // Heidelberg Lecture Matrix Presets
+    document.getElementById('mat-preset-rz90')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [0, -1, 0],
+        [1,  0, 0],
+        [0,  0, 1]
+      ], true);
+    });
+
+    document.getElementById('mat-preset-ry90')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [ 0, 0, 1],
+        [ 0, 1, 0],
+        [-1, 0, 0]
+      ], true);
+    });
+
+    document.getElementById('mat-preset-rx180')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [1,  0,  0],
+        [0, -1,  0],
+        [0,  0, -1]
+      ], true);
+    });
+
+    document.getElementById('mat-preset-down')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [-1, 0,  0],
+        [ 0, 1,  0],
+        [ 0, 0, -1]
+      ], true);
+    });
+
+    document.getElementById('mat-preset-ar4-l2')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [ 0, 0, -1],
+        [-1, 0,  0],
+        [ 0, 1,  0]
+      ], true);
+    });
+
+    document.getElementById('mat-preset-mirror')?.addEventListener('click', () => {
+      applyMatrixToVisualizer([
+        [1, 0,  0],
+        [0, 1,  0],
+        [0, 0, -1]
+      ], true);
     });
 
     // Canvas Buttons
