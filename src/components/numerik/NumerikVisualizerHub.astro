@@ -1,0 +1,1704 @@
+---
+import { COVID_DATA_GERMANY } from '../../data/numerikData';
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'de' } = Astro.props;
+---
+
+<div class="numerik-visualizer-hub not-content" id="numerik-visualizer-hub-root">
+  <!-- Hub Navigation Tabs -->
+  <div class="hub-tabs-header">
+    <div class="hub-title-box">
+      <span class="hub-badge">🔬 Live-Labore</span>
+      <h3 class="hub-title">{lang === 'de' ? 'Interaktive Numerik-Visualisierungen' : 'Interactive Numerics Lab Suite'}</h3>
+    </div>
+    
+    <div class="hub-tab-buttons" role="tablist">
+      <button type="button" class="hub-tab-btn active" data-tab-target="fp-explorer">
+        <span class="tab-icon">🔢</span>
+        <span>{lang === 'de' ? 'Fließkomma & IEEE 754' : 'Floating Point & IEEE 754'}</span>
+      </button>
+      <button type="button" class="hub-tab-btn" data-tab-target="cancellation-lab">
+        <span class="tab-icon">⚡</span>
+        <span>{lang === 'de' ? 'Auslöschungs-Labor' : 'Cancellation Lab'}</span>
+      </button>
+      <button type="button" class="hub-tab-btn" data-tab-target="pipe-network">
+        <span class="tab-icon">💧</span>
+        <span>{lang === 'de' ? 'Rohrnetzwerk & Kirchhoff' : 'Pipe Network & Kirchhoff'}</span>
+      </button>
+      <button type="button" class="hub-tab-btn" data-tab-target="epidemic-fit">
+        <span class="tab-icon">📈</span>
+        <span>{lang === 'de' ? 'Corona-Fitting & Ausgleich' : 'Epidemic Fitting'}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 1: FLOATING POINT & IEEE 754 EXPLORER -->
+  <div class="hub-tab-panel active" id="tab-fp-explorer">
+    <div class="panel-intro">
+      <h4>{lang === 'de' ? '🔢 Fließkommasysteme F(β, r, s) & IEEE 754 Sandbox' : '🔢 Floating Point Systems F(β, r, s) & IEEE 754 Sandbox'}</h4>
+      <p>{lang === 'de' 
+        ? 'Erkunde die mathematische Struktur normierter Fließkommasysteme F(β, r, s). Vergleiche das Vorlesungssystem F(3,2,2) aus Übungsblatt 1 mit echtem 32-Bit Single (`float`) und 64-Bit Double Precision (`double`).' 
+        : 'Explore the mathematical structure of normalized floating point systems F(β, r, s). Compare the mini-system F(3,2,2) from Exercise Sheet 1 with IEEE 754 single and double precision.'}
+      </p>
+    </div>
+
+    <!-- Preset Selector -->
+    <div class="control-row">
+      <span class="control-label">{lang === 'de' ? 'System-Voreinstellung:' : 'Preset System:'}</span>
+      <div class="preset-pills">
+        <button type="button" class="preset-pill active" data-preset="f322">F(3, 2, 2) [Übungsblatt 1]</button>
+        <button type="button" class="preset-pill" data-preset="f221">F(2, 2, 1) [VL02 Folie 34]</button>
+        <button type="button" class="preset-pill" data-preset="f1042">F(10, 4, 2) [Übungsblatt 3]</button>
+        <button type="button" class="preset-pill" data-preset="ieee_float">IEEE 754 float (32-Bit)</button>
+        <button type="button" class="preset-pill" data-preset="ieee_double">IEEE 754 double (64-Bit)</button>
+      </div>
+    </div>
+
+    <!-- Live System Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="m-title">Kardinalität |F(β,r,s)|</span>
+        <span class="m-val" id="fp-metric-cardinality">205</span>
+        <span class="m-sub">inkl. Null & Vorzeichen</span>
+      </div>
+      <div class="metric-card">
+        <span class="m-title">Kleinste pos. Zahl x₊</span>
+        <span class="m-val" id="fp-metric-xmin">5.0805e-5</span>
+        <span class="m-sub">Unterlaufgrenze (Underflow)</span>
+      </div>
+      <div class="metric-card">
+        <span class="m-title">Größte Zahl X₊</span>
+        <span class="m-val" id="fp-metric-xmax">5832</span>
+        <span class="m-sub">Überlaufgrenze (Overflow)</span>
+      </div>
+      <div class="metric-card">
+        <span class="m-title">Maschinengenauigkeit eps</span>
+        <span class="m-val" id="fp-metric-eps">0.16667</span>
+        <span class="m-sub">eps = 0.5 * β^(1-r)</span>
+      </div>
+    </div>
+
+    <!-- Rounding Sandbox -->
+    <div class="sandbox-box">
+      <h5 class="sandbox-title">🎯 {lang === 'de' ? 'Interaktiver Rundungs-Prüfstand' : 'Interactive Rounding Sandbox'}</h5>
+      <div class="sandbox-controls">
+        <div class="input-group">
+          <label for="fp-input-num">{lang === 'de' ? 'Eingabezahl x (Dezimal):' : 'Input number x (Decimal):'}</label>
+          <input type="number" id="fp-input-num" value="0.745" step="0.001" />
+        </div>
+        <div class="input-group">
+          <label for="fp-select-rounding">{lang === 'de' ? 'Rundungsverfahren:' : 'Rounding Mode:'}</label>
+          <select id="fp-select-rounding">
+            <option value="even">{lang === 'de' ? 'Gerade Rundung (Round-to-Even / IEEE 754)' : 'Round-to-Even (IEEE 754 Default)'}</option>
+            <option value="half_up">{lang === 'de' ? 'Kaufmännische Rundung (Half-Up)' : 'Half-Up (Commercial)'}</option>
+            <option value="down">{lang === 'de' ? 'Abrunden (Floor, -∞)' : 'Floor (-∞)'}</option>
+            <option value="up">{lang === 'de' ? 'Aufrunden (Ceil, +∞)' : 'Ceil (+∞)'}</option>
+            <option value="trunc">{lang === 'de' ? 'Abschneiden (Truncate nach 0)' : 'Truncate towards 0'}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rounding-result-box" id="fp-rounding-result-box">
+        <div class="res-item">
+          <span class="res-label">{lang === 'de' ? 'Linker Nachbar left(x):' : 'Left neighbor left(x):'}</span>
+          <span class="res-value" id="fp-res-left">0.74</span>
+        </div>
+        <div class="res-item">
+          <span class="res-label">{lang === 'de' ? 'Rechter Nachbar right(x):' : 'Right neighbor right(x):'}</span>
+          <span class="res-value" id="fp-res-right">0.75</span>
+        </div>
+        <div class="res-item highlight-res">
+          <span class="res-label">{lang === 'de' ? 'Gerundeter Wert rd(x):' : 'Rounded value rd(x):'}</span>
+          <span class="res-value" id="fp-res-rounded">0.74</span>
+        </div>
+        <div class="res-item">
+          <span class="res-label">{lang === 'de' ? 'Relativer Rundungsfehler:' : 'Relative error:'}</span>
+          <span class="res-value" id="fp-res-relerr">0.67% (&le; eps)</span>
+        </div>
+      </div>
+
+      <p class="res-explanation" id="fp-res-explanation">
+        💡 <strong>Erklärung:</strong> 0.745 liegt exakt auf der halben Strecke zwischen 0.74 und 0.75. Die vorletzte Mantissenziffer von 0.74 ist <strong>4 (gerade)</strong>, von 0.75 ist <strong>5 (ungerade)</strong>. Daher rundet <em>Round-to-Even</em> auf <strong>0.74</strong>!
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 2: CATASTROPHIC CANCELLATION LAB -->
+  <div class="hub-tab-panel" id="tab-cancellation-lab">
+    <div class="panel-intro">
+      <h4>{lang === 'de' ? '⚡ Auslöschungs-Labor & Stabilitäts-Simulator' : '⚡ Catastrophic Cancellation & Stability Lab'}</h4>
+      <p>{lang === 'de'
+        ? 'Erlebe live, wie die Subtraktion fast gleich großer Gleitkommazahlen führende Ziffern zerstört (Auslöschung) und wie Vieta-Stabilisierung dieses Problem elegant heilt.'
+        : 'See catastrophic cancellation in action when subtracting nearly identical floating point values, and observe how Vieta stabilization completely solves it.'}
+      </p>
+    </div>
+
+    <!-- Sub-Tabs for Cancellation -->
+    <div class="cancellation-subtabs">
+      <button type="button" class="c-subtab-btn active" data-subtab="quad">
+        {lang === 'de' ? '1. Quadratische Gleichung x² - px + q = 0' : '1. Quadratic Equation x² - px + q = 0'}
+      </button>
+      <button type="button" class="c-subtab-btn" data-subtab="exp">
+        {lang === 'de' ? '2. Taylor-Reihe für e⁻²⁰ (Folie 30)' : '2. Taylor Series for e⁻²⁰ (Slide 30)'}
+      </button>
+      <button type="button" class="c-subtab-btn" data-subtab="nulladd">
+        {lang === 'de' ? '3. Nulladdition (x + 1 == 1)' : '3. Null Addition (x + 1 == 1)'}
+      </button>
+    </div>
+
+    <!-- Exp 1: Quadratic equation -->
+    <div class="c-subpanel active" id="c-subpanel-quad">
+      <div class="slider-control-group">
+        <div class="slider-row">
+          <label for="c-quad-p">Parameter p: <strong id="c-quad-p-val">10000</strong></label>
+          <input type="range" id="c-quad-p" min="10" max="100000000" step="10" value="10000" />
+        </div>
+        <div class="slider-row">
+          <label for="c-quad-q">Parameter q: <strong id="c-quad-q-val">1.0</strong></label>
+          <input type="range" id="c-quad-q" min="0.1" max="10.0" step="0.1" value="1.0" />
+        </div>
+      </div>
+
+      <div class="cancellation-compare-grid">
+        <div class="compare-column naive-column">
+          <div class="col-header">
+            <span class="col-icon">❌</span>
+            <span class="col-title">{lang === 'de' ? 'Naive pq-Formel' : 'Naive pq Formula'}</span>
+          </div>
+          <div class="col-formula">x₂ = p/2 - √(p²/4 - q)</div>
+          <div class="col-result-box">
+            <span class="res-num" id="c-quad-naive-res">9.999999747378752e-05</span>
+            <span class="lost-digits-badge" id="c-quad-lost-badge">⚠️ 8 signifikante Bits verloren</span>
+          </div>
+          <p class="col-note">{lang === 'de' ? 'Subtrahiert p/2 von √(p²/4 - q) ≈ p/2. Bei großem p löschen sich alle gültigen Mantissenstellen aus!' : 'Subtracts p/2 from √(p²/4 - q). For large p, leading bits cancel completely!'}</p>
+        </div>
+
+        <div class="compare-column stable-column">
+          <div class="col-header">
+            <span class="col-icon">✅</span>
+            <span class="col-title">{lang === 'de' ? 'Vieta-Stabilisierung' : 'Vieta Stabilization'}</span>
+          </div>
+          <div class="col-formula">x₁ = p/2 + √(p²/4 - q), &nbsp; x₂ = q / x₁</div>
+          <div class="col-result-box">
+            <span class="res-num" id="c-quad-stable-res">1.0000000000000000e-04</span>
+            <span class="stable-badge">✓ Volle 16 Dezimalstellen</span>
+          </div>
+          <p class="col-note">{lang === 'de' ? 'x₁ wird stabil durch Addition berechnet. x₂ folgt durch Division via Satz von Vieta x₁ · x₂ = q.' : 'x₁ is computed stably via addition; x₂ is obtained via Vieta relation x₁ · x₂ = q.'}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exp 2: Exponential series e^-20 -->
+    <div class="c-subpanel" id="c-subpanel-exp" style="display: none;">
+      <div class="slider-control-group">
+        <div class="slider-row">
+          <label for="c-exp-x">Exponent x: <strong id="c-exp-x-val">-20</strong></label>
+          <input type="range" id="c-exp-x" min="-25" max="-1" step="1" value="-20" />
+        </div>
+      </div>
+
+      <div class="exp-demo-box">
+        <div class="exp-metrics">
+          <div class="exp-m-card">
+            <span class="exp-label">Wahrer mathematischer Wert eˣ:</span>
+            <span class="exp-val" id="c-exp-true-val">2.06115362e-09</span>
+          </div>
+          <div class="exp-m-card bad">
+            <span class="exp-label">Direkte Reihe in float (32-Bit):</span>
+            <span class="exp-val" id="c-exp-float-val">0.75668406</span>
+            <span class="exp-sub">Fehler: ~367.000.000%!</span>
+          </div>
+          <div class="exp-m-card good">
+            <span class="exp-label">Stabil: 1 / e^|x|:</span>
+            <span class="exp-val" id="c-exp-stable-val">2.06115362e-09</span>
+            <span class="exp-sub">Absolut fehlerfrei!</span>
+          </div>
+        </div>
+
+        <div class="exp-bar-visual">
+          <span class="vis-title">{lang === 'de' ? 'Größenordnung der Reihenglieder |y_n| = |xⁿ / n!|:' : 'Magnitude of Series Terms |y_n| = |xⁿ / n!|:'}</span>
+          <div class="magnitude-meter">
+            <div class="meter-bar" style="width: 95%;"></div>
+            <span class="meter-text">Maximales Glied y₂₀ ≈ 2.61 · 10⁶ &nbsp; (Signal e⁻²⁰ liegt bei 10⁻⁹ &rarr; 15 Größenordnungen Differenz!)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exp 3: Nulladdition -->
+    <div class="c-subpanel" id="c-subpanel-nulladd" style="display: none;">
+      <div class="nulladd-tester">
+        <div class="input-group">
+          <label for="nulladd-x-input">Testzahl x für Gleichung x + 1 == 1:</label>
+          <input type="text" id="nulladd-x-input" value="1e-8" />
+        </div>
+        <div class="nulladd-buttons">
+          <button type="button" class="btn-quick-nulladd" data-val="1e-7">1e-7</button>
+          <button type="button" class="btn-quick-nulladd" data-val="5e-8">5e-8</button>
+          <button type="button" class="btn-quick-nulladd" data-val="2.98e-8">2.98e-8 (2⁻²⁵)</button>
+          <button type="button" class="btn-quick-nulladd" data-val="1e-15">1e-15</button>
+          <button type="button" class="btn-quick-nulladd" data-val="1e-16">1e-16</button>
+          <button type="button" class="btn-quick-nulladd" data-val="1.11e-16">1.11e-16 (2⁻⁵³)</button>
+        </div>
+
+        <div class="nulladd-results-grid">
+          <div class="nulladd-card" id="nulladd-card-float">
+            <h5>IEEE 754 float (32-Bit)</h5>
+            <span class="status-pill" id="nulladd-float-pill">Nulladdition!</span>
+            <p id="nulladd-float-msg">x + 1.0f == 1.0f (true)</p>
+            <span class="limit-info">Schranke: x &le; 2⁻²⁵ &approx; 2.98 &times; 10⁻⁸</span>
+          </div>
+          <div class="nulladd-card" id="nulladd-card-double">
+            <h5>IEEE 754 double (64-Bit)</h5>
+            <span class="status-pill" id="nulladd-double-pill">Keine Nulladdition</span>
+            <p id="nulladd-double-msg">x + 1.0 != 1.0 (false)</p>
+            <span class="limit-info">Schranke: x &le; 2⁻⁵⁴ &approx; 5.55 &times; 10⁻¹⁷</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: PIPE NETWORK & KIRCHHOFF SIMULATOR -->
+  <div class="hub-tab-panel" id="tab-pipe-network">
+    <div class="panel-intro">
+      <h4>{lang === 'de' ? '💧 Rohrnetzwerk-Simulator: Lineare Gleichungssysteme (Vorlesung 4)' : '💧 Pipe Network Simulator: Linear Systems (Lecture 4)'}</h4>
+      <p>{lang === 'de'
+        ? 'Interaktive Simulation des 5-Knoten-, 6-Rohre- und 2-Pumpen-Netzwerks aus den Vorlesungsfolien 59–63. Das Knotenpotentialverfahren löst B̂ᵀ L B̂ p̂ = -Ĉᵀ s live für die Knotendrücke und Rohrflüsse!'
+        : 'Interactive simulation of the 5-node, 6-pipe, 2-pump network from Lecture 4 slides 59–63. Solves B̂ᵀ L B̂ p̂ = -Ĉᵀ s in real-time for node pressures and flows!'}
+      </p>
+    </div>
+
+    <!-- Sliders for Pumps and Pipe Conductivities -->
+    <div class="network-controls-bar">
+      <div class="slider-row">
+        <label for="net-pump-s1">Pumpe 1 (Knoten 4 &rarr; 5): <strong id="net-pump-s1-val">2.0</strong> L/s</label>
+        <input type="range" id="net-pump-s1" min="0" max="5" step="0.1" value="2.0" />
+      </div>
+      <div class="slider-row">
+        <label for="net-pump-s2">Pumpe 2 (Knoten 1 &rarr; 3): <strong id="net-pump-s2-val">1.5</strong> L/s</label>
+        <input type="range" id="net-pump-s2" min="0" max="5" step="0.1" value="1.5" />
+      </div>
+      <div class="slider-row">
+        <label for="net-pipe-l">Rohrleitfähigkeit L (einheitlich): <strong id="net-pipe-l-val">1.0</strong></label>
+        <input type="range" id="net-pipe-l" min="0.2" max="3.0" step="0.1" value="1.0" />
+      </div>
+    </div>
+
+    <!-- Network SVG Visualizer -->
+    <div class="network-svg-container">
+      <svg id="network-svg" viewBox="0 0 700 420" width="100%" height="auto" class="network-svg-canvas">
+        <defs>
+          <marker id="arrow-pipe" viewBox="0 0 10 10" refX="18" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" />
+          </marker>
+          <marker id="arrow-pump" viewBox="0 0 10 10" refX="18" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+          </marker>
+        </defs>
+
+        <!-- Pipes (Black Edges) -->
+        <!-- Pipe 1: Node 1 -> Node 2 -->
+        <line id="pipe-1" x1="140" y1="320" x2="60" y2="200" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+        <!-- Pipe 2: Node 2 -> Node 3 -->
+        <line id="pipe-2" x1="60" y1="200" x2="240" y2="70" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+        <!-- Pipe 3: Node 3 -> Node 5 -->
+        <line id="pipe-3" x1="240" y1="70" x2="480" y2="180" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+        <!-- Pipe 4: Node 2 -> Node 5 -->
+        <line id="pipe-4" x1="60" y1="200" x2="480" y2="180" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+        <!-- Pipe 5: Node 1 -> Node 4 -->
+        <line id="pipe-5" x1="140" y1="320" x2="330" y2="270" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+        <!-- Pipe 6: Node 4 -> Node 3 -->
+        <line id="pipe-6" x1="330" y1="270" x2="240" y2="70" stroke="#475569" stroke-width="4" marker-end="url(#arrow-pipe)" />
+
+        <!-- Pumps (Red Dashed Edges) -->
+        <!-- Pump 2: Node 1 -> Node 3 -->
+        <line id="pump-2" x1="140" y1="320" x2="240" y2="70" stroke="#ef4444" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow-pump)" />
+        <!-- Pump 1: Node 4 -> Node 5 -->
+        <line id="pump-1" x1="330" y1="270" x2="480" y2="180" stroke="#ef4444" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow-pump)" />
+
+        <!-- Flow Labels -->
+        <text id="q-label-1" x="90" y="270" fill="#93c5fd" font-size="12" font-weight="700">q₁: --</text>
+        <text id="q-label-2" x="140" y="130" fill="#93c5fd" font-size="12" font-weight="700">q₂: --</text>
+        <text id="q-label-3" x="370" y="115" fill="#93c5fd" font-size="12" font-weight="700">q₃: --</text>
+        <text id="q-label-4" x="250" y="175" fill="#93c5fd" font-size="12" font-weight="700">q₄: --</text>
+        <text id="q-label-5" x="225" y="315" fill="#93c5fd" font-size="12" font-weight="700">q₅: --</text>
+        <text id="q-label-6" x="295" y="170" fill="#93c5fd" font-size="12" font-weight="700">q₆: --</text>
+
+        <!-- Pump Labels -->
+        <text x="175" y="210" fill="#f87171" font-size="12" font-weight="700">Pumpe 2</text>
+        <text x="415" y="245" fill="#f87171" font-size="12" font-weight="700">Pumpe 1</text>
+
+        <!-- Nodes -->
+        <!-- Node 1 -->
+        <circle id="node-1" cx="140" cy="320" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3" />
+        <text x="140" y="325" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">1</text>
+        <text id="p-label-1" x="140" y="358" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">p₁ = --</text>
+
+        <!-- Node 2 -->
+        <circle id="node-2" cx="60" cy="200" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3" />
+        <text x="60" y="205" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">2</text>
+        <text id="p-label-2" x="60" y="238" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">p₂ = --</text>
+
+        <!-- Node 3 -->
+        <circle id="node-3" cx="240" cy="70" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3" />
+        <text x="240" y="75" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">3</text>
+        <text id="p-label-3" x="240" y="42" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">p₃ = --</text>
+
+        <!-- Node 4 -->
+        <circle id="node-4" cx="330" cy="270" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3" />
+        <text x="330" y="275" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">4</text>
+        <text id="p-label-4" x="330" y="308" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">p₄ = --</text>
+
+        <!-- Node 5 (Reference Ground) -->
+        <circle id="node-5" cx="480" cy="180" r="24" fill="#0f172a" stroke="#10b981" stroke-width="3" />
+        <text x="480" y="185" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">5</text>
+        <text id="p-label-5" x="480" y="218" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">p₅ = 0 (Ref)</text>
+      </svg>
+    </div>
+
+    <!-- Live Kirchhoff Equation & Mass Balance Output -->
+    <div class="network-status-box">
+      <div class="status-col">
+        <span class="st-label">{lang === 'de' ? 'Knotenpotentialgleichung:' : 'System Equation:'}</span>
+        <code class="st-formula">A · p̂ = -Ĉᵀ s &nbsp; (A = B̂ᵀ L B̂ &in; ℝ⁴ˣ⁴, s.p.d.)</code>
+      </div>
+      <div class="status-col">
+        <span class="st-label">{lang === 'de' ? '1. Kirchhoffsche Regel (Massenerhaltung):' : 'Kirchhoff Balance:'}</span>
+        <span class="st-valid" id="net-kirchhoff-check">✓ &sum; q = 0 an allen 5 Knoten erfüllt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: EPIDEMIC FITTING VISUALIZER -->
+  <div class="hub-tab-panel" id="tab-epidemic-fit">
+    <div class="panel-intro">
+      <h4>{lang === 'de' ? '📈 Coronavirus-Pandemiedaten & Wachstumsmodell (Vorlesung 1)' : '📈 Epidemic Growth & Parameter Estimation (Lecture 1)'}</h4>
+      <p>{lang === 'de'
+        ? 'Die 55 realen COVID-19 Fallzahlen aus Deutschland (24.02. bis 18.04.2020). Vergleiche 2-Punkt-Interpolation, lineare Ausgleichsrechnung (Gauß-Normalgleichungen) und die Verdopplungszeit T₂ = ln(2)/λ!'
+        : 'The 55 real COVID-19 infection data points from Germany (Feb 24 to Apr 18, 2020). Compare 2-point interpolation, linear least-squares regression and doubling time T₂ = ln(2)/λ!'}
+      </p>
+    </div>
+
+    <div class="epidemic-controls">
+      <div class="slider-row">
+        <label for="epi-fit-cutoff">{lang === 'de' ? 'Trainings-Stichtag (Fit bis Tag):' : 'Fit Cutoff Day:'} <strong id="epi-cutoff-val">Tag 49 (13.04.2020)</strong></label>
+        <input type="range" id="epi-fit-cutoff" min="10" max="54" step="1" value="49" />
+      </div>
+      <div class="scale-toggle-row">
+        <span class="scale-label">{lang === 'de' ? 'Y-Achsen-Skalierung:' : 'Y-Axis Scale:'}</span>
+        <button type="button" class="btn-scale-toggle active" data-scale="log">Logarithmisch (log-linear)</button>
+        <button type="button" class="btn-scale-toggle" data-scale="linear">Linear</button>
+      </div>
+    </div>
+
+    <!-- Epidemic Chart Canvas -->
+    <div class="epidemic-chart-container">
+      <svg id="epidemic-svg" viewBox="0 0 760 360" width="100%" height="auto" class="epidemic-svg-canvas">
+        <!-- Axes -->
+        <line x1="60" y1="310" x2="720" y2="310" stroke="#475569" stroke-width="2" />
+        <line x1="60" y1="30" x2="60" y2="310" stroke="#475569" stroke-width="2" />
+
+        <!-- Grid Lines & Labels rendered via JS -->
+        <g id="epi-grid-group"></g>
+
+        <!-- Lockdowns & Events lines -->
+        <line x1="400" y1="30" x2="400" y2="310" stroke="#ef4444" stroke-dasharray="4,4" stroke-width="1.5" />
+        <text x="405" y="45" fill="#f87171" font-size="11" font-weight="700">1. Lockdown (22.03.)</text>
+
+        <!-- Model Curves -->
+        <path id="epi-curve-interp" fill="none" stroke="#3b82f6" stroke-width="2.5" />
+        <path id="epi-curve-leastsq" fill="none" stroke="#10b981" stroke-width="3" />
+
+        <!-- Data Points Circles -->
+        <g id="epi-points-group"></g>
+      </svg>
+    </div>
+
+    <!-- Parameter Estimation Results Box -->
+    <div class="epidemic-results-grid">
+      <div class="epi-res-card">
+        <span class="epi-card-title">{lang === 'de' ? 'Wachstumsrate λ' : 'Growth Rate λ'}</span>
+        <span class="epi-card-val" id="epi-res-lambda">0.248 / Tag</span>
+        <span class="epi-card-sub">ln(u(t)) = ln(u₀) + λt</span>
+      </div>
+      <div class="epi-res-card highlight">
+        <span class="epi-card-title">{lang === 'de' ? 'Verdopplungszeit T₂' : 'Doubling Time T₂'}</span>
+        <span class="epi-card-val" id="epi-res-t2">2.79 Tage</span>
+        <span class="epi-card-sub">T₂ = ln(2) / λ</span>
+      </div>
+      <div class="epi-res-card">
+        <span class="epi-card-title">{lang === 'de' ? 'Ausgangswert u₀' : 'Initial Cases u₀'}</span>
+        <span class="epi-card-val" id="epi-res-u0">19 Infizierte</span>
+        <span class="epi-card-sub">Schätzung am 24.02.2020</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ COVID_DATA: COVID_DATA_GERMANY }}>
+  function setupNumerikVisualizers() {
+    const root = document.getElementById('numerik-visualizer-hub-root');
+    if (!root) return;
+
+    // 1. Hub Tab Switching
+    const tabBtns = root.querySelectorAll('.hub-tab-btn');
+    const tabPanels = root.querySelectorAll('.hub-tab-panel');
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-tab-target');
+        tabBtns.forEach((b) => b.classList.toggle('active', b === btn));
+        tabPanels.forEach((p) => p.classList.toggle('active', p.id === `tab-${target}`));
+      });
+    });
+
+    // 2. Floating Point Simulator
+    const fpPresets = {
+      f322: { beta: 3, r: 2, s: 2, testNum: 0.745 },
+      f221: { beta: 2, r: 2, s: 1, testNum: 0.75 },
+      f1042: { beta: 10, r: 4, s: 2, testNum: 0.267531 },
+      ieee_float: { beta: 2, r: 24, s: 8, testNum: 0.1 },
+      ieee_double: { beta: 2, r: 53, s: 11, testNum: 0.1 }
+    };
+
+    let activeFpPreset = 'f322';
+    const presetBtns = root.querySelectorAll('.preset-pill');
+    const inputNum = root.querySelector('#fp-input-num');
+    const selectRounding = root.querySelector('#fp-select-rounding');
+
+    function updateFpMetrics() {
+      const p = fpPresets[activeFpPreset] || fpPresets.f322;
+      const beta = p.beta;
+      const r = p.r;
+      const s = p.s;
+
+      // Max exp
+      let expSum = 0;
+      for (let j = 0; j < s; j++) expSum += Math.pow(beta, j);
+      const maxExp = (beta - 1) * expSum;
+      const minExp = -maxExp;
+
+      // Card
+      let cardText = '';
+      if (beta === 2 && r >= 24) {
+        cardText = r === 24 ? '~4.29 · 10⁹ (32-Bit)' : '~1.84 · 10¹⁹ (64-Bit)';
+      } else {
+        const card = 2 * (beta - 1) * Math.pow(beta, r - 1) * (2 * Math.pow(beta, s) - 1) + 1;
+        cardText = card.toLocaleString();
+      }
+
+      const xMin = Math.pow(beta, -1 + minExp);
+      const xMax = (1 - Math.pow(beta, -r)) * Math.pow(beta, maxExp);
+      const eps = 0.5 * Math.pow(beta, 1 - r);
+
+      const elCard = root.querySelector('#fp-metric-cardinality');
+      const elMin = root.querySelector('#fp-metric-xmin');
+      const elMax = root.querySelector('#fp-metric-xmax');
+      const elEps = root.querySelector('#fp-metric-eps');
+
+      if (elCard) elCard.textContent = cardText;
+      if (elMin) elMin.textContent = xMin < 1e-4 ? xMin.toExponential(4) : xMin.toFixed(4);
+      if (elMax) elMax.textContent = xMax > 1e4 ? xMax.toExponential(4) : xMax.toFixed(2);
+      if (elEps) elEps.textContent = eps < 1e-4 ? eps.toExponential(4) : eps.toFixed(5);
+
+      updateRoundingSandbox();
+    }
+
+    function updateRoundingSandbox() {
+      if (!inputNum || !selectRounding) return;
+      const val = parseFloat(inputNum.value) || 0.745;
+      const mode = selectRounding.value;
+
+      // Simulation for 2 decimal digits demonstration
+      const factor = 100;
+      const scaled = val * factor;
+      const floorVal = Math.floor(scaled) / factor;
+      const ceilVal = Math.ceil(scaled) / factor;
+
+      let rounded = floorVal;
+      const diffFloor = Math.abs(val - floorVal);
+      const diffCeil = Math.abs(val - ceilVal);
+
+      if (mode === 'down') {
+        rounded = floorVal;
+      } else if (mode === 'up') {
+        rounded = ceilVal;
+      } else if (mode === 'trunc') {
+        rounded = val >= 0 ? floorVal : ceilVal;
+      } else if (mode === 'half_up') {
+        rounded = Math.round(val * factor) / factor;
+      } else {
+        // Round to even
+        if (Math.abs(diffFloor - diffCeil) < 1e-7) {
+          const lastDigit = Math.round(floorVal * factor) % 10;
+          rounded = (lastDigit % 2 === 0) ? floorVal : ceilVal;
+        } else {
+          rounded = diffFloor < diffCeil ? floorVal : ceilVal;
+        }
+      }
+
+      const elLeft = root.querySelector('#fp-res-left');
+      const elRight = root.querySelector('#fp-res-right');
+      const elRounded = root.querySelector('#fp-res-rounded');
+      const elRelErr = root.querySelector('#fp-res-relerr');
+      const elExpl = root.querySelector('#fp-res-explanation');
+
+      if (elLeft) elLeft.textContent = floorVal.toFixed(2);
+      if (elRight) elRight.textContent = ceilVal.toFixed(2);
+      if (elRounded) elRounded.textContent = rounded.toFixed(2);
+
+      const relErr = Math.abs((val - rounded) / (val || 1)) * 100;
+      if (elRelErr) elRelErr.textContent = `${relErr.toFixed(3)}%`;
+
+      if (elExpl) {
+        if (mode === 'even') {
+          elExpl.innerHTML = `💡 <strong>Gerade Rundung (IEEE 754 Default):</strong> Bei absolutem Gleichstand entscheidet die Parität der letzten Stelle von ${floorVal.toFixed(2)} (${Math.round(floorVal * factor) % 2 === 0 ? 'gerade' : 'ungerade'}). Ergebnis: <strong>${rounded.toFixed(2)}</strong>!`;
+        } else if (mode === 'half_up') {
+          elExpl.innerHTML = `💡 <strong>Kaufmännische Rundung:</strong> Bei Gleichstand (5er-Endung) wird immer strikt aufgerundet auf <strong>${ceilVal.toFixed(2)}</strong> (erzeugt systematischen positiven Bias).`;
+        } else {
+          elExpl.innerHTML = `💡 <strong>Direktes Rundungsverfahren:</strong> ${mode.toUpperCase()} wählt die Schranke <strong>${rounded.toFixed(2)}</strong>.`;
+        }
+      }
+    }
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFpPreset = btn.getAttribute('data-preset') || 'f322';
+        const p = fpPresets[activeFpPreset];
+        if (p && inputNum) inputNum.value = p.testNum.toString();
+        updateFpMetrics();
+      });
+    });
+
+    if (inputNum) inputNum.addEventListener('input', updateRoundingSandbox);
+    if (selectRounding) selectRounding.addEventListener('change', updateRoundingSandbox);
+    updateFpMetrics();
+
+    // 3. Cancellation Simulator
+    const cSubBtns = root.querySelectorAll('.c-subtab-btn');
+    const cSubPanels = root.querySelectorAll('.c-subpanel');
+
+    cSubBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const sub = btn.getAttribute('data-subtab');
+        cSubBtns.forEach((b) => b.classList.toggle('active', b === btn));
+        cSubPanels.forEach((p) => {
+          const match = p.id === `c-subpanel-${sub}`;
+          p.style.display = match ? 'block' : 'none';
+          p.classList.toggle('active', match);
+        });
+      });
+    });
+
+    // Quadratic Cancellation
+    const quadP = root.querySelector('#c-quad-p');
+    const quadQ = root.querySelector('#c-quad-q');
+    const quadPVal = root.querySelector('#c-quad-p-val');
+    const quadQVal = root.querySelector('#c-quad-q-val');
+    const quadNaive = root.querySelector('#c-quad-naive-res');
+    const quadStable = root.querySelector('#c-quad-stable-res');
+    const quadLostBadge = root.querySelector('#c-quad-lost-badge');
+
+    function updateQuadCancellation() {
+      if (!quadP || !quadQ) return;
+      const p = parseFloat(quadP.value);
+      const q = parseFloat(quadQ.value);
+      if (quadPVal) quadPVal.textContent = p.toLocaleString();
+      if (quadQVal) quadQVal.textContent = q.toFixed(1);
+
+      // In double precision
+      const disc = Math.sqrt(p * p / 4.0 - q);
+      const x2Naive = p / 2.0 - disc;
+
+      const x1Stable = p / 2.0 + disc;
+      const x2Stable = q / x1Stable;
+
+      if (quadNaive) quadNaive.textContent = x2Naive.toExponential(16);
+      if (quadStable) quadStable.textContent = x2Stable.toExponential(16);
+
+      // Estimate cancelled digits: log10(p^2 / 4q)
+      const ratio = (p * p) / (4 * q);
+      const lostDecimals = Math.min(16, Math.max(0, Math.floor(Math.log10(ratio) / 2)));
+      if (quadLostBadge) {
+        if (lostDecimals > 0) {
+          quadLostBadge.textContent = `⚠️ Ca. ${lostDecimals * 3} Bits (~${lostDecimals} Dezimalstellen) ausgelöscht!`;
+          quadLostBadge.style.display = 'inline-block';
+        } else {
+          quadLostBadge.style.display = 'none';
+        }
+      }
+    }
+
+    if (quadP) quadP.addEventListener('input', updateQuadCancellation);
+    if (quadQ) quadQ.addEventListener('input', updateQuadCancellation);
+    updateQuadCancellation();
+
+    // Exp Cancellation
+    const expX = root.querySelector('#c-exp-x');
+    const expXVal = root.querySelector('#c-exp-x-val');
+    const expTrue = root.querySelector('#c-exp-true-val');
+    const expFloat = root.querySelector('#c-exp-float-val');
+    const expStable = root.querySelector('#c-exp-stable-val');
+
+    function updateExpCancellation() {
+      if (!expX) return;
+      const x = parseFloat(expX.value);
+      if (expXVal) expXVal.textContent = x.toString();
+
+      const trueVal = Math.exp(x);
+      if (expTrue) expTrue.textContent = trueVal.toExponential(8);
+      if (expStable) expStable.textContent = (1.0 / Math.exp(Math.abs(x))).toExponential(8);
+
+      // Single precision simulation for e^x
+      let sum = 1.0;
+      let term = 1.0;
+      for (let n = 1; n <= 80; n++) {
+        term = Math.fround(Math.fround(term * x) / n);
+        sum = Math.fround(sum + term);
+        if (Math.abs(term) === 0) break;
+      }
+      if (expFloat) expFloat.textContent = sum.toFixed(8);
+    }
+
+    if (expX) expX.addEventListener('input', updateExpCancellation);
+    updateExpCancellation();
+
+    // Null Addition
+    const nullInput = root.querySelector('#nulladd-x-input');
+    const nullQuickBtns = root.querySelectorAll('.btn-quick-nulladd');
+    const floatPill = root.querySelector('#nulladd-float-pill');
+    const floatMsg = root.querySelector('#nulladd-float-msg');
+    const doublePill = root.querySelector('#nulladd-double-pill');
+    const doubleMsg = root.querySelector('#nulladd-double-msg');
+
+    function updateNullAddition() {
+      if (!nullInput) return;
+      const x = parseFloat(nullInput.value) || 0;
+
+      // Float (32-bit float arithmetic)
+      const xFloat = Math.fround(x);
+      const sumFloat = Math.fround(1.0 + xFloat);
+      const isNullFloat = (sumFloat === 1.0);
+
+      // Double (64-bit)
+      const sumDouble = 1.0 + x;
+      const isNullDouble = (sumDouble === 1.0);
+
+      if (floatPill && floatMsg) {
+        floatPill.textContent = isNullFloat ? '✓ Nulladdition findet statt!' : '✗ Keine Nulladdition';
+        floatPill.className = `status-pill ${isNullFloat ? 'bad' : 'good'}`;
+        floatMsg.textContent = `1.0f + x = ${sumFloat.toExponential(7)} ${isNullFloat ? '== 1.0f' : '!= 1.0f'}`;
+      }
+
+      if (doublePill && doubleMsg) {
+        doublePill.textContent = isNullDouble ? '✓ Nulladdition findet statt!' : '✗ Keine Nulladdition';
+        doublePill.className = `status-pill ${isNullDouble ? 'bad' : 'good'}`;
+        doubleMsg.textContent = `1.0 + x = ${sumDouble.toExponential(16)} ${isNullDouble ? '== 1.0' : '!= 1.0'}`;
+      }
+    }
+
+    if (nullInput) nullInput.addEventListener('input', updateNullAddition);
+    nullQuickBtns.forEach((b) => {
+      b.addEventListener('click', () => {
+        if (nullInput) nullInput.value = b.getAttribute('data-val') || '1e-8';
+        updateNullAddition();
+      });
+    });
+    updateNullAddition();
+
+    // 4. Pipe Network Solver & Visualizer
+    const pumpS1 = root.querySelector('#net-pump-s1');
+    const pumpS2 = root.querySelector('#net-pump-s2');
+    const pipeL = root.querySelector('#net-pipe-l');
+    const pumpS1Val = root.querySelector('#net-pump-s1-val');
+    const pumpS2Val = root.querySelector('#net-pump-s2-val');
+    const pipeLVal = root.querySelector('#net-pipe-l-val');
+
+    function solvePipeNetwork() {
+      if (!pumpS1 || !pumpS2 || !pipeL) return;
+      const s1 = parseFloat(pumpS1.value);
+      const s2 = parseFloat(pumpS2.value);
+      const Lval = parseFloat(pipeL.value);
+
+      if (pumpS1Val) pumpS1Val.textContent = s1.toFixed(1);
+      if (pumpS2Val) pumpS2Val.textContent = s2.toFixed(1);
+      if (pipeLVal) pipeLVal.textContent = Lval.toFixed(1);
+
+      // Reduced matrix B_hat (4 nodes x 6 pipes, node 5 omitted)
+      // Transposed: rows = nodes 1..4, cols = pipes 1..6
+      // B_hat_T = [
+      //   [ 1,  0,  0,  0,  1,  0],  // node 1
+      //   [-1,  1,  0,  1,  0,  0],  // node 2
+      //   [ 0, -1, -1,  0,  0,  1],  // node 3
+      //   [ 0,  0,  0,  0, -1, -1]   // node 4
+      // ]
+      // C_hat_T = [
+      //   [ 0, -1],  // node 1
+      //   [ 0,  0],  // node 2
+      //   [ 0,  1],  // node 3
+      //   [ 1,  0]   // node 4
+      // ]
+
+      // With uniform L:
+      // A = B_hat_T * L * B_hat
+      // Node 1: pipes 1, 5 -> diag = 2L. Off-diag: node 2 (-L), node 4 (-L)
+      // Node 2: pipes 1, 2, 4 -> diag = 3L. Off-diag: node 1 (-L), node 3 (-L)
+      // Node 3: pipes 2, 3, 6 -> diag = 3L. Off-diag: node 2 (-L), node 4 (-L)
+      // Node 4: pipes 5, 6 -> diag = 2L. Off-diag: node 1 (-L), node 3 (-L)
+      const A = [
+        [ 2 * Lval, -1 * Lval,  0 * Lval, -1 * Lval],
+        [-1 * Lval,  3 * Lval, -1 * Lval,  0 * Lval],
+        [ 0 * Lval, -1 * Lval,  3 * Lval, -1 * Lval],
+        [-1 * Lval,  0 * Lval, -1 * Lval,  2 * Lval]
+      ];
+
+      // rhs = - C_hat_T * s
+      // Node 1: -(-1 * s2) = s2
+      // Node 2: 0
+      // Node 3: -(1 * s2) = -s2
+      // Node 4: -(1 * s1) = -s1
+      const rhs = [s2, 0, -s2, -s1];
+
+      // 4x4 Gaussian elimination with partial pivoting
+      const n = 4;
+      const M = A.map((row, i) => [...row, rhs[i]]);
+
+      for (let i = 0; i < n; i++) {
+        let maxRow = i;
+        for (let k = i + 1; k < n; k++) {
+          if (Math.abs(M[k][i]) > Math.abs(M[maxRow][i])) maxRow = k;
+        }
+        [M[i], M[maxRow]] = [M[maxRow], M[i]];
+
+        const pivot = M[i][i];
+        if (Math.abs(pivot) < 1e-12) continue;
+        for (let k = i + 1; k < n; k++) {
+          const factor = M[k][i] / pivot;
+          for (let j = i; j <= n; j++) {
+            M[k][j] -= factor * M[i][j];
+          }
+        }
+      }
+
+      const pHat = new Array(n).fill(0);
+      for (let i = n - 1; i >= 0; i--) {
+        let sum = M[i][n];
+        for (let j = i + 1; j < n; j++) {
+          sum -= M[i][j] * pHat[j];
+        }
+        pHat[i] = sum / M[i][i];
+      }
+
+      const p = [pHat[0], pHat[1], pHat[2], pHat[3], 0.0];
+
+      // Pipe flows q_i = L_i * (p_start - p_end)
+      // Pipe 1: 1 -> 2
+      const q1 = Lval * (p[0] - p[1]);
+      // Pipe 2: 2 -> 3
+      const q2 = Lval * (p[1] - p[2]);
+      // Pipe 3: 3 -> 5
+      const q3 = Lval * (p[2] - p[4]);
+      // Pipe 4: 2 -> 5
+      const q4 = Lval * (p[1] - p[4]);
+      // Pipe 5: 1 -> 4
+      const q5 = Lval * (p[0] - p[3]);
+      // Pipe 6: 4 -> 3
+      const q6 = Lval * (p[3] - p[2]);
+
+      // Update pressure labels
+      for (let i = 1; i <= 4; i++) {
+        const lbl = root.querySelector(`#p-label-${i}`);
+        if (lbl) lbl.textContent = `p${i} = ${p[i-1].toFixed(2)}`;
+      }
+
+      // Update flow labels
+      const qArr = [q1, q2, q3, q4, q5, q6];
+      qArr.forEach((qVal, idx) => {
+        const qLbl = root.querySelector(`#q-label-${idx + 1}`);
+        if (qLbl) qLbl.textContent = `q${idx + 1}: ${qVal.toFixed(2)}`;
+      });
+
+      // Update node circle colors based on pressure
+      const maxP = Math.max(...p, 1.0);
+      const minP = Math.min(...p, 0.0);
+      for (let i = 1; i <= 4; i++) {
+        const circle = root.querySelector(`#node-${i}`);
+        if (circle) {
+          const norm = (p[i-1] - minP) / (maxP - minP || 1);
+          // Interpolate blue (low) to amber (high)
+          const r = Math.round(30 + norm * 200);
+          const g = Math.round(144 - norm * 40);
+          const b = Math.round(255 - norm * 150);
+          circle.setAttribute('fill', `rgb(${r}, ${g}, ${b})`);
+        }
+      }
+    }
+
+    if (pumpS1) pumpS1.addEventListener('input', solvePipeNetwork);
+    if (pumpS2) pumpS2.addEventListener('input', solvePipeNetwork);
+    if (pipeL) pipeL.addEventListener('input', solvePipeNetwork);
+    solvePipeNetwork();
+
+    // 5. Epidemic Fit Simulator
+    const epiCutoff = root.querySelector('#epi-fit-cutoff');
+    const epiCutoffVal = root.querySelector('#epi-cutoff-val');
+    const scaleBtns = root.querySelectorAll('.btn-scale-toggle');
+    let isLogScale = true;
+
+    function renderEpidemicFit() {
+      if (!epiCutoff) return;
+      const cutoffIdx = parseInt(epiCutoff.value, 10);
+      const currentItem = COVID_DATA[cutoffIdx] || COVID_DATA[49];
+      if (epiCutoffVal) epiCutoffVal.textContent = `Tag ${cutoffIdx} (${currentItem.date})`;
+
+      // Least squares fit up to cutoff
+      let sumT = 0, sumLogN = 0, sumT2 = 0, sumTLogN = 0;
+      const m = cutoffIdx + 1;
+      const t0 = 0;
+
+      for (let i = 0; i <= cutoffIdx; i++) {
+        const t = COVID_DATA[i].day - t0;
+        const logN = Math.log(COVID_DATA[i].cases);
+        sumT += t;
+        sumLogN += logN;
+        sumT2 += t * t;
+        sumTLogN += t * logN;
+      }
+
+      // Normal equations for line y = a + b*t
+      const denom = (m * sumT2 - sumT * sumT);
+      const b = (m * sumTLogN - sumT * sumLogN) / denom;
+      const a = (sumLogN - b * sumT) / m;
+
+      const lambda = b;
+      const u0 = Math.exp(a);
+      const t2 = Math.log(2) / (lambda || 0.001);
+
+      const elLambda = root.querySelector('#epi-res-lambda');
+      const elT2 = root.querySelector('#epi-res-t2');
+      const elU0 = root.querySelector('#epi-res-u0');
+
+      if (elLambda) elLambda.textContent = `${lambda.toFixed(3)} / Tag`;
+      if (elT2) elT2.textContent = `${t2.toFixed(2)} Tage`;
+      if (elU0) elU0.textContent = `${Math.round(u0)} Infizierte`;
+
+      // Draw SVG chart
+      const svg = root.querySelector('#epidemic-svg');
+      const pointsGroup = root.querySelector('#epi-points-group');
+      const curveLeastSq = root.querySelector('#epi-curve-leastsq');
+      if (!svg || !pointsGroup || !curveLeastSq) return;
+
+      const plotW = 660;
+      const plotH = 260;
+      const originX = 60;
+      const originY = 310;
+
+      const maxDay = 54;
+      const maxCases = 150000;
+      const minLog = 1; // 10^1 = 10
+      const maxLog = 5.3; // ~200,000
+
+      function getCoords(day, cases) {
+        const x = originX + (day / maxDay) * plotW;
+        let y = originY;
+        if (isLogScale) {
+          const lVal = Math.max(1, Math.log10(cases));
+          const norm = (lVal - 1) / (maxLog - 1);
+          y = originY - norm * plotH;
+        } else {
+          y = originY - (cases / maxCases) * plotH;
+        }
+        return { x, y };
+      }
+
+      // Draw points
+      let ptsHtml = '';
+      COVID_DATA.forEach((d, idx) => {
+        const { x, y } = getCoords(d.day, d.cases);
+        const isFitted = idx <= cutoffIdx;
+        ptsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="${isFitted ? '#60a5fa' : '#94a3b8'}" />`;
+      });
+      pointsGroup.innerHTML = ptsHtml;
+
+      // Draw regression curve
+      let pathD = '';
+      for (let t = 0; t <= maxDay; t += 0.5) {
+        const modelCases = u0 * Math.exp(lambda * t);
+        const { x, y } = getCoords(t, modelCases);
+        pathD += (t === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+      }
+      curveLeastSq.setAttribute('d', pathD);
+    }
+
+    if (epiCutoff) epiCutoff.addEventListener('input', renderEpidemicFit);
+    scaleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        scaleBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        isLogScale = (btn.getAttribute('data-scale') === 'log');
+        renderEpidemicFit();
+      });
+    });
+    renderEpidemicFit();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupNumerikVisualizers);
+  } else {
+    setupNumerikVisualizers();
+  }
+
+  document.addEventListener('astro:page-load', setupNumerikVisualizers);
+</script>
+
+<style>
+  .numerik-visualizer-hub {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .hub-tabs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hub-badge {
+    display: inline-block;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    margin-bottom: 0.3rem;
+  }
+
+  .hub-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .hub-tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hub-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.85rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .hub-tab-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #60a5fa;
+    color: #ffffff;
+  }
+
+  .hub-tab-btn.active {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #93c5fd;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  }
+
+  .hub-tab-panel {
+    display: none;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .hub-tab-panel.active {
+    display: flex;
+  }
+
+  .panel-intro h4 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .panel-intro p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #94a3b8;
+  }
+
+  /* Control rows & Presets */
+  .control-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .control-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #93c5fd;
+  }
+
+  .preset-pills {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .preset-pill {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .preset-pill:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #60a5fa;
+  }
+
+  .preset-pill.active {
+    background: #3b82f6;
+    border-color: #93c5fd;
+    color: #ffffff;
+  }
+
+  /* Metrics Grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .metric-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 10px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .m-title {
+    font-size: 0.725rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+  }
+
+  .m-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #38bdf8;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .m-sub {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  /* Sandbox Box */
+  .sandbox-box {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .sandbox-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .sandbox-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex-grow: 1;
+  }
+
+  .input-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+
+  .input-group input, .input-group select {
+    background: #030712;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.85rem;
+    color: #ffffff;
+    font-family: ui-monospace, monospace;
+  }
+
+  .rounding-result-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.65rem;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
+
+  .res-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .res-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+
+  .res-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    font-family: ui-monospace, monospace;
+  }
+
+  .highlight-res .res-value {
+    color: #34d399;
+    font-size: 1.15rem;
+  }
+
+  .res-explanation {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #cbd5e1;
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 3px solid #3b82f6;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Cancellation Sub-Tabs */
+  .cancellation-subtabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.5rem;
+  }
+
+  .c-subtab-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .c-subtab-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #f87171;
+  }
+
+  .c-subtab-btn.active {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+    color: #fca5a5;
+  }
+
+  .slider-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 10px;
+    padding: 0.85rem;
+  }
+
+  .slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .slider-row label {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+  }
+
+  .slider-row input[type="range"] {
+    width: 100%;
+    accent-color: #3b82f6;
+  }
+
+  .cancellation-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .compare-column {
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .naive-column {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+
+  .stable-column {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  .col-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .naive-column .col-title { color: #f87171; }
+  .stable-column .col-title { color: #34d399; }
+
+  .col-formula {
+    font-size: 0.8rem;
+    font-family: ui-monospace, monospace;
+    color: #94a3b8;
+  }
+
+  .col-result-box {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .res-num {
+    font-family: ui-monospace, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    word-break: break-all;
+  }
+
+  .lost-digits-badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: rgba(239, 68, 68, 0.25);
+    color: #fca5a5;
+  }
+
+  .stable-badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.25);
+    color: #a7f3d0;
+  }
+
+  .col-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  /* Exp Demo */
+  .exp-demo-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .exp-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .exp-m-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .exp-m-card.bad { border-color: rgba(239, 68, 68, 0.4); }
+  .exp-m-card.good { border-color: rgba(16, 185, 129, 0.4); }
+
+  .exp-label {
+    font-size: 0.725rem;
+    color: #94a3b8;
+  }
+
+  .exp-val {
+    font-family: ui-monospace, monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .exp-m-card.bad .exp-val { color: #f87171; }
+  .exp-m-card.good .exp-val { color: #34d399; }
+
+  .exp-sub {
+    font-size: 0.7rem;
+    color: #fca5a5;
+  }
+
+  .exp-bar-visual {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .vis-title {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .magnitude-meter {
+    background: #0f172a;
+    border-radius: 9999px;
+    height: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meter-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #ef4444);
+    border-radius: 9999px;
+  }
+
+  .meter-text {
+    font-size: 0.7rem;
+    color: #e2e8f0;
+    margin-top: 0.3rem;
+  }
+
+  /* Null Addition */
+  .nulladd-tester {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  .nulladd-buttons {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-quick-nulladd {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.725rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-family: ui-monospace, monospace;
+  }
+
+  .btn-quick-nulladd:hover {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: #60a5fa;
+  }
+
+  .nulladd-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.85rem;
+  }
+
+  .nulladd-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .nulladd-card h5 {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #f1f5f9;
+  }
+
+  .status-pill {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+  }
+
+  .status-pill.bad {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+
+  .status-pill.good {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+
+  .nulladd-card p {
+    margin: 0;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    color: #ffffff;
+  }
+
+  .limit-info {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  /* Pipe Network */
+  .network-controls-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 10px;
+    padding: 0.85rem;
+  }
+
+  .network-svg-container {
+    background: #030712;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .network-status-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+
+  .status-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .st-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+  }
+
+  .st-formula {
+    color: #93c5fd;
+    font-size: 0.85rem;
+  }
+
+  .st-valid {
+    color: #34d399;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  /* Epidemic Fit */
+  .epidemic-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 10px;
+    padding: 0.85rem;
+  }
+
+  .scale-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .scale-label {
+    font-size: 0.775rem;
+    color: #94a3b8;
+  }
+
+  .btn-scale-toggle {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #cbd5e1;
+    cursor: pointer;
+  }
+
+  .btn-scale-toggle.active {
+    background: #3b82f6;
+    border-color: #93c5fd;
+    color: #ffffff;
+  }
+
+  .epidemic-chart-container {
+    background: #030712;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .epidemic-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .epi-res-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .epi-res-card.highlight {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .epi-card-title {
+    font-size: 0.725rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .epi-card-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #38bdf8;
+    font-family: ui-monospace, monospace;
+  }
+
+  .epi-res-card.highlight .epi-card-val {
+    color: #34d399;
+  }
+
+  .epi-card-sub {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  @media (max-width: 640px) {
+    .hub-tabs-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .hub-tab-buttons {
+      width: 100%;
+    }
+    .hub-tab-btn {
+      flex-grow: 1;
+      justify-content: center;
+    }
+  }
+</style>

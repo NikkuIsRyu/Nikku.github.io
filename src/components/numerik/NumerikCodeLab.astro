@@ -1,0 +1,414 @@
+---
+import { NUMERIK_CODE_SNIPPETS } from '../../data/numerikData';
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'de' } = Astro.props;
+---
+
+<div class="numerik-code-lab not-content" id="numerik-code-lab-root">
+  <div class="code-lab-header">
+    <div class="header-left">
+      <span class="lab-badge">💻 C++ & HDNum</span>
+      <h3 class="lab-title">{lang === 'de' ? 'Praktisches Numerik-Programmierlabor' : 'Practical Numerics Programming Lab'}</h3>
+    </div>
+    <div class="header-right">
+      <span class="lab-note">
+        {lang === 'de' ? 'Nutzt C++20 & HDNum (Header-Only Lehrbibliothek der Uni Heidelberg)' : 'Built with C++20 & HDNum (Heidelberg University Teaching Library)'}
+      </span>
+    </div>
+  </div>
+
+  <!-- Snippet Selector Tabs -->
+  <div class="snippet-tabs-bar" role="tablist">
+    {NUMERIK_CODE_SNIPPETS.map((snippet, idx) => (
+      <button
+        type="button"
+        class={`snippet-tab-btn ${idx === 0 ? 'active' : ''}`}
+        data-snippet-id={snippet.id}
+        role="tab"
+        aria-selected={idx === 0 ? 'true' : 'false'}
+      >
+        <span class="tab-index">0{idx + 1}</span>
+        <span class="tab-label">{snippet.filename}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Snippet Panels -->
+  <div class="snippet-panels-container">
+    {NUMERIK_CODE_SNIPPETS.map((snippet, idx) => (
+      <div
+        class={`snippet-panel ${idx === 0 ? 'active' : ''}`}
+        id={`panel-${snippet.id}`}
+        role="tabpanel"
+      >
+        <div class="panel-meta-row">
+          <div class="meta-left">
+            <h4 class="snippet-title">{snippet.title}</h4>
+            <span class="snippet-lesson">{snippet.lesson}</span>
+          </div>
+          <button type="button" class="btn-copy-code" data-code={snippet.code}>
+            <span class="copy-icon">📋</span>
+            <span class="copy-text">{lang === 'de' ? 'Code kopieren' : 'Copy Code'}</span>
+          </button>
+        </div>
+
+        <p class="snippet-description">{snippet.description}</p>
+
+        <!-- Highlights Checklist -->
+        <div class="highlights-box">
+          <span class="highlights-title">{lang === 'de' ? 'Architektur- & Numerik-Highlights:' : 'Numerics & Design Highlights:'}</span>
+          <ul class="highlights-list">
+            {snippet.highlights.map((h) => (
+              <li>
+                <span class="h-bullet">⚡</span>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Code Block -->
+        <div class="code-terminal-window">
+          <div class="terminal-bar">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-filename">{snippet.filename}</span>
+            <span class="terminal-lang">C++20</span>
+          </div>
+          <pre class="terminal-code"><code>{snippet.code}</code></pre>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  function setupNumerikCodeLab() {
+    const root = document.getElementById('numerik-code-lab-root');
+    if (!root) return;
+
+    const tabBtns = root.querySelectorAll<HTMLButtonElement>('.snippet-tab-btn');
+    const panels = root.querySelectorAll<HTMLElement>('.snippet-panel');
+    const copyBtns = root.querySelectorAll<HTMLButtonElement>('.btn-copy-code');
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-snippet-id');
+        tabBtns.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach((p) => {
+          const matches = p.id === `panel-${id}`;
+          p.classList.toggle('active', matches);
+        });
+      });
+    });
+
+    copyBtns.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const code = btn.getAttribute('data-code');
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          const textSpan = btn.querySelector('.copy-text');
+          if (textSpan) {
+            const original = textSpan.textContent;
+            textSpan.textContent = 'Kopiert! ✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              textSpan.textContent = original;
+              btn.classList.remove('copied');
+            }, 2000);
+          }
+        } catch (err) {
+          console.error('Clipboard copy failed:', err);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupNumerikCodeLab);
+  } else {
+    setupNumerikCodeLab();
+  }
+
+  document.addEventListener('astro:page-load', setupNumerikCodeLab);
+</script>
+
+<style>
+  .numerik-code-lab {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .code-lab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+  }
+
+  .lab-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    margin-bottom: 0.35rem;
+  }
+
+  .lab-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .lab-note {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .snippet-tabs-bar {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .snippet-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.85rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .snippet-tab-btn:hover {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: #60a5fa;
+    color: #ffffff;
+  }
+
+  .snippet-tab-btn.active {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(37, 99, 235, 0.35) 100%);
+    border-color: #3b82f6;
+    color: #93c5fd;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+  }
+
+  .tab-index {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #60a5fa;
+  }
+
+  .snippet-panel {
+    display: none;
+    flex-direction: column;
+    gap: 0.85rem;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .snippet-panel.active {
+    display: flex;
+  }
+
+  .panel-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  .snippet-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .snippet-lesson {
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-copy-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 0.775rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-copy-code:hover {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: #60a5fa;
+    color: #ffffff;
+  }
+
+  .btn-copy-code.copied {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: #10b981;
+    color: #a7f3d0;
+  }
+
+  .snippet-description {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .highlights-box {
+    background: rgba(15, 23, 42, 0.65);
+    border-left: 3px solid #3b82f6;
+    border-radius: 0 8px 8px 0;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .highlights-title {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+    margin-bottom: 0.35rem;
+  }
+
+  .highlights-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .highlights-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 0.825rem;
+    color: #e2e8f0;
+  }
+
+  .h-bullet {
+    color: #38bdf8;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+
+  .code-terminal-window {
+    background: #030712;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .terminal-dots {
+    display: flex;
+    gap: 5px;
+    margin-right: 0.85rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .dot.red { background: #ef4444; }
+  .dot.yellow { background: #f59e0b; }
+  .dot.green { background: #10b981; }
+
+  .terminal-filename {
+    font-size: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #cbd5e1;
+    font-weight: 600;
+  }
+
+  .terminal-lang {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+
+  .terminal-code {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.825rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+    background: transparent;
+  }
+</style>

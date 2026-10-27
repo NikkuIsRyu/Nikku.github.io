@@ -1,0 +1,481 @@
+---
+interface Props {
+  activeSection?: 'visualizers' | 'formulas' | 'confusables' | 'quiz' | 'codelab' | 'course' | 'all';
+  lang?: 'en' | 'de';
+}
+
+const { activeSection = 'visualizers', lang = 'de' } = Astro.props;
+
+const modes = [
+  {
+    id: 'visualizers',
+    icon: '🔬',
+    labelDe: 'Interaktive Labore & Visualisierungen',
+    labelEn: 'Interactive Labs & Visualizers',
+    badgeDe: '4 Live-Simulatoren',
+    badgeEn: '4 Live Simulators',
+    descDe: 'IEEE 754 & F(β,r,s) Explorer, Auslöschungs-Labor, Rohrnetzwerk & Corona-Fitting',
+    descEn: 'IEEE 754 & F(β,r,s) explorer, cancellation lab, pipe networks & epidemic fitting'
+  },
+  {
+    id: 'formulas',
+    icon: '📐',
+    labelDe: 'Formeln, Sätze & Definitionen',
+    labelEn: 'Core Formulas & Theorems',
+    badgeDe: '8 Bento Cards',
+    badgeEn: '8 Bento Cards',
+    descDe: 'Fließkommadarstellung, Rundungsschranken, Kondition κ, Taylor, Landau & Kirchhoff',
+    descEn: 'Floating point specs, rounding bounds, condition κ, Taylor, Landau & Kirchhoff'
+  },
+  {
+    id: 'confusables',
+    icon: '⚖️',
+    labelDe: 'Numerik-Fallstricke & Vergleiche',
+    labelEn: 'Numerics Pitfalls & Confusables',
+    badgeDe: '6 Kontrastpaare',
+    badgeEn: '6 Contrast Pairs',
+    descDe: 'Kaufmännisch vs. Gerade Rundung, Kondition vs. Stabilität, pq-Formel vs. Vieta',
+    descEn: 'Half-up vs. Round-to-even, conditioning vs. stability, pq formula vs. Vieta'
+  },
+  {
+    id: 'quiz',
+    icon: '🎯',
+    labelDe: '60s Micro-Quiz & Klausurzulassung',
+    labelEn: '60s Micro-Quiz Simulator',
+    badgeDe: '10 Miniklausur-Fragen',
+    badgeEn: '10 Practice Items',
+    descDe: 'Schnelltests für die 3 Miniklausuren mit Timer, Sofort-Feedback & Musterlösungen',
+    descEn: 'Rapid tests for the 3 mini-exams with timer, instant feedback & worked proofs'
+  },
+  {
+    id: 'codelab',
+    icon: '💻',
+    labelDe: 'C++ & HDNum Code-Labor',
+    labelEn: 'C++ & HDNum Code Lab',
+    badgeDe: 'C++20 & Lehrbibliothek',
+    badgeEn: 'C++20 & HDNum Library',
+    descDe: 'Nulladdition-Templates, Ausgleichsrechnung, Newton-Solver & stabiler Vieta-Code',
+    descEn: 'Null-addition templates, least-squares regression, Newton solver & Vieta solver'
+  },
+  {
+    id: 'course',
+    icon: '🗂️',
+    labelDe: 'Kurs-Hub & Übungsbetrieb',
+    labelEn: 'Course Hub & Logistics',
+    badgeDe: 'Prof. Bastian · WS 26/27',
+    badgeEn: 'Prof. Bastian · WS 26/27',
+    descDe: '11 Übungsblätter, 3 Miniklausuren (50% Kriterium), Moodle-Hub & Lytris KI-Tutor',
+    descEn: '11 exercise sheets, 3 mini-quizzes (50% rule), Moodle hub & Lytris AI tutor'
+  }
+];
+---
+
+<nav class="numerik-dashboard-nav not-content" id="numerik-study-mode-dashboard-nav" aria-label="Numerik Study Mode Navigation">
+  <div class="nav-intro">
+    <div class="nav-intro-left">
+      <span class="live-pulse"></span>
+      <span class="mode-badge">⚡ {lang === 'de' ? 'Numerik Lernmodus-Dashboard' : 'Numerics Study Mode Navigation'}</span>
+    </div>
+    <div class="nav-intro-right">
+      <button type="button" class="btn-show-all-modes" id="numerik-btn-toggle-all-modes" data-active-all="false">
+        <span class="btn-all-icon">🌐</span>
+        <span class="btn-all-text">{lang === 'de' ? 'Alle Bereiche anzeigen (Vollansicht)' : 'Show All Sections (Full Document)'}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-grid">
+    {modes.map((m) => (
+      <button
+        type="button"
+        class={`nav-card ${m.id === activeSection ? 'active' : ''}`}
+        data-mode-id={m.id}
+        title={lang === 'de' ? `Zu ${m.labelDe} wechseln` : `Switch to ${m.labelEn}`}
+      >
+        <div class="card-top">
+          <span class="card-icon">{m.icon}</span>
+          <span class="card-badge">{lang === 'de' ? m.badgeDe : m.badgeEn}</span>
+        </div>
+        <h4 class="card-title">{lang === 'de' ? m.labelDe : m.labelEn}</h4>
+        <p class="card-desc">{lang === 'de' ? m.descDe : m.descEn}</p>
+        <div class="active-indicator">
+          <span>{lang === 'de' ? 'Aktiver Modus' : 'Active Focus Mode'}</span>
+          <span class="indicator-arrow">→</span>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <div class="mode-active-bar" id="numerik-mode-active-bar">
+    <span class="active-mode-label">{lang === 'de' ? 'Aktiver Fokusbereich:' : 'Current Focus:'}</span>
+    <span class="active-mode-name" id="numerik-active-mode-display-name">
+      {lang === 'de' ? '🔬 Interaktive Labore & Visualisierungen' : '🔬 Interactive Labs & Visualizers'}
+    </span>
+    <span class="active-mode-hint">
+      {lang === 'de' ? '(Klicke oben auf eine Kachel, um den sichtbaren Modus live umzuschalten)' : '(Click any card above to dynamically switch visible content)'}
+    </span>
+  </div>
+</nav>
+
+<script>
+  function setupNumerikStudyDashboard() {
+    const nav = document.getElementById('numerik-study-mode-dashboard-nav');
+    if (!nav) return;
+
+    const cards = nav.querySelectorAll<HTMLButtonElement>('.nav-card');
+    const btnToggleAll = document.getElementById('numerik-btn-toggle-all-modes');
+    const activeName = document.getElementById('numerik-active-mode-display-name');
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.study-mode-section'));
+
+    if (sections.length === 0) return;
+
+    const modeLabels: Record<string, { de: string; en: string }> = {
+      visualizers: {
+        de: '🔬 Interaktive Labore & Visualisierungen (IEEE 754, Auslöschung, Rohrnetzwerk, Corona-Fitting)',
+        en: '🔬 Interactive Labs & Visualizers (IEEE 754, Cancellation, Pipe Networks, Epidemic Fitting)'
+      },
+      formulas: {
+        de: '📐 Formeln, Sätze & Definitionen (Fließkommadarstellung, Rundung, Taylor, Kondition, Kirchhoff)',
+        en: '📐 Core Formulas & Theorems (Floating Point Specs, Rounding, Taylor, Condition, Kirchhoff)'
+      },
+      confusables: {
+        de: '⚖️ Numerik-Fallstricke & Vergleiche (Rundungsarten, Kondition vs. Stabilität, pq vs. Vieta)',
+        en: '⚖️ Numerics Pitfalls & Confusables (Rounding Types, Conditioning vs Stability, pq vs Vieta)'
+      },
+      quiz: {
+        de: '🎯 60s Micro-Quiz & Klausurzulassung (10 interaktive Miniklausur-Aufgaben)',
+        en: '🎯 60s Micro-Quiz Simulator (10 Interactive Exam Practice Items)'
+      },
+      codelab: {
+        de: '💻 C++ & HDNum Code-Labor (Nulladdition-Templates, Least-Squares, Newton, Vieta)',
+        en: '💻 C++ & HDNum Code Lab (Null Addition Templates, Least Squares, Newton, Vieta)'
+      },
+      course: {
+        de: '🗂️ Kurs-Hub & Übungsbetrieb (Prof. Bastian, 11 Blätter, 3 Miniklausuren, Lytris KI-Tutor)',
+        en: '🗂️ Course Hub & Logistics (Prof. Bastian, 11 Sheets, 3 Mini-Quizzes, Lytris AI Tutor)'
+      },
+      all: {
+        de: '🌐 Alle Bereiche aktiv (Vollansicht ohne Filterung)',
+        en: '🌐 All Sections Active (Full Document View)'
+      }
+    };
+
+    function switchMode(targetMode: string, updateHash: boolean = true) {
+      const isAll = targetMode === 'all';
+
+      cards.forEach((card) => {
+        const id = card.getAttribute('data-mode-id');
+        if (isAll) {
+          card.classList.remove('active');
+        } else {
+          card.classList.toggle('active', id === targetMode);
+        }
+      });
+
+      if (btnToggleAll) {
+        btnToggleAll.setAttribute('data-active-all', isAll ? 'true' : 'false');
+        btnToggleAll.classList.toggle('active', isAll);
+      }
+
+      sections.forEach((sec) => {
+        const secMode = sec.getAttribute('data-study-mode');
+        if (isAll || secMode === targetMode) {
+          sec.style.display = 'block';
+          sec.classList.add('mode-visible');
+        } else {
+          sec.style.display = 'none';
+          sec.classList.remove('mode-visible');
+        }
+      });
+
+      if (activeName) {
+        const isDe = document.documentElement.lang?.startsWith('de') || window.location.pathname.includes('/de/');
+        const langKey = isDe ? 'de' : 'en';
+        activeName.textContent = modeLabels[targetMode]?.[langKey] || targetMode;
+      }
+
+      if (updateHash && !isAll) {
+        try {
+          history.replaceState(null, '', `#mode-${targetMode}`);
+        } catch (_) {}
+      } else if (updateHash && isAll) {
+        try {
+          history.replaceState(null, '', window.location.pathname);
+        } catch (_) {}
+      }
+    }
+
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const mode = card.getAttribute('data-mode-id');
+        if (mode) switchMode(mode, true);
+      });
+    });
+
+    if (btnToggleAll) {
+      btnToggleAll.addEventListener('click', () => {
+        const isAllActive = btnToggleAll.getAttribute('data-active-all') === 'true';
+        switchMode(isAllActive ? 'visualizers' : 'all', true);
+      });
+    }
+
+    // Hash reading on load
+    const hash = window.location.hash.toLowerCase();
+    if (hash.startsWith('#mode-')) {
+      const targetMode = hash.replace('#mode-', '');
+      if (modeLabels[targetMode]) {
+        switchMode(targetMode, false);
+      }
+    } else {
+      switchMode('visualizers', false);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupNumerikStudyDashboard);
+  } else {
+    setupNumerikStudyDashboard();
+  }
+
+  document.addEventListener('astro:page-load', setupNumerikStudyDashboard);
+</script>
+
+<style>
+  .numerik-dashboard-nav {
+    margin: 1.5rem 0 2rem 0;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 130, 246, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-intro-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .live-pulse {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+
+  .mode-badge {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #93c5fd;
+    text-transform: uppercase;
+  }
+
+  .btn-show-all-modes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-show-all-modes:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #60a5fa;
+    color: #ffffff;
+  }
+
+  .btn-show-all-modes.active {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-color: #93c5fd;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.95rem;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .nav-card:hover {
+    transform: translateY(-2px);
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(96, 165, 250, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-card.active {
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6, 0 8px 20px rgba(37, 99, 235, 0.25);
+  }
+
+  .nav-card.active::before {
+    background: linear-gradient(90deg, #38bdf8, #3b82f6, #6366f1);
+  }
+
+  .card-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .card-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    background: rgba(59, 130, 246, 0.18);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+
+  .nav-card.active .card-badge {
+    background: rgba(59, 130, 246, 0.35);
+    color: #ffffff;
+    border-color: #60a5fa;
+  }
+
+  .card-title {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0 0 0.3rem 0;
+    line-height: 1.3;
+  }
+
+  .nav-card.active .card-title {
+    color: #60a5fa;
+  }
+
+  .card-desc {
+    font-size: 0.775rem;
+    color: #94a3b8;
+    line-height: 1.35;
+    margin: 0 0 0.6rem 0;
+    flex-grow: 1;
+  }
+
+  .active-indicator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: #3b82f6;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s ease;
+  }
+
+  .nav-card.active .active-indicator {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .mode-active-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    font-size: 0.825rem;
+    border-left: 3px solid #3b82f6;
+  }
+
+  .active-mode-label {
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .active-mode-name {
+    color: #38bdf8;
+    font-weight: 700;
+  }
+
+  .active-mode-hint {
+    color: #64748b;
+    font-size: 0.75rem;
+    margin-left: auto;
+  }
+
+  @media (max-width: 640px) {
+    .nav-grid {
+      grid-template-columns: 1fr;
+    }
+    .active-mode-hint {
+      display: none;
+    }
+  }
+</style>

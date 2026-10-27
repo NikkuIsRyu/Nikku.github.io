@@ -438,13 +438,17 @@ body {
 
 /* Mobile Responsiveness & Containment: Ensure cards and grids never blow out screen width on phones */
 [data-page-bg="japanese"] .sl-markdown-content,
-[data-page-bg="chinese"] .sl-markdown-content {
+[data-page-bg="chinese"] .sl-markdown-content,
+[data-page-bg="core-cs"] .sl-markdown-content,
+[data-page-bg="rmi-anatomy"] .sl-markdown-content {
   max-width: 100%;
   overflow-x: clip;
 }
 
 [data-page-bg="japanese"] .card-grid,
-[data-page-bg="chinese"] .card-grid {
+[data-page-bg="chinese"] .card-grid,
+[data-page-bg="core-cs"] .card-grid,
+[data-page-bg="rmi-anatomy"] .card-grid {
   grid-template-columns: minmax(0, 1fr) !important;
   width: 100%;
   max-width: 100%;
@@ -452,7 +456,9 @@ body {
 
 @media (min-width: 50rem) {
   [data-page-bg="japanese"] .card-grid,
-  [data-page-bg="chinese"] .card-grid {
+  [data-page-bg="chinese"] .card-grid,
+  [data-page-bg="core-cs"] .card-grid,
+  [data-page-bg="rmi-anatomy"] .card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }

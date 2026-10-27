@@ -1,0 +1,310 @@
+---
+import type { NumerikConfusablePair } from '../../data/numerikData';
+import { renderFormula, renderMathInText } from './katexHelper';
+
+interface Props {
+  pair: NumerikConfusablePair;
+  lang?: 'en' | 'de';
+}
+
+const { pair, lang = 'de' } = Astro.props;
+---
+
+<div class="numerik-confusable-card not-content" id={`confusable-${pair.id}`} data-confusable-id={pair.id}>
+  <!-- Card Header -->
+  <header class="confusable-header">
+    <div class="pair-meta">
+      <span class="compare-badge">⚖️ {lang === 'de' ? 'Fallstrick / Direktvergleich' : 'Numerics Confusable Pair'}</span>
+      <span class="lesson-tag">{pair.lesson}</span>
+    </div>
+    <h3 class="pair-title">{pair.topic}</h3>
+    <div class="mnemonic-pill">
+      <span class="mnemonic-label">💡 {lang === 'de' ? 'Faustregel:' : 'Rule of Thumb:'}</span>
+      <span class="mnemonic-text" set:html={renderMathInText(pair.mnemonic)} />
+    </div>
+  </header>
+
+  <!-- 2-Column Comparison Grid -->
+  <div class="comparison-grid">
+    <!-- Left Side -->
+    <div class="comparison-side left-side">
+      <div class="side-header">
+        <div class="term-badge">{pair.left.term}</div>
+        <div class="term-concept">{pair.left.concept}</div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">{lang === 'de' ? 'Formel / Definition:' : 'Formula / Definition:'}</span>
+        <div class="math-render" set:html={renderFormula(pair.left.formula, false)} />
+      </div>
+
+      <p class="rule-text" set:html={renderMathInText(pair.left.description)} />
+
+      <!-- Correct Case -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">{lang === 'de' ? 'Richtig & Gültig' : 'Correct Application'}</span>
+        </div>
+        <div class="case-math">
+          <div class="math-render" set:html={renderFormula(pair.left.correctCase.math, false)} />
+        </div>
+        <div class="case-explanation" set:html={renderMathInText(pair.left.correctCase.explanation)} />
+      </div>
+
+      <!-- Pitfall Case -->
+      <div class="example-case pitfall-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">{lang === 'de' ? 'Klassischer Klausurfehler' : 'Fatal Exam Trap'}</span>
+        </div>
+        <div class="case-math">
+          <div class="math-render" set:html={renderFormula(pair.left.fatalTrap.math, false)} />
+        </div>
+        <div class="case-explanation" set:html={renderMathInText(pair.left.fatalTrap.explanation)} />
+      </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="comparison-side right-side">
+      <div class="side-header">
+        <div class="term-badge highlight-right">{pair.right.term}</div>
+        <div class="term-concept">{pair.right.concept}</div>
+      </div>
+
+      <div class="formula-box">
+        <span class="box-label">{lang === 'de' ? 'Formel / Definition:' : 'Formula / Definition:'}</span>
+        <div class="math-render" set:html={renderFormula(pair.right.formula, false)} />
+      </div>
+
+      <p class="rule-text" set:html={renderMathInText(pair.right.description)} />
+
+      <!-- Correct Case -->
+      <div class="example-case correct-case">
+        <div class="case-header">
+          <span class="status-icon">✅</span>
+          <span class="case-label">{lang === 'de' ? 'Richtig & Gültig' : 'Correct Application'}</span>
+        </div>
+        <div class="case-math">
+          <div class="math-render" set:html={renderFormula(pair.right.correctCase.math, false)} />
+        </div>
+        <div class="case-explanation" set:html={renderMathInText(pair.right.correctCase.explanation)} />
+      </div>
+
+      <!-- Pitfall Case -->
+      <div class="example-case pitfall-case">
+        <div class="case-header">
+          <span class="status-icon">❌</span>
+          <span class="case-label">{lang === 'de' ? 'Klassischer Klausurfehler' : 'Fatal Exam Trap'}</span>
+        </div>
+        <div class="case-math">
+          <div class="math-render" set:html={renderFormula(pair.right.fatalTrap.math, false)} />
+        </div>
+        <div class="case-explanation" set:html={renderMathInText(pair.right.fatalTrap.explanation)} />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .numerik-confusable-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .confusable-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+  }
+
+  .pair-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .compare-badge {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+
+  .lesson-tag {
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.18);
+    color: #93c5fd;
+  }
+
+  .pair-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .mnemonic-pill {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 8px 8px 0;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+    color: #fef3c7;
+    line-height: 1.45;
+  }
+
+  .mnemonic-label {
+    font-weight: 700;
+    color: #fbbf24;
+    margin-right: 0.35rem;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .comparison-side {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .left-side {
+    border-top: 3px solid #3b82f6;
+  }
+
+  .right-side {
+    border-top: 3px solid #10b981;
+  }
+
+  .side-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .term-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+  }
+
+  .highlight-right {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+
+  .term-concept {
+    font-size: 0.775rem;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+
+  .formula-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .box-label {
+    display: block;
+    font-size: 0.675rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 0.2rem;
+  }
+
+  .rule-text {
+    margin: 0;
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: #cbd5e1;
+  }
+
+  .example-case {
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .correct-case {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  .pitfall-case {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+
+  .case-header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.725rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .correct-case .case-header {
+    color: #34d399;
+  }
+
+  .pitfall-case .case-header {
+    color: #f87171;
+  }
+
+  .case-math {
+    overflow-x: auto;
+    padding: 0.15rem 0;
+  }
+
+  .case-explanation {
+    font-size: 0.775rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 640px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

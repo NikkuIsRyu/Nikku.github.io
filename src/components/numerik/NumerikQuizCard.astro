@@ -1,0 +1,446 @@
+---
+import type { NumerikQuizItem } from '../../data/numerikData';
+import { renderMathInText, renderFormula } from './katexHelper';
+
+interface Props {
+  item: NumerikQuizItem;
+  lang?: 'en' | 'de';
+}
+
+const { item, lang = 'de' } = Astro.props;
+---
+
+<div class="numerik-quiz-card not-content" id={`quiz-${item.id}`} data-quiz-id={item.id} data-correct-id={item.correctOptionId}>
+  <!-- Card Header -->
+  <header class="quiz-card-header">
+    <div class="header-meta">
+      <span class="quiz-badge">Q{item.number}</span>
+      <span class="lesson-tag">{item.lesson}</span>
+      <span class="timer-tag">⏱️ {item.timeLimitSec}s {lang === 'de' ? 'Zielzeit' : 'Target'}</span>
+    </div>
+    <h3 class="quiz-title">{item.title}</h3>
+  </header>
+
+  <!-- Question Prompt -->
+  <div class="quiz-question-box">
+    <p class="question-text" set:html={renderMathInText(item.question)} />
+  </div>
+
+  <!-- Interactive Options List -->
+  <div class="quiz-options-group" role="radiogroup" aria-label={`Question ${item.number} options`}>
+    {item.options.map((opt) => (
+      <button
+        type="button"
+        class="quiz-option-btn"
+        data-option-id={opt.id}
+        aria-checked="false"
+      >
+        <span class="option-letter">{opt.id.toUpperCase()}</span>
+        <span class="option-text" set:html={renderMathInText(opt.text)} />
+        <span class="option-feedback-icon" aria-hidden="true"></span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Control Actions -->
+  <div class="quiz-actions-row">
+    <button type="button" class="btn-toggle-solution" data-expanded="false">
+      <span class="solution-btn-icon">💡</span>
+      <span class="solution-btn-text">{lang === 'de' ? 'Musterlösung einblenden' : 'Reveal Worked Solution'}</span>
+    </button>
+    <button type="button" class="btn-reset-quiz" title={lang === 'de' ? 'Zurücksetzen' : 'Reset Question'}>
+      <span>🔄</span>
+    </button>
+  </div>
+
+  <!-- Worked Solution Box -->
+  <div class="solution-box" style="display: none;">
+    <div class="solution-banner">
+      <span class="solution-status-icon">✓</span>
+      <span class="solution-status-title">
+        {lang === 'de' ? `Richtige Antwort: Option ${item.correctOptionId.toUpperCase()}` : `Correct Answer: Option ${item.correctOptionId.toUpperCase()}`}
+      </span>
+    </div>
+
+    <div class="proof-block">
+      <h5 class="proof-heading">{lang === 'de' ? 'Exakte mathematische Herleitung:' : 'Mathematical Derivation:'}</h5>
+      <div class="proof-math" set:html={renderMathInText(item.workedProof)} />
+    </div>
+
+    <div class="explanation-block">
+      <h5 class="proof-heading">{lang === 'de' ? 'Kernaussage & Verständnis:' : 'Key Takeaway:'}</h5>
+      <p set:html={renderMathInText(item.explanation)} />
+    </div>
+
+    {item.distractorBreakdown && item.distractorBreakdown.length > 0 && (
+      <div class="distractor-breakdown">
+        <h5 class="proof-heading">{lang === 'de' ? 'Warum die Distraktoren falsch sind:' : 'Why Distractors Fail:'}</h5>
+        <ul>
+          {item.distractorBreakdown.map((d) => (
+            <li>
+              <strong>{d.optionId.toUpperCase()}:</strong>
+              <span set:html={renderMathInText(d.whyWrong)} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="citation-block">
+      <span class="citation-icon">📖</span>
+      <span class="citation-text"><strong>{lang === 'de' ? 'Quelle / Skript:' : 'Source:'}</strong> {item.slideCitation}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupNumerikQuizCards() {
+    const cards = document.querySelectorAll<HTMLElement>('.numerik-quiz-card');
+
+    cards.forEach((card) => {
+      if (card.dataset.initialized === 'true') return;
+      card.dataset.initialized = 'true';
+
+      const correctId = card.getAttribute('data-correct-id');
+      const optionBtns = card.querySelectorAll<HTMLButtonElement>('.quiz-option-btn');
+      const btnToggle = card.querySelector<HTMLButtonElement>('.btn-toggle-solution');
+      const btnReset = card.querySelector<HTMLButtonElement>('.btn-reset-quiz');
+      const solutionBox = card.querySelector<HTMLElement>('.solution-box');
+
+      function selectOption(btn: HTMLButtonElement) {
+        const optId = btn.getAttribute('data-option-id');
+        const isCorrect = optId === correctId;
+
+        optionBtns.forEach((b) => {
+          b.disabled = true;
+          b.classList.remove('selected-correct', 'selected-wrong');
+          const id = b.getAttribute('data-option-id');
+          if (id === correctId) {
+            b.classList.add('selected-correct');
+          } else if (b === btn && !isCorrect) {
+            b.classList.add('selected-wrong');
+          }
+        });
+
+        if (solutionBox) {
+          solutionBox.style.display = 'block';
+          if (btnToggle) {
+            btnToggle.setAttribute('data-expanded', 'true');
+            btnToggle.classList.add('active');
+          }
+        }
+      }
+
+      optionBtns.forEach((btn) => {
+        btn.addEventListener('click', () => selectOption(btn));
+      });
+
+      if (btnToggle && solutionBox) {
+        btnToggle.addEventListener('click', () => {
+          const isExpanded = btnToggle.getAttribute('data-expanded') === 'true';
+          solutionBox.style.display = isExpanded ? 'none' : 'block';
+          btnToggle.setAttribute('data-expanded', isExpanded ? 'false' : 'true');
+          btnToggle.classList.toggle('active', !isExpanded);
+        });
+      }
+
+      if (btnReset) {
+        btnReset.addEventListener('click', () => {
+          optionBtns.forEach((b) => {
+            b.disabled = false;
+            b.classList.remove('selected-correct', 'selected-wrong');
+          });
+          if (solutionBox) solutionBox.style.display = 'none';
+          if (btnToggle) {
+            btnToggle.setAttribute('data-expanded', 'false');
+            btnToggle.classList.remove('active');
+          }
+        });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupNumerikQuizCards);
+  } else {
+    setupNumerikQuizCards();
+  }
+
+  document.addEventListener('astro:page-load', setupNumerikQuizCards);
+</script>
+
+<style>
+  .numerik-quiz-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .quiz-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.65rem;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quiz-badge {
+    font-size: 0.725rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: #059669;
+    color: #ffffff;
+  }
+
+  .lesson-tag {
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.18);
+    color: #93c5fd;
+  }
+
+  .timer-tag {
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(245, 158, 11, 0.18);
+    color: #fde68a;
+  }
+
+  .quiz-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.35;
+  }
+
+  .quiz-question-box {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+
+  .question-text {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #e2e8f0;
+  }
+
+  .quiz-options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .quiz-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .quiz-option-btn:hover:not(:disabled) {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #60a5fa;
+    transform: translateX(2px);
+  }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #93c5fd;
+    flex-shrink: 0;
+  }
+
+  .option-text {
+    flex-grow: 1;
+    line-height: 1.4;
+  }
+
+  .quiz-option-btn.selected-correct {
+    background: rgba(16, 185, 129, 0.22);
+    border-color: #10b981;
+    color: #ecfdf5;
+  }
+
+  .quiz-option-btn.selected-correct .option-letter {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  .quiz-option-btn.selected-wrong {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: #ef4444;
+    color: #fef2f2;
+  }
+
+  .quiz-option-btn.selected-wrong .option-letter {
+    background: #ef4444;
+    color: #ffffff;
+  }
+
+  .quiz-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-toggle-solution {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-toggle-solution:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #60a5fa;
+    color: #ffffff;
+  }
+
+  .btn-toggle-solution.active {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: #3b82f6;
+    color: #93c5fd;
+  }
+
+  .btn-reset-quiz {
+    padding: 0.45rem 0.65rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-reset-quiz:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ffffff;
+  }
+
+  /* Solution Box */
+  .solution-box {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .solution-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #34d399;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    padding-bottom: 0.5rem;
+  }
+
+  .proof-heading {
+    margin: 0 0 0.35rem 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+  }
+
+  .proof-math, .explanation-block p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .distractor-breakdown {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .distractor-breakdown ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .distractor-breakdown strong {
+    color: #f87171;
+    margin-right: 0.25rem;
+  }
+
+  .citation-block {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-top: 0.5rem;
+  }
+</style>

@@ -1,0 +1,373 @@
+---
+import type { NumerikFormulaRule } from '../../data/numerikData';
+import { renderFormula, renderMathInText } from './katexHelper';
+
+interface Props {
+  rule: NumerikFormulaRule;
+  lang?: 'en' | 'de';
+}
+
+const { rule, lang = 'de' } = Astro.props;
+---
+
+<div class="numerik-formula-card not-content" id={`formula-${rule.id}`} data-formula-id={rule.id}>
+  <!-- ZONE 1: HEADER -->
+  <div class="card-zone-header">
+    <div class="header-badges">
+      <span class="lesson-badge">{rule.lesson}</span>
+      <span class="category-pill">{rule.category}</span>
+    </div>
+    <h3 class="rule-title">{rule.title}</h3>
+    <div class="formula-pill">
+      <span class="formula-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
+      <div class="formula-math" set:html={renderFormula(rule.formulaLaTeX, true)} />
+    </div>
+  </div>
+
+  <!-- ZONE 2: BODY (Intuition & Invariants) -->
+  <div class="card-zone-body">
+    <p class="rule-summary" set:html={renderMathInText(rule.summary)} />
+    
+    <div class="intuition-box">
+      <div class="intuition-header">
+        <span class="intuition-icon">💡</span>
+        <span class="intuition-title">{lang === 'de' ? 'Numerische Intuition & Bedeutung' : 'Numerical Intuition & Meaning'}</span>
+      </div>
+      <p class="intuition-text" set:html={renderMathInText(rule.intuition)} />
+    </div>
+
+    <!-- Invariants Checklist -->
+    <div class="invariants-section">
+      <span class="invariants-title">{lang === 'de' ? 'Wichtige Invarianten & Theoreme:' : 'Key Invariants & Theorems:'}</span>
+      <ul class="invariants-list">
+        {rule.invariants.map((inv) => (
+          <li>
+            <span class="check-icon">✓</span>
+            <span class="inv-text" set:html={renderMathInText(inv)} />
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Collapsible Nuances -->
+    {rule.nuances && rule.nuances.length > 0 && (
+      <details class="rule-nuances-accordion">
+        <summary class="nuances-summary">
+          <span class="summary-arrow">▶</span>
+          <span>{lang === 'de' ? 'Sonderfälle & Prüfungsdetails' : 'Special Cases & Exam Traps'}</span>
+        </summary>
+        <div class="nuances-content">
+          <ul>
+            {rule.nuances.map((nuance) => (
+              <li set:html={renderMathInText(nuance)} />
+            ))}
+          </ul>
+        </div>
+      </details>
+    )}
+  </div>
+
+  <!-- ZONE 3: FOOTER (Code & Example) -->
+  <div class="card-zone-footer">
+    <div class="example-header">
+      <span class="example-icon">💻</span>
+      <span class="example-title">{lang === 'de' ? 'Python / C++ Verifikation' : 'Python / C++ Verification'}</span>
+    </div>
+    
+    <div class="code-block-wrapper">
+      <pre class="code-snippet"><code>{rule.pythonCode}</code></pre>
+    </div>
+
+    {rule.latexExample && (
+      <div class="numerical-check">
+        <span class="check-label">{lang === 'de' ? 'Zahlenbeispiel:' : 'Numerical Check:'}</span>
+        <div class="check-val" set:html={renderFormula(rule.latexExample, false)} />
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .numerik-formula-card {
+    background: var(--sl-color-gray-6, #111827);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .numerik-formula-card:hover {
+    border-color: rgba(96, 165, 250, 0.45);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+  }
+
+  /* ZONE 1 */
+  .card-zone-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header-badges {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .lesson-badge {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+  }
+
+  .category-pill {
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .rule-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.35;
+  }
+
+  .formula-pill {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .formula-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+  }
+
+  .formula-math {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
+    color: #60a5fa;
+  }
+
+  /* ZONE 2 */
+  .card-zone-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .rule-summary {
+    margin: 0;
+    color: #e2e8f0;
+  }
+
+  .intuition-box {
+    background: rgba(30, 41, 59, 0.55);
+    border-left: 3px solid #38bdf8;
+    border-radius: 0 8px 8px 0;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .intuition-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .intuition-icon {
+    font-size: 0.95rem;
+  }
+
+  .intuition-title {
+    font-size: 0.775rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #7dd3fc;
+  }
+
+  .intuition-text {
+    margin: 0;
+    font-size: 0.825rem;
+    line-height: 1.45;
+    color: #e0f2fe;
+  }
+
+  .invariants-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .invariants-title {
+    font-size: 0.775rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+  }
+
+  .invariants-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .invariants-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 0.825rem;
+  }
+
+  .check-icon {
+    color: #34d399;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .inv-text {
+    flex-grow: 1;
+    color: #cbd5e1;
+  }
+
+  /* Accordion */
+  .rule-nuances-accordion {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .nuances-summary {
+    cursor: pointer;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: #93c5fd;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    user-select: none;
+  }
+
+  .summary-arrow {
+    font-size: 0.65rem;
+    transition: transform 0.2s ease;
+  }
+
+  .rule-nuances-accordion[open] .summary-arrow {
+    transform: rotate(90deg);
+  }
+
+  .nuances-content {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .nuances-content ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  /* ZONE 3 */
+  .card-zone-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.75rem;
+  }
+
+  .example-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .example-icon {
+    font-size: 0.9rem;
+  }
+
+  .example-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+  }
+
+  .code-block-wrapper {
+    background: #0b1120;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    overflow-x: auto;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .code-snippet {
+    margin: 0;
+    padding: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #38bdf8;
+    background: transparent;
+  }
+
+  .numerical-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px dashed rgba(16, 185, 129, 0.35);
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .check-label {
+    font-weight: 700;
+    color: #34d399;
+  }
+
+  .check-val {
+    color: #ecfdf5;
+    overflow-x: auto;
+  }
+</style>
