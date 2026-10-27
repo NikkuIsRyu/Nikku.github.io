@@ -18,7 +18,7 @@ const { item, lang = 'de' } = Astro.props;
       <span class="lesson-tag">{item.lesson}</span>
       <span class="timer-tag">⏱️ {item.timeLimitSec}s {lang === 'de' ? 'Zielzeit' : 'Target'}</span>
     </div>
-    <h3 class="quiz-title">{item.title}</h3>
+    <h3 class="quiz-title" set:html={renderMathInText(item.title)} />
   </header>
 
   <!-- Question Prompt -->

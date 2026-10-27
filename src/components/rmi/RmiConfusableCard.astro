@@ -17,7 +17,7 @@ const { pair, lang = 'en' } = Astro.props;
       <span class="compare-badge">⚖️ {lang === 'de' ? 'Fallstrick / Direktvergleich' : 'Robotics Confusable Pair'}</span>
       <span class="lesson-tag">{pair.lesson}</span>
     </div>
-    <h3 class="pair-title">{pair.topic}</h3>
+    <h3 class="pair-title" set:html={renderMathInText(pair.topic)} />
     <div class="mnemonic-pill">
       <span class="mnemonic-label">💡 {lang === 'de' ? 'Faustregel:' : 'Rule of Thumb:'}</span>
       <span class="mnemonic-text" set:html={renderMathInText(pair.mnemonic)} />
@@ -29,8 +29,8 @@ const { pair, lang = 'en' } = Astro.props;
     <!-- Left Side -->
     <div class="comparison-side left-side">
       <div class="side-header">
-        <div class="term-badge">{pair.left.term}</div>
-        <div class="term-concept">{pair.left.concept}</div>
+        <div class="term-badge" set:html={renderMathInText(pair.left.term)} />
+        <div class="term-concept" set:html={renderMathInText(pair.left.concept)} />
       </div>
 
       <div class="formula-box">
@@ -68,8 +68,8 @@ const { pair, lang = 'en' } = Astro.props;
     <!-- Right Side -->
     <div class="comparison-side right-side">
       <div class="side-header">
-        <div class="term-badge right-accent">{pair.right.term}</div>
-        <div class="term-concept">{pair.right.concept}</div>
+        <div class="term-badge right-accent" set:html={renderMathInText(pair.right.term)} />
+        <div class="term-concept" set:html={renderMathInText(pair.right.concept)} />
       </div>
 
       <div class="formula-box">

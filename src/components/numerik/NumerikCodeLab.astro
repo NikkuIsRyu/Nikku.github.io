@@ -1,5 +1,6 @@
 ---
 import { NUMERIK_CODE_SNIPPETS } from '../../data/numerikData';
+import { renderMathInText } from './katexHelper';
 
 interface Props {
   lang?: 'en' | 'de';
@@ -47,7 +48,7 @@ const { lang = 'de' } = Astro.props;
       >
         <div class="panel-meta-row">
           <div class="meta-left">
-            <h4 class="snippet-title">{snippet.title}</h4>
+            <h4 class="snippet-title" set:html={renderMathInText(snippet.title)} />
             <span class="snippet-lesson">{snippet.lesson}</span>
           </div>
           <button type="button" class="btn-copy-code" data-code={snippet.code}>
@@ -56,7 +57,7 @@ const { lang = 'de' } = Astro.props;
           </button>
         </div>
 
-        <p class="snippet-description">{snippet.description}</p>
+        <p class="snippet-description" set:html={renderMathInText(snippet.description)} />
 
         <!-- Highlights Checklist -->
         <div class="highlights-box">
@@ -65,7 +66,7 @@ const { lang = 'de' } = Astro.props;
             {snippet.highlights.map((h) => (
               <li>
                 <span class="h-bullet">⚡</span>
-                <span>{h}</span>
+                <span set:html={renderMathInText(h)} />
               </li>
             ))}
           </ul>

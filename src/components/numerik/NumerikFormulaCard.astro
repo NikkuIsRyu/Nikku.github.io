@@ -17,7 +17,7 @@ const { rule, lang = 'de' } = Astro.props;
       <span class="lesson-badge">{rule.lesson}</span>
       <span class="category-pill">{rule.category}</span>
     </div>
-    <h3 class="rule-title">{rule.title}</h3>
+    <h3 class="rule-title" set:html={renderMathInText(rule.title)} />
     <div class="formula-pill">
       <span class="formula-label">{lang === 'de' ? 'Formel:' : 'Formula:'}</span>
       <div class="formula-math" set:html={renderFormula(rule.formulaLaTeX, true)} />
