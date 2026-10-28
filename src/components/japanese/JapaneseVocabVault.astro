@@ -118,9 +118,19 @@ const lessons = [
             <div class="vcard-top">
               <span class="vcard-lesson notranslate" translate="no">L{v.lesson} #{v.num}</span>
             </div>
-            <div class="vcard-kanji notranslate" translate="no" lang="ja">
-              <span class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</span>
-              {pk.note && <span class="vocab-card-note notranslate" translate="no" lang="ja">{pk.note}</span>}
+            <div class="vcard-kanji-wrap">
+              <div class="vcard-kanji notranslate" translate="no" lang="ja">
+                <span class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</span>
+                {pk.note && <span class="vocab-card-note notranslate" translate="no" lang="ja">{pk.note}</span>}
+              </div>
+              <button
+                type="button"
+                class="btn-stroke-trigger"
+                data-char={pk.main}
+                title={lang === 'en' ? `Inspect stroke order for ${pk.main}` : `Strichfolge für ${pk.main} anzeigen`}
+              >
+                ✍️
+              </button>
             </div>
             <div class="vcard-kana notranslate" translate="no" lang="ja">
               <span class="vocab-kana-main notranslate" translate="no" lang="ja">{pr.main}</span>
@@ -149,6 +159,7 @@ const lessons = [
             <th class="notranslate" translate="no" lang="ja">Kana</th>
             <th>{lang === 'en' ? 'English Meaning' : 'Deutsche Bedeutung'}</th>
             <th>{lang === 'en' ? 'German Translation' : 'Englische Übersetzung'}</th>
+            <th>{lang === 'en' ? 'Strokes' : 'Striche'}</th>
           </tr>
         </thead>
         <tbody>
@@ -173,6 +184,16 @@ const lessons = [
                 </td>
                 <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
                 <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
+                <td class="col-strokes">
+                  <button
+                    type="button"
+                    class="btn-table-stroke"
+                    data-char={pk.main}
+                    title={lang === 'en' ? `Inspect stroke order for ${pk.main}` : `Strichfolge für ${pk.main} anzeigen`}
+                  >
+                    ✍️
+                  </button>
+                </td>
               </tr>
             );
           })}
@@ -280,6 +301,17 @@ const lessons = [
       if (countDisplay) countDisplay.textContent = visible.toString();
       if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
     }
+
+    // 5. Stroke Trigger Buttons
+    root.querySelectorAll<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const char = btn.dataset.char || '';
+        if (char) {
+          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, lang: 'ja' } }));
+        }
+      });
+    });
 
     filterVocab();
   }
@@ -541,6 +573,37 @@ const lessons = [
     background: rgba(225, 29, 72, 0.2);
     border-radius: 0.25rem;
     padding: 0.05rem 0.35rem;
+  }
+
+  .vcard-kanji-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 0.15rem;
+  }
+
+  .btn-stroke-trigger,
+  .btn-table-stroke {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: var(--sl-color-gray-2);
+    transition: all 0.2s ease;
+  }
+
+  .btn-stroke-trigger:hover,
+  .btn-table-stroke:hover {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: rgba(225, 29, 72, 0.5);
+    transform: scale(1.08);
+  }
+
+  .col-strokes {
+    width: 48px;
+    text-align: center;
   }
 
   .vcard-kanji {

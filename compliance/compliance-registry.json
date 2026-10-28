@@ -133,9 +133,10 @@
     },
     {
       "id": "chinese_grammar_data",
-      "name": "Chinese Grammar Rules & Confusable Data",
+      "name": "Chinese Grammar Rules, Confusable & Course Vocabulary Data",
       "paths": [
-        "src/data/chineseGrammarData.ts"
+        "src/data/chineseGrammarData.ts",
+        "src/data/chineseVocabData.ts"
       ],
       "publisher": "schmetterling_verlag",
       "status": "CLEARED_FAIR_USE_SYNTHESIS",

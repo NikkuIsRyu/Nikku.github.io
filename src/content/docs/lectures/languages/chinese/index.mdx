@@ -20,6 +20,8 @@ import GrammarCard from '../../../../../components/chinese/GrammarCard.astro';
 import DialoguePlayer from '../../../../../components/DialoguePlayer.astro';
 import DriveAsset from '../../../../../components/DriveAsset.astro';
 import LanguageSwitch from '../../../../../components/LanguageSwitch.astro';
+import ChineseVocabVault from '../../../../../components/chinese/ChineseVocabVault.astro';
+import StrokeOrderGuide from '../../../../../components/strokes/StrokeOrderGuide.astro';
 import { CONFUSABLE_PAIRS, CHINESE_GRAMMAR_RULES } from '../../../../../data/chineseGrammarData';
 import { CHINESE_DIALOGUES } from '../../../../../data/chineseDialogues';
 
@@ -417,6 +419,19 @@ Hierfür bieten dedizierte 2-Spalten-Gegenüberstellungen **✅ Richtig-** und *
 </div>
 
 {/* ========================================================================= */}
+{/* SECTION: VOKABEL-LEXIKON & ACTIVE RECALL */}
+{/* ========================================================================= */}
+<div id="study-mode-vocab" class="study-mode-section" data-study-mode="vocab" style="display: none;">
+
+## 🔤 Modus: Vokabel-Lexikon & Vault <Badge text="579 Vokabeln • Lektionen 1–10" variant="note" />
+
+Vollständiges, durchsuchbares Vokabel-Register des Kurses mit **Pinyin Active Recall** (Hover / Tap) und interaktiver **Strichfolge-Vorschau (Stroke Guide ✍️)** für Schriftzeichen:
+
+<ChineseVocabVault lang="de" />
+
+</div>
+
+{/* ========================================================================= */}
 {/* SECTION 3: TONSYSTEM & TONE SANDHI */}
 {/* ========================================================================= */}
 <div id="study-mode-tones" class="study-mode-section" data-study-mode="tones" style="display: none;">
@@ -542,3 +557,5 @@ flowchart LR
   * Vollständig neu verfasste, eigenständige Konversationsdialoge für die didaktische Sprachpraxis.
 
 </div>
+
+<StrokeOrderGuide lang="de" isModalOnly={true} />

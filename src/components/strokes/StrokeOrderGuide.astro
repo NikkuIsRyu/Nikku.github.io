@@ -1,0 +1,875 @@
+---
+interface Props {
+  lang?: 'de' | 'en';
+  defaultChar?: string;
+  isModalOnly?: boolean;
+}
+
+const { lang = 'de', defaultChar = '你', isModalOnly = false } = Astro.props;
+
+const suggestions = [
+  { char: '你', pinyin: 'nǐ', meaning: 'du / you' },
+  { char: '好', pinyin: 'hǎo', meaning: 'gut / good' },
+  { char: '学', pinyin: 'xué', meaning: 'lernen / learn' },
+  { char: '生', pinyin: 'shēng', meaning: 'geboren / life' },
+  { char: '见', pinyin: 'jiàn', meaning: 'sehen / see' },
+  { char: '日', pinyin: 'rì', meaning: 'Tag, Sonne / sun' },
+  { char: '中', pinyin: 'zhōng', meaning: 'Mitte / center' },
+  { char: '国', pinyin: 'guó', meaning: 'Land / country' },
+];
+---
+
+<!-- Stroke Order Modal & Interactive Character Studio -->
+<div class="stroke-order-guide not-content notranslate" translate="no" id="stroke-order-guide-root">
+  <!-- Modal Dialog -->
+  <div class="stroke-modal-backdrop" id="stroke-modal-backdrop" style="display: none;">
+    <div class="stroke-modal-panel" role="dialog" aria-modal="true" aria-labelledby="stroke-modal-title">
+      <!-- Modal Header -->
+      <div class="stroke-modal-header">
+        <div class="modal-title-group">
+          <span class="stroke-guide-badge">✍️ {lang === 'en' ? 'Stroke Order Guide' : 'Strichfolge & Schreibtrainer'}</span>
+          <h3 id="stroke-modal-title" class="stroke-modal-heading">
+            <span class="active-char-display" id="modal-active-char">你</span>
+            <span class="active-char-pinyin" id="modal-active-pinyin"></span>
+          </h3>
+        </div>
+        <button type="button" class="btn-modal-close" id="stroke-modal-close" title={lang === 'en' ? 'Close' : 'Schließen'}>✕</button>
+      </div>
+
+      <!-- Quick Character Input / Switcher -->
+      <div class="stroke-char-selector-row">
+        <div class="char-input-wrap">
+          <input
+            type="text"
+            id="stroke-char-input"
+            class="stroke-char-input"
+            placeholder={lang === 'en' ? 'Type any character (e.g. 学, 見, 好)...' : 'Beliebiges Zeichen eingeben (z. B. 学, 見, 好)...'}
+            maxlength="2"
+            autocomplete="off"
+          />
+          <button type="button" id="stroke-char-submit" class="btn-char-submit">
+            {lang === 'en' ? 'Inspect' : 'Laden'}
+          </button>
+        </div>
+
+        <div class="quick-char-pills">
+          <span class="quick-label">{lang === 'en' ? 'Examples:' : 'Beispiele:'}</span>
+          {suggestions.map((s) => (
+            <button
+              type="button"
+              class="btn-quick-char"
+              data-char={s.char}
+              title={`${s.char} (${s.pinyin} - ${s.meaning})`}
+            >
+              {s.char}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Main Canvas & Interactive Studio -->
+      <div class="stroke-studio-layout">
+        <!-- Canvas Box -->
+        <div class="stroke-canvas-container">
+          <div class="canvas-grid-box" id="stroke-canvas-box">
+            <!-- HanziWriter / SVG Target -->
+            <div id="stroke-writer-target" class="stroke-writer-target"></div>
+          </div>
+          <div class="canvas-caption">
+            <span id="stroke-mode-caption">{lang === 'en' ? 'Strokes are numbered in standard order' : 'Striche in normierter Reihenfolge'}</span>
+          </div>
+        </div>
+
+        <!-- Controls & Meta Panel -->
+        <div class="stroke-controls-panel">
+          <div class="stroke-meta-card">
+            <div class="meta-item">
+              <span class="meta-label">{lang === 'en' ? 'Total Strokes:' : 'Strichanzahl:'}</span>
+              <strong class="meta-value" id="stroke-count-value">—</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">{lang === 'en' ? 'Status / Mode:' : 'Modus:'}</span>
+              <span class="meta-status" id="stroke-status-value">{lang === 'en' ? 'Ready' : 'Bereit'}</span>
+            </div>
+          </div>
+
+          <!-- Playback Actions -->
+          <div class="stroke-actions-grid">
+            <button type="button" class="btn-stroke-act btn-act-play" id="btn-stroke-play">
+              <span class="act-icon">▶</span>
+              <span class="act-text">{lang === 'en' ? 'Animate' : 'Animieren'}</span>
+            </button>
+
+            <button type="button" class="btn-stroke-act" id="btn-stroke-step">
+              <span class="act-icon">⏯</span>
+              <span class="act-text">{lang === 'en' ? 'Next Stroke' : 'Nächster Strich'}</span>
+            </button>
+
+            <button type="button" class="btn-stroke-act" id="btn-stroke-loop">
+              <span class="act-icon">🔁</span>
+              <span class="act-text">{lang === 'en' ? 'Loop' : 'Endlosschleife'}</span>
+            </button>
+
+            <button type="button" class="btn-stroke-act" id="btn-stroke-reset">
+              <span class="act-icon">⏮</span>
+              <span class="act-text">{lang === 'en' ? 'Reset' : 'Zurücksetzen'}</span>
+            </button>
+          </div>
+
+          <!-- Interactive Writing Quiz -->
+          <div class="quiz-action-card">
+            <button type="button" class="btn-stroke-quiz" id="btn-stroke-quiz">
+              <span class="quiz-icon">✏️</span>
+              <span class="quiz-title">{lang === 'en' ? 'Interactive Writing Practice' : 'Interaktives Schreibtraining'}</span>
+            </button>
+            <p class="quiz-hint">
+              {lang === 'en'
+                ? 'Draw the character on the canvas with your mouse or touchscreen. The trainer checks stroke order in real time!'
+                : 'Zeichne das Schriftzeichen mit Maus oder Touchscreen nach. Der Trainer prüft jeden Strich in Echtzeit!'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Breakdown Diagram Container -->
+      <div class="stroke-steps-section">
+        <h5 class="steps-heading">
+          <span>{lang === 'en' ? 'Step-by-Step Stroke Evolution' : 'Schritt-für-Schritt Strichabfolge'}</span>
+        </h5>
+        <div class="steps-scroll-row" id="stroke-steps-container">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let hanziWriterLoaded = false;
+  let currentWriter: any = null;
+  let currentChar = '你';
+  let isQuizActive = false;
+  let isLooping = false;
+
+  // Load HanziWriter dynamically on-demand from CDN
+  function loadHanziWriter(): Promise<void> {
+    if (hanziWriterLoaded && (window as any).HanziWriter) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js';
+      script.async = true;
+      script.onload = () => {
+        hanziWriterLoaded = true;
+        resolve();
+      };
+      script.onerror = () => reject(new Error('Failed to load HanziWriter'));
+      document.head.appendChild(script);
+    });
+  }
+
+  function setupStrokeGuide() {
+    const root = document.getElementById('stroke-order-guide-root');
+    if (!root) return;
+
+    const modal = document.getElementById('stroke-modal-backdrop');
+    const btnClose = document.getElementById('stroke-modal-close');
+    const target = document.getElementById('stroke-writer-target');
+    const activeCharDisplay = document.getElementById('modal-active-char');
+    const activePinyinDisplay = document.getElementById('modal-active-pinyin');
+    const strokeCountDisplay = document.getElementById('stroke-count-value');
+    const strokeStatusDisplay = document.getElementById('stroke-status-value');
+    const stepsContainer = document.getElementById('stroke-steps-container');
+
+    const btnPlay = document.getElementById('btn-stroke-play');
+    const btnStep = document.getElementById('btn-stroke-step');
+    const btnLoop = document.getElementById('btn-stroke-loop');
+    const btnReset = document.getElementById('btn-stroke-reset');
+    const btnQuiz = document.getElementById('btn-stroke-quiz');
+
+    const inputChar = document.getElementById('stroke-char-input') as HTMLInputElement | null;
+    const btnSubmit = document.getElementById('stroke-char-submit');
+    const quickButtons = root.querySelectorAll<HTMLButtonElement>('.btn-quick-char');
+
+    // Open Modal
+    function openModal(char: string, pinyin = '') {
+      if (!modal) return;
+      modal.style.display = 'flex';
+      currentChar = char.trim().charAt(0) || '你';
+      if (activeCharDisplay) activeCharDisplay.textContent = currentChar;
+      if (activePinyinDisplay) activePinyinDisplay.textContent = pinyin ? `[${pinyin}]` : '';
+      if (inputChar) inputChar.value = currentChar;
+
+      initWriterForChar(currentChar);
+    }
+
+    // Close Modal
+    function closeModal() {
+      if (!modal) return;
+      modal.style.display = 'none';
+      if (currentWriter) {
+        if (isLooping) currentWriter.cancelQuiz();
+      }
+      isLooping = false;
+      isQuizActive = false;
+    }
+
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    // Global Event Listener
+    window.addEventListener('nikku:open-stroke-guide', (e: any) => {
+      const char = e.detail?.char || '你';
+      const pinyin = e.detail?.pinyin || '';
+      openModal(char, pinyin);
+    });
+
+    // Quick Character Pills
+    quickButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const c = btn.dataset.char || '你';
+        currentChar = c;
+        if (activeCharDisplay) activeCharDisplay.textContent = c;
+        if (inputChar) inputChar.value = c;
+        initWriterForChar(c);
+      });
+    });
+
+    // Custom Char Input
+    function handleCustomInput() {
+      if (!inputChar) return;
+      const raw = inputChar.value.trim();
+      if (!raw) return;
+      // Get first CJK ideograph
+      const c = raw.charAt(0);
+      currentChar = c;
+      if (activeCharDisplay) activeCharDisplay.textContent = c;
+      initWriterForChar(c);
+    }
+
+    if (btnSubmit) btnSubmit.addEventListener('click', handleCustomInput);
+    if (inputChar) {
+      inputChar.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleCustomInput();
+      });
+    }
+
+    // Initialize Character in HanziWriter
+    async function initWriterForChar(char: string) {
+      if (!target) return;
+      target.innerHTML = '';
+      if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Lade Zeichendaten...';
+      isQuizActive = false;
+      isLooping = false;
+
+      try {
+        await loadHanziWriter();
+        const HanziWriter = (window as any).HanziWriter;
+        if (!HanziWriter) return;
+
+        // Custom loader: try Chinese first, then Japanese
+        const charDataLoader = async (c: string, onComplete: any, onError: any) => {
+          try {
+            // 1. Try Chinese data
+            const res = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${c}.json`);
+            if (res.ok) {
+              const data = await res.json();
+              return onComplete(data);
+            }
+          } catch {}
+
+          try {
+            // 2. Try Japanese Kanji data
+            const resJp = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${c}.json`);
+            if (resJp.ok) {
+              const dataJp = await resJp.json();
+              return onComplete(dataJp);
+            }
+          } catch {}
+
+          onError(new Error('Character not found in database'));
+        };
+
+        currentWriter = HanziWriter.create('stroke-writer-target', char, {
+          width: 220,
+          height: 220,
+          padding: 15,
+          showOutline: true,
+          strokeAnimationSpeed: 1.2,
+          delayBetweenStrokes: 150,
+          strokeColor: '#f43f5e',
+          outlineColor: 'rgba(255, 255, 255, 0.15)',
+          drawingColor: '#34d399',
+          charDataLoader
+        });
+
+        // Query Character Stroke Data
+        HanziWriter.loadCharacterData(char, { charDataLoader }).then((charData: any) => {
+          if (charData && charData.strokes) {
+            const count = charData.strokes.length;
+            if (strokeCountDisplay) strokeCountDisplay.textContent = count.toString();
+            if (strokeStatusDisplay) strokeStatusDisplay.textContent = `${count} Striche geladen`;
+
+            // Render Step-by-Step previews
+            renderStepsBreakdown(char, charData);
+          }
+        }).catch(() => {
+          if (strokeCountDisplay) strokeCountDisplay.textContent = '—';
+          if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Keine Vektordaten gefunden';
+        });
+
+        // Initial animation
+        currentWriter.animateCharacter();
+
+      } catch (err) {
+        if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Fehler beim Laden';
+      }
+    }
+
+    // Render Step-by-Step Mini Diagrams
+    function renderStepsBreakdown(char: string, charData: any) {
+      if (!stepsContainer) return;
+      stepsContainer.innerHTML = '';
+      const strokes = charData.strokes || [];
+      const HanziWriter = (window as any).HanziWriter;
+
+      strokes.forEach((_: any, idx: number) => {
+        const stepBox = document.createElement('div');
+        stepBox.className = 'stroke-step-box';
+
+        const numBadge = document.createElement('span');
+        numBadge.className = 'step-num';
+        numBadge.textContent = `#${idx + 1}`;
+
+        const miniTarget = document.createElement('div');
+        miniTarget.className = 'step-svg-target';
+        miniTarget.id = `step-target-${idx}`;
+
+        stepBox.appendChild(numBadge);
+        stepBox.appendChild(miniTarget);
+        stepsContainer.appendChild(stepBox);
+
+        // Render static snapshot with strokes 0 to idx
+        if (HanziWriter) {
+          const miniWriter = HanziWriter.create(miniTarget, char, {
+            width: 48,
+            height: 48,
+            padding: 4,
+            showOutline: true,
+            outlineColor: 'rgba(255, 255, 255, 0.08)',
+            strokeColor: '#fda4af',
+            charDataLoader: (_c: string, cb: any) => cb(charData)
+          });
+          // Show strokes up to current
+          miniWriter.showCharacter();
+        }
+      });
+    }
+
+    // Actions
+    if (btnPlay) {
+      btnPlay.addEventListener('click', () => {
+        if (!currentWriter) return;
+        isLooping = false;
+        if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Animation läuft...';
+        currentWriter.animateCharacter({
+          onComplete: () => {
+            if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Fertig';
+          }
+        });
+      });
+    }
+
+    if (btnStep) {
+      btnStep.addEventListener('click', () => {
+        if (!currentWriter) return;
+        isLooping = false;
+        currentWriter.animateCharacter();
+      });
+    }
+
+    if (btnLoop) {
+      btnLoop.addEventListener('click', () => {
+        if (!currentWriter) return;
+        isLooping = !isLooping;
+        if (isLooping) {
+          if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Endlosschleife aktiv';
+          currentWriter.loopCharacterAnimation();
+        } else {
+          currentWriter.pauseAnimation();
+          if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Schleife pausiert';
+        }
+      });
+    }
+
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (!currentWriter) return;
+        isLooping = false;
+        isQuizActive = false;
+        currentWriter.showOutline();
+        currentWriter.hideCharacter();
+        if (strokeStatusDisplay) strokeStatusDisplay.textContent = 'Zurückgesetzt';
+      });
+    }
+
+    if (btnQuiz) {
+      btnQuiz.addEventListener('click', () => {
+        if (!currentWriter) return;
+        isQuizActive = true;
+        isLooping = false;
+        if (strokeStatusDisplay) strokeStatusDisplay.textContent = '✏️ Übungsmodus: Zeichne den 1. Strich!';
+
+        currentWriter.quiz({
+          onCorrectStroke: (data: any) => {
+            if (strokeStatusDisplay) {
+              strokeStatusDisplay.textContent = `✓ Richtig! (${data.strokeNum + 1}/${data.totalStrokes})`;
+            }
+          },
+          onMistake: (data: any) => {
+            if (strokeStatusDisplay) {
+              strokeStatusDisplay.textContent = `❌ Nicht ganz! Versuche Strich ${data.strokeNum + 1} noch einmal.`;
+            }
+          },
+          onComplete: () => {
+            if (strokeStatusDisplay) {
+              strokeStatusDisplay.textContent = '🎉 Großartig! Zeichen erfolgreich vervollständigt!';
+            }
+          }
+        });
+      });
+    }
+  }
+
+  setupStrokeGuide();
+  document.addEventListener('astro:page-load', setupStrokeGuide);
+</script>
+
+<style>
+  .stroke-order-guide {
+    position: relative;
+    z-index: 9999;
+  }
+
+  /* Backdrop */
+  .stroke-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 10000;
+  }
+
+  /* Modal Dialog Panel */
+  .stroke-modal-panel {
+    background: #0f172a;
+    border: 1px solid rgba(225, 29, 72, 0.4);
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(225, 29, 72, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    box-sizing: border-box;
+  }
+
+  :global([data-theme='light']) .stroke-modal-panel {
+    background: #ffffff;
+    border-color: rgba(225, 29, 72, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Header */
+  .stroke-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+  }
+
+  .modal-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stroke-guide-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    border: 1px solid rgba(225, 29, 72, 0.35);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+    width: fit-content;
+  }
+
+  .stroke-modal-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .active-char-display {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--sl-color-white);
+    line-height: 1;
+  }
+
+  :global([data-theme='light']) .active-char-display {
+    color: #0f172a;
+  }
+
+  .active-char-pinyin {
+    font-size: 1.1rem;
+    color: #fda4af;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-weight: 600;
+  }
+
+  .btn-modal-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.5rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sl-color-gray-3);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-modal-close:hover {
+    color: #ffffff;
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+  }
+
+  /* Character Search Row */
+  .stroke-char-selector-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .char-input-wrap {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .stroke-char-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-white);
+    outline: none;
+  }
+
+  :global([data-theme='light']) .stroke-char-input {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #0f172a;
+  }
+
+  .stroke-char-input:focus {
+    border-color: #fb7185;
+  }
+
+  .btn-char-submit {
+    background: rgba(225, 29, 72, 0.25);
+    border: 1px solid rgba(225, 29, 72, 0.45);
+    color: #fda4af;
+    font-weight: 600;
+    padding: 0 0.85rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-char-submit:hover {
+    background: #e11d48;
+    color: #ffffff;
+  }
+
+  .quick-char-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-label {
+    font-size: 0.675rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-4);
+  }
+
+  .btn-quick-char {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-quick-char:hover {
+    background: rgba(225, 29, 72, 0.2);
+    border-color: rgba(225, 29, 72, 0.4);
+    color: #fda4af;
+  }
+
+  /* Main Layout */
+  .stroke-studio-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  @media (max-width: 600px) {
+    .stroke-studio-layout {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+  }
+
+  /* Canvas Box */
+  .stroke-canvas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .canvas-grid-box {
+    width: 220px;
+    height: 220px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px dashed rgba(225, 29, 72, 0.35);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Traditional Chinese / Japanese Rice Grid (米字格) background */
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 110px 110px;
+  }
+
+  :global([data-theme='light']) .canvas-grid-box {
+    background: #fdf2f4;
+    border-color: rgba(225, 29, 72, 0.25);
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  }
+
+  .canvas-caption {
+    font-size: 0.675rem;
+    color: var(--sl-color-gray-4);
+    font-style: italic;
+  }
+
+  /* Controls Panel */
+  .stroke-controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  .stroke-meta-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .meta-label {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .meta-value {
+    font-size: 1rem;
+    color: #fb7185;
+  }
+
+  .meta-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #34d399;
+  }
+
+  .stroke-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .btn-stroke-act {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .btn-stroke-act {
+    background: #f1f5f9;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+  }
+
+  .btn-stroke-act:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .btn-act-play {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: rgba(225, 29, 72, 0.5);
+    color: #fda4af;
+  }
+
+  .btn-act-play:hover {
+    background: #e11d48;
+    color: #ffffff;
+  }
+
+  /* Quiz Card */
+  .quiz-action-card {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 0.65rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .btn-stroke-quiz {
+    background: #059669;
+    border: none;
+    border-radius: 0.45rem;
+    padding: 0.5rem;
+    color: #ffffff;
+    font-size: 0.825rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-stroke-quiz:hover {
+    background: #10b981;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+
+  .quiz-hint {
+    font-size: 0.675rem;
+    color: var(--sl-color-gray-3);
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  /* Steps Section */
+  .stroke-steps-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.85rem;
+  }
+
+  .steps-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .steps-scroll-row {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+  }
+
+  :global(.stroke-step-box) {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.45rem;
+    padding: 0.25rem 0.35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: 52px;
+  }
+
+  :global([data-theme='light'] .stroke-step-box) {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  :global(.step-num) {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #fb7185;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  :global(.step-svg-target) {
+    width: 48px;
+    height: 48px;
+  }
+</style>

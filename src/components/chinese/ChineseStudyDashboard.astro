@@ -1,6 +1,6 @@
 ---
 interface Props {
-  activeSection?: 'dialogues' | 'grammar' | 'tones' | 'assets' | 'all';
+  activeSection?: 'dialogues' | 'grammar' | 'tones' | 'vocab' | 'assets' | 'all';
   lang?: 'de' | 'en';
 }
 
@@ -24,6 +24,15 @@ const modes = [
     badge: '26 Regeln + Confusables',
     descDe: 'Bento-Cards, Formel-Pills & Pinyin Active-Recall',
     descEn: 'Bento Cards, Formula Pills & Pinyin Active Recall'
+  },
+  {
+    id: 'vocab',
+    icon: '🔤',
+    labelDe: 'Vokabel-Lexikon & Vault',
+    labelEn: 'Vocabulary Lexicon & Vault',
+    badge: '579 Vokabeln',
+    descDe: 'Lektionen 1–10 mit Pinyin-Hover-Recall & Strichfolge ✍️',
+    descEn: 'Lessons 1–10 with Pinyin Hover Recall & Stroke Guide ✍️'
   },
   {
     id: 'tones',
@@ -115,6 +124,10 @@ const modes = [
       grammar: {
         de: '📐 Systematischer Grammatik-Explorer (26 Regeln & Confusables)',
         en: '📐 Systematic Grammar Explorer (26 Rules & Confusables)'
+      },
+      vocab: {
+        de: '🔤 Vokabel-Lexikon & Vault (579 Wörter mit Pinyin-Recall & Strichfolge)',
+        en: '🔤 Vocabulary Lexicon & Vault (579 Words with Pinyin Recall & Stroke Guide)'
       },
       tones: {
         de: '🇨🇳 Tonsystem & Tone Sandhi (Aussprache & Töne)',
@@ -300,7 +313,7 @@ const modes = [
     box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
   }
 
-  /* Grid of 4 Cards */
+  /* Grid of Cards */
   .nav-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -309,13 +322,13 @@ const modes = [
 
   @media (min-width: 640px) {
     .nav-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (min-width: 1060px) {
     .nav-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
   }
 

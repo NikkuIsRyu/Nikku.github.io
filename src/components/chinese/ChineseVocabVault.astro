@@ -1,0 +1,1001 @@
+---
+import { CHINESE_COURSE_VOCAB, type ChineseVocabItem } from '../../data/chineseVocabData';
+
+interface Props {
+  lang?: 'de' | 'en';
+}
+
+const { lang = 'de' } = Astro.props;
+
+const lessons = [
+  { id: 'all', labelDe: 'Alle Lektionen (579)', labelEn: 'All Lessons (579)' },
+  { id: '0', labelDe: 'Grundwortschatz (10)', labelEn: 'Foundations (10)' },
+  { id: '1', labelDe: 'Lektion 1 (37)', labelEn: 'Lesson 1 (37)' },
+  { id: '2', labelDe: 'Lektion 2 (19)', labelEn: 'Lesson 2 (19)' },
+  { id: '3', labelDe: 'Lektion 3 (86)', labelEn: 'Lesson 3 (86)' },
+  { id: '4', labelDe: 'Lektion 4 (67)', labelEn: 'Lesson 4 (67)' },
+  { id: '5', labelDe: 'Lektion 5 (66)', labelEn: 'Lesson 5 (66)' },
+  { id: '6', labelDe: 'Lektion 6 (79)', labelEn: 'Lesson 6 (79)' },
+  { id: '7', labelDe: 'Lektion 7 (56)', labelEn: 'Lesson 7 (56)' },
+  { id: '8', labelDe: 'Lektion 8 (50)', labelEn: 'Lesson 8 (50)' },
+  { id: '9', labelDe: 'Lektion 9 (54)', labelEn: 'Lesson 9 (54)' },
+  { id: '10', labelDe: 'Lektion 10 (55)', labelEn: 'Lesson 10 (55)' },
+];
+---
+
+<div class="chinese-vocab-vault not-content notranslate" translate="no" id="chinese-vocab-vault">
+  <!-- Vocab Header & Search -->
+  <div class="vocab-header-card">
+    <div class="vocab-title-row">
+      <div class="vocab-badge-group">
+        <span class="vocab-icon">🔤</span>
+        <span class="vocab-badge">{lang === 'en' ? 'Course Lexicon & Active Recall' : 'Vokabel-Lexikon & Active Recall'}</span>
+      </div>
+      <h3 class="vocab-main-title">
+        {lang === 'en' ? 'Chinese Language Course Vocabulary Lexicon (579 Words)' : 'Chinesisch Grundkurs Vokabel-Lexikon (579 Wörter)'}
+      </h3>
+      <p class="vocab-subtitle">
+        {lang === 'en'
+          ? 'Explore, search, and practice 579 verified vocabulary items across Lessons 1–10. Supports Pinyin active-recall modes (Visible, Hover/Tap, Hidden) and interactive stroke order inspection.'
+          : 'Durchsuche und trainiere 579 verifizierte Vokabeln der Lektionen 1–10 am ZSL Heidelberg. Mit Pinyin-Hover-Modus für aktives Schriftzeichentraining und interaktiver Strichfolge-Vorschau.'}
+      </p>
+    </div>
+
+    <!-- Search Input & Controls -->
+    <div class="vocab-search-row">
+      <div class="search-input-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="zh-vocab-search-input"
+          class="vocab-search-input"
+          placeholder={lang === 'en' ? 'Search Hanzi, Pinyin, English, German or Topic...' : 'Hanzi, Pinyin, deutsche Bedeutung oder Thema suchen...'}
+          autocomplete="off"
+        />
+        <button type="button" id="zh-vocab-search-clear" class="vocab-search-clear" title="Löschen">✕</button>
+      </div>
+
+      <!-- Active Recall Pinyin Switcher -->
+      <div class="vocab-pinyin-toggle" id="zh-vocab-pinyin-toggle" title="Pinyin Active Recall Modus">
+        <span class="ctrl-label">Pinyin:</span>
+        <button type="button" class="btn-pinyin-mode active" data-pinyin-mode="visible" title="Pinyin immer anzeigen">
+          <span>👁️ {lang === 'en' ? 'Visible' : 'Sichtbar'}</span>
+        </button>
+        <button type="button" class="btn-pinyin-mode" data-pinyin-mode="hover" title="Pinyin erst bei Hover/Tap anzeigen">
+          <span>🎯 {lang === 'en' ? 'Hover' : 'Hover'}</span>
+        </button>
+        <button type="button" class="btn-pinyin-mode" data-pinyin-mode="hidden" title="Pinyin ganz verbergen">
+          <span>🙈 {lang === 'en' ? 'Hidden' : 'Versteckt'}</span>
+        </button>
+      </div>
+
+      <!-- View Switcher (Cards vs. Table) -->
+      <div class="vocab-layout-toggle" id="zh-vocab-layout-toggle">
+        <button type="button" class="btn-layout-mode active" data-layout="grid" title="Karten-Ansicht">
+          <span>🗂️ Grid</span>
+        </button>
+        <button type="button" class="btn-layout-mode" data-layout="table" title="Tabellen-Ansicht">
+          <span>📋 Table</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Lesson Filter Pills -->
+    <div class="vocab-lesson-filters" id="zh-vocab-lesson-filters">
+      <span class="filter-label">{lang === 'en' ? 'Lesson Filter:' : 'Lektionsfilter:'}</span>
+      <div class="pills-scroll">
+        {lessons.map((ls) => (
+          <button
+            type="button"
+            class={`btn-vocab-pill ${ls.id === 'all' ? 'active' : ''}`}
+            data-lesson={ls.id}
+          >
+            {lang === 'en' ? ls.labelEn : ls.labelDe}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="vocab-stats-row">
+    <span class="stats-text">
+      {lang === 'en' ? 'Showing' : 'Zeige'} <strong id="zh-vocab-count">{CHINESE_COURSE_VOCAB.length}</strong> {lang === 'en' ? 'words' : 'Vokabeln'}
+    </span>
+    <span class="furigana-hint">
+      💡 {lang === 'en' ? 'Tip: Switch Pinyin to "Hover" to test Hanzi character recognition!' : 'Tipp: Schalte auf "Hover-Modus", um dein Schriftzeichen-Wiedererkennen zu trainieren!'}
+    </span>
+  </div>
+
+  <!-- VIEW A: Cards Grid -->
+  <div class="vocab-grid-view" id="zh-vocab-grid-view">
+    <div class="vocab-cards-grid" id="zh-vocab-cards-grid">
+      {CHINESE_COURSE_VOCAB.map((v) => (
+        <div class="vocab-card" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+          <div class="vcard-top">
+            <span class="vcard-lesson">{lang === 'en' ? v.lessonLabelEn : v.lessonLabel} #{v.num}</span>
+            <span class="vcard-topic" title={v.topic}>{v.topic}</span>
+          </div>
+
+          <div class="vcard-hanzi-row">
+            <span class="vcard-hanzi" data-hanzi={v.hanzi}>{v.hanzi}</span>
+            <button
+              type="button"
+              class="btn-stroke-trigger"
+              data-char={v.hanzi}
+              title={lang === 'en' ? `Inspect stroke order for ${v.hanzi}` : `Strichfolge für ${v.hanzi} anzeigen`}
+            >
+              ✍️
+            </button>
+          </div>
+
+          <div class="vcard-pinyin">{v.pinyin}</div>
+          <div class="vcard-meaning">{lang === 'en' ? (v.en || v.de) : v.de}</div>
+          {lang === 'en' && v.de !== v.en && <div class="vcard-alt-trans">DE: {v.de}</div>}
+
+          {v.exHanzi && (
+            <details class="vcard-example-box">
+              <summary class="example-toggle">
+                <span>💡 {lang === 'en' ? 'Example Sentence' : 'Beispielsatz'}</span>
+              </summary>
+              <div class="example-body">
+                <div class="ex-hanzi">{v.exHanzi}</div>
+                {v.exPinyin && <div class="ex-pinyin">{v.exPinyin}</div>}
+                {v.exDe && <div class="ex-trans">{lang === 'en' ? (v.exDe) : v.exDe}</div>}
+              </div>
+            </details>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- VIEW B: Compact Table View -->
+  <div class="vocab-table-view" id="zh-vocab-table-view" style="display: none;">
+    <div class="table-scroll-hint">
+      <span>↔️ {lang === 'en' ? 'Tip: Scroll horizontally if table exceeds screen width' : 'Tipp: Tabelle lässt sich bei schmalem Display horizontal scrollen'}</span>
+    </div>
+    <div class="table-scroll-wrapper">
+      <table class="vocab-data-table" id="zh-vocab-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{lang === 'en' ? 'Lesson' : 'Lektion'}</th>
+            <th>Hanzi</th>
+            <th>Pinyin</th>
+            <th>{lang === 'en' ? 'German Meaning' : 'Deutsche Bedeutung'}</th>
+            <th>{lang === 'en' ? 'Example Sentence' : 'Beispielsatz'}</th>
+            <th>{lang === 'en' ? 'Strokes' : 'Striche'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {CHINESE_COURSE_VOCAB.map((v) => (
+            <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
+              <td class="col-num">{v.num}</td>
+              <td class="col-lesson">
+                <span class="table-lbadge">L{v.lesson}</span>
+              </td>
+              <td class="col-hanji">
+                <div class="vocab-table-cell">
+                  <strong class="vocab-term-hanzi" data-hanzi={v.hanzi}>{v.hanzi}</strong>
+                </div>
+              </td>
+              <td class="col-pinyin">
+                <div class="vocab-table-cell">
+                  <code class="vocab-pinyin-badge">{v.pinyin}</code>
+                </div>
+              </td>
+              <td class="col-primary">
+                {lang === 'en' ? (v.en || v.de) : v.de}
+              </td>
+              <td class="col-example">
+                {v.exHanzi ? (
+                  <div class="table-ex-cell">
+                    <span class="table-ex-hz">{v.exHanzi}</span>
+                    <span class="table-ex-tr">{v.exDe}</span>
+                  </div>
+                ) : (
+                  <span class="table-ex-none">—</span>
+                )}
+              </td>
+              <td class="col-strokes">
+                <button
+                  type="button"
+                  class="btn-table-stroke"
+                  data-char={v.hanzi}
+                  title={lang === 'en' ? `Inspect stroke order for ${v.hanzi}` : `Strichfolge für ${v.hanzi} anzeigen`}
+                >
+                  ✍️
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- No Vocab Matches State -->
+  <div class="vocab-no-results" id="zh-vocab-no-results" style="display: none;">
+    <p>🔍 {lang === 'en' ? 'No vocabulary entries match your query.' : 'Keine passenden Vokabeln gefunden.'}</p>
+  </div>
+</div>
+
+<script>
+  function setupChineseVocabVault() {
+    const root = document.getElementById('chinese-vocab-vault');
+    if (!root) return;
+
+    const input = document.getElementById('zh-vocab-search-input') as HTMLInputElement | null;
+    const btnClear = document.getElementById('zh-vocab-search-clear');
+    const lessonButtons = root.querySelectorAll<HTMLButtonElement>('#zh-vocab-lesson-filters .btn-vocab-pill');
+    const layoutButtons = root.querySelectorAll<HTMLButtonElement>('#zh-vocab-layout-toggle .btn-layout-mode');
+    const pinyinButtons = root.querySelectorAll<HTMLButtonElement>('#zh-vocab-pinyin-toggle .btn-pinyin-mode');
+    const viewGrid = document.getElementById('zh-vocab-grid-view');
+    const viewTable = document.getElementById('zh-vocab-table-view');
+    const noResults = document.getElementById('zh-vocab-no-results');
+    const countDisplay = document.getElementById('zh-vocab-count');
+
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('#zh-vocab-cards-grid .vocab-card'));
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('#zh-vocab-table tbody tr'));
+
+    let activeLesson = 'all';
+    let searchQuery = '';
+    let currentLayout = 'grid';
+
+    // 1. Layout Mode (Grid vs Table)
+    layoutButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        layoutButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLayout = btn.dataset.layout || 'grid';
+
+        if (viewGrid) viewGrid.style.display = currentLayout === 'grid' ? 'block' : 'none';
+        if (viewTable) viewTable.style.display = currentLayout === 'table' ? 'block' : 'none';
+      });
+    });
+
+    // 2. Pinyin Active Recall Mode
+    pinyinButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        pinyinButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.pinyinMode || 'visible';
+        root.dataset.pinyinMode = mode;
+      });
+    });
+
+    // 3. Lesson Filter
+    lessonButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lessonButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeLesson = btn.dataset.lesson || 'all';
+        filterVocab();
+      });
+    });
+
+    // 4. Search Handler
+    function handleInput(val: string) {
+      searchQuery = val.toLowerCase().trim();
+      if (btnClear) btnClear.style.display = searchQuery ? 'block' : 'none';
+      filterVocab();
+    }
+
+    if (input) {
+      input.addEventListener('input', (e) => handleInput((e.target as HTMLInputElement).value));
+    }
+
+    if (btnClear) {
+      btnClear.addEventListener('click', () => {
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+        handleInput('');
+      });
+    }
+
+    // Keyboard shortcut (Ctrl+K or / to search)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && document.activeElement !== input)) {
+        if (input && root.offsetParent !== null) {
+          e.preventDefault();
+          input.focus();
+        }
+      }
+    });
+
+    // 5. Filtering Engine
+    function filterVocab() {
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const lesson = card.dataset.lesson || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchLesson = activeLesson === 'all' || lesson === activeLesson;
+        const matchSearch = !searchQuery || text.includes(searchQuery);
+        const isMatch = matchLesson && matchSearch;
+
+        card.style.display = isMatch ? 'flex' : 'none';
+        if (isMatch) visible++;
+      });
+
+      rows.forEach((row) => {
+        const lesson = row.dataset.lesson || '';
+        const text = row.textContent?.toLowerCase() || '';
+
+        const matchLesson = activeLesson === 'all' || lesson === activeLesson;
+        const matchSearch = !searchQuery || text.includes(searchQuery);
+
+        row.style.display = matchLesson && matchSearch ? '' : 'none';
+      });
+
+      if (countDisplay) countDisplay.textContent = visible.toString();
+      if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    // 6. Stroke Trigger Buttons -> Dispatch Event for Global Modal
+    root.querySelectorAll<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const char = btn.dataset.char || '';
+        if (char) {
+          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, lang: 'zh' } }));
+        }
+      });
+    });
+
+    filterVocab();
+  }
+
+  setupChineseVocabVault();
+  document.addEventListener('astro:page-load', setupChineseVocabVault);
+</script>
+
+<style>
+  .chinese-vocab-vault {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .vocab-header-card {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  :global([data-theme='light']) .vocab-header-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(225, 29, 72, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .vocab-badge-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .vocab-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    border: 1px solid rgba(225, 29, 72, 0.35);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+
+  .vocab-main-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--sl-color-white);
+    margin: 0.2rem 0 0.4rem 0;
+  }
+
+  :global([data-theme='light']) .vocab-main-title {
+    color: #0f172a;
+  }
+
+  .vocab-subtitle {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Search & Controls Row */
+  .vocab-search-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-input-box {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.85rem;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .vocab-search-input {
+    width: 100%;
+    padding: 0.55rem 2.2rem 0.55rem 2.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.5rem;
+    color: var(--sl-color-white);
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .vocab-search-input {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #0f172a;
+  }
+
+  .vocab-search-input:focus {
+    border-color: #fb7185;
+    box-shadow: 0 0 0 2px rgba(251, 113, 133, 0.25);
+  }
+
+  .vocab-search-clear {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  /* Pinyin & Layout Toggles */
+  .vocab-pinyin-toggle,
+  .vocab-layout-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.2rem;
+  }
+
+  :global([data-theme='light']) .vocab-pinyin-toggle,
+  :global([data-theme='light']) .vocab-layout-toggle {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .ctrl-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--sl-color-gray-4);
+    padding: 0 0.35rem;
+    text-transform: uppercase;
+  }
+
+  .btn-pinyin-mode,
+  .btn-layout-mode {
+    background: transparent;
+    border: none;
+    border-radius: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-pinyin-mode:hover,
+  .btn-layout-mode:hover {
+    color: var(--sl-color-white);
+  }
+
+  :global([data-theme='light']) .btn-pinyin-mode:hover,
+  :global([data-theme='light']) .btn-layout-mode:hover {
+    color: #0f172a;
+  }
+
+  .btn-pinyin-mode.active,
+  .btn-layout-mode.active {
+    background: rgba(225, 29, 72, 0.3);
+    color: #fda4af;
+    border: 1px solid rgba(225, 29, 72, 0.5);
+  }
+
+  :global([data-theme='light']) .btn-pinyin-mode.active,
+  :global([data-theme='light']) .btn-layout-mode.active {
+    background: #e11d48;
+    color: #ffffff;
+    border-color: #be123c;
+  }
+
+  /* Lesson Filter Pills */
+  .vocab-lesson-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-4);
+  }
+
+  .pills-scroll {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+  }
+
+  .btn-vocab-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .btn-vocab-pill {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #475569;
+  }
+
+  .btn-vocab-pill:hover {
+    color: var(--sl-color-white);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  :global([data-theme='light']) .btn-vocab-pill:hover {
+    color: #0f172a;
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-vocab-pill.active {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: rgba(225, 29, 72, 0.6);
+    color: #fda4af;
+  }
+
+  :global([data-theme='light']) .btn-vocab-pill.active {
+    background: rgba(225, 29, 72, 0.1);
+    border-color: #e11d48;
+    color: #be123c;
+  }
+
+  /* Stats Row */
+  .vocab-stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    padding: 0 0.25rem;
+  }
+
+  .stats-text strong {
+    color: #fb7185;
+  }
+
+  .furigana-hint {
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  /* VIEW A: Cards Grid */
+  .vocab-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    .vocab-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .vocab-card {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  :global([data-theme='light']) .vocab-card {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .vocab-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(244, 63, 94, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .vcard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .vcard-lesson {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    border-radius: 0.25rem;
+    padding: 0.05rem 0.35rem;
+    white-space: nowrap;
+  }
+
+  .vcard-topic {
+    font-size: 0.65rem;
+    color: var(--sl-color-gray-4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+
+  .vcard-hanzi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 0.2rem;
+  }
+
+  .vcard-hanzi {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--sl-color-white);
+    letter-spacing: 0.05em;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  :global([data-theme='light']) .vcard-hanzi {
+    color: #0f172a;
+  }
+
+  .btn-stroke-trigger,
+  .btn-table-stroke {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: var(--sl-color-gray-2);
+    transition: all 0.2s ease;
+  }
+
+  .btn-stroke-trigger:hover,
+  .btn-table-stroke:hover {
+    background: rgba(225, 29, 72, 0.25);
+    border-color: rgba(225, 29, 72, 0.5);
+    transform: scale(1.08);
+  }
+
+  .vcard-pinyin {
+    font-size: 0.85rem;
+    color: #fda4af;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  /* Active Recall Pinyin states on cards */
+  :global([data-pinyin-mode='hover']) .vcard-pinyin {
+    opacity: 0;
+    filter: blur(4px);
+  }
+
+  :global([data-pinyin-mode='hover']) .vocab-card:hover .vcard-pinyin {
+    opacity: 1;
+    filter: none;
+  }
+
+  :global([data-pinyin-mode='hidden']) .vcard-pinyin {
+    visibility: hidden;
+  }
+
+  .vcard-meaning {
+    font-size: 0.825rem;
+    color: var(--sl-color-gray-2);
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 0.15rem;
+  }
+
+  .vcard-alt-trans {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-4);
+    font-style: italic;
+  }
+
+  /* Example box in Card */
+  .vcard-example-box {
+    margin-top: 0.4rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-top: 0.35rem;
+  }
+
+  .example-toggle {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .example-toggle:hover {
+    color: #fda4af;
+  }
+
+  .example-body {
+    margin-top: 0.35rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.35rem;
+    padding: 0.4rem 0.55rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .ex-hanzi {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  :global([data-theme='light']) .ex-hanzi {
+    color: #0f172a;
+  }
+
+  .ex-pinyin {
+    font-size: 0.725rem;
+    color: #fda4af;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .ex-trans {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+  }
+
+  /* Table View */
+  .table-scroll-hint {
+    display: none;
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    margin-bottom: 0.4rem;
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .table-scroll-hint {
+      display: block;
+    }
+  }
+
+  .table-scroll-wrapper {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .table-scroll-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+  .table-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .table-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(244, 63, 94, 0.35);
+    border-radius: 3px;
+  }
+
+  .vocab-data-table {
+    width: 100%;
+    min-width: 860px;
+    border-collapse: collapse;
+    font-size: 0.825rem;
+  }
+
+  .vocab-data-table th,
+  .vocab-data-table td {
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+  }
+
+  .vocab-data-table th {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    font-weight: 700;
+    color: var(--sl-color-gray-2);
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(244, 63, 94, 0.3);
+  }
+
+  :global([data-theme='light']) .vocab-data-table th {
+    background: rgba(241, 245, 249, 0.95);
+    border-bottom-color: rgba(244, 63, 94, 0.4);
+    color: #334155;
+  }
+
+  .table-lbadge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fda4af;
+    background: rgba(225, 29, 72, 0.2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .col-num {
+    width: 44px;
+    text-align: center;
+    color: var(--sl-color-gray-4);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .col-lesson {
+    width: 60px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .col-hanji {
+    min-width: 130px;
+    white-space: nowrap;
+  }
+
+  .col-pinyin {
+    min-width: 140px;
+    white-space: nowrap;
+  }
+
+  .col-primary {
+    min-width: 180px;
+    line-height: 1.45;
+    color: var(--sl-color-gray-1);
+    word-break: normal;
+  }
+
+  .col-example {
+    min-width: 250px;
+    line-height: 1.4;
+  }
+
+  .col-strokes {
+    width: 50px;
+    text-align: center;
+  }
+
+  .vocab-term-hanzi {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--sl-color-white);
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  :global([data-theme='light']) .vocab-term-hanzi {
+    color: #0f172a;
+  }
+
+  .vocab-pinyin-badge {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.825rem;
+    color: #fda4af;
+    background: rgba(244, 63, 94, 0.12) !important;
+    border: 1px solid rgba(244, 63, 94, 0.25) !important;
+    padding: 0.1rem 0.4rem !important;
+    border-radius: 0.25rem !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  /* Active Recall Pinyin states on table */
+  :global([data-pinyin-mode='hover']) .col-pinyin .vocab-pinyin-badge {
+    opacity: 0;
+    filter: blur(4px);
+    transition: all 0.2s ease;
+  }
+
+  :global([data-pinyin-mode='hover']) tr:hover .col-pinyin .vocab-pinyin-badge {
+    opacity: 1;
+    filter: none;
+  }
+
+  :global([data-pinyin-mode='hidden']) .col-pinyin .vocab-pinyin-badge {
+    visibility: hidden;
+  }
+
+  .table-ex-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .table-ex-hz {
+    font-size: 0.8rem;
+    color: var(--sl-color-white);
+    font-weight: 500;
+  }
+
+  :global([data-theme='light']) .table-ex-hz {
+    color: #0f172a;
+  }
+
+  .table-ex-tr {
+    font-size: 0.725rem;
+    color: var(--sl-color-gray-3);
+    font-style: italic;
+  }
+
+  .table-ex-none {
+    color: var(--sl-color-gray-4);
+  }
+
+  .vocab-no-results {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>
