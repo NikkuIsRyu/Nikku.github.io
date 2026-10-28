@@ -1,8 +1,8 @@
 ---
-title: "Robotics & Machine Intelligence (Argon UX Prototyp)"
-description: "Interaktiver Prototyp für RMI: Lie-Gruppen Kinematik Explorer, Fallstricke & Vergleiche, 60s Micro-Quiz Simulator, AR4 Roboter-Labor und Kurs-Logistik."
+title: "Robotics & Machine Intelligence (WS 2026/27)"
+description: "Master-Studienportal für Robotics & Machine Intelligence (Prof. Dr. Artur Andrzejak): 3D-Kinematik-Labor, SO(3) & SE(3) Lie-Gruppen-Explorer, AR4 Product of Exponentials (PoE), Fallstricke, 60s Micro-Quiz Simulator & Anatomische Koordinatensysteme."
 sidebar:
-  order: 11
+  hidden: true
 head:
   - tag: script
     content: document.documentElement.dataset.pageBg = 'rmi-anatomy';
@@ -22,9 +22,9 @@ import { RMI_FORMULA_RULES, RMI_CONFUSABLE_PAIRS, RMI_QUIZ_PRACTICE_ITEMS, RMI_C
 
 <div class="page-bg-rmi-anatomy" aria-hidden="true"></div>
 
-# 🤖 Robotics & Machine Intelligence <Badge text="Argon UX Prototyp" variant="tip" size="medium" />
+# 🤖 Robotics & Machine Intelligence <Badge text="Argon UX Architektur" variant="tip" size="medium" />
 
-<LanguageSwitch current="de" enHref="/lectures/ai-and-med/rmi-prototype/" deHref="/lectures/ai-and-med/de/rmi-prototype/" />
+<LanguageSwitch current="de" enHref="/lectures/ai-and-med/rmi-anatomy/" deHref="/lectures/ai-and-med/de/rmi-anatomy/" />
 
 Interaktives Studien- und Nachschlagewerk für das Master-Modul **Robotics and Machine Intelligence (IRMI)** bei **Prof. Dr. Artur Andrzejak** (*Künstliche Intelligenz für Programmierung — AIP*, Universität Heidelberg, Wintersemester 2026/27).
 
@@ -35,7 +35,7 @@ Interaktives Studien- und Nachschlagewerk für das Master-Modul **Robotics and M
   2. ⚖️ **Robotik-Fallstricke & Vergleiche**: Direkte Gegenüberstellung chronischer Klausurfallen (*FK vs. IK*, *PoE vs. DH*, *Feste vs. Bewegte Achsen*, *Gimbal Lock vs. Quaternionen*).
   3. 🎯 **60s Micro-Quiz Simulator**: Interaktiver Übungstest mit Sofort-Feedback, Fehlerursachenanalyse der Distraktoren und Foliennachweisen für die montäglichen Micro-Quizzes.
   4. 🤖 **AR4 Roboter & Python-Labor**: Exakte Geometriedaten des Annin AR4 6-DoF Roboterarms, Home-Pose-Matrix $M$, Schraubenachsen-Tabelle, URDF-XML und `modern_robotics`-Code.
-  5. 🗂️ **Kurs-Hub & Prüfungslogistik**: Direkter Download aller Foliensätze s00–s03, Zulassungsregeln (96/160 Pkt.), Bonuspunkte und Discord-Tutorien.
+  5. 🗂️ **Kurs-Hub & Prüfungslogistik**: Direkter Download aller Foliensätze s00–s03, Zulassungsregeln (96/160 Pkt.), Bonuspunkte, anatomische Koordinatenebenen und Discord-Tutorien.
 :::
 
 ---
@@ -75,13 +75,13 @@ flowchart LR
     E -.->|T_eo = inv(T_se) * T_sc * T_co<br/>Greifziel| O
 ```
 
-* **Pfeil in Vorwärtsrichtung**: Multiplikation mit Transformationsmatrix ($T_{ac} = T_{ab} T_{bc}$).
-* **Pfeil gegen die Richtung**: Multiplikation mit inverser Matrix ($T_{ba} = T_{ab}^{-1}$).
-* **Greifziel vom Greifer aus gesehen**: $T_{eo} = T_{se}^{-1} T_{sc} T_{co}$.
+* **Mit dem Pfeil multiplizieren**: Multiplikation mit Transformationsmatrix ($T_{ac} = T_{ab} T_{bc}$).
+* **Gegen den Pfeil**: Multiplikation mit inverser Matrix ($T_{ba} = T_{ab}^{-1}$).
+* **Greifziel vom Greifer aus berechnen**: $T_{eo} = T_{se}^{-1} T_{sc} T_{co}$.
 
 ---
 
-### 🗂️ Kinematische Transformations-Karten
+### 🗂️ Kern-Operatoren der Raumkinematik
 
 <CardGrid>
   {RMI_FORMULA_RULES.slice(0, 4).map((rule) => (
@@ -102,9 +102,9 @@ flowchart LR
 {/* ========================================================================= */}
 <div id="study-mode-confusables" class="study-mode-section" data-study-mode="confusables" style="display: none;">
 
-## ⚖️ Modus: Robotik-Fallstricke & Vergleiche <Badge text="6 Direktvergleiche • Klausurfallen" variant="tip" />
+## ⚖️ Modus: Robotik-Fallstricke & Vergleiche Spotlight <Badge text="6 Direktvergleiche" variant="tip" />
 
-In Prüfungen und ROS-Pipelines führen ähnlich klingende oder formal verwandte Konzepte häufig zu Fehlern. Nachfolgend findest du direkte 2-Spalten-Gegenüberstellungen:
+Robotik-Klausuren und Steuerungsprogramme führen bei mathematisch eng verwandten Konzepten häufig zu chronischer Verwirrung. Nachfolgend findest du direkte Gegenüberstellungen mit Formeln, Gültigkeitsbedingungen und typischen Fallen:
 
 {RMI_CONFUSABLE_PAIRS.map((pair) => (
   <RmiConfusableCard pair={pair} lang="de" />
@@ -117,12 +117,12 @@ In Prüfungen und ROS-Pipelines führen ähnlich klingende oder formal verwandte
 {/* ========================================================================= */}
 <div id="study-mode-quiz" class="study-mode-section" data-study-mode="quiz" style="display: none;">
 
-## 🎯 Modus: 60s Micro-Quiz Simulator & Prüfungstraining <Badge text="10 Aufgaben • Sofort-Auswertung" variant="success" />
+## 🎯 Modus: 60s Micro-Quiz Simulator & Prüfungstraining <Badge text="10 Aufgaben • Sofort-Feedback" variant="success" />
 
-Jeden Montag öffnet circa 10 Minuten vor der Vorlesung online auf `https://rmi-heidelberg.de/` ein Micro-Quiz mit 3 Multiple-Choice-Aufgaben (**strenger 1-Minuten-Timer pro Frage**). Über 10 Vorlesungen können so bis zu **30+ Bonuspunkte** für die Klausurzulassung gesammelt werden.
+Vor jeder Montags-Vorlesung öffnet auf `https://rmi-heidelberg.de/` ein freiwilliges Online-Micro-Quiz (strikt **1 Minute Bearbeitungszeit pro Frage**, 3 Fragen pro Quiz, bis zu **30+ Bonuspunkte** für die Klausurzulassung).
 
-:::note[Trainingsstrategie für die Micro-Quizzes]
-Die Fragen verlangen keine langwierigen Rechnungen, sondern testen exaktes Begriffsverständnis, Matrix-Eigenschaften und Vorzeichenregeln. Klicke auf deine Wunschantwort, um sofort zu sehen, ob sie korrekt ist (**✅ Richtig** bzw. **❌ Falsch**), und studiere die ausführliche Herleitung!
+:::note[Micro-Quiz Trainingsstrategie]
+Diese Aufgaben testen schnelle geometrische Intuition und Definitionsgenauigkeit statt langer Rechnungen. Klicke auf eine Antwort für **sofortiges Feedback** (**✅ Richtig** oder **❌ Falsch**), klappe den vollständigen Beweis aus und prüfe die Analyse der falschen Antwortmöglichkeiten (Distraktoren)!
 :::
 
 {RMI_QUIZ_PRACTICE_ITEMS.map((item) => (
@@ -131,7 +131,7 @@ Die Fragen verlangen keine langwierigen Rechnungen, sondern testen exaktes Begri
 
 <div class="not-content" style="margin-top: 1.5rem; text-align: center;">
   <a href="/assets/rmi/quiz1_practice_sheet.pdf" download="quiz1_practice_sheet.pdf" class="btn-download-sheet">
-    📥 Komplettes LaTeX-Übungsblatt herunterladen (PDF)
+    📥 Vollständiges LaTeX Übungsblatt herunterladen (PDF)
   </a>
 </div>
 
@@ -142,7 +142,7 @@ Die Fragen verlangen keine langwierigen Rechnungen, sondern testen exaktes Begri
 {/* ========================================================================= */}
 <div id="study-mode-hardware" class="study-mode-section" data-study-mode="hardware" style="display: none;">
 
-## 🤖 Modus: AR4 Roboterarm & Python-Labor <Badge text="Annin AR4 MK5 • URDF & PoE" variant="note" />
+## 🤖 Modus: AR4 Roboter-Anatomie & Python-Labor <Badge text="Annin AR4 MK5 • URDF & PoE" variant="note" />
 
 <RmiHardwareLab lang="de" />
 
@@ -153,91 +153,104 @@ Die Fragen verlangen keine langwierigen Rechnungen, sondern testen exaktes Begri
 {/* ========================================================================= */}
 <div id="study-mode-course" class="study-mode-section" data-study-mode="course" style="display: none;">
 
-## 🗂️ Modus: Kurs-Hub & Prüfungslogistik <Badge text="WS 2026/27 • 6 ECTS" variant="tip" />
+## 🗂️ Modus: Kurs-Hub & Prüfungslogistik <Badge text="WS 2026/27 • 6 CP" variant="tip" />
 
-### 📋 Kursübersicht auf einen Blick
+### 📋 Kurs-Überblick
 
 | Parameter | Spezifikation | Details |
 | :--- | :--- | :--- |
-| **Modul** | Robotics & Machine Intelligence (IRMI) | Master Data & Computer Science, Scientific Computing |
-| **Dozent** | Prof. Dr. Artur Andrzejak | Gruppe AIP, INF 205 (Mathematikon), Raum 2.214 |
-| **Assistent & Tutoren** | Lennart Stöpler, Til Gramlich, Ole Plechinger | Wöchentliche Übungen, Quiz-Besprechung & Simulationslabor |
+| **Modul** | Robotics & Machine Intelligence (IRMI) | Master Informatik, Data and Computer Science, Scientific Computing |
+| **Dozent** | Prof. Dr. Artur Andrzejak | AIP-Gruppe, INF 205 (Mathematikon), Raum 2.214 |
+| **Übungsleitung & Tutoren** | Lennart Stöpler, Til Gramlich, Ole Plechinger | Wöchentliche Übungen, Präsenztutorien & Roboterlabor |
 | **Vorlesungstermin** | Montag 11:15–12:45 | Hörsaal, INF 205 (Mathematikon) |
 | **Tutorien 1 & 2** | Dienstag 11:15–12:45 (SR 1) & Donnerstag 16:15–17:45 (SR C) | INF 205 |
-| **Arbeitsaufwand** | 180 Arbeitsstunden (6 ECTS) | ca. 12 Stunden/Woche über 15 Wochen |
-| **Discord** | Offizieller Diskussionskanal | [discord.gg/GPFutgV9R](https://discord.gg/GPFutgV9R) |
+| **Arbeitsaufwand** | 180 Stunden gesamt (6 ECTS) | ca. 12 Stunden/Woche über 15 Wochen (Vorlesung, Übung, Projekt) |
+| **Community** | Discord-Server | [discord.gg/GPFutgV9R](https://discord.gg/GPFutgV9R) |
 
 ---
 
-### 🏆 Zulassungsbedingungen zur Klausur
+### 🏆 Zulassungsbedingungen zur Abschlussklausur
 
-Die Zulassung zur schriftlichen Abschlussklausur erfordert das Erfüllen von **zwei Bedingungen**:
+Die Zulassung zur Abschlussklausur erfordert das Bestehen von **zwei unabhängigen Kriterien**:
 
 ```mermaid
 flowchart LR
     Q["Quizzes:<br/>≥ 96 von 160 Punkten (60%)<br/>(4 Präsenz-Quizzes × 40 Pkt.)"] --> ADM["Zulassung zur Abschlussklausur"]
-    B["Online Micro-Quizzes:<br/>Bis zu 30+ Bonuspunkte<br/>(Zählen direkt auf die 96 Pkt.!)"] -.->|Bonusanrechnung| Q
-    P["Software-Projekt:<br/>Pass / Fail<br/>(3er-Gruppen + Primärtutor)"] --> ADM
+    B["Online Micro-Quizzes:<br/>Bis zu 30+ Bonuspunkte<br/>(Zählen direkt auf die 96 Pkt.!)"] -.->|Punktebonus| Q
+    P["Softwareprojekt:<br/>Bestanden / Nicht bestanden<br/>(3er-Gruppen + Primärtutor)"] --> ADM
 ```
 
 1. **Quizzes ($\ge 96$ / 160 Punkte = 60%)**:
    - 4 schriftliche Quizzes in den letzten 20 Minuten der Vorlesung (je 40 Punkte, 4 Aufgaben $\times$ 10 Punkte).
-   - **Quiz A**: 02.11.2026 (Vorlesung 1 & 2: Anatomie, Kinematik, Rotationen)
-   - **Quiz B**: 23.11.2026 (Vorlesung 3 & 4: PoE, Inverse Kinematik, Dynamik)
-   - **Quiz C**: 14.12.2026 (Vorlesung 5 & 6: ML Refresher, Deep Learning Vision)
-   - **Quiz D**: 18.01.2027 (Vorlesung 7 & 8: 3D Vision, Imitation & RL)
-   - **Micro-Quiz Bonus**: 10 wöchentliche Online-Micro-Quizzes (je 3 Fragen) bringen **bis zu 30+ Bonuspunkte**, die auf die 96 Punkte angerechnet werden!
-2. **Software-Projekt (Pass / Fail)**:
-   - Bearbeitung in **3er-Gruppen** an simulierten bzw. realen Roboterarmen.
-   - Jede Gruppe erhält einen primären Tutor zur Betreuung.
+   - **Quiz A**: 02.11.2026 (Vorlesungen 1 & 2: Anatomie, Kinematik, Rotationen)
+   - **Quiz B**: 23.11.2026 (Vorlesungen 3 & 4: PoE, Inverse Kinematik, Dynamik)
+   - **Quiz C**: 14.12.2026 (Vorlesungen 5 & 6: ML Refresher, Deep Learning Vision)
+   - **Quiz D**: 18.01.2027 (Vorlesungen 7 & 8: 3D Vision, Imitation & RL)
+   - **Micro-Quiz Bonus**: 10 wöchentliche Online-Micro-Quizzes bringen **bis zu 30+ Bonuspunkte**, die direkt auf die 96-Punkte-Schwelle angerechnet werden!
+2. **Softwareprojekt (Bestanden / Nicht bestanden)**:
+   - Umsetzung in **3er-Gruppen** an simulierten / physischen Roboterarmen.
+   - Jede Gruppe erhält einen Primärtutor zur Betreuung und Zwischenabnahme.
 
 ---
 
-### 📂 Offizielle Vorlesungsfolien (Heibox / Google Drive)
+### 🔬 Medizinische Bildgebung & Anatomische Koordinatensysteme
+
+Grundlagen für die Registrierung von Robotik-Endeffektoren und medizinischen Sensoren mit der menschlichen Anatomie:
+* **Sagittalebene**: Teilt den Körper in linke und rechte Hälfte.
+* **Frontal- / Koronalebene**: Teilt den Körper in vordere (anteriore) und hintere (posteriore) Hälfte.
+* **Transversal- / Axialebene**: Teilt den Körper in obere (superiore) und untere (inferiore) Hälfte.
+* **Starrkörpertransformationen im 3D-Raum**: Dargestellt über homogene Transformationsmatrizen in $SE(3)$:
+
+$$
+T = \begin{bmatrix} R & \mathbf{t} \\ \mathbf{0}^T & 1 \end{bmatrix} \in \mathbb{R}^{4 \times 4}, \quad R \in SO(3), \; \mathbf{t} \in \mathbb{R}^3
+$$
+
+---
+
+### 📂 Offizielle Vorlesungsunterlagen (Heibox / Google Drive)
 
 <DriveAsset
-  title="Vorlesung 0: Administrative Informationen & Kursüberblick"
+  title="Lecture 0: Administrative Informationen & Modulüberblick"
   type="slides"
-  description="Prüfungsmodalitäten, Quiz-Termine, Bonuspunkteregelung, Literaturempfehlungen und Kontaktadressen."
+  description="Prüfungsmodalitäten, Quiz-Termine, Bonuspunkte-Regelung, empfohlene Literatur und Kontaktdaten."
   href="https://bit.ly/HDRMI2026"
 />
 
 <DriveAsset
-  title="Vorlesung 1: Einführung & Roboteranatomie"
+  title="Lecture 1: Einführung & Roboteranatomie"
   type="slides"
-  description="Fabrik vs. offene Welt, Sense-Think-Act-Schleife, Moravec-Paradoxon, AR4 6-DoF Anatomie, Freiheitsgrade und Grübler-Formel."
+  description="Fabrik- vs. offene Weltrobotik, Sense-Think-Act Schleife, Moravec-Paradoxon, AR4 6-DoF Arm-Anatomie, Freiheitsgrade und Grübler-Formel."
   href="https://bit.ly/HDRMI2026"
 />
 
 <DriveAsset
-  title="Vorlesung 2: Rotationen, Transformationen, Vorwärtskinematik"
+  title="Lecture 2: Rotationen, Transformationen & Vorwärtskinematik"
   type="slides"
-  description="SO(2) und SO(3) Rotationsmatrizen, Rechte-Hand-Regel, Roll-Pitch-Yaw vs. Euler ZYX, Gimbal Lock, homogene Transformationen in SE(3) und URDF."
+  description="SO(2) und SO(3) Drehmatrizen, Rechte-Hand-Regel, Roll-Pitch-Yaw vs. Euler ZYX, Gimbal Lock, homogene Transformationen in SE(3) und URDF."
   href="https://bit.ly/HDRMI2026"
 />
 
 <DriveAsset
-  title="Vorlesung 3: Product of Exponentials (Tutorial Notes)"
+  title="Lecture 3: Product of Exponentials (Tutorial Notes)"
   type="slides"
-  description="Matrix-Exponential auf SO(3) & SE(3), Herleitung der Rodrigues-Formel, Schraubenachsen S = (omega, v), PoE Space- und Body-Form."
+  description="Matrix-Exponential auf SO(3) & SE(3), Herleitung der Rodrigues-Formel, Schraubenachsen S = (omega, v), PoE Space- & Body-Form und AR4 Beispiel."
   href="https://bit.ly/HDRMI2026"
 />
 
 <DriveAsset
-  title="Übungsblatt: Micro-Quiz 1 Vorbereitung (PDF)"
+  title="Übungsblatt: Vorbereitung Micro-Quiz 1 (PDF)"
   type="pdf"
-  description="10 gezielte Multiple-Choice-Aufgaben mit ausführlichen mathematischen Musterlösungen und Fehleranalysen."
+  description="Gezieltes Trainingsblatt mit 10 Multiple-Choice-Aufgaben, detaillierten mathematischen Lösungsschritten und Distraktoren-Erklärungen."
   href="/assets/rmi/quiz1_practice_sheet.pdf"
 />
 
 ---
 
-### 📚 Empfohlene Literatur & Software
+### 📚 Empfohlene Lehrbücher & Software-Bibliotheken
 
-* **Modern Robotics: Mechanics, Planning, and Control** — Kevin M. Lynch & Frank C. Park (Cambridge University Press, 2019). [Kostenloses PDF, Videos & Software](https://modernrobotics.org).
+* **Modern Robotics: Mechanics, Planning, and Control** — Kevin M. Lynch & Frank C. Park (Cambridge University Press, 2019). [Kostenloses PDF, Videos und Code](https://modernrobotics.org).
 * **Robotics, Vision and Control (in Python)** — Peter Corke (3. Auflage, Springer, 2023).
-* **Python Modern Robotics Library**: `pip install modern_robotics` ([GitHub: NxRLab/ModernRobotics](https://github.com/NxRLab/ModernRobotics)).
+* **Python Modern Robotics Bibliothek**: `pip install modern_robotics` ([GitHub: NxRLab/ModernRobotics](https://github.com/NxRLab/ModernRobotics)).
 * **SciPy Spatial Transform**: `from scipy.spatial.transform import Rotation as R`.
 
 </div>
-

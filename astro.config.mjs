@@ -14,6 +14,9 @@ export default defineConfig({
 		'/lectures/languages/chinese/en/prototype': '/lectures/languages/chinese/en/',
 		'/lectures/languages/japanese/prototype': '/lectures/languages/japanese/b1-1/',
 		'/lectures/languages/japanese/de/prototype': '/lectures/languages/japanese/b1-1/de/',
+		'/lectures/ai-and-med/rmi-prototype': '/lectures/ai-and-med/rmi-anatomy/',
+		'/lectures/ai-and-med/de/rmi-prototype': '/lectures/ai-and-med/de/rmi-anatomy/',
+		'/lectures/ai-and-med/rmi': '/lectures/ai-and-med/rmi-anatomy/',
 	},
 	markdown: {
 		processor: unified({
