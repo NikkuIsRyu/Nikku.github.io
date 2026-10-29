@@ -1,39 +1,68 @@
 ---
 interface Props {
   lang?: 'de' | 'en';
+  scriptMode?: 'ja' | 'zh';
   defaultChar?: string;
   isModalOnly?: boolean;
 }
 
-const { lang = 'de', defaultChar = '你', isModalOnly = false } = Astro.props;
+const {
+  lang = 'de',
+  scriptMode = 'zh',
+  defaultChar = scriptMode === 'ja' ? '日' : '你',
+  isModalOnly = false,
+} = Astro.props;
 
-const suggestions = [
-  { char: '你', pinyin: 'nǐ', meaning: 'du / you' },
-  { char: '好', pinyin: 'hǎo', meaning: 'gut / good' },
-  { char: '学', pinyin: 'xué', meaning: 'lernen / learn' },
-  { char: '生', pinyin: 'shēng', meaning: 'geboren / life' },
-  { char: '见', pinyin: 'jiàn', meaning: 'sehen / see' },
-  { char: '日', pinyin: 'rì', meaning: 'Tag, Sonne / sun' },
-  { char: '中', pinyin: 'zhōng', meaning: 'Mitte / center' },
-  { char: '国', pinyin: 'guó', meaning: 'Land / country' },
+const jaSuggestions = [
+  { char: '日', reading: 'にち / ひ', meaning: 'Tag, Sonne / sun' },
+  { char: '本', reading: 'ほん', meaning: 'Buch, Ursprung / origin' },
+  { char: '語', reading: 'ご', meaning: 'Sprache / language' },
+  { char: '学', reading: 'がく / まなぶ', meaning: 'lernen / study' },
+  { char: '生', reading: 'せい / いきる', meaning: 'Leben / life' },
+  { char: '見', reading: 'けん / みる', meaning: 'sehen / see' },
+  { char: '食', reading: 'しょく / たべる', meaning: 'essen / eat' },
+  { char: '行', reading: 'こう / いく', meaning: 'gehen / go' },
 ];
+
+const zhSuggestions = [
+  { char: '你', reading: 'nǐ', meaning: 'du / you' },
+  { char: '好', reading: 'hǎo', meaning: 'gut / good' },
+  { char: '学', reading: 'xué', meaning: 'lernen / learn' },
+  { char: '生', reading: 'shēng', meaning: 'geboren / life' },
+  { char: '见', reading: 'jiàn', meaning: 'sehen / see' },
+  { char: '日', reading: 'rì', meaning: 'Tag, Sonne / sun' },
+  { char: '中', reading: 'zhōng', meaning: 'Mitte / center' },
+  { char: '国', reading: 'guó', meaning: 'Land / country' },
+];
+
+const suggestions = scriptMode === 'ja' ? jaSuggestions : zhSuggestions;
 ---
 
 <!-- Stroke Order Modal & Interactive Character Studio -->
-<div class="stroke-order-guide not-content notranslate" translate="no" id="stroke-order-guide-root">
+<div class="stroke-order-guide not-content notranslate" translate="no" id="stroke-order-guide-root" data-script-mode={scriptMode}>
   <!-- Modal Dialog -->
   <div class="stroke-modal-backdrop" id="stroke-modal-backdrop" style="display: none;">
     <div class="stroke-modal-panel" role="dialog" aria-modal="true" aria-labelledby="stroke-modal-title">
       <!-- Modal Header -->
       <div class="stroke-modal-header">
         <div class="modal-title-group">
-          <span class="stroke-guide-badge">✍️ {lang === 'en' ? 'Stroke Order Guide' : 'Strichfolge & Schreibtrainer'}</span>
+          <span class="stroke-guide-badge" id="stroke-modal-badge">
+            ✍️ {scriptMode === 'ja'
+              ? (lang === 'en' ? 'Kanji Stroke Order Guide & Practice' : 'Kanji-Strichfolge & Schreibtrainer')
+              : (lang === 'en' ? 'Hanzi Stroke Order Guide & Practice' : 'Hanzi-Strichfolge & Schreibtrainer')}
+          </span>
           <h3 id="stroke-modal-title" class="stroke-modal-heading">
-            <span class="active-char-display" id="modal-active-char">你</span>
+            <span class="active-char-display" id="modal-active-char">{defaultChar}</span>
             <span class="active-char-pinyin" id="modal-active-pinyin"></span>
           </h3>
         </div>
         <button type="button" class="btn-modal-close" id="stroke-modal-close" title={lang === 'en' ? 'Close' : 'Schließen'}>✕</button>
+      </div>
+
+      <!-- Word Kanji Pills (active when inspected term contains multiple Kanji) -->
+      <div class="word-kanji-row" id="stroke-word-kanji-row" style="display: none;">
+        <span class="word-kanji-label">{lang === 'en' ? 'Kanji in this word:' : 'Kanji in dieser Vokabel:'}</span>
+        <div class="word-kanji-pills" id="modal-word-kanji-pills"></div>
       </div>
 
       <!-- Quick Character Input / Switcher -->
@@ -43,7 +72,9 @@ const suggestions = [
             type="text"
             id="stroke-char-input"
             class="stroke-char-input"
-            placeholder={lang === 'en' ? 'Type any character (e.g. 学, 見, 好)...' : 'Beliebiges Zeichen eingeben (z. B. 学, 見, 好)...'}
+            placeholder={scriptMode === 'ja'
+              ? (lang === 'en' ? 'Type any Kanji (e.g. 学, 見, 食, 勉)...' : 'Beliebiges Kanji eingeben (z. B. 学, 見, 食, 勉)...')
+              : (lang === 'en' ? 'Type any character (e.g. 你, 好, 学)...' : 'Beliebiges Zeichen eingeben (z. B. 你, 好, 学)...')}
             maxlength="2"
             autocomplete="off"
           />
@@ -59,7 +90,7 @@ const suggestions = [
               type="button"
               class="btn-quick-char"
               data-char={s.char}
-              title={`${s.char} (${s.pinyin} - ${s.meaning})`}
+              title={`${s.char} (${s.reading} - ${s.meaning})`}
             >
               {s.char}
             </button>
@@ -147,9 +178,10 @@ const suggestions = [
 <script>
   let hanziWriterLoaded = false;
   let currentWriter: any = null;
-  let currentChar = '你';
+  let currentChar = '日';
   let isQuizActive = false;
   let isLooping = false;
+  let activeScriptMode = 'zh';
 
   // Load HanziWriter dynamically on-demand from CDN
   function loadHanziWriter(): Promise<void> {
@@ -172,6 +204,8 @@ const suggestions = [
     const root = document.getElementById('stroke-order-guide-root');
     if (!root) return;
 
+    activeScriptMode = root.dataset.scriptMode || (window.location.pathname.includes('/languages/japanese/') ? 'ja' : 'zh');
+
     const modal = document.getElementById('stroke-modal-backdrop');
     const btnClose = document.getElementById('stroke-modal-close');
     const target = document.getElementById('stroke-writer-target');
@@ -180,6 +214,9 @@ const suggestions = [
     const strokeCountDisplay = document.getElementById('stroke-count-value');
     const strokeStatusDisplay = document.getElementById('stroke-status-value');
     const stepsContainer = document.getElementById('stroke-steps-container');
+    const wordKanjiRow = document.getElementById('stroke-word-kanji-row');
+    const wordKanjiPills = document.getElementById('modal-word-kanji-pills');
+    const modalBadge = document.getElementById('stroke-modal-badge');
 
     const btnPlay = document.getElementById('btn-stroke-play');
     const btnStep = document.getElementById('btn-stroke-step');
@@ -192,12 +229,64 @@ const suggestions = [
     const quickButtons = root.querySelectorAll<HTMLButtonElement>('.btn-quick-char');
 
     // Open Modal
-    function openModal(char: string, pinyin = '') {
+    function openModal(char: string, reading = '', eventLang = '') {
       if (!modal) return;
       modal.style.display = 'flex';
-      currentChar = char.trim().charAt(0) || '你';
+
+      const langMode = eventLang || (window.location.pathname.includes('/languages/japanese/') ? 'ja' : activeScriptMode);
+      activeScriptMode = langMode;
+
+      // Update badge dynamically
+      if (modalBadge) {
+        const isEn = document.documentElement.lang?.startsWith('en') || (window.location.pathname.includes('/languages/japanese/') && !window.location.pathname.includes('/de/'));
+        if (activeScriptMode === 'ja') {
+          modalBadge.textContent = isEn ? '✍️ Kanji Stroke Order Guide & Practice' : '✍️ Kanji-Strichfolge & Schreibtrainer';
+        } else {
+          modalBadge.textContent = isEn ? '✍️ Hanzi Stroke Order Guide & Practice' : '✍️ Hanzi-Strichfolge & Schreibtrainer';
+        }
+      }
+
+      // Extract all CJK Ideographs / Kanji from the term
+      const kanjiList = (char.match(/[\u4e00-\u9faf]/g) || []);
+
+      // If word contains multiple Kanji, render selectable tabs/pills
+      if (wordKanjiRow && wordKanjiPills) {
+        if (kanjiList.length > 1) {
+          wordKanjiRow.style.display = 'flex';
+          wordKanjiPills.innerHTML = '';
+          kanjiList.forEach((k, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `btn-word-kanji ${idx === 0 ? 'active' : ''}`;
+            btn.textContent = k;
+            btn.title = `Strichfolge für ${k} anzeigen`;
+            btn.addEventListener('click', () => {
+              wordKanjiPills.querySelectorAll('.btn-word-kanji').forEach((b) => b.classList.remove('active'));
+              btn.classList.add('active');
+              currentChar = k;
+              if (activeCharDisplay) activeCharDisplay.textContent = k;
+              if (inputChar) inputChar.value = k;
+              initWriterForChar(k);
+            });
+            wordKanjiPills.appendChild(btn);
+          });
+        } else {
+          wordKanjiRow.style.display = 'none';
+          wordKanjiPills.innerHTML = '';
+        }
+      }
+
+      // Determine initial active character
+      if (kanjiList.length > 0) {
+        currentChar = kanjiList[0];
+      } else {
+        currentChar = char.trim().charAt(0) || (activeScriptMode === 'ja' ? '日' : '你');
+      }
+
       if (activeCharDisplay) activeCharDisplay.textContent = currentChar;
-      if (activePinyinDisplay) activePinyinDisplay.textContent = pinyin ? `[${pinyin}]` : '';
+      if (activePinyinDisplay) {
+        activePinyinDisplay.textContent = reading ? `[${reading}]` : '';
+      }
       if (inputChar) inputChar.value = currentChar;
 
       initWriterForChar(currentChar);
@@ -223,18 +312,20 @@ const suggestions = [
 
     // Global Event Listener
     window.addEventListener('nikku:open-stroke-guide', (e: any) => {
-      const char = e.detail?.char || '你';
-      const pinyin = e.detail?.pinyin || '';
-      openModal(char, pinyin);
+      const char = e.detail?.char || (activeScriptMode === 'ja' ? '日' : '你');
+      const reading = e.detail?.reading || e.detail?.pinyin || '';
+      const eventLang = e.detail?.lang || (window.location.pathname.includes('/languages/japanese/') ? 'ja' : 'zh');
+      openModal(char, reading, eventLang);
     });
 
     // Quick Character Pills
     quickButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
-        const c = btn.dataset.char || '你';
+        const c = btn.dataset.char || (activeScriptMode === 'ja' ? '日' : '你');
         currentChar = c;
         if (activeCharDisplay) activeCharDisplay.textContent = c;
         if (inputChar) inputChar.value = c;
+        if (wordKanjiRow) wordKanjiRow.style.display = 'none';
         initWriterForChar(c);
       });
     });
@@ -248,6 +339,7 @@ const suggestions = [
       const c = raw.charAt(0);
       currentChar = c;
       if (activeCharDisplay) activeCharDisplay.textContent = c;
+      if (wordKanjiRow) wordKanjiRow.style.display = 'none';
       initWriterForChar(c);
     }
 
@@ -271,25 +363,47 @@ const suggestions = [
         const HanziWriter = (window as any).HanziWriter;
         if (!HanziWriter) return;
 
-        // Custom loader: try Chinese first, then Japanese
+        // Custom loader: prioritize dataset according to active script mode
         const charDataLoader = async (c: string, onComplete: any, onError: any) => {
-          try {
-            // 1. Try Chinese data
-            const res = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${c}.json`);
-            if (res.ok) {
-              const data = await res.json();
-              return onComplete(data);
-            }
-          } catch {}
+          const isJa = activeScriptMode === 'ja';
 
-          try {
-            // 2. Try Japanese Kanji data
-            const resJp = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${c}.json`);
-            if (resJp.ok) {
-              const dataJp = await resJp.json();
-              return onComplete(dataJp);
-            }
-          } catch {}
+          if (isJa) {
+            // 1. Try Japanese KanjiVG dataset first for authentic JIS stroke order
+            try {
+              const resJp = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${c}.json`);
+              if (resJp.ok) {
+                const dataJp = await resJp.json();
+                return onComplete(dataJp);
+              }
+            } catch {}
+
+            // 2. Fallback to standard Chinese dataset
+            try {
+              const res = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${c}.json`);
+              if (res.ok) {
+                const data = await res.json();
+                return onComplete(data);
+              }
+            } catch {}
+          } else {
+            // 1. Try Chinese dataset first
+            try {
+              const res = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${c}.json`);
+              if (res.ok) {
+                const data = await res.json();
+                return onComplete(data);
+              }
+            } catch {}
+
+            // 2. Fallback to Japanese dataset
+            try {
+              const resJp = await fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${c}.json`);
+              if (resJp.ok) {
+                const dataJp = await resJp.json();
+                return onComplete(dataJp);
+              }
+            } catch {}
+          }
 
           onError(new Error('Character not found in database'));
         };
@@ -353,8 +467,13 @@ const suggestions = [
         stepBox.appendChild(miniTarget);
         stepsContainer.appendChild(stepBox);
 
-        // Render static snapshot with strokes 0 to idx
+        // Render static snapshot with progressive strokes 0 to idx
         if (HanziWriter) {
+          const partialData = {
+            ...charData,
+            strokes: charData.strokes.slice(0, idx + 1),
+            medians: charData.medians ? charData.medians.slice(0, idx + 1) : []
+          };
           const miniWriter = HanziWriter.create(miniTarget, char, {
             width: 48,
             height: 48,
@@ -362,9 +481,8 @@ const suggestions = [
             showOutline: true,
             outlineColor: 'rgba(255, 255, 255, 0.08)',
             strokeColor: '#fda4af',
-            charDataLoader: (_c: string, cb: any) => cb(charData)
+            charDataLoader: (_c: string, cb: any) => cb(partialData)
           });
-          // Show strokes up to current
           miniWriter.showCharacter();
         }
       });
@@ -453,6 +571,57 @@ const suggestions = [
   .stroke-order-guide {
     position: relative;
     z-index: 9999;
+  }
+
+  /* Word Kanji Pills */
+  .word-kanji-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    background: rgba(225, 29, 72, 0.1);
+    border: 1px solid rgba(225, 29, 72, 0.25);
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .word-kanji-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fda4af;
+  }
+
+  .word-kanji-pills {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-word-kanji {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  :global([data-theme='light']) .btn-word-kanji {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+  }
+
+  .btn-word-kanji:hover,
+  .btn-word-kanji.active {
+    background: #e11d48;
+    border-color: #fda4af;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+    transform: translateY(-1px);
   }
 
   /* Backdrop */

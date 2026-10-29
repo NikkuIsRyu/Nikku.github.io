@@ -99,12 +99,25 @@ const lessons = [
 
   <!-- Stats Row -->
   <div class="vocab-stats-row">
-    <span class="stats-text">
-      {lang === 'en' ? 'Showing' : 'Zeige'} <strong id="jp-vocab-count">{JAPANESE_B1_VOCAB.length}</strong> {lang === 'en' ? 'words' : 'Vokabeln'}
-    </span>
-    <span class="furigana-hint">
-      💡 {lang === 'en' ? 'Tip: Switch to "Hover Mode" in the Grammar Explorer to test your Kanji readings!' : 'Tipp: Schalte oben auf "Hover-Modus", um deine Kanji-Lesung zu testen!'}
-    </span>
+    <div class="stats-left">
+      <span class="stats-text">
+        {lang === 'en' ? 'Showing' : 'Zeige'} <strong id="jp-vocab-count">{JAPANESE_B1_VOCAB.length}</strong> {lang === 'en' ? 'words' : 'Vokabeln'}
+      </span>
+      <span class="furigana-hint">
+        💡 {lang === 'en' ? 'Tip: Click ✍️ on any Kanji to inspect and practice its stroke order!' : 'Tipp: Klicke bei jedem Kanji auf ✍️, um die Strichfolge interaktiv zu trainieren!'}
+      </span>
+    </div>
+    <div class="stats-right">
+      <button
+        type="button"
+        class="btn-open-kanji-studio"
+        id="btn-jp-open-kanji-studio"
+        title={lang === 'en' ? 'Open interactive Kanji Stroke Studio' : 'Interaktives Kanji-Strichfolge Studio öffnen'}
+      >
+        <span class="studio-icon">✍️</span>
+        <span>{lang === 'en' ? 'Kanji Stroke Studio' : 'Kanji-Strichfolge Studio'}</span>
+      </button>
+    </div>
   </div>
 
   <!-- VIEW A: Cards Grid -->
@@ -113,6 +126,7 @@ const lessons = [
       {JAPANESE_B1_VOCAB.map((v) => {
         const pk = parseVocabTerm(v.kanji);
         const pr = parseVocabTerm(v.kana);
+        const hasKanji = /[\u4e00-\u9faf]/.test(v.kanji);
         return (
           <div class="vocab-card notranslate" translate="no" data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
             <div class="vcard-top">
@@ -123,14 +137,17 @@ const lessons = [
                 <span class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</span>
                 {pk.note && <span class="vocab-card-note notranslate" translate="no" lang="ja">{pk.note}</span>}
               </div>
-              <button
-                type="button"
-                class="btn-stroke-trigger"
-                data-char={pk.main}
-                title={lang === 'en' ? `Inspect stroke order for ${pk.main}` : `Strichfolge für ${pk.main} anzeigen`}
-              >
-                ✍️
-              </button>
+              {hasKanji && (
+                <button
+                  type="button"
+                  class="btn-stroke-trigger"
+                  data-char={v.kanji}
+                  data-reading={v.kana}
+                  title={lang === 'en' ? `Inspect Kanji stroke order for ${pk.main}` : `Kanji-Strichfolge für ${pk.main} anzeigen`}
+                >
+                  ✍️
+                </button>
+              )}
             </div>
             <div class="vcard-kana notranslate" translate="no" lang="ja">
               <span class="vocab-kana-main notranslate" translate="no" lang="ja">{pr.main}</span>
@@ -166,6 +183,7 @@ const lessons = [
           {JAPANESE_B1_VOCAB.map((v) => {
             const pk = parseVocabTerm(v.kanji);
             const pr = parseVocabTerm(v.kana);
+            const hasKanji = /[\u4e00-\u9faf]/.test(v.kanji);
             return (
               <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
                 <td class="col-num">{v.num}</td>
@@ -185,14 +203,19 @@ const lessons = [
                 <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
                 <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
                 <td class="col-strokes">
-                  <button
-                    type="button"
-                    class="btn-table-stroke"
-                    data-char={pk.main}
-                    title={lang === 'en' ? `Inspect stroke order for ${pk.main}` : `Strichfolge für ${pk.main} anzeigen`}
-                  >
-                    ✍️
-                  </button>
+                  {hasKanji ? (
+                    <button
+                      type="button"
+                      class="btn-table-stroke"
+                      data-char={v.kanji}
+                      data-reading={v.kana}
+                      title={lang === 'en' ? `Inspect Kanji stroke order for ${pk.main}` : `Kanji-Strichfolge für ${pk.main} anzeigen`}
+                    >
+                      ✍️
+                    </button>
+                  ) : (
+                    <span class="no-kanji-dash" title={lang === 'en' ? 'Kana only (no Kanji)' : 'Nur Kana (kein Kanji)'}>—</span>
+                  )}
                 </td>
               </tr>
             );
@@ -307,11 +330,19 @@ const lessons = [
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const char = btn.dataset.char || '';
+        const reading = btn.dataset.reading || '';
         if (char) {
-          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, lang: 'ja' } }));
+          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, reading, lang: 'ja' } }));
         }
       });
     });
+
+    const btnStudio = root.querySelector<HTMLButtonElement>('#btn-jp-open-kanji-studio');
+    if (btnStudio) {
+      btnStudio.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char: '学', reading: 'がく', lang: 'ja' } }));
+      });
+    }
 
     filterVocab();
   }
@@ -507,14 +538,56 @@ const lessons = [
     align-items: center;
     font-size: 0.75rem;
     color: var(--sl-color-gray-3);
-    padding: 0 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.5rem;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  :global([data-theme='light']) .vocab-stats-row {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .stats-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-open-kanji-studio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(225, 29, 72, 0.15);
+    border: 1px solid rgba(225, 29, 72, 0.35);
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    color: #fda4af;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-open-kanji-studio:hover {
+    background: #e11d48;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(225, 29, 72, 0.4);
+    transform: translateY(-1px);
   }
 
   .furigana-hint {
     color: #fb7185;
     font-style: italic;
+  }
+
+  .no-kanji-dash {
+    color: var(--sl-color-gray-4);
+    font-size: 0.85rem;
   }
 
   /* Cards Grid */

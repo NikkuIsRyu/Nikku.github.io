@@ -1,7 +1,7 @@
 # 🛡️ Website Legal & Licensing Compliance Report
 
 **Benchmark Version**: `v1.3.0`  
-**Audit Date**: 2026-10-28  
+**Audit Date**: 2026-10-29  
 **Benchmark Score**: **100 / 100** (Grade **A+**)  
 **Status**: ✅ **CLEARED FOR PUBLIC SHARING**  
 
@@ -21,7 +21,7 @@
 
 * **Items Under Review**: Chinese dialogue texts (Lektionen 2–10) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus, 18 dialogues)
 * **Contact Email**: `info@schmetterling-verlag.de`
-* **Initial Inquiry Sent**: 2026-10-18 (**10 days ago**)
+* **Initial Inquiry Sent**: 2026-10-18 (**11 days ago**)
 * **Current Safeguards on Site**:
   - ✅ Direct raw audio downloads are withheld and blocked
   - ✅ Anki deck download is gated behind WIP (wip={true}) in DriveAsset

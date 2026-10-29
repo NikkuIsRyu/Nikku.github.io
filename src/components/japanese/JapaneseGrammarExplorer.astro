@@ -401,6 +401,18 @@ const lessons = [
       return matchLesson && matchCategory && matchSearch;
     }
 
+    // Kanji Click-to-Stroke trigger on ruby characters
+    root.addEventListener('click', (e) => {
+      const ruby = (e.target as HTMLElement)?.closest('.furigana-ruby[data-kanji]') as HTMLElement | null;
+      if (ruby) {
+        const kanji = ruby.dataset.kanji || '';
+        const reading = ruby.dataset.reading || '';
+        if (kanji) {
+          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char: kanji, reading, lang: 'ja' } }));
+        }
+      }
+    });
+
     // Initialize
     setFuriganaMode('visible');
     filterItems();

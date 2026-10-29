@@ -10,7 +10,10 @@ const { rule, lang = 'de' } = Astro.props;
 
 // Helper to convert bracketed furigana "窓[まど]が 割[わ]れて います。" into ruby HTML
 function renderFurigana(text: string): string {
-  return text.replace(/([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g, '<ruby class="furigana-ruby notranslate" translate="no" lang="ja">$1<rt class="furigana-rt notranslate" translate="no" lang="ja">$2</rt></ruby>');
+  return text.replace(
+    /([一-龯々]+)\[([ぁ-んァ-ヶ]+)\]/g,
+    '<ruby class="furigana-ruby notranslate" translate="no" lang="ja" data-kanji="$1" data-reading="$2" title="Klicke für Kanji-Strichfolge ✍️">$1<rt class="furigana-rt notranslate" translate="no" lang="ja">$2</rt></ruby>'
+  );
 }
 ---
 
@@ -367,6 +370,17 @@ function renderFurigana(text: string): string {
     ruby-align: center;
     position: relative;
     white-space: nowrap !important;
+  }
+
+  :global(.furigana-ruby[data-kanji]) {
+    cursor: pointer;
+    border-radius: 0.2rem;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  :global(.furigana-ruby[data-kanji]:hover) {
+    color: #fb7185;
+    text-shadow: 0 0 8px rgba(251, 113, 133, 0.4);
   }
 
   :global(.furigana-rt) {
