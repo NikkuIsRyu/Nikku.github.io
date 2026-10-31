@@ -68,6 +68,9 @@ const { lang = 'en' } = Astro.props;
         <button type="button" class="btn-canvas-action" id="btn-toggle-grid" title="Toggle Ground Grid">
           ▦ {lang === 'de' ? 'Gitter an/aus' : 'Toggle Grid'}
         </button>
+        <button type="button" class="btn-canvas-action active-toggle" id="btn-toggle-arm-model" title="Roboterarm-Demo einblenden">
+          🦾 {lang === 'de' ? 'Roboterarm-Demo' : 'Arm Demo'}
+        </button>
         <button type="button" class="btn-canvas-action" id="btn-toggle-screws" title="Toggle Screw Axes" style="display: none;">
           ⚡ {lang === 'de' ? 'Schraubenachsen' : 'Screw Axes'}
         </button>
@@ -77,8 +80,23 @@ const { lang = 'en' } = Astro.props;
       <div class="gimbal-lock-alert" id="gimbal-lock-banner" style="display: none;">
         <span class="alert-icon">⚠️</span>
         <div class="alert-text">
-          <strong>{lang === 'de' ? 'Gimbal Lock (Singularität) erreicht!' : 'Gimbal Lock (Singularity) Reached!'}</strong>
-          <span>{lang === 'de' ? 'Pitch = ±90°: Roll- und Yaw-Achsen fallen zusammen. 1 DoF geht verloren!' : 'Pitch = ±90°: Roll and Yaw axes align. 1 DoF is lost!'}</span>
+          <div class="alert-title-row">
+            <strong>{lang === 'de' ? 'Gimbal Lock (Singularität) erreicht!' : 'Gimbal Lock (Singularity) Reached!'}</strong>
+            <span class="alert-badge">Pitch θ = ±90°</span>
+          </div>
+          <span class="alert-desc">
+            {lang === 'de'
+              ? 'Roboterarm-Beispiel: Mittelgelenk steht bei 90° senkrecht nach oben. Die Drehung am Kopf (Roll um x) fällt exakt mit der Basis (Yaw um z) zusammen! Drehung am Kopf bewirkt dasselbe wie Drehung an der Basis.'
+              : 'Robot Arm Analogy: Middle joint stands vertically at 90°. Head rotation (Roll about x) aligns identically with Base rotation (Yaw about z)! Turning the head produces the exact same motion as turning the base.'}
+          </span>
+          <div class="alert-action-strip">
+            <button type="button" class="btn-alert-action" id="btn-gimbal-cancel-test">
+              🔄 {lang === 'de' ? 'Test: Basis +30°, Kopf -30° (Tool bleibt starr!)' : 'Test: Base +30°, Head -30° (Tool stays rigid!)'}
+            </button>
+            <button type="button" class="btn-alert-action btn-alert-secondary" id="btn-gimbal-reset-pitch">
+              ↺ {lang === 'de' ? 'Pitch auf 0° senken' : 'Lower Pitch to 0°'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -126,6 +144,7 @@ const { lang = 'en' } = Astro.props;
           <span class="preset-label">{lang === 'de' ? 'Presets:' : 'Presets:'}</span>
           <button type="button" class="btn-preset" id="preset-rot-zero">Zero (Identity)</button>
           <button type="button" class="btn-preset" id="preset-rot-gimbal">Pitch 90° (Gimbal Lock)</button>
+          <button type="button" class="btn-preset btn-preset-highlight" id="preset-rot-gimbal-arm">🦾 {lang === 'de' ? 'Gimbal Arm Demo' : 'Gimbal Arm Demo'}</button>
           <button type="button" class="btn-preset" id="preset-rot-x90">X +90°</button>
           <button type="button" class="btn-preset" id="preset-rot-z90">Z +90°</button>
         </div>
@@ -251,7 +270,7 @@ const { lang = 'en' } = Astro.props;
           <div class="model-buttons">
             <button type="button" class="btn-model active" data-model="ar4">Annin AR4 (6-DoF)</button>
             <button type="button" class="btn-model" data-model="planar2r">2R Planar (2-DoF)</button>
-            <button type="button" class="btn-model" data-model="spatial3r">3R Spatial (3-DoF)</button>
+            <button type="button" class="btn-model" data-model="spatial3r">{lang === 'de' ? '3R Gimbal-Arm (Singularität)' : '3R Gimbal Arm (Singularity)'}</button>
           </div>
         </div>
 
@@ -265,6 +284,8 @@ const { lang = 'en' } = Astro.props;
           <span class="preset-label">{lang === 'de' ? 'Posen:' : 'Poses:'}</span>
           <button type="button" class="btn-preset" id="preset-arm-home">Home Pose (M)</button>
           <button type="button" class="btn-preset" id="preset-arm-down">Lecture 3: Pointing Down</button>
+          <button type="button" class="btn-preset btn-preset-highlight" id="preset-arm-gimbal-lock">⚡ {lang === 'de' ? 'Gimbal Lock (J2 = 90° senkrecht)' : 'Gimbal Lock (J2 = 90° upright)'}</button>
+          <button type="button" class="btn-preset" id="preset-arm-cancel-test">🔄 {lang === 'de' ? 'Anti-Drehung (J1 +45°, J3 -45°)' : 'Anti-Rotation (J1 +45°, J3 -45°)'}</button>
           <button type="button" class="btn-preset" id="preset-arm-reach">Reach Limit</button>
         </div>
 
@@ -543,21 +564,28 @@ const { lang = 'en' } = Astro.props;
     color: #fff;
   }
 
+  .btn-canvas-action.active-toggle {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: #38bdf8;
+    color: #38bdf8;
+  }
+
   /* Gimbal Lock Alert */
   .gimbal-lock-alert {
     position: absolute;
     top: 3.25rem;
     left: 0.75rem;
     right: 0.75rem;
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.25);
     border: 1px solid #ef4444;
     border-radius: 0.5rem;
-    padding: 0.6rem 0.85rem;
+    padding: 0.65rem 0.85rem;
     display: flex;
-    gap: 0.6rem;
-    align-items: center;
+    gap: 0.65rem;
+    align-items: flex-start;
     backdrop-filter: blur(8px);
     animation: pulse-red 2s infinite;
+    z-index: 10;
   }
 
   @keyframes pulse-red {
@@ -566,7 +594,8 @@ const { lang = 'en' } = Astro.props;
   }
 
   .gimbal-lock-alert .alert-icon {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
+    margin-top: 0.1rem;
   }
 
   .gimbal-lock-alert .alert-text {
@@ -574,7 +603,77 @@ const { lang = 'en' } = Astro.props;
     color: #fecaca;
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .gimbal-lock-alert .alert-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .gimbal-lock-alert .alert-badge {
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  .gimbal-lock-alert .alert-desc {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #fee2e2;
+  }
+
+  .gimbal-lock-alert .alert-action-strip {
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-alert-action {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+    padding: 0.25rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.725rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-alert-action:hover {
+    background: #ffffff;
+    color: #991b1b;
+  }
+
+  .btn-alert-secondary {
+    background: transparent;
+    border-color: rgba(254, 202, 202, 0.45);
+    color: #fecaca;
+  }
+
+  .btn-alert-secondary:hover {
+    background: rgba(239, 68, 68, 0.4);
+    color: #fff;
+  }
+
+  .btn-preset-highlight {
+    background: rgba(245, 158, 11, 0.18) !important;
+    border-color: #fbbf24 !important;
+    color: #fbbf24 !important;
+    font-weight: 600;
+  }
+
+  .btn-preset-highlight:hover {
+    background: #fbbf24 !important;
+    color: #0f172a !important;
   }
 
   /* Control Panel */
@@ -1187,6 +1286,9 @@ const { lang = 'en' } = Astro.props;
   document.addEventListener('DOMContentLoaded', () => {
     initRmiVisualizer();
   });
+  document.addEventListener('astro:page-load', () => {
+    initRmiVisualizer();
+  });
 
   function initRmiVisualizer() {
     const canvas = document.getElementById('rmi-viewport-canvas');
@@ -1212,6 +1314,7 @@ const { lang = 'en' } = Astro.props;
     let currentModel = 'ar4'; // 'ar4' | 'planar2r' | 'spatial3r'
     let showGrid = true;
     let showScrews = false;
+    let showArmInRotation = true; // 3-Joint Arm illustrative model in Tab 1
 
     // 3D Camera Orbit State
     let cameraAzimuth = 45 * (Math.PI / 180);
@@ -1273,18 +1376,18 @@ const { lang = 'en' } = Astro.props;
         ]
       },
       spatial3r: {
-        name: '3R Spatial Arm (3-DoF)',
+        name: '3R Gimbal Arm (Z-Y-X Singularity)',
         dof: 3,
         joints: [
-          { name: 'J1 (Base Swivel)', axis: [0, 0, 1], min: -180, max: 180, q: [0, 0, 0] },
-          { name: 'J2 (Shoulder)',    axis: [0, 1, 0], min: -90,  max: 90,  q: [0, 0, 120] },
-          { name: 'J3 (Elbow)',       axis: [0, 1, 0], min: -120, max: 120, q: [180, 0, 120] }
+          { name: 'J1 (Basis um z / Yaw)',   axis: [0, 0, 1], min: -180, max: 180, q: [0, 0, 0] },
+          { name: 'J2 (Mitte um y / Pitch)', axis: [0, 1, 0], min: -90,  max: 90,  q: [0, 0, 80] },
+          { name: 'J3 (Kopf um x / Roll)',   axis: [1, 0, 0], min: -180, max: 180, q: [135, 0, 80] }
         ],
-        l1: 120, l2: 180, l3: 140,
+        l1: 80, l2: 135,
         homePoseM: [
-          [1, 0, 0, 320],
+          [1, 0, 0, 135],
           [0, 1, 0, 0],
-          [0, 0, 1, 120],
+          [0, 0, 1, 80],
           [0, 0, 0, 1]
         ]
       }
@@ -1712,11 +1815,15 @@ const { lang = 'en' } = Astro.props;
         R = computeRotationMatrix(rollDeg, pitchDeg, yawDeg, rotOrder);
       }
 
-      // Draw Rotated Body Frame {b}
-      drawCoordinateFrame(ctx, R, [0, 0, 0], ox, oy, 110, false);
-
-      // Draw Orbit Rings to show current rotation angles
-      drawRotationRings(ctx, R, ox, oy);
+      if (showArmInRotation) {
+        // Draw 3-Joint 2-Link Robotic Arm demonstrating Euler angles & Gimbal Lock
+        draw3JointGimbalArm(ctx, yawDeg, pitchDeg, rollDeg, ox, oy, 0.9, true);
+      } else {
+        // Draw Rotated Body Frame {b}
+        drawCoordinateFrame(ctx, R, [0, 0, 0], ox, oy, 110, false);
+        // Draw Orbit Rings to show current rotation angles
+        drawRotationRings(ctx, R, ox, oy);
+      }
 
       // Update UI Matrix Display
       updateRotationMatrixHUD(R);
@@ -1749,6 +1856,243 @@ const { lang = 'en' } = Astro.props;
         else ctx.lineTo(pt.px, pt.py);
       }
       ctx.stroke();
+      ctx.restore();
+    }
+
+    // -------------------------------------------------------------
+    // 3-JOINT GIMBAL ROBOT ARM: HIGH-FIDELITY 3D VISUALIZER
+    // Kinematic Model: 2 Links, 3 Revolute Joints (Z-Y-X / Yaw-Pitch-Roll)
+    // -------------------------------------------------------------
+    function draw3JointGimbalArm(ctx, yDeg, pDeg, rDeg, ox, oy, scale = 0.9, isTab1 = true) {
+      const yRad = degToRad(yDeg);
+      const pRad = degToRad(pDeg);
+      const rRad = degToRad(rDeg);
+
+      const L1 = 75;  // Height of Link 1 (Base turret)
+      const L2 = 135; // Length of Link 2 (Upper arm / forearm)
+
+      const pBase = [0, 0, 0];
+      const pJ2 = [0, 0, L1];
+
+      // Arm tip position:
+      // At Pitch = 0°: extends horizontally along X (dx = L2, dz = 0)
+      // At Pitch = 90°: tilts vertically straight up along Z (dx = 0, dz = L2)
+      const armX = Math.cos(pRad) * L2;
+      const armZ = Math.sin(pRad) * L2;
+      const tipX = Math.cos(yRad) * armX;
+      const tipY = Math.sin(yRad) * armX;
+      const tipZ = L1 + armZ;
+      const pTip = [tipX, tipY, tipZ];
+
+      // Exact tip orientation matrix R = Rz(yaw) * Ry(pitch) * Rx(roll)
+      const Ry_pitch = [
+        [Math.cos(pRad), 0, -Math.sin(pRad)],
+        [0, 1, 0],
+        [Math.sin(pRad), 0, Math.cos(pRad)]
+      ];
+      const Rz = [
+        [Math.cos(yRad), -Math.sin(yRad), 0],
+        [Math.sin(yRad), Math.cos(yRad), 0],
+        [0, 0, 1]
+      ];
+      const Rx = [
+        [1, 0, 0],
+        [0, Math.cos(rRad), -Math.sin(rRad)],
+        [0, Math.sin(rRad), Math.cos(rRad)]
+      ];
+      const R_tip = mult3x3(Rz, mult3x3(Ry_pitch, Rx));
+
+      // 1. Draw Base Mount Ring on Ground Grid
+      drawBaseRing(ctx, ox, oy, 28 * scale, '#1e293b', '#64748b');
+
+      // 2. Draw Link 1 (Base Turret Column)
+      drawArmSegment(ctx, pBase, pJ2, ox, oy, scale, '#2563eb', 13 * scale);
+
+      // 3. Draw Yaw indicator ring at base
+      drawYawIndicator(ctx, yRad, ox, oy, 32 * scale);
+
+      // 4. Draw Joint 2 (Middle Shoulder/Elbow Pivot Cylinder)
+      drawJointCylinder(ctx, pJ2, yRad, ox, oy, scale, '#0284c7');
+
+      // 5. Draw Link 2 (Forearm)
+      drawArmSegment(ctx, pJ2, pTip, ox, oy, scale, '#38bdf8', 10 * scale);
+
+      // 6. Draw Gripper Tool & Frame at Head
+      drawGripperTool(ctx, pTip, R_tip, ox, oy, scale);
+      drawCoordinateFrame(ctx, R_tip, pTip.map(v => v * scale), ox, oy, 48 * scale, false);
+
+      // 7. Check Gimbal Lock Singularity Condition (Pitch near ±90°)
+      const isGimbal = Math.abs(Math.abs(pDeg) - 90) < 1.5;
+      if (isGimbal) {
+        drawGimbalLockSingularityBeams(ctx, pBase, pJ2, pTip, ox, oy, scale, yDeg, rDeg);
+      }
+
+      return { pTip, R_tip, isGimbal };
+    }
+
+    function drawBaseRing(ctx, ox, oy, radius, fill, stroke) {
+      ctx.save();
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const steps = 36;
+      for (let i = 0; i <= steps; i++) {
+        const a = (i / steps) * Math.PI * 2;
+        const pt = project3D(Math.cos(a) * radius, Math.sin(a) * radius, 0, ox, oy);
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawYawIndicator(ctx, yRad, ox, oy, radius) {
+      ctx.save();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      const steps = Math.max(8, Math.abs(Math.round(yRad * 16)));
+      for (let i = 0; i <= steps; i++) {
+        const a = (i / steps) * yRad;
+        const pt = project3D(Math.cos(a) * radius, Math.sin(a) * radius, 3, ox, oy);
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawJointCylinder(ctx, pos, yRad, ox, oy, scale, color) {
+      const pinHalfLen = 14;
+      const pinAx = [-Math.sin(yRad) * pinHalfLen, Math.cos(yRad) * pinHalfLen, 0];
+      const p1 = [(pos[0] - pinAx[0]) * scale, (pos[1] - pinAx[1]) * scale, pos[2] * scale];
+      const p2 = [(pos[0] + pinAx[0]) * scale, (pos[1] + pinAx[1]) * scale, pos[2] * scale];
+
+      const pt1 = project3D(p1[0], p1[1], p1[2], ox, oy);
+      const pt2 = project3D(p2[0], p2[1], p2[2], ox, oy);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 8 * scale;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(pt1.px, pt1.py);
+      ctx.lineTo(pt2.px, pt2.py);
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.beginPath();
+      ctx.arc(pt1.px, pt1.py, 3.5 * scale, 0, Math.PI * 2);
+      ctx.arc(pt2.px, pt2.py, 3.5 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawGripperTool(ctx, pos, R, ox, oy, scale) {
+      ctx.save();
+      const hubPt = project3D(pos[0] * scale, pos[1] * scale, pos[2] * scale, ox, oy);
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.arc(hubPt.px, hubPt.py, 5.5 * scale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Tool base bracket along body Y: [-9, +9]
+      const spread = 9;
+      const reach = 20;
+
+      const f1Tip = multMatVec3(R, [reach, -spread, 0]);
+      const f2Tip = multMatVec3(R, [reach, spread, 0]);
+      const f1Base = multMatVec3(R, [3, -spread, 0]);
+      const f2Base = multMatVec3(R, [3, spread, 0]);
+
+      const ptTip1 = project3D((pos[0] + f1Tip[0]) * scale, (pos[1] + f1Tip[1]) * scale, (pos[2] + f1Tip[2]) * scale, ox, oy);
+      const ptTip2 = project3D((pos[0] + f2Tip[0]) * scale, (pos[1] + f2Tip[1]) * scale, (pos[2] + f2Tip[2]) * scale, ox, oy);
+      const ptBase1 = project3D((pos[0] + f1Base[0]) * scale, (pos[1] + f1Base[1]) * scale, (pos[2] + f1Base[2]) * scale, ox, oy);
+      const ptBase2 = project3D((pos[0] + f2Base[0]) * scale, (pos[1] + f2Base[1]) * scale, (pos[2] + f2Base[2]) * scale, ox, oy);
+
+      // Crossbar
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 3.5 * scale;
+      ctx.beginPath();
+      ctx.moveTo(ptBase1.px, ptBase1.py);
+      ctx.lineTo(ptBase2.px, ptBase2.py);
+      ctx.stroke();
+
+      // Left Finger
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.8 * scale;
+      ctx.beginPath();
+      ctx.moveTo(ptBase1.px, ptBase1.py);
+      ctx.lineTo(ptTip1.px, ptTip1.py);
+      ctx.stroke();
+
+      // Right Finger
+      ctx.beginPath();
+      ctx.moveTo(ptBase2.px, ptBase2.py);
+      ctx.lineTo(ptTip2.px, ptTip2.py);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawGimbalLockSingularityBeams(ctx, pBase, pJ2, pTip, ox, oy, scale, yDeg, rDeg) {
+      ctx.save();
+
+      // Glowing vertical line through (0, 0, z)
+      const pBottom = project3D(0, 0, -30 * scale, ox, oy);
+      const pTop = project3D(0, 0, (pTip[2] + 45) * scale, ox, oy);
+
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 4]);
+      ctx.shadowColor = '#ef4444';
+      ctx.shadowBlur = 12;
+
+      ctx.beginPath();
+      ctx.moveTo(pBottom.px, pBottom.py);
+      ctx.lineTo(pTop.px, pTop.py);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      // Concentric rotation rings around vertical axis at base and head
+      const drawRing = (zHeight, color, label) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const r = 26 * scale;
+        const steps = 32;
+        for (let i = 0; i <= steps; i++) {
+          const a = (i / steps) * Math.PI * 2;
+          const pt = project3D(Math.cos(a) * r, Math.sin(a) * r, zHeight * scale, ox, oy);
+          if (i === 0) ctx.moveTo(pt.px, pt.py);
+          else ctx.lineTo(pt.px, pt.py);
+        }
+        ctx.stroke();
+
+        const tagPt = project3D(r * 1.15, 0, zHeight * scale, ox, oy);
+        ctx.fillStyle = color;
+        ctx.font = 'bold 11px system-ui, sans-serif';
+        ctx.fillText(label, tagPt.px + 4, tagPt.py);
+      };
+
+      drawRing(25, '#38bdf8', 'J1: Basis um z');
+      drawRing(pTip[2], '#f43f5e', 'J3: Kopf (x ≡ z)');
+
+      // Top Alert Tag
+      ctx.fillStyle = '#fee2e2';
+      ctx.font = 'bold 11px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('⚡ ACHSEN FALLEN ZUSAMMEN (GIMBAL LOCK)', pTop.px, pTop.py - 12);
+      ctx.font = '10px monospace';
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText(`Netto-Drehung = Yaw (${yDeg}°) + Roll (${rDeg}°) = ${(yDeg + rDeg).toFixed(1)}°`, pTop.px, pTop.py - 1);
+      ctx.textAlign = 'start';
+
       ctx.restore();
     }
 
@@ -1915,36 +2259,28 @@ const { lang = 'en' } = Astro.props;
     }
 
     function renderSpatial3R(ctx, ox, oy) {
-      const th = armAngles.spatial3r.map(degToRad);
-      const l1 = 120;
-      const l2 = 180;
-      const l3 = 140;
-      const scale = 0.55;
+      const angles = armAngles.spatial3r;
+      const res = draw3JointGimbalArm(ctx, angles[0], angles[1], angles[2], ox, oy, 0.95, false);
 
-      const p0 = [0, 0, 0];
-      const p1 = [0, 0, l1];
-      const r_arm = l2 * Math.cos(th[1]);
-      const z2 = l1 + l2 * Math.sin(th[1]);
-      const x2 = r_arm * Math.cos(th[0]);
-      const y2 = r_arm * Math.sin(th[0]);
-
-      const r_tip = r_arm + l3 * Math.cos(th[1] + th[2]);
-      const z3 = z2 + l3 * Math.sin(th[1] + th[2]);
-      const x3 = r_tip * Math.cos(th[0]);
-      const y3 = r_tip * Math.sin(th[0]);
-
-      drawArmSegment(ctx, p0, p1, ox, oy, scale, '#475569', 12);
-      drawArmSegment(ctx, p1, [x2, y2, z2], ox, oy, scale, '#3b82f6', 10);
-      drawArmSegment(ctx, [x2, y2, z2], [x3, y3, z3], ox, oy, scale, '#0ea5e9', 8);
+      const pTip = res.pTip;
+      const R_tip = res.R_tip;
 
       const T = [
-        [1, 0, 0, x3],
-        [0, 1, 0, y3],
-        [0, 0, 1, z3],
+        [R_tip[0][0], R_tip[0][1], R_tip[0][2], pTip[0]],
+        [R_tip[1][0], R_tip[1][1], R_tip[1][2], pTip[1]],
+        [R_tip[2][0], R_tip[2][1], R_tip[2][2], pTip[2]],
         [0, 0, 0, 1]
       ];
-      drawCoordinateFrame(ctx, eye3(), [x3*scale, y3*scale, z3*scale], ox, oy, 35, false);
       update4x4HUD(T);
+
+      const dofEl = document.getElementById('ee-dof-val');
+      if (dofEl) {
+        if (res.isGimbal) {
+          dofEl.innerHTML = `<span style="color:#ef4444;font-weight:bold;">⚠️ GIMBAL LOCK: J1 ≡ J3 (Rang(J)=2, 1 DoF verloren!)</span>`;
+        } else {
+          dofEl.textContent = 'm = 3(4 - 1 - 3) + 3 = 3 DoF (Voll agil)';
+        }
+      }
     }
 
     function drawArmSegment(ctx, pA, pB, ox, oy, scale, color, width) {
@@ -2185,7 +2521,25 @@ const { lang = 'en' } = Astro.props;
     });
     document.getElementById('preset-rot-gimbal')?.addEventListener('click', () => {
       activeCustomMatrix = null;
+      showArmInRotation = true;
+      document.getElementById('btn-toggle-arm-model')?.classList.add('active-toggle');
       sRoll.value = 30; sPitch.value = 90; sYaw.value = 45; syncRotationSliders();
+    });
+    document.getElementById('preset-rot-gimbal-arm')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
+      showArmInRotation = true;
+      document.getElementById('btn-toggle-arm-model')?.classList.add('active-toggle');
+      sRoll.value = 45; sPitch.value = 90; sYaw.value = 30; syncRotationSliders();
+    });
+    document.getElementById('btn-gimbal-cancel-test')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
+      showArmInRotation = true;
+      document.getElementById('btn-toggle-arm-model')?.classList.add('active-toggle');
+      sRoll.value = -30; sPitch.value = 90; sYaw.value = 30; syncRotationSliders();
+    });
+    document.getElementById('btn-gimbal-reset-pitch')?.addEventListener('click', () => {
+      activeCustomMatrix = null;
+      sPitch.value = 0; syncRotationSliders();
     });
     document.getElementById('preset-rot-x90')?.addEventListener('click', () => {
       activeCustomMatrix = null;
@@ -2320,6 +2674,12 @@ const { lang = 'en' } = Astro.props;
       render();
     });
 
+    document.getElementById('btn-toggle-arm-model')?.addEventListener('click', (e) => {
+      showArmInRotation = !showArmInRotation;
+      e.target.classList.toggle('active-toggle', showArmInRotation);
+      render();
+    });
+
     document.getElementById('btn-toggle-screws')?.addEventListener('click', (e) => {
       showScrews = !showScrews;
       e.target.style.background = showScrews ? 'rgba(56, 189, 248, 0.3)' : '';
@@ -2392,6 +2752,24 @@ const { lang = 'en' } = Astro.props;
       render();
     });
 
+    document.getElementById('preset-arm-gimbal-lock')?.addEventListener('click', () => {
+      if (currentModel === 'spatial3r') {
+        armAngles.spatial3r = [30, 90, 45];
+      } else if (currentModel === 'ar4') {
+        armAngles.ar4 = [0, 30, -30, 45, 0, -45];
+      }
+      populateJointSliders();
+      render();
+    });
+
+    document.getElementById('preset-arm-cancel-test')?.addEventListener('click', () => {
+      if (currentModel === 'spatial3r') {
+        armAngles.spatial3r = [45, 90, -45];
+      }
+      populateJointSliders();
+      render();
+    });
+
     document.getElementById('preset-arm-reach')?.addEventListener('click', () => {
       if (currentModel === 'ar4') {
         armAngles.ar4 = [0, 0, 0, 0, 0, 0];
@@ -2401,6 +2779,29 @@ const { lang = 'en' } = Astro.props;
       populateJointSliders();
       render();
     });
+
+    // Global Interactive Bridge
+    window.showRmiGimbalArmDemo = function() {
+      // 1. Switch to Tab 1 (Rotation)
+      const tabRot = document.querySelector('.vis-tab[data-tab="rotation"]');
+      if (tabRot) tabRot.click();
+
+      // 2. Ensure Arm Demo Model is active
+      showArmInRotation = true;
+      document.getElementById('btn-toggle-arm-model')?.classList.add('active-toggle');
+
+      // 3. Set Euler angles: Pitch 90° (arm vertically upright), Base 30°, Head 45°
+      activeCustomMatrix = null;
+      if (sPitch) sPitch.value = 90;
+      if (sYaw) sYaw.value = 30;
+      if (sRoll) sRoll.value = 45;
+      syncRotationSliders();
+
+      // 4. Reset camera angle to best showcase upright arm
+      cameraAzimuth = 35 * (Math.PI / 180);
+      cameraElevation = 18 * (Math.PI / 180);
+      render();
+    };
 
     // Matrix Lab Inputs
     ['lab-wx', 'lab-wy', 'lab-wz'].forEach(id => {

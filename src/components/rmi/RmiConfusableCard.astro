@@ -104,7 +104,59 @@ const { pair, lang = 'en' } = Astro.props;
       </div>
     </div>
   </div>
+
+  {pair.id === 'gimbal-lock-vs-quaternions' && (
+    <div class="gimbal-arm-spotlight">
+      <div class="spotlight-header">
+        <span class="spotlight-badge">🦾 {lang === 'de' ? 'Das anschauliche Roboterarm-Beispiel' : 'The Intuitive Robot Arm Analogy'}</span>
+        <button type="button" class="btn-jump-visualizer" id="btn-jump-gimbal-arm">
+          🕹️ {lang === 'de' ? 'Im 3D-Studio ansehen & ausprobieren' : 'Experience Live in 3D Kinematics Studio'}
+        </button>
+      </div>
+      <p class="spotlight-quote">
+        {lang === 'de' 
+          ? '„Ein Roboterarm mit 2 Armen/Gliedern und 3 Gelenken: Der erste dreht um die z-Achse (Basis), der zweite um die y-Achse (Mittelgelenk) und der letzte um die x-Achse (Kopf). Wenn das Mittelgelenk 90° macht, zeigt der Arm senkrecht nach oben, woraus folgt: Die Drehung am Kopf hat dieselbe Auswirkung wie die Drehung an der Basis!“'
+          : '“A robotic arm with 2 links and 3 joints: first rotates around the z-axis (base), second around the y-axis (middle joint), and last around the x-axis (head). When the middle joint tilts to 90°, the arm points straight up: turning the head produces the exact same rotation as turning the base!”'}
+      </p>
+      <div class="spotlight-steps">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <span class="step-text"><strong>{lang === 'de' ? 'Basis (z-Achse):' : 'Base (z-axis):'}</strong> {lang === 'de' ? 'Dreht den gesamten Arm horizontal um die Hochachse (Yaw).' : 'Rotates the entire arm horizontally (Yaw).'}</span>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <span class="step-text"><strong>{lang === 'de' ? 'Mittelgelenk (y-Achse = 90°):' : 'Middle Joint (y-axis = 90°):'}</strong> {lang === 'de' ? 'Kippt den Arm kerzengerade senkrecht in den Himmel.' : 'Pitches the forearm vertically straight up.'}</span>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <span class="step-text"><strong>{lang === 'de' ? 'Kopf (x-Achse ≡ z-Achse):' : 'Head (x-axis ≡ z-axis):'}</strong> {lang === 'de' ? 'Die Drehachse am Kopf steht nun ebenfalls exakt senkrecht — dieselbe Auswirkung wie die Basis!' : 'The head axis now points vertically up as well — identical effect to the base!'}</span>
+        </div>
+      </div>
+    </div>
+  )}
 </div>
+
+<script>
+  function setupConfusableJumpButtons() {
+    document.getElementById('btn-jump-gimbal-arm')?.addEventListener('click', () => {
+      // Switch study dashboard to kinematics if available
+      const navBtn = document.querySelector('[data-mode="kinematics"]');
+      if (navBtn) {
+        navBtn.click();
+      }
+      if (typeof window !== 'undefined' && window.showRmiGimbalArmDemo) {
+        window.showRmiGimbalArmDemo();
+      }
+      const vis = document.getElementById('rmi-visualizer-root');
+      if (vis) {
+        vis.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', setupConfusableJumpButtons);
+  document.addEventListener('astro:page-load', setupConfusableJumpButtons);
+</script>
 
 <style>
   .rmi-confusable-card {
@@ -441,5 +493,131 @@ const { pair, lang = 'en' } = Astro.props;
 
   :global([data-theme='light']) .case-explanation {
     color: #475569;
+  }
+
+  /* Robotic Arm Gimbal Lock Spotlight */
+  .gimbal-arm-spotlight {
+    margin-top: 0.5rem;
+    background: radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.12), transparent 45%),
+                rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 12px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+  }
+
+  :global([data-theme='light']) .gimbal-arm-spotlight {
+    background: #fffbeb;
+    border-color: rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+  }
+
+  .spotlight-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .spotlight-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  :global([data-theme='light']) .spotlight-badge {
+    color: #d97706;
+  }
+
+  .btn-jump-visualizer {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-jump-visualizer:hover {
+    background: #38bdf8;
+    color: #0b1120;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .spotlight-quote {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #fef3c7;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.65rem 0.85rem;
+    border-left: 3px solid #fbbf24;
+    border-radius: 0 6px 6px 0;
+    margin: 0;
+    font-style: italic;
+  }
+
+  :global([data-theme='light']) .spotlight-quote {
+    color: #78350f;
+    background: rgba(254, 243, 199, 0.5);
+  }
+
+  .spotlight-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.65rem;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+  }
+
+  :global([data-theme='light']) .step-item {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .step-num {
+    background: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 0.75rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  :global([data-theme='light']) .step-num {
+    background: #fde68a;
+    color: #b45309;
+  }
+
+  .step-text {
+    font-size: 0.775rem;
+    line-height: 1.4;
+    color: #e2e8f0;
+  }
+
+  :global([data-theme='light']) .step-text {
+    color: #334155;
   }
 </style>

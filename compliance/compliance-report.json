@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-29T11:30:14.239Z",
+  "timestamp": "2026-10-31T16:17:54.941Z",
   "passed": true,
   "warnings": [],
   "errors": [],
@@ -9,7 +9,7 @@
     "unmappedCount": 0,
     "totalDependencies": 360,
     "pendingPublishersCount": 1,
-    "executionTimeMs": 25
+    "executionTimeMs": 18
   },
   "scores": {
     "totalScore": 100,

@@ -580,14 +580,14 @@ export const RMI_CONFUSABLE_PAIRS: RmiConfusablePair[] = [
       term: 'Euler Angles / Roll-Pitch-Yaw',
       concept: 'Minimal 3-Parameter Representation',
       formula: 'R = \\mathrm{Rot}(\\hat{z}, \\psi) \\mathrm{Rot}(\\hat{y}, \\theta) \\mathrm{Rot}(\\hat{x}, \\phi)',
-      description: 'Compact 3 numbers (roll, pitch, yaw). Intuitive for human interfaces ("tilt 20 deg forward").',
+      description: 'Compact 3 numbers (roll, pitch, yaw). Anschauliches Roboterarm-Beispiel: 2 Armglieder mit 3 Gelenken (Basis um z, Mitte um y, Kopf um x).',
       correctCase: {
         math: '\\text{Only suitable for GUI display and visualization}',
         explanation: 'When displaying arm telemetry to operators on a dashboard, Roll-Pitch-Yaw angles are human-readable.'
       },
       pitfallCase: {
         math: '\\text{Pitch } \\theta = \\pm 90^\\circ \\implies \\text{\\textbf{Gimbal Lock}}',
-        warning: 'At pitch +/-90 deg, roll and yaw axes coincide! One DoF is lost; atan2(0,0) fails; tiny motion requires infinite angular jumps.'
+        warning: 'Macht das Mittelgelenk 90°, zeigt der Arm senkrecht nach oben! Die x-Drehachse am Kopf fällt exakt mit der z-Drehachse der Basis zusammen. Eine Drehung am Kopf hat dieselbe Auswirkung wie eine Drehung an der Basis — 1 DoF geht verloren!'
       }
     },
     right: {
@@ -794,7 +794,7 @@ export const RMI_QUIZ_PRACTICE_ITEMS: RmiQuizItem[] = [
       { id: 'd', text: 'When all three angles are identical' }
     ],
     correctOptionId: 'b',
-    explanation: 'When pitch theta = +/- 90 degrees, cos(theta) = 0. The rotation matrix collapses such that only (phi - psi) appears. The roll axis x_b coincides with the yaw axis z_s, losing one degree of freedom and making atan2(0,0) undefined.',
+    explanation: 'When pitch theta = +/- 90 degrees, cos(theta) = 0. The rotation matrix collapses such that only (phi - psi) appears. The roll axis x_b coincides with the yaw axis z_s, losing one degree of freedom and making atan2(0,0) undefined. Anschauliches Roboterarm-Beispiel: Bei einem 3-Gelenk-Arm (Basis um z, Mitte um y, Kopf um x) steht bei Pitch 90° der Arm kerzengerade senkrecht nach oben — die Kopf-Drehung fällt exakt auf dieselbe vertikale Raumachse wie die Basis-Drehung!',
     distractorBreakdown: [
       { optionId: 'a', whyWrong: 'Roll = 0 is a completely regular orientation with no singularity.' },
       { optionId: 'c', whyWrong: 'Yaw = 180 is well-defined and has non-zero cosine.' },

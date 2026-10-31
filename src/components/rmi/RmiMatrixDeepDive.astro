@@ -22,6 +22,7 @@ const f3_cube = renderFormula(String.raw`[\hat{\omega}]^3 = -[\hat{\omega}]`);
 const f4 = renderFormula(String.raw`e^{[\hat{\omega}]\theta} = I + \sin\theta [\hat{\omega}] + (1 - \cos\theta) [\hat{\omega}]^2 \in SO(3)`, true);
 const f5 = renderFormula(String.raw`T = \begin{bmatrix} R & p \\ \mathbf{0}^T & 1 \end{bmatrix} \implies T^{-1} = \begin{bmatrix} R^T & -R^T p \\ \mathbf{0}^T & 1 \end{bmatrix}`, true);
 const f6 = renderFormula(String.raw`m = 6(N - 1 - J) + \sum_{i=1}^J f_i \quad (\text{Spatial 3D})`, true);
+const f7 = renderFormula(String.raw`R = R_z(\psi) R_y(90^\circ) R_x(\phi) = R_z(\psi + \phi) R_y(90^\circ)`, true);
 ---
 
 <div class="rmi-matrix-deepdive not-content">
@@ -169,8 +170,50 @@ const f6 = renderFormula(String.raw`m = 6(N - 1 - J) + \sum_{i=1}^J f_i \quad (\
           : 'N = number of links (including base), J = number of joints, f_i = degrees of freedom of joint i. For the 6-axis AR4: N=7, J=6, f_i=1 ⟹ m = 6(7 - 1 - 6) + 6 = 6 DoF!'}
       </p>
     </div>
+
+    <!-- Card 7: Gimbal Lock & Robot Arm Analogy -->
+    <div class="matrix-card card-gimbal-spotlight">
+      <div class="card-icon-pill icon-red">⚠️ {lang === 'de' ? 'Konzept 7' : 'Concept 7'}</div>
+      <h4 class="card-title">{lang === 'de' ? 'Gimbal Lock & Das Roboterarm-Prinzip' : 'Gimbal Lock & The Robot Arm Principle'}</h4>
+      <p class="card-text">
+        {lang === 'de'
+          ? 'Warum das Flugzeug-Beispiel oft verwirrt, aber der Roboterarm sofort einleuchtet: Betrachte einen Roboterarm mit 2 Gliedern und 3 Drehgelenken (Basis dreht um z, Mitte kippt um y, Kopf dreht um x).'
+          : 'Why airplane analogies confuse, but robot arms make it crystal-clear: Consider a robotic arm with 2 links and 3 revolute joints (Base rotates around z, Middle tilts around y, Head rolls around x).'}
+      </p>
+
+      <div class="matrix-formula-box accent-red-border" set:html={f7} />
+
+      <div class="callout-tip tip-red">
+        <strong>💡 {lang === 'de' ? 'Die anschauliche Kinematik:' : 'The Intuitive Kinematics:'}</strong>
+        <span>
+          {lang === 'de'
+            ? 'Macht das Mittelgelenk 90°, zeigt der Arm kerzengerade senkrecht nach oben. Die Drehachse am Kopf fällt exakt mit der z-Drehachse an der Basis zusammen! Ob du an der Basis oder am Kopf drehst: Beide drehen um exakt dieselbe vertikale Raumachse. 1 Rotations-DoF geht verloren!'
+            : 'When the middle joint tilts to 90°, the arm stands vertically upright. The rotation axis of the head aligns identically with the base z-axis! Turning either joint produces the exact same motion around the vertical axis. 1 DoF is lost!'}
+        </span>
+      </div>
+
+      <button type="button" class="btn-deepdive-demo" id="btn-deepdive-gimbal-demo">
+        🕹️ {lang === 'de' ? 'Im 3D-Kinematik-Studio ansehen & testen' : 'Test in 3D Kinematics Studio'}
+      </button>
+    </div>
   </div>
 </div>
+
+<script>
+  function setupDeepDiveButtons() {
+    document.getElementById('btn-deepdive-gimbal-demo')?.addEventListener('click', () => {
+      const navBtn = document.querySelector('[data-mode="kinematics"]');
+      if (navBtn) navBtn.click();
+      if (typeof window !== 'undefined' && window.showRmiGimbalArmDemo) {
+        window.showRmiGimbalArmDemo();
+      }
+      const vis = document.getElementById('rmi-visualizer-root');
+      if (vis) vis.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', setupDeepDiveButtons);
+  document.addEventListener('astro:page-load', setupDeepDiveButtons);
+</script>
 
 <style>
   .rmi-matrix-deepdive {
@@ -248,6 +291,49 @@ const f6 = renderFormula(String.raw`m = 6(N - 1 - J) + \sum_{i=1}^J f_i \quad (\
   .icon-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
   .icon-cyan { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
   .icon-pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+  .icon-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+  .card-gimbal-spotlight {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: radial-gradient(circle at 90% 10%, rgba(239, 68, 68, 0.08), transparent 40%), #161b22;
+  }
+
+  .card-gimbal-spotlight:hover {
+    border-color: #ef4444;
+  }
+
+  .accent-red-border {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.05);
+    color: #fca5a5;
+  }
+
+  .tip-red {
+    background: rgba(239, 68, 68, 0.08);
+    border-left: 3px solid #ef4444;
+    color: #fecaca;
+  }
+
+  .btn-deepdive-demo {
+    margin-top: auto;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid #fbbf24;
+    color: #fbbf24;
+    padding: 0.45rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: flex-start;
+  }
+
+  .btn-deepdive-demo:hover {
+    background: #fbbf24;
+    color: #0b1120;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    transform: translateY(-1px);
+  }
 
   .card-title {
     font-size: 1.05rem;
