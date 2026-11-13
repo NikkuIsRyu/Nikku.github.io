@@ -29,6 +29,13 @@ export default defineConfig({
 			title: 'Nikku | Academic Vault & Portfolio',
 			head: [
 				{
+					tag: 'meta',
+					attrs: {
+						name: 'google-site-verification',
+						content: 'dY33SKpCdgDZZy2TzhXmT1kAcfsr2pguvURDv-gagMo',
+					},
+				},
+				{
 					tag: 'script',
 					attrs: {
 						defer: true,
