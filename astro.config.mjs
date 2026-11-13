@@ -82,6 +82,7 @@ export default defineConfig({
 							],
 						},
 						{ label: 'Chinesisch & Audio-Dialoge', slug: 'lectures/languages/chinese' },
+						{ label: 'Deutsch üben (ドイツ語練習)', link: '/deutsch/' },
 					],
 				},
 			],
