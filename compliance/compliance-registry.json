@@ -310,14 +310,15 @@
         "public/uni-og-bg-mobile.jpg",
         "public/uni-og-bg.jpg",
         "public/og-image.jpg",
-        "public/home/*.webp"
+        "public/home/*.webp",
+        "public/*-bg*.webp"
       ],
       "publisher": "original_artwork",
       "status": "CLEARED_ORIGINAL",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Custom pixel art backgrounds created for the digital garden theme. Includes the social share image (og-image.jpg) and homepage thumbnails (public/home/), derived from these backgrounds."
+      "notes": "Custom pixel art backgrounds created for the digital garden theme. Includes the social share image (og-image.jpg) and homepage thumbnails (public/home/), derived from these backgrounds. WebP copies (public/*-bg*.webp) are what the site loads; the JPGs are kept as masters."
     },
     {
       "id": "character_avatars",

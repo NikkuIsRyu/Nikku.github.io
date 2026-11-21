@@ -25,16 +25,16 @@
      --pbg-m    portrait/mobile crop (optional; falls back to --pbg)
    ======================================================== */
 
-html[data-has-hero]                                   { --pbg: url('/sakura-bg.jpg'); }
-html[data-page-bg="desk"],        body:has(.page-bg-desk)        { --pbg: url('/desk-bg.jpg');        --pbg-pos: center center; }
-html[data-page-bg="audimax"],     body:has(.page-bg-audimax)     { --pbg: url('/audimax-bg.jpg');     --pbg-pos: center bottom; }
-html[data-page-bg="japanese"],    body:has(.page-bg-japanese)    { --pbg: url('/japanese-bg.jpg');    --pbg-m: url('/japanese-bg-mobile.jpg'); }
-html[data-page-bg="uni-og"],      body:has(.page-bg-uni-og)      { --pbg: url('/uni-og-bg.jpg');      --pbg-m: url('/uni-og-bg-mobile.jpg'); }
-html[data-page-bg="cs-lab"],      body:has(.page-bg-cs-lab)      { --pbg: url('/cs-lab-bg.jpg');      --pbg-m: url('/cs-lab-bg-mobile.jpg'); }
-html[data-page-bg="core-cs"],     body:has(.page-bg-core-cs)     { --pbg: url('/core-cs-bg.jpg');     --pbg-m: url('/core-cs-bg-mobile.jpg'); }
-html[data-page-bg="chinese"],     body:has(.page-bg-chinese)     { --pbg: url('/chinese-bg.jpg');     --pbg-m: url('/chinese-bg-mobile.jpg'); }
-html[data-page-bg="rmi-anatomy"], body:has(.page-bg-rmi-anatomy) { --pbg: url('/rmi-anatomy-bg.jpg'); --pbg-m: url('/rmi-anatomy-bg-mobile.jpg'); }
-html[data-page-bg="ml"],          body:has(.page-bg-ml)          { --pbg: url('/ml-bg.jpg');          --pbg-m: url('/ml-bg-mobile.jpg'); }
+html[data-has-hero]                                   { --pbg: url('/sakura-bg.webp'); }
+html[data-page-bg="desk"],        body:has(.page-bg-desk)        { --pbg: url('/desk-bg.webp');        --pbg-pos: center center; }
+html[data-page-bg="audimax"],     body:has(.page-bg-audimax)     { --pbg: url('/audimax-bg.webp');     --pbg-pos: center bottom; }
+html[data-page-bg="japanese"],    body:has(.page-bg-japanese)    { --pbg: url('/japanese-bg.webp');    --pbg-m: url('/japanese-bg-mobile.webp'); }
+html[data-page-bg="uni-og"],      body:has(.page-bg-uni-og)      { --pbg: url('/uni-og-bg.webp');      --pbg-m: url('/uni-og-bg-mobile.webp'); }
+html[data-page-bg="cs-lab"],      body:has(.page-bg-cs-lab)      { --pbg: url('/cs-lab-bg.webp');      --pbg-m: url('/cs-lab-bg-mobile.webp'); }
+html[data-page-bg="core-cs"],     body:has(.page-bg-core-cs)     { --pbg: url('/core-cs-bg.webp');     --pbg-m: url('/core-cs-bg-mobile.webp'); }
+html[data-page-bg="chinese"],     body:has(.page-bg-chinese)     { --pbg: url('/chinese-bg.webp');     --pbg-m: url('/chinese-bg-mobile.webp'); }
+html[data-page-bg="rmi-anatomy"], body:has(.page-bg-rmi-anatomy) { --pbg: url('/rmi-anatomy-bg.webp'); --pbg-m: url('/rmi-anatomy-bg-mobile.webp'); }
+html[data-page-bg="ml"],          body:has(.page-bg-ml)          { --pbg: url('/ml-bg.webp');          --pbg-m: url('/ml-bg-mobile.webp'); }
 
 html[data-has-hero] body,
 html[data-page-bg] body,
@@ -106,20 +106,20 @@ html[data-page-bg="heidelberg"] body::after {
 
 /* Zone 1 & Zone 4: Audimax (Default initial state) */
 .heidelberg-bg-layer.bg-audimax {
-  background-image: url('/audimax-bg.jpg');
+  background-image: url('/audimax-bg.webp');
   background-position: center bottom;
   opacity: 0.28;
 }
 
 /* Zone 2: Uni-OG */
 .heidelberg-bg-layer.bg-uni-og {
-  background-image: url('/uni-og-bg.jpg');
+  background-image: url('/uni-og-bg.webp');
   background-position: right bottom;
 }
 
 /* Zone 3: Café Park */
 .heidelberg-bg-layer.bg-cafe-park {
-  background-image: url('/cafe-park-bg.jpg');
+  background-image: url('/cafe-park-bg.webp');
   background-position: right bottom;
 }
 
@@ -163,14 +163,14 @@ html[data-heidelberg-bg="cafe-park"] .heidelberg-bg-layer.bg-cafe-park {
 
   .heidelberg-bg-layer.bg-uni-og {
     background-color: #242b3e;
-    background-image: url('/uni-og-bg-mobile.jpg');
+    background-image: url('/uni-og-bg-mobile.webp');
     background-size: 100% auto;
     background-position: center bottom;
   }
 
   .heidelberg-bg-layer.bg-cafe-park {
     background-color: #242b3e;
-    background-image: url('/cafe-park-bg.jpg');
+    background-image: url('/cafe-park-bg.webp');
     background-size: cover;
     background-position: center center;
   }
