@@ -1,19 +1,19 @@
 # 🛡️ Website Legal & Licensing Compliance Report
 
-**Benchmark Version**: `v1.3.0`  
-**Audit Date**: 2026-10-31  
-**Benchmark Score**: **100 / 100** (Grade **A+**)  
+**Benchmark Version**: `v1.4.0`  
+**Audit Date**: 2026-11-21  
+**Benchmark Score**: **99 / 100** (Grade **A+**)  
 **Status**: ✅ **CLEARED FOR PUBLIC SHARING**  
 
 ## 📊 Benchmark Summary
 
 | Benchmark Dimension | Target Standard | Measured Score | Status |
 | :--- | :--- | :--- | :--- |
-| **Asset Inventory Coverage** | 100% of website files registered | **100%** (146/146) | ✅ Pass |
+| **Asset Inventory Coverage** | 100% of website files registered | **100%** (188/188) | ✅ Pass |
 | **Pending Rights Gating** | 100% WIP gating on un-cleared rights | **100%** (No public download leaks) | ✅ Pass |
 | **University IP Compliance** | Zero unconsented professor slide links | **100%** (Self-authored notes only) | ✅ Pass |
 | **NPM Dependency Licenses** | 100% permissive open-source licenses | **100%** (360 packages) | ✅ Pass |
-| **Publisher Workflow Health** | Timely follow-ups & documented fallbacks | **100%** (Active monitoring) | ✅ Pass |
+| **Publisher Workflow Health** | Timely follow-ups & documented fallbacks | **90%** (Active monitoring) | ⚠️ Advisory |
 
 ## 📬 Monitored Publishers & Permissions Tracker
 
@@ -21,7 +21,7 @@
 
 * **Items Under Review**: Chinese dialogue texts (Lektionen 2–10) from course textbook, Dual-Audio 107 MB Anki Spaced-Repetition Deck, Web audio playback streams synthesized via Voice-ML v4 (GPT-SoVITS v2ProPlus, 18 dialogues)
 * **Contact Email**: `info@schmetterling-verlag.de`
-* **Initial Inquiry Sent**: 2026-10-18 (**13 days ago**)
+* **Initial Inquiry Sent**: 2026-10-18 (**34 days ago**)
 * **Current Safeguards on Site**:
   - ✅ Direct raw audio downloads are withheld and blocked
   - ✅ Anki deck download is gated behind WIP (wip={true}) in DriveAsset

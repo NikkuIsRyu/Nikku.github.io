@@ -1,0 +1,100 @@
+---
+title: Portfolio & Studienarchiv
+description: Informatikstudent an der Universität Heidelberg. Machine-Learning-Projekte, interaktive Vorlesungsnotizen und Sprachlern-Tools von Nick Blassmann (Nikku).
+template: splash
+hero:
+  title: Hi, ich bin Nikku.
+  tagline: Ich studiere Informatik an der Universität Heidelberg, baue Machine-Learning-Tools und interaktive Lern-Apps und sammle hier meine Kurse als Notizen, mit denen man wirklich etwas ausprobieren kann.
+  image:
+    html: '<img class="hero-sprite" src="/characters/standalones/nick_fullbody_standing_front.png" alt="Pixel-Art: Nikku im grauen T-Shirt und Jeans" width="328" height="902" />'
+  actions:
+    - text: Meine Projekte
+      link: '#projekte'
+      icon: right-arrow
+    - text: Zum Studienarchiv
+      link: /de/lectures/
+      icon: open-book
+      variant: minimal
+    - text: Lebenslauf
+      link: /de/cv/
+      icon: document
+      variant: minimal
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import ProjectCard from '../../../components/home/ProjectCard.astro';
+import NowList from '../../../components/home/NowList.astro';
+
+## Aktuell
+
+<NowList
+	items={[
+		{ label: 'Studium', text: 'B.Sc. Informatik, 5. Semester, Universität Heidelberg' },
+		{ label: 'Forschung', text: 'Sicherheit von KI-Agenten: MCP-Vertrauensgrenzen und Prompt Injection' },
+		{ label: 'Als Nächstes', text: 'Bachelorarbeit in KI / ML (Sommer 2027)' },
+		{ label: 'Danach', text: 'Auslandssemester in Ostasien (Winter 2027/28)' },
+	]}
+/>
+
+## Projekte
+
+<div class="home-projects not-content">
+	<ProjectCard
+		title="Voice ML: Mandarin TTS"
+		image="/home/voice-ml.webp"
+		imageAlt="Pixel-Art: chinesische Skyline bei Nacht, Nikku liest unter einem Kirschbaum"
+		pixel
+		tags={['PyTorch', 'GPT-SoVITS', 'Whisper', 'CUDA']}
+		links={[
+			{ label: 'Dialoge anhören', href: '/de/lectures/languages/chinese/' },
+			{ label: 'GitHub', href: 'https://github.com/NikkuIsRyu/Voice_ML_Project' },
+		]}
+	>
+		Ein feinjustiertes GPT-SoVITS-Stimmmodell, das natürliches Mandarin erzeugt. Es spricht alle 18 Dialoge mit mehreren Sprechern in meinen Chinesisch-Notizen.
+	</ProjectCard>
+	<ProjectCard
+		title="Robotik-Kinematik-Labor"
+		image="/home/rmi.webp"
+		imageAlt="Pixel-Art: Robotiklabor, Nikku und ein Freund arbeiten an einem Roboterarm neben einem Anatomiemodell"
+		pixel
+		tags={['TypeScript', 'Canvas', 'Lineare Algebra']}
+		links={[{ label: 'Ausprobieren', href: '/de/lectures/ai-and-med/rmi-anatomy/' }]}
+	>
+		Interaktive Visualisierungen für Rotationen, Starrkörper-Transformationen und die Vorwärtskinematik des AR4-Roboterarms, gebaut für die Vorlesung Robotics &amp; Machine Intelligence.
+	</ProjectCard>
+	<ProjectCard
+		title="Deutsch üben"
+		image="/home/deutsch.webp"
+		imageAlt="App-Icon von Deutsch üben"
+		tags={['PWA', 'Offline', 'Astro']}
+		links={[
+			{ label: 'App öffnen', href: '/deutsch/' },
+			{ label: 'GitHub', href: 'https://github.com/NikkuIsRyu/deutsch-for-japanese' },
+		]}
+	>
+		Eine Deutsch-Übungs-App für Japanischsprachige (A2–B2): Lückentexte, Satzbau, Grammatik und Wiederholung in Abständen. Installierbar und offline nutzbar.
+	</ProjectCard>
+</div>
+
+## Studienarchiv
+
+Interaktive Notizen aus meinen Kursen. Die meisten Seiten gibt es auf Englisch und Deutsch.
+
+<CardGrid>
+	<LinkCard title="Einführung in die Numerik" description="Gleitkomma-Sandbox, Auslöschungs-Labor, Kirchhoff-Rohrnetz-Simulator und ein C++-Code-Labor." href="/de/lectures/core-cs/numerik/" />
+	<LinkCard title="Robotics & Machine Intelligence" description="Kinematik-Visualisierungen, Formelkarten, typische Fallstricke und ein 60-Sekunden-Quiz." href="/de/lectures/ai-and-med/rmi-anatomy/" />
+	<LinkCard title="Chinesisch (Mandarin)" description="18 Audio-Dialoge, 579 Vokabeln mit Strichfolge, Grammatik-Explorer und Töne." href="/de/lectures/languages/chinese/" />
+	<LinkCard title="Japanisch B1.1" description="Grammatik-Explorer, verwechselbare Paare und Vokabelsammlung zu Minna no Nihongo II." href="/de/lectures/languages/japanese/b1-1/" />
+	<LinkCard title="Seminar: Agentic AI" description="Lese-Tracker, Paper-Notizen und ein Glossar zum Seminar über agentische KI." href="/de/lectures/ai-and-med/seminar-agentic-ai/" />
+	<LinkCard title="Alle Kurse" description="Theoretische Informatik, Datenbanken, Algorithmen, IT-Sicherheit und mehr." href="/de/lectures/" />
+</CardGrid>
+
+## Heidelberg
+
+<div class="home-teaser not-content">
+	<img class="pixel" src="/home/heidelberg.webp" alt="Pixel-Art: Nikku und Freunde am Lagerfeuer unter einem Kirschbaum bei Nacht" width="640" height="360" loading="lazy" decoding="async" />
+	<div>
+		<p>Wie es wirklich ist, in Deutschlands ältester Universitätsstadt Informatik zu studieren: die zwei Campusse, die Lernorte, die Cafés und die Traditionen.</p>
+		<p><a href="/de/heidelberg/">Zum Heidelberg-Guide →</a></p>
+	</div>
+</div>

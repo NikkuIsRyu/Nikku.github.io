@@ -1,23 +1,25 @@
 {
-  "timestamp": "2026-10-31T16:17:54.941Z",
+  "timestamp": "2026-11-21T13:21:21.499Z",
   "passed": true,
-  "warnings": [],
+  "warnings": [
+    "Follow-up due for Schmetterling Verlag Stuttgart (34 days elapsed)"
+  ],
   "errors": [],
   "metrics": {
-    "totalFilesAudited": 146,
-    "registeredFiles": 146,
+    "totalFilesAudited": 188,
+    "registeredFiles": 188,
     "unmappedCount": 0,
     "totalDependencies": 360,
     "pendingPublishersCount": 1,
-    "executionTimeMs": 18
+    "executionTimeMs": 29
   },
   "scores": {
-    "totalScore": 100,
+    "totalScore": 99,
     "grade": "A+",
     "coverageScore": 100,
     "gatingScore": 100,
     "universityIpScore": 100,
     "packageLicenseScore": 100,
-    "followUpScore": 100
+    "followUpScore": 90
   }
 }

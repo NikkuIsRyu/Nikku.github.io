@@ -1,8 +1,6 @@
 ---
-title: "Chinesisch (Mandarin) & Audio-Dialoge"
-description: "Mandarin-Chinesisch Grundkurs: Interaktive Multi-Speaker Audio-Dialoge (Voice-ML v4), Tonal System, Satzstrukturen und 107 MB Anki-Deck."
-sidebar:
-  order: 2
+title: "Chinese (Mandarin) & Audio Dialogues"
+description: "Mandarin Chinese Foundation Course: Interactive Multi-Speaker Audio Dialogues (Voice-ML v4), Tonal System, Systematic Grammar Compendium (Lessons 2–10), and 128 MB Anki Deck."
 head:
   - tag: script
     content: document.documentElement.dataset.pageBg = 'chinese'; document.documentElement.classList.add('notranslate');
@@ -27,481 +25,487 @@ import { CHINESE_DIALOGUES } from '../../../../../data/chineseDialogues';
 
 <div class="page-bg-chinese" aria-hidden="true"></div>
 
-# Chinesisch (Mandarin) <Badge text="Grundkurs & Audio-Dialoge" variant="success" size="medium" />
+<Badge text="Foundation Course & Audio Dialogues" variant="success" size="medium" />
 
-<LanguageSwitch current="de" enHref="/lectures/languages/chinese/en/" deHref="/lectures/languages/chinese/" />
+<LanguageSwitch />
 
-Interaktives Studien- und Nachschlagewerk für den Grundkurs **Chinesisch (Mandarin Sprachpraxis I & II)** am Zentralen Sprachlabor (*ZSL / heiSKILLS*) der Universität Heidelberg.
+Interactive study and reference vault for the foundation course **Chinese (Mandarin Language Practice I & II)** at the Central Language Laboratory (*ZSL / heiSKILLS*) of Heidelberg University.
 
-Diese Seite bündelt die vollständigen, mit **Voice-ML v4 (GPT-SoVITS v2ProPlus)** synthetisierten **Multi-Speaker Audio-Dialoge** (Lektionen 2 bis 10 mit allen 18 Dialogen), den systematischen **Grammatik-Explorer** mit 26 Kernregeln und Confusables, fundierte Übersichten zum **Tonsystem (Tone Sandhi)** sowie den Zugang zum **Dual-Audio Anki-Deck**.
+This page bundles the complete **multi-speaker audio dialogues** (Lessons 2 to 10 with all 18 dialogues) synthesized with **Voice-ML v4 (GPT-SoVITS v2ProPlus)**, the systematic **Grammar Explorer** with 26 core rules and confusable pairs, comprehensive guides to the **tonal system (Tone Sandhi)**, and direct access to the **dual-audio Anki deck**.
 
 ---
 
-## 🧭 Lernmodus-Dashboard (Study Mode Navigation)
+## 🧭 Study Mode Navigation Dashboard
 
-Klicke auf eine der Kacheln unten, um den **sichtbaren Inhalt der Seite live umzuschalten**:
+Click any of the cards below to **dynamically switch visible page sections live**:
 
-<ChineseStudyDashboard activeSection="dialogues" lang="de" />
+<ChineseStudyDashboard activeSection="dialogues" lang="en" />
 
 ---
 
 {/* ========================================================================= */}
-{/* SECTION 1: AUDIO-DIALOGE (DEFAULT ACTIVE) */}
+{/* SECTION 1: AUDIO DIALOGUES (DEFAULT ACTIVE) */}
 {/* ========================================================================= */}
 <div id="study-mode-dialogues" class="study-mode-section" data-study-mode="dialogues">
 
-## 🎙️ Modus: Multi-Speaker Audio-Dialoge <Badge text="Voice-ML v4 • 18 Dialoge" variant="success" />
+## 🎙️ Mode: Multi-Speaker Audio Dialogues <Badge text="Voice-ML v4 • 18 Dialogues" variant="success" />
 
-In diesem Modus konzentriert sich die Seite vollständig auf die **gesprochene Sprache**, Satz-Shadowing und das Hörverständnis. Statt zwischen Grammatikregeln hin und her zu scrollen, stehen die interaktiven Player im Zentrum:
+In this mode, the page focuses completely on **spoken speech, shadowing, and listening comprehension**. Rather than scrolling past long grammar explanations, interactive dialogue players take center stage:
 
-* **Dual-Speed Bereitstellung**: 1.0x Standardtempo & 0.75x verlangsamtes Lerntempo.
-* **Satz-Looping (Shadowing)**: Wiederhole jeden beliebigen Turn in Endlosschleife, bis Intonation und Rhythmus sitzen.
-* **Live Untertitel-Tracking**: Hanzi, Pinyin und deutsche Übersetzung springen synchron zum Audio weiter.
+* **Dual-Speed Playback**: 1.0x standard tempo & 0.75x slow learning pace.
+* **Sentence Looping (Shadowing)**: Repeat any individual turn in an infinite loop to perfect intonation.
+* **Live Synchronized Tracking**: Subtitles in Hanzi, Pinyin, and English follow the audio with millisecond accuracy.
 
 ---
 
-### 🗺️ Schnellnavigation der Dialoge
+### 🗺️ Quick Navigation of Dialogues
 
-| Lektion | Thematischer Fokus & Dialoge | Audio-Sprecher |
+| Lesson | Thematic Focus & Dialogues | Audio Speakers |
 | :--- | :--- | :--- |
-| **[Lektion 2](#lektion-2--geschäftskontakte-herkunft--sprachen)** | Dialog 2.1 (Vorstellung & Singapur) & Dialog 2.2 (Sprachen & Übersetzung) | 🎙️ 2 Multi-Speaker Audios (3 Sprecher) |
-| **[Lektion 3](#lektion-3--messezentrum-kontaktdaten--adressen)** | Dialog 3.1 (Messebroschüre & Durchwahlen) & Dialog 3.2 (Studio in Chengdu) | 🎙️ 2 Multi-Speaker Audios (Festnetz / Adressen) |
-| **[Lektion 4](#lektion-4--uhrzeit-zeitzonen--kalender)** | Dialog 4.1 (Uhrzeit Zürich & Sommerzeit) & Dialog 4.2 (Datum & Kalender) | 🎙️ 2 Multi-Speaker Audios (Zeit / Kalender) |
-| **[Lektion 5](#lektion-5--büroumgebung-raumorientierung--werkstatt)** | Dialog 5.1 (Büroräume & Baupläne) & Dialog 5.2 (Weg zur Werkstatt & Kiosk) | 🎙️ 2 Multi-Speaker Audios (Orientierung / Distanzen) |
-| **[Lektion 6](#lektion-6--industriemesse-reisen--stadt-vs-land)** | Dialog 6.1 (Messe Shanghai & Herbstferien) & Dialog 6.2 (Großstadt vs. Landleben Dali) | 🎙️ 2 Multi-Speaker Audios (Termine / Lebensstil) |
-| **[Lektion 7](#lektion-7--restaurantkultur-sichuan-küche--aa-system)** | Dialog 7.1 (Sichuan-Küche & Menüwahl) & Dialog 7.2 (Rechnung & AA-Kostenteilung) | 🎙️ 2 Multi-Speaker Audios (Speisen / Bezahlkultur) |
-| **[Lektion 8](#lektion-8--einkauf-elektronikzubehör--preisverhandlung)** | Dialog 8.1 (Elektronik & Quittung) & Dialog 8.2 (Kleidung & Feilschen) | 🎙️ 2 Multi-Speaker Audios (Kaufhaus / Rabatte) |
-| **[Lektion 9](#lektion-9--termine-essenseinladungen--abendprogramm)** | Dialog 9.1 (Wochenendschicht & Lunch) & Dialog 9.2 (Feierabend & Kino) | 🎙️ 2 Multi-Speaker Audios (Dienstplan / Freizeit) |
-| **[Lektion 10](#lektion-10--geschäftsessen-kulinarik--vergleiche)** | Dialog 10.1 (Speisekarte & Bestellung) & Dialog 10.2 (Getränke, Toast & Rechnung) | 🎙️ 2 Multi-Speaker Audios (Kulinarik / Gastronomie) |
+| **[Lesson 2](#lesson-2--business-contacts-origins--languages)** | Dialogue 2.1 (Introductions & Singapore) & Dialogue 2.2 (Languages & Translation) | 🎙️ 2 Multi-Speaker Audios (3 Speakers) |
+| **[Lesson 3](#lesson-3--exhibition-center-contact-details--addresses)** | Dialogue 3.1 (Exhibition Brochure & Extensions) & Dialogue 3.2 (Studio in Chengdu) | 🎙️ 2 Multi-Speaker Audios (Landline / Addresses) |
+| **[Lesson 4](#lesson-4--time-time-zones--calendar)** | Dialogue 4.1 (Zurich Time & Daylight Saving) & Dialogue 4.2 (Dates & Calendar) | 🎙️ 2 Multi-Speaker Audios (Time / Calendar) |
+| **[Lesson 5](#lesson-5--office-premises-spatial-orientation--workshop)** | Dialogue 5.1 (Office Floorplans & Inspection) & Dialogue 5.2 (Way to Workshop & Kiosk) | 🎙️ 2 Multi-Speaker Audios (Directions / Distances) |
+| **[Lesson 6](#lesson-6--industrial-fair-travel--city-vs-countryside)** | Dialogue 6.1 (Shanghai Fair & Autumn Vacation) & Dialogue 6.2 (Metropolis vs. Rural Dali) | 🎙️ 2 Multi-Speaker Audios (Schedules / Lifestyle) |
+| **[Lesson 7](#lesson-7--restaurant-culture-sichuan-cuisine--aa-system)** | Dialogue 7.1 (Sichuan Cuisine & Menu Ordering) & Dialogue 7.2 (Bill & AA Cost-Sharing) | 🎙️ 2 Multi-Speaker Audios (Dishes / Dining Customs) |
+| **[Lesson 8](#lesson-8--shopping-electronics--price-bargaining)** | Dialogue 8.1 (Electronics Store & Receipt) & Dialogue 8.2 (Clothing Market & Bargaining) | 🎙️ 2 Multi-Speaker Audios (Shopping / Discounts) |
+| **[Lesson 9](#lesson-9--schedules-lunch-invitations--evening-plans)** | Dialogue 9.1 (Weekend Shift & Lunch) & Dialogue 9.2 (After-Hours & Cinema) | 🎙️ 2 Multi-Speaker Audios (Appointments / Leisure) |
+| **[Lesson 10](#lesson-10--business-dinner-dining-culture--comparisons)** | Dialogue 10.1 (Menu Advice & Ordering) & Dialogue 10.2 (Drinks, Toast & Bill) | 🎙️ 2 Multi-Speaker Audios (Dining / Banquets) |
 
 ---
 
-## 🎙️ Lektion 2 — Geschäftskontakte, Herkunft & Sprachen
+## Lesson 2 — Business Contacts, Origins & Languages
 
-In Lektion 2 stehen das förmliche Vorstellen von Geschäftspartnern, das Erfragen von Herkunft und Heimatstadt sowie multilinguale Kompetenzen im Mittelpunkt.
+Lesson 2 introduces the fundamental sentence order of Mandarin, the tonal system, question formation with `吗` (*ma*), and the core verbs `是` (*shì* – to be), `叫` (*jiào* – to be called), and `在` (*zài* – to be located at).
 
-:::note[Grammatische Schlüsselmuster]
-* **Vorstellen mit `介绍`**: `各位好，我来给二位介绍一下，这位是……` (*...zhè wèi shì...* – „Guten Tag allerseits, ich möchte Ihnen beiden einander vorstellen: Das ist...“)
-* **Familienname vs. Vorname**: `我姓陈，名字叫陈明。` (*Wǒ xìng Chén, míngzi jiào Chén Míng.* – „Mein Nachname ist Chen, mein Name ist Chen Ming.“)
-* **Höflichkeitsform**: `幸会，认识您非常高兴！` (*Xìnghuì, rènshi nín fēicháng gāoxìng!* – „Sehr erfreut, Sie kennenzulernen!“)
-* **Herkunftsangabe mit `出生在`**: `陈先生出生在新加坡，现在在上海工作。` (*Chén xiānsheng chūshēng zài Xīnjiāpō...* – „Herr Chen ist in Singapur geboren...“)
-* **Auswahlsatz mit `还是` (*háishi*)**: `她是日本人还是中国人呢？` („Ist sie Japanerin oder Chinesin?“)
-* **Rückbestätigungspartikel `吧` (*ba*)**: `从上周起已经开始实行夏令时了吧？` („...oder? / nicht wahr?“)
+:::note[Key Grammatical Patterns]
+* **S-V-O Word Order**: `陈先生现在在上海工作。` ("Mr. Chen is currently working in Shanghai.")
+* **Particle Questions with `吗`**: Turns a statement into a Yes/No question without inverting word order: `您是韦伯先生吗？` ("Are you Mr. Weber?")
+* **Question Pronouns**: `您贵姓？` ("What is your honorable surname?"), `她叫什么名字？` ("What is her name?")
+* **The Possessive Particle `的` (*de*)**: `这是我的名片。` ("This is my business card.")
 :::
 
-### Dialog 2.1: Geschäftskontakte & Herkunft
-*Drei-Personen-Gespräch*: Eine Kollegin stellt Herrn Weber von der Firma Siemens und Herrn Chen Ming einander vor. Visitenkarten werden ausgetauscht und die Herkunft aus Singapur geklärt.
+### Dialogue 2.1: Business Contacts & Origin
+Three-party dialogue: Colleague A introduces Mr. Weber (Siemens) and Mr. Chen Ming to each other. Business cards are exchanged, and Mr. Chen's Singaporean background is discussed.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[0]}
+	lang="en"
 />
 
 ---
 
-### Dialog 2.2: Sprachkenntnisse & Übersetzung
-*Zwei-Personen-Gespräch*: Zwei Kollegen sprechen über Tanaka Yahui (田中雅慧), Übersetzerin der Außenwirtschaftsabteilung mit japanischem Vater aus Tokio und chinesischer Mutter aus Peking, die Chinesisch, Deutsch und Japanisch beherrscht.
+### Dialogue 2.2: Language Skills & Translation
+Three colleagues discuss German, English, and Chinese language proficiencies, translation assignments for the Siemens delegation, and native accents.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[1]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 3 — Messezentrum, Kontaktdaten & Adressen
+## Lesson 3 — Exhibition Center, Contact Details & Addresses
 
-Lektion 3 behandelt räumliche Orientierung im Büro, das Erfragen von Festnetznummern und Durchwahlen sowie das genaue Notieren von Wohn- und Geschäftsadressen in China.
+Lesson 3 focuses on giving phone numbers (using `yāo` for 1), expressing email addresses, spatial prepositions, and searching for contact details.
 
-:::note[Grammatische Schlüsselmuster]
-* **Ortsabfrage mit `在` & `哪儿`**: `宣传册放在哪儿了？` (*...fàng zài nǎr le?* – „Wo ist die Broschüre abgelegt?“)
-* **Lokativ-Kombinationen**: `在电脑旁边的那本文件夹里` („In dem Aktenordner neben dem Computer“).
-* **Festnetz vs. Durchwahl**: `座机号码` (*zuòjī hàomǎ* – Festnetznummer) vs. `分机号` (*fēnjī hào* – Durchwahlnummer).
-* **Ziffer `一` bei Rufnummern**: In Telefonnummern wird die Ziffer `1` als **`yāo`** (幺) gesprochen, um akustische Verwechslungen mit `7` (*qī*) zu verhindern!
-* **A-not-A Fragemuster**: `他的私人手机号码你存了没有？` (*...nǐ cún le méiyǒu?* – „Hast du seine Handynummer abgespeichert [oder nicht]?“)
-* **Adressfolge vom Großen zum Kleinen**: *Stadt $\to$ Bezirk $\to$ Straße $\to$ Hausnummer*: `青羊区春熙路六十八号` (*Qīngyáng Qū Chūnxī Lù liùshíbā hào* – Qingyang-Bezirk, Chunxi-Straße Nr. 68).
+:::note[Key Grammatical Patterns]
+* **Pronunciation of 1 in numbers**: The numeral `一` (*yī*) is spoken as **`yāo`** in telephone numbers, room numbers, and extensions to prevent acoustic confusion with `七` (*qī* – 7).
+* **Existential Location with `在` (*zài*)**: `宣传册在桌子上。` ("The brochure is on the table.")
+* **Wh-Questions with `哪儿 / 哪里` (*nǎr / nǎli*)**: `宣传册放在哪儿了？` ("Where was the brochure placed?")
+* **Large Numbers & Quantities**: Extension numbers with `分机号是多少？` ("What is the extension number?")
 :::
 
-### Dialog 3.1: Messezentrum & Telefonnummern
-Zwei Kollegen suchen im Büro nach der Broschüre des neuen Business-Messezentrums, um die Telefonnummer der Zentrale und die Durchwahl der Marketingabteilung herauszusuchen.
+### Dialogue 3.1: Exhibition Center & Phone Numbers
+Colleagues prepare exhibition materials for the Shanghai Fair, search for the brochure, and note down phone and extension numbers.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[2]}
+	lang="en"
 />
 
 ---
 
-### Dialog 3.2: Kontaktdaten & Studio in Chengdu
-Gespräch über den ehemaligen TUM-Kommilitonen Zhou Wenqiang (Zhou Ming), der in Chengdu im Stadtbezirk Qingyang ein Beratungsstudio eröffnet hat.
+### Dialogue 3.2: Contact Details & Studio in Chengdu
+Discussion of company contact details, branch addresses, email exchanges, and Mr. Weber's photography studio in Chengdu.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[3]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 4 — Uhrzeit, Zeitzonen & Kalender
+## Lesson 4 — Time, Time Zones & Calendar
 
-Lektion 4 vertieft exakte Uhrzeitangaben, Zeitverschiebungen zwischen China (CST, UTC+8) und Zentraleuropa (Schweiz/Deutschland) sowie Kalenderabgleiche.
+Lesson 4 covers telling the time (`点`, `分`, `刻`, `半`), calendar dates (year-month-day hierarchy), weekdays, and time zone differences between Germany/Switzerland (CET/CEST) and Beijing (CST, UTC+8).
 
-:::note[Grammatische Schlüsselmuster]
-* **Uhrzeitangabe**: `点` (*diǎn* – Stunde), `刻` (*kè* – Viertelstunde, 15 Min.), `半` (*bàn* – halbe Stunde, 30 Min.).
-* **Vergleichskonstruktion mit `比`**: `北京时间比瑞士快六个小时` („Peking-Zeit ist der Schweiz sechs Stunden voraus“).
-* **Tageszeitpräfixe**: Werden *vor* die Uhrzeit gesetzt: `早晨` (*zǎochen* – früher Morgen), `上午` (*shàngwǔ* – Vormittag), `凌晨` (*língchén* – nachts/Frühstunden), `下午` (*xiàwǔ* – Nachmittag).
-* **Datumsreihenfolge**: Immer hierarchisch *Monat $\to$ Tag $\to$ Wochentag*: `五月二十六日星期日` (Sonntag, 26. Mai).
-* **Wochentage**: `周几` (*zhōu jǐ*) oder `星期几` (*xīngqī jǐ*) zur Frage nach dem Wochentag; Antworten: `周四` (Donnerstag), `周六` (Samstag), `周日` (Sonntag).
-* **Relative Zeitangaben**: `前天` (*qiántiān* – vorgestern), `昨天` (*zuótiān* – gestern), `今天` (*jīntiān* – heute), `后天` (*hòutiān* – übermorgen).
+:::note[Key Grammatical Patterns]
+* **Time from Largest to Smallest**: `二〇二六年十月二十四日下午三点一刻` (Year $\to$ Month $\to$ Day $\to$ Time of day $\to$ Hour $\to$ Minute).
+* **Time as Adverbial Modifier**: Placed **before** the main verb: `我们明天上午九点开会。` ("We hold our meeting tomorrow morning at 9:00 AM.")
+* **Time Zones**: `瑞士现在比北京慢六个小时。` ("Switzerland is currently six hours behind Beijing.")
+* **Alternative Questions with `还是` (*háishi*)**: `今天是星期二还是星期三？` ("Is today Tuesday or Wednesday?")
 :::
 
-### Dialog 4.1: Uhrzeit & Zeitzonen Zürich
-Zwei Kollegen vergleichen die aktuelle Uhrzeit in China (10:15 Uhr) mit Zürich unter Berücksichtigung der europäischen Sommerzeit (5 Stunden Differenz), um ein Online-Meeting sinnvoll zu terminieren.
+### Dialogue 4.1: Time & Zurich Time Zones
+Colleagues check local time in Shanghai vs. Zurich headquarters, discuss daylight saving time, and schedule an international conference call.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[4]}
+	lang="en"
 />
 
 ---
 
-### Dialog 4.2: Datum, Wochentag & Kalender
-Herr Abteilungsleiter Zhao und eine Kollegin ermitteln das aktuelle Datum. Ein Missverständnis klärt sich auf, als auffällt, dass der Wandkalender noch aus dem Vormonat stammt.
+### Dialogue 4.2: Date, Weekday & Calendar
+Scheduling coordination: Checking dates on the calendar, weekdays, upcoming project milestones, and flight departures.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[5]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 5 — Büroumgebung, Raumorientierung & Werkstatt
+## Lesson 5 — Office Premises, Spatial Orientation & Workshop
 
-Lektion 5 erweitert den Wortschatz um räumliche Orientierung im Büro- und Werksgelände, Richtungsangaben und Distanzen sowie die Vorbereitung geschäftlicher Betriebsbesichtigungen.
+Lesson 5 covers directional locatives (方位词: `前边`, `后边`, `左边`, `右边`, `对面`), office floorplans, building levels, and distance descriptions.
 
-:::note[Grammatische Schlüsselmuster]
-* **Lokativ-Nomen (Positionen)**: `上面` (*shàngmiàn* – oben/auf), `下边` (*xiàbian* – unten/darunter), `里边` (*lǐbian* – innen/in), `后边` (*hòubiān* – hinter), `前边` (*qiánbiān* – vor), `旁边` (*pángbiān* – neben), `中间` (*zhōngjiān* – Mitte/zwischen).
-* **Ortspräposition `在` mit Lokativ**: `在门后边的墙上` („An der Wand hinter der Tür“), `在书架第二层` („Im zweiten Fach des Bücherregals“).
-* **Entfernungsangabe mit `从...到...有多远`**: `从咱们办公楼到一号生产车间大概有多远？` („Wie weit ist es ungefähr vom Bürogebäude zur Werkstatt 1?“)
-* **Distanzangabe**: `走过去大概只有两百米，非常近。` (*...zhǐ yǒu liǎngbǎi mǐ...* – „Zu Fuß sind es nur ca. 200 Meter, sehr nah.“)
-* **Bewegungsverben mit `穿过`**: `穿过中间的小花园` (*chuānguò...* – „durch den kleinen Garten hindurchgehen“).
-* **Höfliche Gesprächsführung**: `顺便问一下` (*shùnbiàn wèn yíxià* – „Darf ich bei der Gelegenheit fragen...“), `多谢二位` („Vielen Dank euch beiden“), `辛苦大家了` („Danke für euren Einsatz!“).
+:::note[Key Grammatical Patterns]
+* **Locative Nouns**: `在 + [Noun] + [Position]` (e.g., `在电脑旁边` – next to the computer, `在二楼` – on the 2nd floor).
+* **Chinese Floor Numbering**: Ground floor is **一楼 (*yī lóu*)**! The European 1st upper floor is therefore **二楼 (*èr lóu*)** in Chinese!
+* **Existential `有` (*yǒu*) vs. Positional `在` (*zài*)**:
+  * `桌子上有一台笔记本电脑。` ("On the desk there is a laptop.")
+  * `笔记本电脑在桌子上。` ("The laptop is on the desk.")
 :::
 
-### Dialog 5.1: Büroräume & Werkstattvorbereitung
-*Drei-Personen-Gespräch*: Drei Kollegen suchen nach den Bauplänen des Bürogebäudes, prüfen Klimaanlage, Heizung und Büromöbel und bereiten sich auf den Kontrollbesuch von Manager Zhang vor.
+### Dialogue 5.1: Office Premises & Workshop Inspection
+The team reviews room plans for the new office building, searches for technical documents, and prepares an inspection of Workshop 2.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[6]}
+	lang="en"
 />
 
 ---
 
-### Dialog 5.2: Orientierung zur Produktionswerkstatt
-*Drei-Personen-Gespräch*: Die Kollegen besprechen den kurzen Fußweg zur Produktionswerkstatt 1 durch den Garten und verabreden sich zu einem kurzen Gang an die frische Luft und zum Werkskiosk.
+### Dialogue 5.2: Direction to the Production Workshop
+Colleagues walk across the industrial park, ask for directions to the production workshop, and stop by the company cafeteria.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[7]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 6 — Industriemesse, Reisen & Stadt vs. Land
+## Lesson 6 — Industrial Fair, Travel & City vs. Countryside
 
-Lektion 6 behandelt Geschäftsreisen zur Industriemesse Shanghai, Reisedauer, Jahreszeiten und Klimavorzüge sowie eine lebhafte Diskussion über das Leben in dynamischen Metropolen gegenüber der Ruhe kleinerer Städte wie Dali.
+Lesson 6 explores business travel to Shanghai, vacation planning, duration expressions (how long vs. when), modal verbs `要` (*yào*) and `想` (*xiǎng*), and comparative living preferences.
 
-:::note[Grammatische Schlüsselmuster]
-* **Zeitdauer mit `待 + Dauer`**: `咱们部门这次打算在上海待几天左右？` (*...dāi jǐ tiān...* – „Wie viele Tage plant unsere Abteilung in Shanghai zu bleiben?“)
-* **Planung & Absicht mit `打算` / `计划`**: `我们计划先在展厅待四天` („Wir planen, zunächst vier Tage in der Messehalle zu verbringen“).
-* **Kausalgefüge mit `为什么...？因为...`**: `为什么选秋天呢？因为那边的秋天景色很美...` („Warum im Herbst? Weil die Herbstlandschaft dort wunderschön ist...“).
-* **Doppelnegation / Fragemuster mit `想不想`**: `大家想不想一起去周围的南方城市看看？` („Möchtet ihr [oder nicht] umliegende Städte im Süden besuchen?“)
-* **Präferenzvergleich**: `更喜欢在大城市工作，还是更向往安静的农村生活？` („Arbeitet ihr lieber in der Großstadt oder zieht ihr das Landleben vor?“)
-* **Konzessives `不过` (*búguò*)**: `不过大城市也有烦恼...` („Großstädte bringen jedoch auch Nachteile mit sich...“).
-* **Adjektivsteigerung mit `比...得多`**: `生活节奏也比东部沿海慢得多` („Das Lebenstempo ist viel langsamer als an der Ostküste“).
+:::note[Key Grammatical Patterns]
+* **Duration vs. Point of Time**: Point of time precedes the verb (`明天下午到`), duration follows the verb (`待四个星期`).
+* **Modal Verbs**: `想` (*xiǎng* – would like to) vs. `要` (*yào* – intend to / will). Both negated by **不想 (*bù xiǎng*)**!
+* **Purpose Sentences with `去` (*qù*)**: `去慕尼黑参观工业展` ("go to Munich to visit the industrial exhibition").
+* **Measure Words**: The universal measure word `个` (*ge*), except for `天` (*tiān*) and `年` (*nián*) which never take `个`!
 :::
 
-### Dialog 6.1: Industriemesse Shanghai & Reisepläne
-*Drei-Personen-Gespräch*: Drei Kollegen koordinieren die Ankunft des Projektleiters für die Industriemesse Shanghai und planen im Anschluss einen herbstlichen Ausflug nach Shaoxing und Hangzhou.
+### Dialogue 6.1: Shanghai Industrial Fair & Travel Plans
+Colleagues coordinate their participation in the Shanghai Autumn Technology Fair, hotel stays, and subsequent vacation plans in Yunnan.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[8]}
+	lang="en"
 />
 
 ---
 
-### Dialog 6.2: Großstadt-Dynamik vs. Landleben in Dali
-*Drei-Personen-Gespräch*: Angeregte Diskussion über Vor- und Nachteile zwischen Metropolen (Chancen, Verkehrsstau) und dem entschleunigten Leben im südwestchinesischen Dali.
+### Dialogue 6.2: Metropolis Dynamics vs. Countryside in Dali
+Three colleagues debate living in bustling metropolises (Shanghai, Munich) versus relaxing rural towns like Dali in Yunnan.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[9]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 7 — Restaurantkultur, Sichuan-Küche & AA-System
+## Lesson 7 — Restaurant Culture, Sichuan Cuisine & AA System
 
-Lektion 7 vermittelt authentische Speise- und Restaurantkultur in China: Bestellen von Gerichten, Nachfragen zu Schärfegraden und Zutaten sowie die gesellschaftlichen Gepflogenheiten beim Bezahlen (Einladen vs. Kostenteilung im Kollegium).
+Lesson 7 immerses into Chinese culinary culture, ordering authentic Sichuan dishes, understanding spice levels, toasting etiquette, and the AA bill-splitting convention (*AA制*).
 
-:::note[Grammatische Schlüsselmuster]
-* **Zählwörter für Speisen & Getränke**: `一份菜单` (*yí fèn càidān* – eine Speisekarte), `一壶热茶` (*yì hú rè chá* – eine Kanne heißer Tee), `三碗香米饭` (*sān wǎn xiāngmǐfàn* – drei Schalen Duftreis), `一瓶矿泉水` (*yì píng kuàngquánshuǐ* – eine Flasche Mineralwasser).
-* **Vorlieben & Unverträglichkeiten**: `你们有什么忌口的吗？` (*...jìkǒu de ma?* – „Gibt es Speisen, die ihr meidet/nicht esst?“), `我不太能吃特别辣的菜` („Ich vertrage sehr scharfes Essen nicht so gut“).
-* **Doppelkonjunktion `既...又...`**: `既解油腻，又能放松身心` („Sowohl fettneutralisierend als auch entspannend für Körper und Geist“), `既保留了传统风味，又融合了创新烹饪` („Bewahrt traditionelle Aromen und verbindet moderne Kochkunst“).
-* **Ergebnis- & Richtungsanzeige mit `下来`**: `把这几道菜定下来` („Diese Gerichte jetzt festlegen/bestellen“).
-* **Bezahlkultur & Rechnung**: `买单` (*mǎidān* – zahlen), `我来请客，大家千万不要争` („Das geht auf mich, protestiert bitte gar nicht erst!“).
-* **Kostenteilung / AA-Prinzip**: `平摊餐费` (*píngtān cānfèi* – Mahlzeit gleichmäßig aufteilen) bzw. **`AA制`** (*AA-zhì* – getrennte Rechnung nach dem niederländischen Prinzip).
+:::note[Key Grammatical Patterns]
+* **Serial Verb Construction for Transport**: `坐地铁去饭店` ("take the subway to the restaurant").
+* **Directional Vectors with `往` (*wǎng*)**: `往右拐` ("turn right"), `往前走` ("go straight forward").
+* **Distance with `离` (*lí*)**: `饭店离这里不远` ("The restaurant is not far from here").
+* **AA System**: `咱们AA制吧！` ("Let's split the bill evenly / go Dutch!")
 :::
 
-### Dialog 7.1: Sichuan-Restaurant & Menübestellung
-*Drei-Personen-Gespräch*: Drei Kollegen studieren nach Feierabend die Speisekarte eines Sichuan-Restaurants und wählen Gerichte aus: Wolfsbarsch, Tomaten-Rührei, Kung-Pao-Huhn und Longjing-Tee.
+### Dialogue 7.1: Sichuan Restaurant & Ordering Dishes
+Colleagues visit a traditional Sichuan restaurant, consult the waiter on signature dishes (Kung Pao Chicken, Mapo Tofu), and adjust the spice levels.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[10]}
+	lang="en"
 />
 
 ---
 
-### Dialog 7.2: Rechnungsbegleichung & Kostenteilung (AA-System)
-*Drei-Personen-Gespräch*: Nach dem Festessen loben die Kollegen die Spezialitäten und klären die Abrechnung – die Gastgeberin möchte einladen, die Kollegen plädieren für faire Kostenteilung (AA-System).
+### Dialogue 7.2: Settling the Bill & AA Split (Go Dutch)
+After dinner, the host offers to treat the table, but her colleagues politely insist on splitting the bill equally according to the AA system.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[11]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 8 — Einkauf, Elektronikzubehör & Preisverhandlung
+## Lesson 8 — Shopping, Electronics & Price Bargaining
 
-In Lektion 8 stehen Einkaufsdialoge, Mengenangaben mit Zählwörtern, das chinesische Rabattsystem (*dǎzhé*), Verbverdoppelungen sowie das Verhandeln auf dem Abendmarkt im Mittelpunkt.
+Lesson 8 focuses on retail purchasing conversations, measure words with demonstratives, the Chinese discount system (*dǎzhé*), verb reduplication, and evening market bargaining.
 
-:::note[Grammatische Schlüsselmuster]
-* **Verbverdoppelung (`V-V` / `V-yī-V`)**: Lockert Handlungen auf und drückt unverbindliches Ausprobieren aus: `看（一）看` (mal kurz schauen), `试一下` (kurz anprobieren).
-* **Das chinesische Rabattsystem (`打 x 折` *dǎ x zhé*)**: Nennt den **verbleibenden Zahlungsanteil** in Zehnteln! `打八折` bedeutet: Man zahlt 80 %, erhält also **20 % Rabatt**! `打八五折` = 15 % Rabatt.
-* **Große Zahlen**: `百` (*bǎi* – 100), `千` (*qiān* – 1.000), `万` (*wàn* – 10.000). Die Ziffer 0 (`零` *líng*) wird bei inneren Lücken genau einmal gesprochen.
-* **Demonstrativ-Zählwort-Muster**: `这种优盘多少钱？` („Wie viel kostet diese Art von USB-Stick?“).
+:::note[Key Grammatical Patterns]
+* **Verb Reduplication (`V-V` / `V-yī-V`)**: Lightens an action into an informal or tentative trial: `看（一）看` (take a brief look), `试一下` (try it on for a second).
+* **The Chinese Discount Formula (`打 x 折` *dǎ x zhé*)**: Expresses the **remaining payment fraction** in tenths! `打八折` means the customer pays 80%, receiving a **20% discount**! `打八五折` = 15% off.
+* **Large Numbers**: `百` (*bǎi* – 100), `千` (*qiān* – 1,000), `万` (*wàn* – 10,000). The digit zero (`零` *líng*) is vocalized exactly once across internal zero intervals.
+* **Demonstrative Pattern**: `这种优盘多少钱？` ("How much is this type of USB flash drive?").
 :::
 
-### Dialog 8.1: Elektronikzubehör im Technik-Kaufhaus & Quittung
-Zwei Kollegen (A und C) besorgen vor einer Konferenz in der Elektronikabteilung bei einem Verkäufer (B) USB-Sticks, Speicherkarten, eine Handy-Aufladekarte sowie Batterien und lassen sich eine Firmenquittung (*Fāpiào*) ausstellen.
+### Dialogue 8.1: Electronics in the Department Store & Official Invoice
+Two colleagues (A and C) purchase USB drives, optical discs, a mobile phone recharge card, and camera batteries from a sales assistant (B) ahead of a conference and request an official corporate invoice (*Fāpiào*).
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[12]}
+	lang="en"
 />
 
 ---
 
-### Dialog 8.2: Kleidung, Farben & Feilschen auf dem Abendmarkt
-Zwei Kollegen (A und C) bummeln über einen Bekleidungsmarkt, lassen sich von einem Händler (B) Seidenkrawatten und ein dunkelblaues Hemd zeigen und verhandeln über Rabatte (*dǎzhé*).
+### Dialogue 8.2: Clothing, Colors & Bargaining at the Night Market
+Two colleagues (A and C) stroll through an evening apparel market, browse silk neckties and a dark blue dress shirt with a merchant (B), and negotiate discount percentages (*dǎzhé*).
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[13]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 9 — Termine, Essenseinladungen & Abendprogramm
+## Lesson 9 — Schedules, Lunch Invitations & Evening Plans
 
-Lektion 9 behandelt Dienstpläne, Schichtzeiten, Essenseinladungen am Wochenende, Kupplungssätze (Pivotsätze) mit `请` (*qǐng*) sowie die Verlaufsform mit `（正）在` (*[zhèng]zài*).
+Lesson 9 covers weekend duty rosters, shift schedules, Sunday dining invitations, pivotal (telescoped) sentences with `请` (*qǐng*), and the progressive aspect with `（正）在` (*[zhèng]zài*).
 
-:::note[Grammatische Schlüsselmuster]
-* **Kupplungssatz (兼语句 / Pivotsatz)**: `S + 请 / 让 / 要 + [Pivot-Objekt] + [Zweitprädikat]`: Das Objekt des ersten Verbs ist zugleich das handelnde Subjekt des zweiten Verbs! (`我想请你去吃午饭` – „Ich möchte dich zum Mittagessen einladen“).
-* **Verlaufsform (Progressive Aspect)**: `（正）在 + Verb`: Drückt Handlungen aus, die gerade im Moment des Sprechens ablaufen (`我正在看电影` – „Ich schaue gerade einen Film“).
-* **Kooperation**: `跟 / 和 + [Person] + 一起 + Verb` (z. B. `跟他一起去` – mit ihm zusammen hingehen).
-* **Aktionsphasen mit `上` / `下`**: `上班` (*shàng bān* – Dienst beginnen) ↔ `下班` (*xià bān* – Feierabend machen).
+:::note[Key Grammatical Patterns]
+* **Pivotal Sentences (兼语句 / Telescoped Structure)**: `S + 请 / 让 / 要 + [Pivot Object] + [Second Predicate]`: The direct object of the first verb serves simultaneously as the subject of the second action! (`我想请你去吃午饭` – "I would like to invite you to have lunch").
+* **Progressive Aspect**: `（正）在 + Verb`: Indicates an action actively unfolding at the moment of speech (`我正在看电影` – "I am currently watching a movie").
+* **Cooperation**: `跟 / 和 + [Person] + 一起 + Verb` (e.g., `跟他一起去` – go together with him).
+* **Shift Phases**: `上班` (*shàng bān* – begin work shift) ↔ `下班` (*xià bān* – finish work shift).
 :::
 
-### Dialog 9.1: Wochenendschicht & Einladung zum Sonntags-Lunch
-Sprecherin A möchte ihre beiden Kollegen (B und C) am Samstagmittag ins Sichuan-Restaurant einladen. Da Kollege B am Samstag bis mittags Dienst hat und nachmittags bereits verabredet ist, verlegen sie das Treffen auf Sonntagmittag um 12 Uhr.
+### Dialogue 9.1: Weekend Duty Shift & Sunday Lunch Invitation
+Speaker A invites colleagues B and C to a Saturday Sichuan lunch. Because colleague B has morning duty until noon and afternoon commitments, they reschedule their gathering to Sunday at 12:00 PM.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[14]}
+	lang="en"
 />
 
 ---
 
-### Dialog 9.2: Feierabendpläne & Gemeinsamer Kinobesuch
-Nach dem Chinesischkurs fragt Sprecherin A ihre beiden Kollegen (B und C), womit sie gerade beschäftigt sind, und schließt sich ihrem Kinobesuch für den neuen Jackie-Chan-Film an.
+### Dialogue 9.2: Evening Schedules & Movie Outing
+Following Chinese class, Speaker A inquires about what colleagues B and C are currently engaged with and joins them for the evening screening of the newly released Jackie Chan feature.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[15]}
+	lang="en"
 />
 
 ---
 
-## 🎙️ Lektion 10 — Geschäftsessen, Kulinarik & Vergleiche
+## Lesson 10 — Business Dinner, Dining Culture & Comparisons
 
-In Lektion 10 stehen Restaurantbesuche, die Bestellung chinesischer Spezialitäten, Potenzialkomplemente der Wahrnehmung (*kàndedǒng*), Vergleiche mit `比` (*bǐ*) sowie Trink- und Bezahlkonventionen (*gānbēi*, *mǎidān*) im Mittelpunkt.
+Lesson 10 covers restaurant hospitality, ordering Chinese culinary specialties, perceptual potential complements (*kàndedǒng*), comparative sentences with `比` (*bǐ*), and customary banqueting etiquette (*gānbēi*, *mǎidān*).
 
-:::note[Grammatische Schlüsselmuster]
-* **Vergleichssatz mit `比`**: `A + 比 + B + Adjektiv` (z. B. `这儿比那边安静` – „Hier ist es ruhiger als drüben“).
-* **Potenzialkomplement der Fähigkeit**: `Verb + 得 / 不 + 懂` (`看得懂` – lesen und verstehen können ↔ `看不懂` – nicht verstehen können).
-* **Erfahrungspartikel `过` (*guo*)**: Zeigt an, dass eine Handlung mindestens einmal in der Vergangenheit stattgefunden hat (`吃过一次` – schon einmal gegessen haben).
-* **Gastronomie-Floskeln**: `来……` zum Bestellen (`来一个宫保鸡丁` – „Bringen Sie uns ein Kung-Pao-Hühnchen“), `干杯` (*gānbēi* – „Leeren Sie das Glas! / Prost!“), `买单` (*mǎidān* – „Die Rechnung bitte!“).
+:::note[Key Grammatical Patterns]
+* **Comparative Construction with `比`**: `A + 比 + B + Adjective` (e.g., `这儿比那边安静` – "Here is quieter than over there").
+* **Potential Complement of Comprehension**: `Verb + 得 / 不 + 懂` (`看得懂` – able to read and understand ↔ `看不懂` – unable to decipher/comprehend).
+* **Experiential Aspect Particle `过` (*guo*)**: Marks that an event has occurred at least once in past experience (`吃过一次` – have eaten it once before).
+* **Hospitality Conventions**: `来……` for ordering dishes (`来一个宫保鸡丁` – "Bring us a Kung Pao chicken"), `干杯` (*gānbēi* – "Bottoms up! / Cheers!"), `买单` (*mǎidān* – "Check, please!").
 :::
 
-### Dialog 10.1: Platzwahl, Speisekarten-Beratung & Bestellung
-Zwei Kollegen (A und B) suchen sich zur Mittagszeit einen ruhigen Tisch am Fenster. Da Kollege B die handgeschriebene Spezialitätenkarte nicht vollständig lesen kann, lassen sie sich vom Kellner (C) vegetarische Gerichte, eine mild gewürzte Sauer-Scharf-Suppe und Sichuan-Dandan-Nudeln empfehlen.
+### Dialogue 10.1: Table Selection, Menu Consultation & Ordering
+Two colleagues (A and B) choose a quiet window table for lunch. Because colleague B cannot fully read the handwritten culinary board, they consult the waiter (C) for vegetarian recommendations, mild hot-and-sour soup, and Sichuan Dandan noodles.
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[16]}
+	lang="en"
 />
 
 ---
 
-### Dialog 10.2: Getränkeauswahl, Maotai-Toast & Rechnungsbegleichung
-Nach dem Essen unterhalten sich die drei Kollegen (A, B und C) über Tsingtao-Bier, Rotwein und Maotai-Schnaps, stoßen auf die Zusammenarbeit und Gesundheit an und klären die Bezahlung der Rechnung (*mǎidān*).
+### Dialogue 10.2: Beverage Pairing, Maotai Toast & Settling the Bill
+Following dinner, the three colleagues discuss Tsingtao beer, dry red wine, and premium Maotai liquor, toast to successful cooperation and good health, and settle the invoice (*mǎidān*).
 
 <DialoguePlayer
 	dialogue={CHINESE_DIALOGUES[17]}
+	lang="en"
 />
 
 </div>
 
 {/* ========================================================================= */}
-{/* SECTION 2: GRAMMATIK-EXPLORER */}
+{/* SECTION 2: GRAMMAR EXPLORER */}
 {/* ========================================================================= */}
 <div id="study-mode-grammar" class="study-mode-section" data-study-mode="grammar" style="display: none;">
 
-## 📐 Modus: Systematischer Grammatik-Explorer <Badge text="26 Regeln + Confusables" variant="success" />
+## 📐 Mode: Systematic Grammar Explorer <Badge text="26 Rules + Confusables" variant="success" />
 
-Der **Grammatik-Explorer** löst das Problem des endlosen Scrollens durch gezielte Filterung, konfigurierbare Pinyin-Sichtbarkeit und kompakte Kartendarstellung:
+The **Grammar Explorer** replaces endless scrolling with live client-side search, customizable Pinyin visibility, and responsive card layouts:
 
-* **Suchfeld (`Ctrl+K`)**: Schnelles Nachschlagen nach Regeln, Pinyin oder Hanzi (z. B. `zài`, `比`, `离`, `Modalverb`, `Fragen`).
-* **Layout-Umschalter**: Wähle zwischen **🗂️ Bento Grid** (2-spaltiges Dashboard), **📑 Akkordeon-Liste** (kompakt) und **⚖️ Confusables Spotlight**.
-* **Pinyin-Modus (Active Recall)**:
-  * **👁️ Immer sichtbar**: Standard-Lernmodus.
-  * **👆 Hover-Modus**: Pinyin ist unscharf/verborgen und erscheint erst bei Mouseover oder Tap — ideal zur Selbstüberprüfung der Hanzi-Lesekompetenz!
-  * **🙈 Verbergen**: Pures Schriftzeichentraining ohne Stützräder.
+* **Search Bar (`Ctrl+K`)**: Search rules, Hanzi, or Pinyin (e.g. `zài`, `比`, `离`, `modal verb`, `questions`).
+* **Layout Switcher**: Choose between **🗂️ Bento Grid** (2-column desktop dashboard), **📑 Accordion List** (ultra-compact), and **⚖️ Confusables Spotlight**.
+* **Pinyin Active Recall**:
+  * **👁️ Always Visible**: Standard continuous study mode.
+  * **👆 Hover Mode**: Pinyin is blurred/hidden and reveals only when hovering or tapping an example — optimal for self-testing Hanzi reading skills!
+  * **🙈 Hidden**: Complete pinyin removal for pure character immersion.
 
-<ChineseGrammarExplorer lang="de" />
+<ChineseGrammarExplorer lang="en" />
 
 ---
 
-### 🔍 Standardisierte 3-Zonen "GrammarCard" im Detail
+### 🔍 Standardized 3-Zone "GrammarCard" in Detail
 
-Leitlinie für die didaktische Grammatikarchitektur: *„Standardisiere jeden Grammatikpunkt in eine visuelle Komponente mit drei klar getrennten Zonen.“*
+Argon's design principle for grammar components: *"Standardize every grammar point into a visual component with three distinct zones."*
 
 ```mermaid
 flowchart TD
     subgraph Card["GrammarCard Component"]
-        Z1["Zone 1: Header Zone<br/>🏷️ Lektions-Badge + Titel + Monospace Formel-Pill"]
-        Z2["Zone 2: Body Zone<br/>📖 1-2 Satz Kernregel + Aufklappbare Ausnahmen (<details>)"]
-        Z3["Zone 3: Footer Zone<br/>🔤 3-Ebenen Ausrichtung: Großes Hanzi + Muted Pinyin + Übersetzung"]
+        Z1["Zone 1: Header Zone<br/>🏷️ Lesson Badge + Title + Monospace Formula Pill"]
+        Z2["Zone 2: Body Zone<br/>📖 1-2 Sentence Rule + Collapsible Nuances (<details>)"]
+        Z3["Zone 3: Footer Zone<br/>🔤 3-Layer Aligned Grid: Large Hanzi + Muted Pinyin + Translation"]
     end
     Z1 --> Z2 --> Z3
 ```
 
-Hier sind zwei isolierte Einzelkarten zur Demonstration der Zoneneinteilung:
+Here are two isolated cards demonstrating the 3-zone architecture:
 
 <CardGrid>
-  <GrammarCard rule={CHINESE_GRAMMAR_RULES[0]} lang="de" />
-  <GrammarCard rule={CHINESE_GRAMMAR_RULES[25]} lang="de" />
+  <GrammarCard rule={CHINESE_GRAMMAR_RULES[0]} lang="en" />
+  <GrammarCard rule={CHINESE_GRAMMAR_RULES[25]} lang="en" />
 </CardGrid>
 
 ---
 
-### ⚖️ Confusable-Gegenüberstellungen (Confusable Pairs)
+### ⚖️ Side-by-Side Confusable Comparisons
 
-Chinesisch-Lernende verwechseln häufig semantisch ähnliche Wörter mit unterschiedlichen syntaktischen Regeln (`二` vs. `两`, `在` vs. `有`, `想` vs. `要`, `离` vs. `从…到…`). 
+Chinese learners often confuse semantically similar expressions governed by strict syntactic conditions (`二` vs. `两`, `在` vs. `有`, `想` vs. `要`, `离` vs. `从…到…`).
 
-Hierfür bieten dedizierte 2-Spalten-Gegenüberstellungen **✅ Richtig-** und **❌ Falsch-Muster** inklusive Begründung:
+The layout provides a dedicated 2-column comparative format featuring **✅ Correct** and **❌ Incorrect** monospace examples with error explanations:
 
-<ConfusableCard pair={CONFUSABLE_PAIRS[0]} lang="de" />
+<ConfusableCard pair={CONFUSABLE_PAIRS[0]} lang="en" />
 
-<ConfusableCard pair={CONFUSABLE_PAIRS[1]} lang="de" />
+<ConfusableCard pair={CONFUSABLE_PAIRS[1]} lang="en" />
 
-<ConfusableCard pair={CONFUSABLE_PAIRS[2]} lang="de" />
+<ConfusableCard pair={CONFUSABLE_PAIRS[2]} lang="en" />
 
 ---
 
-### 📊 Vergleich der Layout-Muster (UX-Matrix)
+### 📊 Layout Pattern Comparison Matrix
 
-| Layout-Muster | Geeignet für | Visuelle Wirkung & Interaktion |
+| Layout Pattern | Best For | Visual Impact & UX Dynamics |
 | :--- | :--- | :--- |
-| **Bento Grid Cards** | Schnelles Scannen & Nachschlagen (Desktop 2–3 Spalten) | Moderner Dashboard-Look; klare Formel-Pills fangen den Blick sofort ein. |
-| **Akkordeon-Liste (`<details>`)** | Kompaktes Kompendium auf einer Seite | Maximale Übersichtlichkeit; User sieht nur Titel + Formel, bis Details aufgeklappt werden. |
-| **Confusables Spotlight** | Problemwörter & Fehlerprävention (`二/两`, `在/有`) | 2-Spalten Direktvergleich mit ✅ und ❌ Beispielen verhindert typische Fallstricke. |
-| **Hover-Pinyin Active Recall** | Vokabel- & Schriftzeichentraining | Ermöglicht Selbsttests direkt im Fließtext ohne störende Pinyin-Trainingsräder. |
+| **Bento Grid Cards** | Rapid scanning & reference on desktop | Modern dashboard feel; formula pills catch the eye immediately. |
+| **Accordion List (`<details>`)** | Fitting 25+ rules cleanly on a single page | High density; learners only see titles + formulas until expanded. |
+| **Confusables Spotlight** | Error prevention & contrastive learning (`二/两`, `在/有`) | 2-column direct contrast with ✅/❌ examples prevents chronic grammar pitfalls. |
+| **Hover-Pinyin Active Recall** | Vocabulary & reading comprehension | Enables instant self-testing without pinyin training wheels cluttering the page. |
 
 </div>
 
 {/* ========================================================================= */}
-{/* SECTION: VOKABEL-LEXIKON & ACTIVE RECALL */}
+{/* SECTION: VOCABULARY LEXICON & ACTIVE RECALL */}
 {/* ========================================================================= */}
 <div id="study-mode-vocab" class="study-mode-section" data-study-mode="vocab" style="display: none;">
 
-## 🔤 Modus: Vokabel-Lexikon & Vault <Badge text="579 Vokabeln • Lektionen 1–10" variant="note" />
+## 🔤 Mode: Vocabulary Lexicon & Vault <Badge text="579 Words • Lessons 1–10" variant="note" />
 
-Vollständiges, durchsuchbares Vokabel-Register des Kurses mit **Pinyin Active Recall** (Hover / Tap) und interaktiver **Strichfolge-Vorschau (Stroke Guide ✍️)** für Schriftzeichen:
+Complete, searchable course vocabulary registers with **Pinyin Active Recall** (Hover / Tap reveal) and interactive **Character Stroke Order Guides (Stroke Guide ✍️)**:
 
-<ChineseVocabVault lang="de" />
+<ChineseVocabVault lang="en" />
 
 </div>
 
 {/* ========================================================================= */}
-{/* SECTION 3: TONSYSTEM & TONE SANDHI */}
+{/* SECTION 3: TONAL SYSTEM & TONE SANDHI */}
 {/* ========================================================================= */}
 <div id="study-mode-tones" class="study-mode-section" data-study-mode="tones" style="display: none;">
 
-## 🇨🇳 Modus: Tonsystem & Tone Sandhi <Badge text="4 Töne + Sandhi" variant="tip" />
+## 🇨🇳 Mode: Tonal System & Tone Sandhi <Badge text="4 Tones + Sandhi" variant="tip" />
 
-Das Mandarin-Tonsystem ist das Fundament für verständliche Aussprache. In diesem fokussierten Modus werden Tonhöhenverläufe und die unverzichtbaren Sandhi-Regeln übersichtlich dargestellt:
+The Mandarin tonal system is the bedrock of acoustic intelligibility. This focused mode presents pitch contours and essential sandhi shifts cleanly:
 
-### 1. Die vier Grundtöne & der Neutralton
+### 1. The Four Basic Tones & Neutral Tone
 
-| Ton | Name | Chinesischer Name | Tonhöhenverlauf (Chao) | Symbol | Beispiel | Bedeutung |
+| Tone | English Name | Chinese Name | Contour / Pitch | 5-Level Value | Example | Meaning |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1. Ton** | Hoch-eben | 阴平 (*yīnpíng*) | **55** (durchgehend hoch) | $\bar{a}$ | `mā` (妈) | Mutter |
-| **2. Ton** | Steigend | 阳平 (*yángpíng*) | **35** (mittel nach hoch) | $\acute{a}$ | `má` (麻) | Hanf |
-| **3. Ton** | Fallend-steigend | 上声 (*shǎngshēng*) | **214** (isoliert: tief fallend, leicht ansteigend) | $\check{a}$ | `mǎ` (马) | Pferd |
-| **4. Ton** | Fallend | 去声 (*qùshēng*) | **51** (hoch nach tief, scharf abfallend) | $\grave{a}$ | `mà` (骂) | schimpfen |
-| **Neutralton** | Kurz / Tonlos | 轻声 (*qīngshēng*) | *–* (kurz, leicht, pegelt sich nach Vortontiefe) | $a$ | `ma` (吗) | Fragepartikel |
+| **1st Tone** | High Level | 阴平 (*yīnpíng*) | High, level, sustained | **55** | `mā` (妈) | mother |
+| **2nd Tone** | Rising | 阳平 (*yángpíng*) | Mid-to-high, rising | **35** | `má` (麻) | hemp |
+| **3rd Tone** | Dipping | 上声 (*shǎngshēng*) | Low dipping, slight rise | **214** (isolated) | `mǎ` (马) | horse |
+| **4th Tone** | Falling | 去声 (*qùshēng*) | High-to-low, sharply falling | **51** | `mà` (骂) | to scold |
+| **Neutral Tone** | Light / Unstressed | 轻声 (*qīngshēng*) | Short, unstressed, light | *–* | `ma` (吗) | question particle |
 
 ---
 
-### 2. Tone Sandhi: Die vier Kernregeln
+### 2. Tone Sandhi: Four Essential Change Rules
 
-:::note[Regel 1: Zwei aufeinanderfolgende 3. Töne ($3 + 3 \to 2 + 3$)]
-Treffen zwei Silben im 3. Ton aufeinander, wird die erste Silbe als **2. Ton (steigend)** gesprochen (obwohl sie im Wörterbuch und in Pinyin als 3. Ton geschrieben wird):
-* `你好` (*nǐ + hǎo*) $\to$ gesprochen als **`ní hǎo`** (35 + 214)
-* `可以` (*kě + yǐ*) $\to$ gesprochen als **`ké yǐ`** (35 + 214)
-* `手表` (*shǒu + biǎo*) $\to$ gesprochen als **`shóu biǎo`** (35 + 214)
+:::note[Rule 1: Two Consecutive 3rd Tones ($3 + 3 \to 2 + 3$)]
+When two 3rd-tone syllables meet in sequence, the first shifts to a **2nd tone (rising)**:
+* Written: `nǐ hǎo` (你好) $\to$ Spoken: **`ní hǎo`** (35 + 214)
+* Written: `kěyǐ` (可以) $\to$ Spoken: **`kéyǐ`** (35 + 214)
+* Written: `shǒubiǎo` (手表) $\to$ Spoken: **`shóubiǎo`** (35 + 214)
 :::
 
-:::note[Regel 2: Halb-dritter Ton (Half Third Tone: $214 \to 21$)]
-Folgt auf eine Silbe im 3. Ton ein 1., 2., 4. Ton oder ein Neutralton, wird der 3. Ton **nur abgesenkt ($21$)**, ohne am Ende wieder anzusteigen. Er klingt wie ein tiefer, ebener Bass-Ton:
-* `北京` (*Běijīng*): `Běi` (Ton 3) vor `jīng` (Ton 1) $\to$ tiefes $21$.
-* `很忙` (*hěnmáng*): `hěn` (Ton 3) vor `máng` (Ton 2) $\to$ tiefes $21$.
-* `好看` (*hǎokàn*): `hǎo` (Ton 3) vor `kàn` (Ton 4) $\to$ tiefes $21$.
+:::note[Rule 2: Half-Third Tone ($214 \to 21$)]
+When a 3rd tone precedes a 1st, 2nd, 4th, or neutral tone, it is pronounced as a **low dipping tone ($21$)** without the final rise. It sounds like a deep base tone:
+* `北京` (*Běijīng*): `Běi` (Tone 3) before `jīng` (Tone 1) $\to$ deep $21$.
+* `很忙` (*hěnmáng*): `hěn` (Tone 3) before `máng` (Tone 2) $\to$ deep $21$.
+* `好看` (*hǎokàn*): `hǎo` (Tone 3) before `kàn` (Tone 4) $\to$ deep $21$.
 :::
 
-:::note[Regel 3: Tonwechsel der Verneinungspartikel `不` (*bù*)]
-Die Negationspartikel `不` steht regulär im **4. Ton (*bù*)** vor dem 1., 2. und 3. Ton:
-* `不高` (*bù gāo* – nicht hoch), `不来` (*bù lái* – nicht kommen), `不好` (*bù hǎo* – nicht gut).
-* Vor einem weiteren **4. Ton** wechselt `不` in den **2. Ton (*bú*)**:
-  * `不是` $\to$ **`bú shì`** (nicht sein); `不对` $\to$ **`bú duì`** (nicht richtig); `不要` $\to$ **`bú yào`**!
+:::note[Rule 3: Tone Changes of the Negative Particle `不` (*bù*)]
+`不` is inherently a **4th tone (*bù*)** before 1st, 2nd, and 3rd tones:
+* `不高` (*bù gāo* – not high), `不来` (*bù lái* – not coming), `不好` (*bù hǎo* – not good).
+* Before another **4th tone syllable**, however, it shifts to a **2nd tone (*bú*)**:
+  * `不是` $\to$ **`bú shì`** (is not); `不对` $\to$ **`bú duì`** (incorrect); `不要` $\to$ **`bú yào`**!
 :::
 
-:::note[Regel 4: Tonwechsel des Zahlworts `一` (*yī*)]
-* **1. Ton (*yī*)**: Als isolierte Zahl, beim Zählen, in Ordnungszahlen oder am Wortende:
-  * `第一` (*dì-yī* – erster), `一月` (*yī yuè* – Januar).
-* Vor Silben im **1., 2. oder 3. Ton** wechselt `一` in den **4. Ton (*yì*)**:
-  * `一天` (*yì tiān* – ein Tag, vor Ton 1), `一年` (*yì nián* – ein Jahr, vor Ton 2), `一起` (*yì qǐ* – gemeinsam, vor Ton 3).
-* Vor einer Silbe im **4. Ton** wechselt `一` in den **2. Ton (*yí*)**:
-  * `一下` (*yí xià* – kurz, einmal), `一共` (*yí gòng* – insgesamt), `一定` (*yí dìng* – bestimmt).
-* **Sonderfall Telefonnummern (`yāo`)**:
-  * In Telefon-, Fax-, Zimmer- und Flugnummern wird `一` als **`yāo`** gesprochen, um akustische Verwechslung mit `七` (*qī*) über Lautsprecher oder Rauschen zu vermeiden.
+:::note[Rule 4: Tone Changes of the Numeral `一` (*yī*)]
+* **1st tone (*yī*)**: When isolated, counting, or at the end of a word:
+  * `第一` (*dì-yī* – first), `一月` (*yī yuè* – January).
+* Before **1st, 2nd, or 3rd tones**, `一` shifts to **4th tone (*yì*)**:
+  * `一天` (*yì tiān* – one day, before Tone 1), `一年` (*yì nián* – one year, before Tone 2), `一起` (*yì qǐ* – together, before Tone 3).
+* Before **4th tones**, `一` shifts to **2nd tone (*yí*)**:
+  * `一下` (*yí xià* – a bit), `一共` (*yí gòng* – altogether), `一定` (*yí dìng* – definitely).
+* **Phone Numbers Special Case (`yāo`)**:
+  * In telephone numbers, room numbers, and flight codes, `一` is spoken as **`yāo`** to prevent acoustic confusion with `七` (*qī*).
 :::
 
 </div>
 
 {/* ========================================================================= */}
-{/* SECTION 4: KURS-ASSETS & DOWNLOADS */}
+{/* SECTION 4: COURSE ASSETS & DOWNLOADS */}
 {/* ========================================================================= */}
 <div id="study-mode-assets" class="study-mode-section" data-study-mode="assets" style="display: none;">
 
-## 🗂️ Modus: Kurs-Assets & Anki-Deck <Badge text="Downloads (WIP)" variant="note" />
+## 🗂️ Mode: Course Assets & Anki Deck <Badge text="Downloads (WIP)" variant="note" />
 
-In diesem Modus finden sich alle Download-Ressourcen und Vokabeldecks für den Kurs:
+Access flashcard exports, study resources, and uncompressed audio masters:
 
-### 📥 Direkte Downloads
+### 📥 Direct Downloads
 
 <CardGrid>
-  <Card title="560-Noten Anki Dual-Audio Deck" icon="document">
-    Vollständiges Anki-Deck (.apkg) mit Hanzi-Schreibrichtung, Pinyin, Beispielsätzen und beidseitig abspielbaren Audio-Samples aller Lektionen 1–10.
+  <Card title="560-Note Anki Dual-Audio Deck" icon="document">
+    Complete Anki deck (.apkg) with character stroke orders, pinyin, sample sentences, and bidirectional audio playback for Lessons 1–10.
     
     <DriveAsset
       title="Download 107 MB Anki Deck"
@@ -512,8 +516,8 @@ In diesem Modus finden sich alle Download-Ressourcen und Vokabeldecks für den K
     />
   </Card>
 
-  <Card title="Studio WAV Master-Archiv" icon="laptop">
-    Unkomprimierte 32 kHz Studio-Aufnahmen aller 18 Dialoge inklusive millisekundengenauer Turn-Timestamps im JSON-Format.
+  <Card title="Studio WAV Master Archive" icon="laptop">
+    Uncompressed 32 kHz master WAV recordings for all 18 dialogues with millisecond-exact turn timestamps in JSON.
     
     <DriveAsset
       title="Dialogues Master Archive (WAV & JSON)"
@@ -527,35 +531,35 @@ In diesem Modus finden sich alle Download-Ressourcen und Vokabeldecks für den K
 
 ---
 
-### 🎙️ Technische Synthese-Architektur (Voice-ML v4)
+### 🎙️ Technical Synthesis Architecture (Voice-ML v4)
 
-Die auf dieser Seite eingebundenen Dialoge wurden mit der eigens entwickelten **Voice-ML Pipeline v4 (GPT-SoVITS v2ProPlus)** synthetisiert:
+The dialogues hosted on this page were synthesized using the custom **Voice-ML Pipeline v4 (GPT-SoVITS v2ProPlus)**:
 
 ```mermaid
 flowchart LR
-    A["CSMSC 7.50h Studio<br/>(7.081 Clips Biaobei)"] -->|Fine-Tuning v2ProPlus| F["female_v4<br/>(Kollegin / Moderatorin)"]
-    B["AISHELL-3 SSB0817<br/>(Qualitäts-Gate aktiv)"] -->|Fine-Tuning 2.5h| M1["male_v1<br/>(Herr Chen / Kollege B)"]
-    C["AISHELL-3 SSB1630<br/>(Zero-Shot Profil)"] -->|Zero-Shot v2ProPlus| M2["male_zs<br/>(Herr Weber / Kollege C)"]
+    A["CSMSC 7.50h Studio<br/>(7,081 Clips Biaobei)"] -->|Fine-Tuning v2ProPlus| F["female_v4<br/>(Colleague / Moderator)"]
+    B["AISHELL-3 SSB0817<br/>(Quality-Gate Active)"] -->|Fine-Tuning 2.5h| M1["male_v1<br/>(Mr. Chen / Colleague B)"]
+    C["AISHELL-3 SSB1630<br/>(Zero-Shot Profile)"] -->|Zero-Shot v2ProPlus| M2["male_zs<br/>(Mr. Weber / Colleague C)"]
     
-    F & M1 & M2 --> S["Sprecher-spezifisches Batching<br/>(Kein GPU-Thrashing)"]
+    F & M1 & M2 --> S["Speaker-Specific Batching<br/>(Zero GPU-Thrashing)"]
     S --> VAD["Spectral VAD Trimming<br/>(70-5000 Hz, RMS-Gate)"]
-    VAD --> N["EBU R128 Normalisierung<br/>(-16 LUFS Target)"]
+    VAD --> N["EBU R128 Normalization<br/>(-16 LUFS Target)"]
     N --> R["Room-Tone Stitching<br/>(-65 dBFS Pause + 15ms Fade)"]
     R --> OUT["18 Multi-Speaker Audiofiles<br/>(1.0x Standard + 0.75x Slow)"]
 ```
 
-* **Stimmen-Profile (Milestone D / v4)**:
-  * `female_v4`: Fine-Tuning auf **7,50 Stunden (7.081 Audio-Clips)** kuratierten Studioaufnahmen aus CSMSC (BZNSYP). Beseitigt synthetische Artefakte bei identisch niedriger Zeichenfehlerrate ($\text{CER} = 5{,}70\%$ auf Whisper `large-v3` ohne Halluzinationsausreißer).
-  * `male_v1`: 2,5 Stunden Fine-Tuning auf dem akustisch reinsten Sprecher (SSB0817 aus AISHELL-3). Unter Claude's Quality-Preservation-Gate intakt gehalten, um Überanpassung zu verhindern.
-  * `male_zs`: Zero-Shot Sprecherprofil (SSB1630) für Dritte im Drei-Personen-Dialog.
-* **Audio-Aufbereitung & Features**:
-  * Bereinigung durch spektrale Voice Activity Detection (VAD) mit Frequenz-Bandpass ($70\text{--}5000\text{ Hz}$).
-  * Lautstärke-Angleichung aller Sprecher auf **$-16\text{ LUFS}$** nach ITU-R BS.1770 / EBU R128.
-  * Natürliche Room-Tone-Pausen ($520\text{ ms}$ nach Aussagen, $620\text{ ms}$ nach Fragen) mit $15\text{ ms}$ Raised-Cosine-Crossfades.
-  * Dual-Speed-Bereitstellung: 1.0x Standardtempo sowie 0.75x Lerntempo für intensives Satz-Shadowing.
-* **100% Eigenständige Autorenschaft**:
-  * Vollständig neu verfasste, eigenständige Konversationsdialoge für die didaktische Sprachpraxis.
+* **Speaker Profiles (Milestone D / v4)**:
+  * `female_v4`: Fine-tuned on **7.50 hours (7,081 audio clips)** of studio recordings from CSMSC (BZNSYP). Eliminates artifacts with an ultra-low character error rate ($\text{CER} = 5.70\%$ on Whisper `large-v3`).
+  * `male_v1`: 2.5 hours fine-tuning on speaker SSB0817 from AISHELL-3. Maintained under a strict quality preservation gate to prevent overfitting.
+  * `male_zs`: Zero-shot voice profile (SSB1630) for third parties in three-party conversations.
+* **Audio Engineering**:
+  * Voice Activity Detection (VAD) bandpass filtered ($70\text{--}5000\text{ Hz}$).
+  * EBU R128 loudness normalization to **$-16\text{ LUFS}$** across all speaker turns.
+  * Natural room-tone stitching ($520\text{ ms}$ for statements, $620\text{ ms}$ for questions) with $15\text{ ms}$ raised-cosine crossfades.
+  * Dual-speed exports: 1.0x native tempo and 0.75x learner pace for targeted sentence shadowing.
+* **100% Original Authorship**:
+  * Fully independently authored conversational dialogue scripts specifically created for university and self-study practice.
 
 </div>
 
-<StrokeOrderGuide lang="de" scriptMode="zh" defaultChar="你" isModalOnly={true} />
+<StrokeOrderGuide lang="en" scriptMode="zh" defaultChar="你" isModalOnly={true} />

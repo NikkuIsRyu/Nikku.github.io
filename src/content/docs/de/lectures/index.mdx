@@ -1,0 +1,54 @@
+---
+title: Studienarchiv
+description: Verzeichnis meiner Uni-Kurse mit Vorlesungsnotizen, Formelherleitungen und Google-Drive-Materialien.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'audimax';
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Willkommen im digitalen Studienarchiv. Hier sind alle Kurszusammenfassungen, $\KaTeX$-Formeln, Code-Beispiele und Links zu Materialien auf Google Drive gesammelt.
+
+---
+
+<div class="page-bg-audimax" aria-hidden="true"></div>
+
+## 🏛️ Kursverzeichnis
+
+<CardGrid>
+	<Card title="Kerninformatik" icon="laptop">
+		Grundlagen von theoretischer Informatik über Algorithmen und relationale Datenbanken bis zu IT-Sicherheit und Software-Engineering.
+
+		* [Theoretische Informatik](/de/lectures/core-cs/theoretical-cs/)
+		* [Einführung in die Numerik (WS 2026/27)](/de/lectures/core-cs/numerik/)
+		* [Datenbanken & SQL](/de/lectures/core-cs/databases/)
+		* [Algorithmen & Datenstrukturen](/de/lectures/core-cs/algorithms/)
+		* [IT-Security & Exploitation](/de/lectures/core-cs/it-security/)
+		* [Information Systems Engineering (ISE)](/de/lectures/core-cs/ise/)
+	</Card>
+
+	<Card title="KI, Robotik & Medizininformatik" icon="star">
+		Angewandtes Machine Learning, mathematische Optimierung, Roboterkinematik und intelligente Systeme.
+
+		* [Machine Learning & Gradient Descent](/de/lectures/ai-and-med/machine-learning/)
+		* [RMI: Robotics & Machine Intelligence (WS 2026/27)](/de/lectures/ai-and-med/rmi-anatomy/)
+		* [Seminar: Agentic AI for Problem Solving (WS 2026/27)](/de/lectures/ai-and-med/seminar-agentic-ai/)
+	</Card>
+
+	<Card title="Sprachkurse" icon="translate">
+		Interaktive Sprachnotizen, Vokabelsammlungen und Anki-Decks.
+
+		* [Japanisch](/de/lectures/languages/japanese/)
+			* [Japanisch B1.1](/de/lectures/languages/japanese/b1-1/)
+			* [Japanisch B1.2](/de/lectures/languages/japanese/b1-2/)
+		* [Chinesisch (Mandarin) & Audio-Dialoge](/de/lectures/languages/chinese/)
+			* 18 interaktive Dialoge mit mehreren Sprechern, Tone Sandhi, Grammatik (L2–L10) und ein Anki-Deck mit 560 Karten
+	</Card>
+</CardGrid>
+
+---
+
+## ☁️ Materialien auf Google Drive
+
+Große Dateien wie Machine-Learning-Checkpoints (`ml_models.zip`), Vorlesungsfolien (`.pdf`, `.pptx`) und Anki-Pakete (`.apkg`) liegen auf Google Drive und werden von hier aus verlinkt, damit das Repository klein bleibt.

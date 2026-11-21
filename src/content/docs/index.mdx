@@ -1,38 +1,100 @@
 ---
-title: Welcome to My Academic Vault
-description: Personal university archive, lecture notes, and engineering portfolio by Nick Blassmann.
+title: Portfolio & Study Vault
+description: Computer Science student at Heidelberg University. Machine-learning projects, interactive lecture notes and language-learning tools by Nick Blassmann (Nikku).
 template: splash
 hero:
-  tagline: Personal Computer Science knowledge vault, lecture notes, and engineering portfolio by Nick Blassmann (Heidelberg University).
+  title: Hi, I'm Nikku.
+  tagline: Computer Science student at Heidelberg University. I build machine-learning tools and interactive study apps, and I keep my courses here as notes you can actually play with.
+  image:
+    html: '<img class="hero-sprite" src="/characters/standalones/nick_fullbody_standing_front.png" alt="Pixel-art Nikku standing, in a grey T-shirt and jeans" width="328" height="902" />'
   actions:
-    - text: Explore Knowledge Vault
-      link: /lectures/
+    - text: See my projects
+      link: '#projects'
       icon: right-arrow
-    - text: Heidelberg & Student Life
-      link: /heidelberg/
+    - text: Open the study vault
+      link: /lectures/
       icon: open-book
       variant: minimal
-    - text: Curriculum Vitae
+    - text: CV
       link: /cv/
       icon: document
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import ProjectCard from '../../components/home/ProjectCard.astro';
+import NowList from '../../components/home/NowList.astro';
 
-## Vault Structure & Curriculum
+## Now
 
-<CardGrid stagger>
-	<Card title="Core Computer Science" icon="laptop">
-		Formal foundations in [Theoretische Informatik](/lectures/core-cs/theoretical-cs/), [Datenbanken](/lectures/core-cs/databases/), [Algorithmen](/lectures/core-cs/algorithms/), and [IT-Security](/lectures/core-cs/it-security/).
-	</Card>
-	<Card title="AI, Robotics & Medical Systems" icon="star">
-		Applied machine learning models, [Gradient Descent derivations](/lectures/ai-and-med/machine-learning/), [Robotics & Machine Intelligence (RMI)](/lectures/ai-and-med/rmi-anatomy/), and the [Agentic AI Seminar Hub](/lectures/ai-and-med/seminar-agentic-ai/).
-	</Card>
-	<Card title="5 TB Google Drive Vault" icon="external">
-		High-capacity cloud storage for lecture slides, Voice ML weights (`ml_models.zip`), and Anki decks without repo bloat.
-	</Card>
-	<Card title="LaTeX Math & Code Synthesis" icon="pencil">
-		Full $\KaTeX$ formula rendering with reproducible Python code and interactive search.
-	</Card>
+<NowList
+	items={[
+		{ label: 'Studying', text: 'B.Sc. Informatik, 5th semester, Heidelberg University' },
+		{ label: 'Researching', text: 'Security of AI agents: MCP trust boundaries and prompt injection' },
+		{ label: 'Next', text: "Bachelor's thesis in AI / ML (summer 2027)" },
+		{ label: 'Then', text: 'Exchange semester in East Asia (winter 2027/28)' },
+	]}
+/>
+
+## Projects
+
+<div class="home-projects not-content">
+	<ProjectCard
+		title="Voice ML: Mandarin TTS"
+		image="/home/voice-ml.webp"
+		imageAlt="Pixel-art Chinese skyline at night, with Nikku reading under a cherry tree"
+		pixel
+		tags={['PyTorch', 'GPT-SoVITS', 'Whisper', 'CUDA']}
+		links={[
+			{ label: 'Hear the dialogues', href: '/lectures/languages/chinese/' },
+			{ label: 'GitHub', href: 'https://github.com/NikkuIsRyu/Voice_ML_Project' },
+		]}
+	>
+		A fine-tuned GPT-SoVITS voice model that synthesises natural Mandarin. It voices all 18 multi-speaker dialogues in my Chinese course notes.
+	</ProjectCard>
+	<ProjectCard
+		title="Robot kinematics lab"
+		image="/home/rmi.webp"
+		imageAlt="Pixel-art robotics lab: Nikku and a friend working on a robot arm next to an anatomy model"
+		pixel
+		tags={['TypeScript', 'Canvas', 'Linear algebra']}
+		links={[{ label: 'Try it', href: '/lectures/ai-and-med/rmi-anatomy/' }]}
+	>
+		Interactive visualisers for rotations, rigid-body transforms and the forward kinematics of the AR4 robot arm, built for the Robotics &amp; Machine Intelligence course.
+	</ProjectCard>
+	<ProjectCard
+		title="Deutsch üben"
+		image="/home/deutsch.webp"
+		imageAlt="App icon of Deutsch üben"
+		tags={['PWA', 'Offline', 'Astro']}
+		links={[
+			{ label: 'Open the app', href: '/deutsch/' },
+			{ label: 'GitHub', href: 'https://github.com/NikkuIsRyu/deutsch-for-japanese' },
+		]}
+	>
+		A German practice app for Japanese speakers (A2–B2): cloze drills, sentence building, grammar and spaced review. You can install it, and it works offline.
+	</ProjectCard>
+</div>
+
+## Study vault
+
+Interactive notes from my courses. Most pages are in English and German.
+
+<CardGrid>
+	<LinkCard title="Numerical Analysis" description="Floating-point sandbox, cancellation lab, Kirchhoff pipe-network simulator and a C++ code lab." href="/lectures/core-cs/numerik/" />
+	<LinkCard title="Robotics & Machine Intelligence" description="Kinematics visualisers, formula cards, common pitfalls and a 60-second quiz." href="/lectures/ai-and-med/rmi-anatomy/" />
+	<LinkCard title="Chinese (Mandarin)" description="18 audio dialogues, 579 vocabulary entries with stroke order, grammar explorer and tones." href="/lectures/languages/chinese/" />
+	<LinkCard title="Japanese B1.1" description="Grammar explorer, confusable pairs and a vocabulary vault for Minna no Nihongo II." href="/lectures/languages/japanese/b1-1/" />
+	<LinkCard title="Seminar: Agentic AI" description="Reading tracker, paper notes and a glossary for the agentic-AI seminar." href="/lectures/ai-and-med/seminar-agentic-ai/" />
+	<LinkCard title="All courses" description="Theoretical CS, databases, algorithms, IT security and more." href="/lectures/" />
 </CardGrid>
+
+## Heidelberg
+
+<div class="home-teaser not-content">
+	<img class="pixel" src="/home/heidelberg.webp" alt="Pixel-art of Nikku and friends around a campfire under a cherry tree at night" width="640" height="360" loading="lazy" decoding="async" />
+	<div>
+		<p>What studying Computer Science in Germany's oldest university town is actually like: the two campuses, the study spots, the cafés and the traditions.</p>
+		<p><a href="/heidelberg/">Read the Heidelberg guide →</a></p>
+	</div>
+</div>

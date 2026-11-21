@@ -1,9 +1,9 @@
 {
   "$schema": "./compliance-schema.json",
   "project": "Website-Project (nikku.tech)",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "auditor": "Antigravity Compliance Engine",
-  "lastAudited": "2026-10-27",
+  "lastAudited": "2026-11-21",
   "legalFramework": [
     "German Urheberrechtsgesetz (UrhG) § 51 (Zitatrecht)",
     "German Urheberrechtsgesetz (UrhG) § 60a (Unterricht und Lehre)",
@@ -175,7 +175,8 @@
       "id": "chinese_course_page",
       "name": "Chinese Language Course Page, Prototypes & Anki Asset",
       "paths": [
-        "src/content/docs/lectures/languages/chinese/**"
+        "src/content/docs/lectures/languages/chinese/**",
+        "src/content/docs/de/lectures/languages/chinese/**"
       ],
       "publisher": "schmetterling_verlag",
       "status": "PENDING_PERMISSION",
@@ -190,7 +191,8 @@
       "paths": [
         "src/content/docs/lectures/languages/japanese/**",
         "src/data/japaneseGrammarData.ts",
-        "src/data/japaneseVocabData.ts"
+        "src/data/japaneseVocabData.ts",
+        "src/content/docs/de/lectures/languages/japanese/**"
       ],
       "publisher": "three_a_corporation",
       "status": "CLEARED_FAIR_USE_SYNTHESIS",
@@ -209,8 +211,8 @@
         "src/content/docs/lectures/core-cs/ise.md",
         "src/content/docs/lectures/core-cs/it-security.md",
         "src/content/docs/lectures/core-cs/theoretical-cs.md",
-        "src/content/docs/lectures/core-cs/numerik-prototype.mdx",
-        "src/content/docs/lectures/core-cs/de/numerik-prototype.mdx"
+        "src/content/docs/lectures/core-cs/numerik.mdx",
+        "src/content/docs/de/lectures/core-cs/**"
       ],
       "publisher": "heidelberg_university",
       "status": "CLEARED_SELF_AUTHORED",
@@ -236,8 +238,8 @@
       "id": "ai_seminar_workstation",
       "name": "Agentic AI Seminar Workstation & Lexicon",
       "paths": [
-        "src/content/docs/lectures/ai-and-med/seminar-agentic-ai/index.mdx",
-        "src/data/seminarAgenticAi.ts"
+        "src/data/seminarAgenticAi.ts",
+        "src/content/docs/lectures/ai-and-med/seminar-agentic-ai.mdx"
       ],
       "publisher": "academic_open_access",
       "status": "CLEARED_OPEN_ACCESS",
@@ -252,7 +254,8 @@
       "paths": [
         "src/content/docs/lectures/ai-and-med/**",
         "src/data/rmiData.ts",
-        "public/assets/rmi/**"
+        "public/assets/rmi/**",
+        "src/content/docs/de/lectures/ai-and-med/**"
       ],
       "publisher": "heidelberg_university",
       "status": "CLEARED_SELF_AUTHORED",
@@ -268,7 +271,11 @@
         "src/content/docs/index.mdx",
         "src/content/docs/cv.md",
         "src/content/docs/heidelberg.mdx",
-        "src/content/docs/lectures/index.mdx"
+        "src/content/docs/lectures/index.mdx",
+        "src/content/docs/de/index.mdx",
+        "src/content/docs/de/lectures/index.mdx",
+        "src/content/docs/de/cv.md",
+        "src/content/docs/de/heidelberg.mdx"
       ],
       "publisher": "original_artwork",
       "status": "CLEARED_SELF_AUTHORED",
@@ -301,14 +308,16 @@
         "public/rmi-anatomy-bg.jpg",
         "public/sakura-bg.jpg",
         "public/uni-og-bg-mobile.jpg",
-        "public/uni-og-bg.jpg"
+        "public/uni-og-bg.jpg",
+        "public/og-image.jpg",
+        "public/home/*.webp"
       ],
       "publisher": "original_artwork",
       "status": "CLEARED_ORIGINAL",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "Custom pixel art backgrounds created for the digital garden theme."
+      "notes": "Custom pixel art backgrounds created for the digital garden theme. Includes the social share image (og-image.jpg) and homepage thumbnails (public/home/), derived from these backgrounds."
     },
     {
       "id": "character_avatars",
@@ -336,14 +345,41 @@
       "paths": [
         "public/CNAME",
         "public/favicon.svg",
-        "src/assets/houston.webp"
+        "src/assets/houston.webp",
+        "public/googledbd61a60e5e9c4a5.html"
       ],
       "publisher": "original_artwork",
       "status": "CLEARED_ORIGINAL",
       "canSharePublicly": true,
       "requiresWipGate": false,
       "allowDirectDownload": false,
-      "notes": "DNS CNAME, SVG site favicon, and Starlight mascot asset."
+      "notes": "DNS CNAME, SVG site favicon, and Starlight mascot asset. Also the Google Search Console verification file."
+    },
+    {
+      "id": "deutsch_practice_pwa",
+      "name": "Deutsch üben PWA (German practice for Japanese speakers)",
+      "paths": [
+        "public/deutsch/**"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Prebuilt static PWA from the author's own repository NikkuIsRyu/deutsch-for-japanese; all exercise content self-authored."
+    },
+    {
+      "id": "knowledge_vault_app_legal",
+      "name": "Knowledge Vault Android App: Privacy Policy",
+      "paths": [
+        "public/knowledge-vault/**"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "Self-authored privacy policy page (DE/EN) for the author's Android app."
     }
   ]
 }

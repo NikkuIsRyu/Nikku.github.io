@@ -7,173 +7,64 @@
   --sl-color-accent-high: #93c5fd;
 }
 
-/* Shared base layout for pages with pixel art background overlay */
+/* Light theme: darker blues so accent text passes WCAG AA (4.5:1) on white */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dbeafe;
+  --sl-color-accent: #1d4ed8;
+  --sl-color-accent-high: #1e3a8a;
+}
+
+/* ========================================================
+   Pixel-art page backgrounds
+   A page picks its scene with a head script
+   (document.documentElement.dataset.pageBg = '<key>') and, as a
+   no-JS fallback, a hidden <div class="page-bg-<key>">.
+   To add a scene: add one line to the registry below
+   (plus the key to the :is() lists if it needs the no-JS fallback).
+     --pbg      desktop image          --pbg-pos  desktop position
+     --pbg-m    portrait/mobile crop (optional; falls back to --pbg)
+   ======================================================== */
+
+html[data-has-hero]                                   { --pbg: url('/sakura-bg.jpg'); }
+html[data-page-bg="desk"],        body:has(.page-bg-desk)        { --pbg: url('/desk-bg.jpg');        --pbg-pos: center center; }
+html[data-page-bg="audimax"],     body:has(.page-bg-audimax)     { --pbg: url('/audimax-bg.jpg');     --pbg-pos: center bottom; }
+html[data-page-bg="japanese"],    body:has(.page-bg-japanese)    { --pbg: url('/japanese-bg.jpg');    --pbg-m: url('/japanese-bg-mobile.jpg'); }
+html[data-page-bg="uni-og"],      body:has(.page-bg-uni-og)      { --pbg: url('/uni-og-bg.jpg');      --pbg-m: url('/uni-og-bg-mobile.jpg'); }
+html[data-page-bg="cs-lab"],      body:has(.page-bg-cs-lab)      { --pbg: url('/cs-lab-bg.jpg');      --pbg-m: url('/cs-lab-bg-mobile.jpg'); }
+html[data-page-bg="core-cs"],     body:has(.page-bg-core-cs)     { --pbg: url('/core-cs-bg.jpg');     --pbg-m: url('/core-cs-bg-mobile.jpg'); }
+html[data-page-bg="chinese"],     body:has(.page-bg-chinese)     { --pbg: url('/chinese-bg.jpg');     --pbg-m: url('/chinese-bg-mobile.jpg'); }
+html[data-page-bg="rmi-anatomy"], body:has(.page-bg-rmi-anatomy) { --pbg: url('/rmi-anatomy-bg.jpg'); --pbg-m: url('/rmi-anatomy-bg-mobile.jpg'); }
+html[data-page-bg="ml"],          body:has(.page-bg-ml)          { --pbg: url('/ml-bg.jpg');          --pbg-m: url('/ml-bg-mobile.jpg'); }
+
 html[data-has-hero] body,
 html[data-page-bg] body,
-body:has(.page-bg-desk),
-body:has(.page-bg-audimax),
-body:has(.page-bg-japanese),
-body:has(.page-bg-uni-og),
-body:has(.page-bg-cs-lab),
-body:has(.page-bg-core-cs),
-body:has(.page-bg-chinese),
-body:has(.page-bg-rmi-anatomy),
-body:has(.page-bg-ml) {
+body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml)) {
   position: relative;
   background-color: var(--sl-color-bg);
 }
 
 html[data-has-hero] body::before,
-html[data-page-bg="desk"] body::before,
-html[data-page-bg="audimax"] body::before,
-html[data-page-bg="japanese"] body::before,
-html[data-page-bg="uni-og"] body::before,
-html[data-page-bg="cs-lab"] body::before,
-html[data-page-bg="core-cs"] body::before,
-html[data-page-bg="chinese"] body::before,
-html[data-page-bg="rmi-anatomy"] body::before,
-html[data-page-bg="ml"] body::before,
-body:has(.page-bg-desk)::before,
-body:has(.page-bg-audimax)::before,
-body:has(.page-bg-japanese)::before,
-body:has(.page-bg-uni-og)::before,
-body:has(.page-bg-cs-lab)::before,
-body:has(.page-bg-core-cs)::before,
-body:has(.page-bg-chinese)::before,
-body:has(.page-bg-rmi-anatomy)::before,
-body:has(.page-bg-ml)::before {
+html[data-page-bg] body::before,
+body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml))::before {
   content: '';
   position: fixed;
   inset: 0;
+  background-image: var(--pbg, none);
+  background-position: var(--pbg-pos, right bottom);
   background-size: cover;
   background-repeat: no-repeat;
   image-rendering: pixelated;
+  opacity: 0.28;
   pointer-events: none;
   z-index: 0;
 }
 
-html[data-has-hero] body::before {
-  background-image: url('/sakura-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="desk"] body::before,
-body:has(.page-bg-desk)::before {
-  background-image: url('/desk-bg.jpg');
-  background-position: center center;
-  opacity: 0.28;
-}
-
-html[data-page-bg="audimax"] body::before,
-body:has(.page-bg-audimax)::before {
-  background-image: url('/audimax-bg.jpg');
-  background-position: center bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="japanese"] body::before,
-body:has(.page-bg-japanese)::before {
-  background-image: url('/japanese-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="uni-og"] body::before,
-body:has(.page-bg-uni-og)::before {
-  background-image: url('/uni-og-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="cs-lab"] body::before,
-body:has(.page-bg-cs-lab)::before {
-  background-image: url('/cs-lab-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="core-cs"] body::before,
-body:has(.page-bg-core-cs)::before {
-  background-image: url('/core-cs-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="chinese"] body::before,
-body:has(.page-bg-chinese)::before {
-  background-image: url('/chinese-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="rmi-anatomy"] body::before,
-body:has(.page-bg-rmi-anatomy)::before {
-  background-image: url('/rmi-anatomy-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
-html[data-page-bg="ml"] body::before,
-body:has(.page-bg-ml)::before {
-  background-image: url('/ml-bg.jpg');
-  background-position: right bottom;
-  opacity: 0.28;
-}
-
 @media (max-width: 50rem), (orientation: portrait) {
-  html[data-page-bg="japanese"] body::before,
-  body:has(.page-bg-japanese)::before {
+  /* Scenes with a dedicated portrait crop: show it full-width, anchored to the bottom */
+  html:is([data-page-bg="japanese"], [data-page-bg="uni-og"], [data-page-bg="cs-lab"], [data-page-bg="core-cs"], [data-page-bg="chinese"], [data-page-bg="rmi-anatomy"], [data-page-bg="ml"]) body::before,
+  body:has(:is(.page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml))::before {
     background-color: #242b3e;
-    background-image: url('/japanese-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="uni-og"] body::before,
-  body:has(.page-bg-uni-og)::before {
-    background-color: #242b3e;
-    background-image: url('/uni-og-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="cs-lab"] body::before,
-  body:has(.page-bg-cs-lab)::before {
-    background-color: #242b3e;
-    background-image: url('/cs-lab-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="core-cs"] body::before,
-  body:has(.page-bg-core-cs)::before {
-    background-color: #242b3e;
-    background-image: url('/core-cs-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="chinese"] body::before,
-  body:has(.page-bg-chinese)::before {
-    background-color: #242b3e;
-    background-image: url('/chinese-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="rmi-anatomy"] body::before,
-  body:has(.page-bg-rmi-anatomy)::before {
-    background-color: #242b3e;
-    background-image: url('/rmi-anatomy-bg-mobile.jpg');
-    background-size: 100% auto;
-    background-position: center bottom;
-  }
-
-  html[data-page-bg="ml"] body::before,
-  body:has(.page-bg-ml)::before {
-    background-color: #242b3e;
-    background-image: url('/ml-bg-mobile.jpg');
+    background-image: var(--pbg-m, var(--pbg));
     background-size: 100% auto;
     background-position: center bottom;
   }
@@ -291,47 +182,26 @@ html[data-heidelberg-bg="cafe-park"] .heidelberg-bg-layer.bg-cafe-park {
   }
 }
 
+/* Translucent chrome so the scene shows through.
+   Note: Starlight renders both <header class="header"> and an inner
+   <div class="header">; target only the outer element or the tint stacks. */
 html[data-has-hero] .page,
 html[data-page-bg] .page,
-body:has(.page-bg-desk) .page,
-body:has(.page-bg-audimax) .page,
-body:has(.page-bg-japanese) .page,
-body:has(.page-bg-uni-og) .page,
-body:has(.page-bg-cs-lab) .page,
-body:has(.page-bg-core-cs) .page,
-body:has(.page-bg-chinese) .page,
-body:has(.page-bg-rmi-anatomy) .page,
-body:has(.page-bg-ml) .page {
+body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml)) .page {
   position: relative;
   z-index: 1;
 }
 
-html[data-has-hero] .header,
-html[data-page-bg] .header,
-body:has(.page-bg-desk) .header,
-body:has(.page-bg-audimax) .header,
-body:has(.page-bg-japanese) .header,
-body:has(.page-bg-uni-og) .header,
-body:has(.page-bg-cs-lab) .header,
-body:has(.page-bg-core-cs) .header,
-body:has(.page-bg-chinese) .header,
-body:has(.page-bg-rmi-anatomy) .header,
-body:has(.page-bg-ml) .header {
+html[data-has-hero] header.header,
+html[data-page-bg] header.header,
+body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml)) header.header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
   backdrop-filter: blur(8px);
 }
 
 @media (min-width: 50rem) {
   html[data-page-bg] .sidebar-pane,
-  body:has(.page-bg-desk) .sidebar-pane,
-  body:has(.page-bg-audimax) .sidebar-pane,
-  body:has(.page-bg-japanese) .sidebar-pane,
-  body:has(.page-bg-uni-og) .sidebar-pane,
-  body:has(.page-bg-cs-lab) .sidebar-pane,
-  body:has(.page-bg-core-cs) .sidebar-pane,
-  body:has(.page-bg-chinese) .sidebar-pane,
-  body:has(.page-bg-rmi-anatomy) .sidebar-pane,
-  body:has(.page-bg-ml) .sidebar-pane {
+  body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml)) .sidebar-pane {
     background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 75%, transparent);
     backdrop-filter: blur(8px);
   }
@@ -339,15 +209,7 @@ body:has(.page-bg-ml) .header {
 
 html[data-has-hero] .card,
 html[data-page-bg] .card,
-body:has(.page-bg-desk) .card,
-body:has(.page-bg-audimax) .card,
-body:has(.page-bg-japanese) .card,
-body:has(.page-bg-uni-og) .card,
-body:has(.page-bg-cs-lab) .card,
-body:has(.page-bg-core-cs) .card,
-body:has(.page-bg-chinese) .card,
-body:has(.page-bg-rmi-anatomy) .card,
-body:has(.page-bg-ml) .card {
+body:has(:is(.page-bg-desk, .page-bg-audimax, .page-bg-japanese, .page-bg-uni-og, .page-bg-cs-lab, .page-bg-core-cs, .page-bg-chinese, .page-bg-rmi-anatomy, .page-bg-ml)) .card {
   background-color: color-mix(in srgb, var(--sl-color-gray-6) 75%, transparent);
   backdrop-filter: blur(4px);
 }
@@ -500,5 +362,77 @@ body {
   .katex-display > .katex > .katex-html > .base {
     margin-top: 0.15em;
     margin-bottom: 0.15em;
+  }
+}
+
+/* ========================================================
+   Homepage (src/content/docs/index.mdx and de/index.mdx)
+   ======================================================== */
+.hero-sprite {
+  display: block;
+  width: auto;
+  height: min(26rem, 55vw);
+  margin-inline: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35));
+}
+
+@media (max-width: 50rem) {
+  .hero-sprite {
+    height: 14rem;
+  }
+}
+
+.home-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1rem;
+}
+
+.home-teaser {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  background-color: color-mix(in srgb, var(--sl-color-bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.home-teaser img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.home-teaser img.pixel {
+  image-rendering: pixelated;
+}
+
+.home-teaser p {
+  margin: 0 0 0.75rem;
+}
+
+.home-teaser p:last-child {
+  margin-bottom: 0;
+}
+
+.home-teaser a {
+  color: var(--sl-color-text-accent);
+  font-weight: 600;
+}
+
+@media (min-width: 50rem) {
+  .home-teaser {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+}
+
+/* Keep the full site title readable next to search + menu on phones */
+@media (max-width: 50rem) {
+  .site-title {
+    font-size: clamp(0.95rem, 4.2vw, var(--sl-text-h4));
   }
 }

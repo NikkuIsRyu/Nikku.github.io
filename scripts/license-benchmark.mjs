@@ -245,7 +245,7 @@ async function runBenchmark() {
 
   // 3. UNIVERSITY IP & PROFESSOR SLIDE DISTRIBUTION AUDIT
   console.log(`${colors.bold}🎓 Tier 3: University IP & Professor Lecture Slides Audit${colors.reset}`);
-  const coreCsFiles = allPhysicalFiles.filter(f => f.startsWith('src/content/docs/lectures/core-cs/'));
+  const coreCsFiles = allPhysicalFiles.filter(f => /^src\/content\/docs\/(de\/)?lectures\/core-cs\//.test(f));
   let slideLeaks = 0;
 
   for (const file of coreCsFiles) {

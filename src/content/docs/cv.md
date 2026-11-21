@@ -18,7 +18,7 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 * **Focus Areas**: Artificial Intelligence & Machine Learning, Robotics & Embodied AI, AI Agent Security (MCP), Systems Architecture
 * **Portfolio**: [nikku.tech](https://nikku.tech) *(alias: [nickblassmann.me](https://nickblassmann.me))*
 * **GitHub**: [github.com/NikkuIsRyu](https://github.com/NikkuIsRyu)
-* **LinkedIn**: [linkedin.com/in/nikkuisryu](https://linkedin.com)
+* **LinkedIn**: [linkedin.com/in/nikkuisryu](https://www.linkedin.com/in/nikkuisryu)
 
 ---
 
@@ -58,7 +58,7 @@ Welcome to my personal academic portal and knowledge base. I document my univers
 * **Architecture**: Local REST inference API server paired with batch synthesis client scripts (`generate_audio.py`) and a 17.5 GB deep learning checkpoint archive (`ml_models.zip`) hosted on the Google Drive Vault.
 
 ### [Academic Knowledge Vault & Portfolio (nikku.tech)](https://github.com/NikkuIsRyu/Nikku.github.io)
-* **Stack**: Astro 5, Starlight, TypeScript, KaTeX, GitHub Actions CI/CD, Google Drive CDN.
+* **Stack**: Astro 7, Starlight, TypeScript, KaTeX, GitHub Actions CI/CD, Google Drive CDN.
 * **Overview**: Personal academic knowledge base, lecture synthesis vault, and project portfolio. Automated continuous deployment with GitHub Actions, mathematical formula rendering with KaTeX, Pagefind client-side search, and hybrid cloud streaming of slides, datasets, and flashcard archives via `<DriveAsset />`.
 
 ### [AnkiDeckGenPython & LaTeX Study Automation](https://github.com/NikkuIsRyu/AnkiDeckGenPython)

@@ -1,15 +1,12 @@
 ---
-interface Props {
-  current: 'en' | 'de';
-  enHref?: string;
-  deHref?: string;
-}
-
-const {
-  current,
-  enHref = '/lectures/languages/japanese/b1-1/',
-  deHref = '/lectures/languages/japanese/b1-1/de/',
-} = Astro.props;
+// In-page EN/DE toggle. English is Starlight's root locale and German lives
+// under /de/, so the counterpart URL is derived from the current path.
+// Only use it on pages that have a real translation in both locales.
+const path = Astro.url.pathname;
+const isDe = path === '/de' || path.startsWith('/de/');
+const current: 'en' | 'de' = isDe ? 'de' : 'en';
+const enHref = isDe ? path.slice(3) || '/' : path;
+const deHref = isDe ? path : `/de${path}`;
 ---
 
 <div class="lang-switch-bar not-content" role="navigation" aria-label="Language selector / Sprachauswahl">
