@@ -92,6 +92,7 @@ export default defineConfig({
 					items: [
 						{ label: 'CV & About Me', translations: { de: 'Lebenslauf & Über mich' }, slug: 'cv' },
 						{ label: 'Heidelberg & Student Life', translations: { de: 'Heidelberg & Studentenleben' }, slug: 'heidelberg' },
+						{ label: 'Voice ML project', translations: { de: 'Voice-ML-Projekt' }, slug: 'projects/voice-ml' },
 					],
 				},
 				{

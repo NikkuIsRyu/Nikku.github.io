@@ -1,0 +1,49 @@
+---
+title: "Voice ML: Mandarin-TTS"
+description: Wie ein GPT-SoVITS-Stimmmodell vom Zero-Shot-Klonen zur feinjustierten Mandarin-Stimme wurde. Alle Trainingsstufen direkt im Vergleich anhören.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'chinese';
+---
+
+import VoiceProgress from '../../../../components/VoiceProgress.astro';
+import LanguageSwitch from '../../../../components/LanguageSwitch.astro';
+
+<div class="page-bg-chinese" aria-hidden="true"></div>
+
+<LanguageSwitch />
+
+Voice ML ist meine Text-to-Speech-Pipeline für Mandarin. Ich trainiere [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS)-Stimmmodelle auf einer RTX 4060 mit offenen Sprachkorpora nach. Die Pipeline spricht dann die [18 Dialoge und 560 Vokabeln](/de/lectures/languages/chinese/) in meinen Chinesisch-Notizen.
+
+## Den Fortschritt anhören
+
+Jede Stufe liest dieselben Sätze mit demselben Seed und denselben Einstellungen. Es ändert sich also nur das Modell. Wähle einen Satz und vergleiche.
+
+<VoiceProgress
+	stages={[
+		{ id: '1_baseline', label: 'Ausgangsmodell', model: 'base v2ProPlus', description: 'Das vortrainierte GPT-SoVITS-Modell ohne eigenes Training. Es ahmt die Stimme anhand eines einzigen kurzen Referenzclips nach (Zero-Shot).' },
+		{ id: '2_ft1', label: 'Erstes Fine-Tuning', model: 'female_v3', description: 'Nachtrainiert auf Studioaufnahmen aus dem CSMSC-Korpus.' },
+		{ id: '3_ft2', label: 'Zweites Fine-Tuning', model: 'female_v4', description: 'Neu trainiert auf einem erweiterten CSMSC-Datensatz mit 7,5 Stunden.' },
+		{ id: '4_current', label: 'Aktuell', model: 'female_zh_c1', description: 'Mein neuestes Modell, nachtrainiert auf AISHELL-3, einem offen lizenzierten Korpus, der auch kommerzielle Nutzung erlaubt.' },
+	]}
+	sentences={[
+		{ id: 'greeting', label: 'Begrüßung', hanzi: '你好，今天过得开心吗？', pinyin: 'Nǐ hǎo, jīntiān guò de kāixīn ma?', translation: 'Hallo, hattest du heute einen schönen Tag?' },
+		{ id: 'sandhi', label: 'Tone Sandhi', hanzi: '老李想买两把好看的雨伞，可以陪小吕一起去展览馆选购。', pinyin: 'Lǎo Lǐ xiǎng mǎi liǎng bǎ hǎokàn de yǔsǎn, kěyǐ péi Xiǎo Lǚ yìqǐ qù zhǎnlǎnguǎn xuǎngòu.', translation: 'Der alte Li möchte zwei schöne Regenschirme kaufen und kann sie mit der kleinen Lü in der Ausstellungshalle aussuchen. (Voller dritter Töne, die sich nebeneinander verändern.)' },
+		{ id: 'cuisine', label: 'Langer Satz', hanzi: '这道特色菜既保留了传统风味，又融合了创新的烹饪工艺，味道确实不同凡响。', pinyin: 'Zhè dào tèsè cài jì bǎoliú le chuántǒng fēngwèi, yòu rónghé le chuàngxīn de pēngrèn gōngyì, wèidào quèshí bùtóng fánxiǎng.', translation: 'Dieses Spezialgericht bewahrt den traditionellen Geschmack und verbindet ihn mit neuen Kochtechniken. Es schmeckt wirklich außergewöhnlich.' },
+	]}
+/>
+
+## So funktioniert es
+
+1. **Daten:** Saubere Aufnahmen eines einzelnen Sprechers mit Transkript, in kurze Clips geschnitten und normalisiert.
+2. **Fine-Tuning:** Beide Teile von GPT-SoVITS werden trainiert: das GPT-Modell (was gesagt wird, Prosodie) und das SoVITS-Modell (wie es klingt).
+3. **Qualitätsprüfung:** Ein fester Satz Testsätze wird synthetisiert und mit Whisper large-v3 transkribiert. Ein Checkpoint ersetzt den vorherigen nur, wenn seine Zeichenfehlerrate stimmt.
+4. **Synthese:** Ein Batch-Client erzeugt Dialoge mit mehreren Sprechern in normalem und langsamem Tempo, mit Zeitstempeln pro Wort für den Dialog-Player.
+
+[Quellcode auf GitHub ↗](https://github.com/NikkuIsRyu/Voice_ML_Project)
+
+## Daten und Lizenzen
+
+- **CSMSC** (Data-Baker) wurde für das erste und zweite Fine-Tuning genutzt. Die Lizenz erlaubt nur nicht-kommerzielle Nutzung, daher dienen diese Hörproben nur zur Dokumentation des Trainingsverlaufs.
+- **AISHELL-3** (Apache-2.0) wird für die aktuelle Stimme genutzt. Chinesische Aussprache basiert auf AISHELL-3 Sprachkorpus (Apache-2.0 Lizenz).
+- Die Testsätze sind selbst geschrieben und stammen aus keinem Lehrbuch.

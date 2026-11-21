@@ -1,0 +1,49 @@
+---
+title: "Voice ML: Mandarin TTS"
+description: How a GPT-SoVITS voice model went from zero-shot cloning to a fine-tuned Mandarin tutor voice. Listen to every training stage side by side.
+head:
+  - tag: script
+    content: document.documentElement.dataset.pageBg = 'chinese';
+---
+
+import VoiceProgress from '../../../components/VoiceProgress.astro';
+import LanguageSwitch from '../../../components/LanguageSwitch.astro';
+
+<div class="page-bg-chinese" aria-hidden="true"></div>
+
+<LanguageSwitch />
+
+Voice ML is my text-to-speech pipeline for Mandarin. I fine-tune [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) voice models on open speech corpora on an RTX 4060. The pipeline then voices the [18 multi-speaker dialogues and 560 vocabulary words](/lectures/languages/chinese/) in my Chinese course notes.
+
+## Hear the progress
+
+Every stage below reads the same sentences with the same seed and sampling settings, so the only thing that changes is the model. Pick a sentence and compare.
+
+<VoiceProgress
+	stages={[
+		{ id: '1_baseline', label: 'Baseline', model: 'base v2ProPlus', description: 'The pretrained GPT-SoVITS model with no training. It imitates the voice from a single short reference clip (zero-shot).' },
+		{ id: '2_ft1', label: 'First fine-tune', model: 'female_v3', description: 'Fine-tuned on studio recordings from the CSMSC corpus.' },
+		{ id: '3_ft2', label: 'Second fine-tune', model: 'female_v4', description: 'Retrained on an expanded 7.5-hour CSMSC set.' },
+		{ id: '4_current', label: 'Current', model: 'female_zh_c1', description: 'My newest model, fine-tuned on AISHELL-3, an openly licensed corpus that also allows commercial use.' },
+	]}
+	sentences={[
+		{ id: 'greeting', label: 'Greeting', hanzi: '你好，今天过得开心吗？', pinyin: 'Nǐ hǎo, jīntiān guò de kāixīn ma?', translation: 'Hi, did you have a good day today?' },
+		{ id: 'sandhi', label: 'Tone sandhi', hanzi: '老李想买两把好看的雨伞，可以陪小吕一起去展览馆选购。', pinyin: 'Lǎo Lǐ xiǎng mǎi liǎng bǎ hǎokàn de yǔsǎn, kěyǐ péi Xiǎo Lǚ yìqǐ qù zhǎnlǎnguǎn xuǎngòu.', translation: 'Old Li wants to buy two nice umbrellas and can go and pick them out at the exhibition hall with Little Lü. (Full of third tones that change pitch next to each other.)' },
+		{ id: 'cuisine', label: 'Long sentence', hanzi: '这道特色菜既保留了传统风味，又融合了创新的烹饪工艺，味道确实不同凡响。', pinyin: 'Zhè dào tèsè cài jì bǎoliú le chuántǒng fēngwèi, yòu rónghé le chuàngxīn de pēngrèn gōngyì, wèidào quèshí bùtóng fánxiǎng.', translation: 'This signature dish keeps its traditional flavour while blending in new cooking techniques; it really tastes extraordinary.' },
+	]}
+/>
+
+## How it works
+
+1. **Data:** Clean single-speaker recordings with transcripts, sliced into short clips and normalised.
+2. **Fine-tuning:** Both halves of GPT-SoVITS are trained: the GPT model (what to say, prosody) and the SoVITS model (how it sounds).
+3. **Evaluation gate:** A fixed set of test sentences is synthesised and transcribed with Whisper large-v3. A checkpoint only replaces the previous one if its character error rate holds up.
+4. **Synthesis:** A batch client renders dialogues with several speakers at normal and study speed, with word-level timestamps for the dialogue player.
+
+[Source code on GitHub ↗](https://github.com/NikkuIsRyu/Voice_ML_Project)
+
+## Data and licences
+
+- **CSMSC** (Data-Baker) was used for the first and second fine-tune. Its licence allows non-commercial use only, so these samples are shown only to document the training history.
+- **AISHELL-3** (Apache-2.0) is used for the current voice. Chinesische Aussprache basiert auf AISHELL-3 Sprachkorpus (Apache-2.0 Lizenz).
+- The test sentences are self-written and not taken from any textbook.

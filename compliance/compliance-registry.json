@@ -380,6 +380,21 @@
       "requiresWipGate": false,
       "allowDirectDownload": false,
       "notes": "Self-authored privacy policy page (DE/EN) for the author's Android app."
+    },
+    {
+      "id": "voice_ml_progress_samples",
+      "name": "Voice ML project page & fine-tuning progress samples",
+      "paths": [
+        "src/content/docs/projects/**",
+        "src/content/docs/de/projects/**",
+        "public/audio/voice-ml/**"
+      ],
+      "publisher": "original_artwork",
+      "status": "CLEARED_SELF_AUTHORED",
+      "canSharePublicly": true,
+      "requiresWipGate": false,
+      "allowDirectDownload": false,
+      "notes": "12 short synthetic samples of self-written test sentences, rendered by the author's own models. Stages 2-3 (female_v3/v4) were trained on CSMSC (Data-Baker, non-commercial licence) and are shown on this non-commercial portfolio only to document training history; stage 4 uses AISHELL-3 (Apache-2.0) with the required attribution on the page."
     }
   ]
 }
