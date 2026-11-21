@@ -168,49 +168,9 @@ const lessons = [
             <th>{lang === 'en' ? 'Strokes' : 'Striche'}</th>
           </tr>
         </thead>
-        <tbody>
-          {CHINESE_COURSE_VOCAB.map((v) => (
-            <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
-              <td class="col-num">{v.num}</td>
-              <td class="col-lesson">
-                <span class="table-lbadge">L{v.lesson}</span>
-              </td>
-              <td class="col-hanji">
-                <div class="vocab-table-cell">
-                  <strong class="vocab-term-hanzi" data-hanzi={v.hanzi}>{v.hanzi}</strong>
-                </div>
-              </td>
-              <td class="col-pinyin">
-                <div class="vocab-table-cell">
-                  <code class="vocab-pinyin-badge">{v.pinyin}</code>
-                </div>
-              </td>
-              <td class="col-primary">
-                {lang === 'en' ? (v.en || v.de) : v.de}
-              </td>
-              <td class="col-example">
-                {v.exHanzi ? (
-                  <div class="table-ex-cell">
-                    <span class="table-ex-hz">{v.exHanzi}</span>
-                    <span class="table-ex-tr">{v.exDe}</span>
-                  </div>
-                ) : (
-                  <span class="table-ex-none">—</span>
-                )}
-              </td>
-              <td class="col-strokes">
-                <button
-                  type="button"
-                  class="btn-table-stroke"
-                  data-char={v.hanzi}
-                  title={lang === 'en' ? `Inspect stroke order for ${v.hanzi}` : `Strichfolge für ${v.hanzi} anzeigen`}
-                >
-                  ✍️
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <!-- Rows are built from the cards on first switch to table view (see buildTable),
+             so the 579 entries are not shipped twice in the HTML. -->
+        <tbody></tbody>
       </table>
     </div>
   </div>
@@ -237,7 +197,75 @@ const lessons = [
     const countDisplay = document.getElementById('zh-vocab-count');
 
     const cards = Array.from(root.querySelectorAll<HTMLElement>('#zh-vocab-cards-grid .vocab-card'));
-    const rows = Array.from(root.querySelectorAll<HTMLElement>('#zh-vocab-table tbody tr'));
+    const table = document.getElementById('zh-vocab-table');
+    let rows: HTMLElement[] = [];
+
+    // Build the compact table from the card grid the first time it is shown.
+    // Elements created here need the component's scoped-style class to pick up its CSS.
+    function buildTable() {
+      const tbody = table?.querySelector('tbody');
+      if (!table || !tbody || rows.length) return;
+      const scope = Array.from(table.classList).find((c) => c.startsWith('astro-'));
+      const el = (tag: string, cls?: string, text?: string) => {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (scope) node.classList.add(scope);
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+      const frag = document.createDocumentFragment();
+      cards.forEach((card) => {
+        const q = (sel: string) => card.querySelector<HTMLElement>(sel);
+        const hanzi = q('.vcard-hanzi')?.textContent?.trim() || '';
+        const tr = el('tr');
+        tr.dataset.lesson = card.dataset.lesson || '';
+        tr.dataset.num = card.dataset.num || '';
+
+        tr.append(el('td', 'col-num', card.dataset.num || ''));
+        const lessonTd = el('td', 'col-lesson');
+        lessonTd.append(el('span', 'table-lbadge', `L${card.dataset.lesson || ''}`));
+        tr.append(lessonTd);
+
+        const hanziTd = el('td', 'col-hanji');
+        const hanziCell = el('div', 'vocab-table-cell');
+        const strong = el('strong', 'vocab-term-hanzi', hanzi);
+        strong.dataset.hanzi = hanzi;
+        hanziCell.append(strong);
+        hanziTd.append(hanziCell);
+        tr.append(hanziTd);
+
+        const pinyinTd = el('td', 'col-pinyin');
+        const pinyinCell = el('div', 'vocab-table-cell');
+        pinyinCell.append(el('code', 'vocab-pinyin-badge', q('.vcard-pinyin')?.textContent?.trim() || ''));
+        pinyinTd.append(pinyinCell);
+        tr.append(pinyinTd);
+
+        tr.append(el('td', 'col-primary', q('.vcard-meaning')?.textContent?.trim() || ''));
+
+        const exTd = el('td', 'col-example');
+        const exHanzi = q('.ex-hanzi')?.textContent?.trim();
+        if (exHanzi) {
+          const exCell = el('div', 'table-ex-cell');
+          exCell.append(el('span', 'table-ex-hz', exHanzi), el('span', 'table-ex-tr', q('.ex-trans')?.textContent?.trim() || ''));
+          exTd.append(exCell);
+        } else {
+          exTd.append(el('span', 'table-ex-none', '—'));
+        }
+        tr.append(exTd);
+
+        const strokeTd = el('td', 'col-strokes');
+        const btn = el('button', 'btn-table-stroke', '✍️') as HTMLButtonElement;
+        btn.type = 'button';
+        btn.dataset.char = hanzi;
+        btn.title = q('.btn-stroke-trigger')?.title || '';
+        strokeTd.append(btn);
+        tr.append(strokeTd);
+
+        frag.append(tr);
+        rows.push(tr);
+      });
+      tbody.append(frag);
+    }
 
     let activeLesson = 'all';
     let searchQuery = '';
@@ -249,6 +277,10 @@ const lessons = [
         layoutButtons.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         currentLayout = btn.dataset.layout || 'grid';
+        if (currentLayout === 'table' && !rows.length) {
+          buildTable();
+          filterVocab();
+        }
 
         if (viewGrid) viewGrid.style.display = currentLayout === 'grid' ? 'block' : 'none';
         if (viewTable) viewTable.style.display = currentLayout === 'table' ? 'block' : 'none';
@@ -337,14 +369,15 @@ const lessons = [
     }
 
     // 6. Stroke Trigger Buttons -> Dispatch Event for Global Modal
-    root.querySelectorAll<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const char = btn.dataset.char || '';
-        if (char) {
-          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, lang: 'zh' } }));
-        }
-      });
+    // Delegated, so it also covers table rows that are built later.
+    root.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke');
+      if (!btn || !root.contains(btn)) return;
+      e.stopPropagation();
+      const char = btn.dataset.char || '';
+      if (char) {
+        window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, lang: 'zh' } }));
+      }
     });
 
     filterVocab();

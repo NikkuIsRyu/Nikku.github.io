@@ -179,48 +179,9 @@ const lessons = [
             <th>{lang === 'en' ? 'Strokes' : 'Striche'}</th>
           </tr>
         </thead>
-        <tbody>
-          {JAPANESE_B1_VOCAB.map((v) => {
-            const pk = parseVocabTerm(v.kanji);
-            const pr = parseVocabTerm(v.kana);
-            const hasKanji = /[\u4e00-\u9faf]/.test(v.kanji);
-            return (
-              <tr data-lesson={v.lesson.toString()} data-num={v.num.toString()}>
-                <td class="col-num">{v.num}</td>
-                <td class="col-lesson"><span class="table-lbadge notranslate" translate="no">L{v.lesson}</span></td>
-                <td class="col-kanji notranslate" translate="no" lang="ja">
-                  <div class="vocab-table-cell notranslate" translate="no" lang="ja">
-                    <strong class="vocab-term-main notranslate" translate="no" lang="ja">{pk.main}</strong>
-                    {pk.note && <span class="vocab-table-note notranslate" translate="no" lang="ja">{pk.note}</span>}
-                  </div>
-                </td>
-                <td class="col-kana notranslate" translate="no" lang="ja">
-                  <div class="vocab-table-cell notranslate" translate="no" lang="ja">
-                    <code class="vocab-kana-badge notranslate" translate="no" lang="ja">{pr.main}</code>
-                    {pr.note && <span class="vocab-kana-note notranslate" translate="no" lang="ja">{pr.note}</span>}
-                  </div>
-                </td>
-                <td class="col-primary">{lang === 'en' ? v.en : v.de}</td>
-                <td class="col-secondary">{lang === 'en' ? v.de : v.en}</td>
-                <td class="col-strokes">
-                  {hasKanji ? (
-                    <button
-                      type="button"
-                      class="btn-table-stroke"
-                      data-char={v.kanji}
-                      data-reading={v.kana}
-                      title={lang === 'en' ? `Inspect Kanji stroke order for ${pk.main}` : `Kanji-Strichfolge für ${pk.main} anzeigen`}
-                    >
-                      ✍️
-                    </button>
-                  ) : (
-                    <span class="no-kanji-dash" title={lang === 'en' ? 'Kana only (no Kanji)' : 'Nur Kana (kein Kanji)'}>—</span>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
+        <!-- Rows are built from the cards on first switch to table view (see buildTable),
+             so the vocabulary is not shipped twice in the HTML. -->
+        <tbody data-kana-only-label={lang === 'en' ? 'Kana only (no Kanji)' : 'Nur Kana (kein Kanji)'}></tbody>
       </table>
     </div>
   </div>
@@ -246,7 +207,78 @@ const lessons = [
     const countDisplay = document.getElementById('jp-vocab-count');
 
     const cards = Array.from(root.querySelectorAll<HTMLElement>('#jp-vocab-cards-grid .vocab-card'));
-    const rows = Array.from(root.querySelectorAll<HTMLElement>('#jp-vocab-table tbody tr'));
+    const table = document.getElementById('jp-vocab-table');
+    let rows: HTMLElement[] = [];
+
+    // Build the compact table from the card grid the first time it is shown.
+    // Elements created here need the component's scoped-style class to pick up its CSS.
+    function buildTable() {
+      const tbody = table?.querySelector<HTMLElement>('tbody');
+      if (!table || !tbody || rows.length) return;
+      const scope = Array.from(table.classList).find((c) => c.startsWith('astro-'));
+      const el = (tag: string, cls?: string, text?: string, ja = false) => {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (scope) node.classList.add(scope);
+        if (ja) {
+          node.classList.add('notranslate');
+          node.setAttribute('translate', 'no');
+          node.lang = 'ja';
+        }
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+      const frag = document.createDocumentFragment();
+      cards.forEach((card) => {
+        const txt = (sel: string) => card.querySelector<HTMLElement>(sel)?.textContent?.trim() || '';
+        const tr = el('tr');
+        tr.dataset.lesson = card.dataset.lesson || '';
+        tr.dataset.num = card.dataset.num || '';
+        tr.append(el('td', 'col-num', card.dataset.num || ''));
+
+        const lessonTd = el('td', 'col-lesson');
+        const badge = el('span', 'table-lbadge notranslate', `L${card.dataset.lesson || ''}`);
+        badge.setAttribute('translate', 'no');
+        lessonTd.append(badge);
+        tr.append(lessonTd);
+
+        const kanjiTd = el('td', 'col-kanji', undefined, true);
+        const kanjiCell = el('div', 'vocab-table-cell', undefined, true);
+        kanjiCell.append(el('strong', 'vocab-term-main', txt('.vocab-term-main'), true));
+        if (txt('.vocab-card-note')) kanjiCell.append(el('span', 'vocab-table-note', txt('.vocab-card-note'), true));
+        kanjiTd.append(kanjiCell);
+        tr.append(kanjiTd);
+
+        const kanaTd = el('td', 'col-kana', undefined, true);
+        const kanaCell = el('div', 'vocab-table-cell', undefined, true);
+        kanaCell.append(el('code', 'vocab-kana-badge', txt('.vocab-kana-main'), true));
+        if (txt('.vocab-card-kana-note')) kanaCell.append(el('span', 'vocab-kana-note', txt('.vocab-card-kana-note'), true));
+        kanaTd.append(kanaCell);
+        tr.append(kanaTd);
+
+        tr.append(el('td', 'col-primary', txt('.vcard-meaning')));
+        tr.append(el('td', 'col-secondary', txt('.vcard-alt-trans')));
+
+        const strokeTd = el('td', 'col-strokes');
+        const cardBtn = card.querySelector<HTMLButtonElement>('.btn-stroke-trigger');
+        if (cardBtn) {
+          const btn = el('button', 'btn-table-stroke', '✍️') as HTMLButtonElement;
+          btn.type = 'button';
+          btn.dataset.char = cardBtn.dataset.char || '';
+          btn.dataset.reading = cardBtn.dataset.reading || '';
+          btn.title = cardBtn.title;
+          strokeTd.append(btn);
+        } else {
+          const dash = el('span', 'no-kanji-dash', '—');
+          dash.title = tbody.dataset.kanaOnlyLabel || '';
+          strokeTd.append(dash);
+        }
+        tr.append(strokeTd);
+        frag.append(tr);
+        rows.push(tr);
+      });
+      tbody.append(frag);
+    }
 
     let activeLesson = 'all';
     let searchQuery = '';
@@ -258,6 +290,10 @@ const lessons = [
         layoutButtons.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         currentLayout = btn.dataset.layout || 'grid';
+        if (currentLayout === 'table' && !rows.length) {
+          buildTable();
+          filterVocab();
+        }
 
         if (viewGrid) viewGrid.style.display = currentLayout === 'grid' ? 'block' : 'none';
         if (viewTable) viewTable.style.display = currentLayout === 'table' ? 'block' : 'none';
@@ -326,15 +362,16 @@ const lessons = [
     }
 
     // 5. Stroke Trigger Buttons
-    root.querySelectorAll<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const char = btn.dataset.char || '';
-        const reading = btn.dataset.reading || '';
-        if (char) {
-          window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, reading, lang: 'ja' } }));
-        }
-      });
+    // Delegated, so it also covers table rows that are built later.
+    root.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.btn-stroke-trigger, .btn-table-stroke');
+      if (!btn || !root.contains(btn)) return;
+      e.stopPropagation();
+      const char = btn.dataset.char || '';
+      const reading = btn.dataset.reading || '';
+      if (char) {
+        window.dispatchEvent(new CustomEvent('nikku:open-stroke-guide', { detail: { char, reading, lang: 'ja' } }));
+      }
     });
 
     const btnStudio = root.querySelector<HTMLButtonElement>('#btn-jp-open-kanji-studio');
