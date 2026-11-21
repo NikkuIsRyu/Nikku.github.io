@@ -12,7 +12,7 @@
 - English is the root locale and German is `/de/`. Pages without a German version use Starlight's fallback, which shows the English page with a notice.
 - The Chinese page's root URL now serves English. German moves to `/de/…`.
 - The LinkedIn handle is `nikkuisryu`, taken from the CV text.
-- The homepage hero shows Nick only. The Heidelberg teaser reuses the existing uni-friends campfire art, which already appears on the site.
+- No character sprites on the site. Per the user, `public/characters/` is source material for making backgrounds only. The hero sprite was removed on 2026-11-21.
 
 ## Plan
 0. **Safety**
